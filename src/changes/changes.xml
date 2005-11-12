@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>RPM plugin project</title>
+    <author email="boba@codehaus.org">Bob Allison</author>
+  </properties>
+  <body>
+    <release version="1.0-alpha-1" date="2005-11-11">
+      <action dev="boba" type="add">
+        Initial version
+      </action>
+    </release>
+  </body>
+</document>

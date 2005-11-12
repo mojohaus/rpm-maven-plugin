@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven RPM Plugin">
+  <bannerLeft>
+      <name>Mojo</name>
+      <src>/images/mojo_logo.png</src>
+      <href>http://mojo.codehaus.org</href>
+  </bannerLeft>
+   <bannerRight>
+      <name>Codehaus</name>
+      <src>http://mojo.codehaus.org/images/codehaus-small.png</src>
+      <href>http://www.codehaus.org</href>
+   </bannerRight>
+  <body>
+    <links>
+         <item name="Mojo" href="http://mojo.codehaus.org"/>
+         <item name="Maven" href="http://maven.apache.org/"/>
+    </links>
+
+    <menu name="Maven RPM Plugin">
+      <item name="Introduction" href="intro.html"/>
+      <menu name="Project Settings" href="pom.html">
+          <item name="artifactId" href="pom.html#artifactId"/>
+          <item name="description" href="pom.html#description"/>
+          <item name="name" href="pom.html#name"/>
+          <item name="organization" href="pom.html#organization"/>
+      </menu>
+      <menu name="Basic Parameters" href="basic-params.html">
+          <item name="copyright" href="basic-params.html#copyright"/>
+          <item name="distribution" href="basic-params.html#distribution"/>
+          <item name="group" href="basic-params.html#group"/>
+          <item name="icon" href="basic-params.html#icon"/>
+          <menu name="mappings" href="basic-params.html#mappings">
+              <item name="configuration" href="basic-params.html#configuration"/>
+              <item name="directory" href="basic-params.html#directory"/>
+              <item name="documentation" href="basic-params.html#documentation"/>
+              <item name="filemode" href="basic-params.html#filemode"/>
+              <item name="filename" href="basic-params.html#filename"/>
+              <item name="groupname" href="basic-params.html#groupname"/>
+              <item name="sources" href="basic-params.html#sources"/>
+              <item name="username" href="basic-params.html#username"/>
+          </menu>
+          <item name="needarch" href="basic-params.html#needarch"/>
+          <item name="packager" href="basic-params.html#packager"/>
+          <item name="release" href="basic-params.html#release"/>
+          <item name="version" href="basic-params.html#version"/>
+          <item name="workarea" href="basic-params.html#workarea"/>
+      </menu>
+      <menu name="Advanced Parameters" href="adv-params.html">
+          <item name="RPM Dependencies" href="adv-params.html#Dependency"/>
+          <item name="Relocation" href="adv-params.html#Relocation"/>
+          <item name="Scripts" href="adv-params.html#Scripts"/>
+      </menu>
+      <item name="Sample Configuration" href="sample.html"/>
+      <item name="To Do List" href="todo.html"/>
+    </menu>
+
+    ${reports}
+
+  </body>
+</project>

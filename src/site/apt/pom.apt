@@ -1,0 +1,30 @@
+ ------
+ Maven RPM Plugin - Project Settings
+ ------
+ Bob Allison
+ ------
+ 11 November 2005
+ -----
+
+Project Settings
+
+  The following items should be specified in the project descriptor.  They
+  are used in the RPM spec file and influence what is packaged in the RPM.
+
+* {artifactId}
+
+  The name to use for the RPM package.  This value cannot contain spaces.  The
+  RPM builder will silently discard everything after the first space.
+
+* {description}
+
+  The description of the software.
+
+* {name}
+
+  A one-line description of the software.
+
+* {organization}
+
+  The <<<name>>> element is used to populate the vendor tag, and the
+  <<<url>>> element is used for the package's URL.

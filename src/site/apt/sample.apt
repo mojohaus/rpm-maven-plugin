@@ -1,0 +1,105 @@
+ ------
+ Maven RPM Plugin - Sample Configuration
+ ------
+ Bob Allison
+ ------
+ 11 November 2005
+ -----
+
+Sample Configuration
+
+  Below is a sample project descriptor which utilizes all of the basic
+  parameters and a few of the advanced parameters.
+
++----+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>collection.trash</groupId>
+    <artifactId>landfill</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>Land-Based Trash Repository</name>
+    <description>
+This is a sample using trash collection as an example.
+    </description>
+    <organization>
+        <name>Sanitation Workers of Washington, D.C.</name>
+        <url>http://www.trash.gov/</url>
+    </organization>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <configuration>
+                    <release>1</release>
+                    <copyright>2005, SWWDC</copyright>
+                    <distribution>Trash 2005</distribution>
+                    <group>Application/Collectors</group>
+                    <icon>src/main/resources/icon.gif</icon>
+                    <packager>SWWDC</packager>
+                    <prefix>/usr/local</prefix>
+                    <mappings>
+                        <mapping>
+                            <directory>/usr/local/bin/landfill</directory>
+                            <filemode>440</filemode>
+                            <username>dumper</username>
+                            <groupname>dumpgroup</groupname>
+                            <sources>
+                                <source>
+                                    <location>target/classes</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>/usr/local/doc/landfill</directory>
+                            <documentation>true</documentation>
+                            <filemode>444</filemode>
+                            <username>dumper</username>
+                            <groupname>dumpgroup</groupname>
+                            <sources>
+                                <source>
+                                    <location>target/site</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>/usr/local/bin</directory>
+                            <filemode>750</filemode>
+                            <username>dumper</username>
+                            <groupname>dumpgroup</groupname>
+                            <sources>
+                                <source>
+                                    <location>src/main/bin</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>/usr/local/conf/landfill</directory>
+                            <configuration>true</configuration>
+                            <filemode>640</filemode>
+                            <username>dumper</username>
+                            <groupname>dumpgroup</groupname>
+                            <sources>
+                                <source>
+                                    <location>src/main/conf</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>/usr/local/log/landfill</directory>
+                            <filemode>750</filemode>
+                            <username>dumper</username>
+                            <groupname>dumpgroup</groupname>
+                        </mapping>
+                    </mappings>
+                    <postinstallScript>src/main/scripts/postinstall</postinstallScript>
+                    <preremoveScript>src/main/scripts/preremove</preremoveScript>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
++----+

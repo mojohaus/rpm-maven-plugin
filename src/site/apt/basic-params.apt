@@ -1,0 +1,156 @@
+ ------
+ Maven RPM Plugin - Basic Parameters
+ ------
+ Bob Allison
+ ------
+ 11 November 2005
+ -----
+
+Basic Parameters
+
+  The parameters described in this page are the basic parameters required to
+  package an RPM.  Each parameter name matches the tag used for the value in
+  the RPM spec file.
+
+* {version}
+
+  The version number to use for the RPM package.  By default, this is the
+  project version.  This value cannot contain a dash (<<<->>>) due to
+  contraints in the RPM file naming convention.  Any specified value will
+  be truncated at the first dash.
+
+* {release} (<<required>>)
+
+  The release number of the RPM.  This should be an integer initialized to
+  1 when the RPM is first released for a particular version and incremented
+  with each subsequent release.
+
+* {copyright}
+
+  The copyright information for the RPM.  This is a <<one-line>> identifier of
+  the copyright, like "<<<GPL>>>".
+
+* {distribution}
+
+  A one-line string identifying the distribution of which this RPM is a part.
+
+* {group}
+
+  A string which identifies the software group for this package.  This can be
+  used by GUI tools to group packages for display.  Check the RPM documentation
+  (installed in <<</usr/share/doc/rpm->>><version><<</GROUPS>>> on most Linuxes)
+  for a list of current groups.
+
+* {icon}
+
+  The file (GIF or XPM) with an icon for the package.  This can be used by GUI
+  tools to display an icon for the package.
+
+* {needarch}
+
+  If given the value <<<true>>>, the package will be marked as specific to
+  the architecture of the machine building the package.  This should only be
+  necessary in the case of compiled code from languages such as C or C++, and
+  should not be specified if the executable content of the package consists
+  only of scripts (such as shell, perl, or python) and Java code.
+
+* {packager}
+
+  The name of the person or group which is creating the package.  By default,
+  this will be taken from the name specified in the POM's organization
+  information.
+
+* {workarea}
+
+  The directory to use to build the RPM.  By default, this is a directory
+  named <<<rpm>>> in the project's build directory.
+
+* {mappings} (<<required>>)
+
+  This specifies the mapping between the files and directories that exist in
+  the project and the files and directories installed when the RPM package is
+  installed on a system.  The RPM build program requires one mapping element
+  for each file to be installed.  If the mapping element points to a directory
+  the RPM build program will use the specifications of the mapping for every
+  file in the entire tree starting at the specified directory.  Within the
+  <<<mappings>>> tag is a series of <<<mapping>>> tags which each contain
+  the following elements:
+
+** {directory} (<<required>>)
+
+  This is the directory where the files in this mapping will be installed
+  when the package is installed.  This value must start with <<</>>>.
+
+** {filename}
+
+  This is a shell-style wildcard to identify the files in this mapping to the
+  RPM builder program.  This allows the mapping element to refer to only a
+  subset of files or directories contained within the <<<directory>>>.  Note
+  that this element does not prevent other files or directories from being
+  copied to the RPM work area; you should specify the appropriate
+  <<<includes>>> or <<<excludes>>> in the source specification.  If not
+  specified, the mapping will be used for all content in the directory tree.
+
+** {configuration}
+
+  If given the value <<<true>>>, the files in this mapping are marked as
+  configuration files.  These files get special treatment during package
+  installation to ensure that local changes to the configuration are not lost.
+
+** {documentation}
+
+  If given the value <<<true>>>, the file(s) are marked as documentation files.
+  The RPM command installs documentation files into a directory (usually under
+  <<</usr/share/doc>>>) named the same as the RPM package.
+
+** {filemode} (<<recommended>>)
+
+  This is UNIX permissions (file mode) to assign to the files when installed.
+  This value consists of three octal digits representing the access for the
+  owner, the group, and the world.  Each digit represents the access allowed
+  and is the sum of 4 for read, 2 for write, and 1 for execute.  A common
+  value to use is "644" which provides the owner read/write access and
+  read-only access to everyone else.  For more information on this subject,
+  read {{{http://www.tldp.org/LDP/intro-linux/html/sect_03_04.html}File
+  Security}}, section 3.4 of the Introduction to Linux maintained by the
+  Linux Documentation Project.  If not specified, the files retain the
+  filemode assigned to them when copied to the RPM work area.
+
+** {username} (<<recommended>>)
+
+  This is the UNIX username to assign to the files when installed.  If the
+  named user does not exist when the package is installed, the user
+  <<<root>>> will be used.  If not specified, the files will be owned by
+  the user used to create the package.
+
+** {groupname} (<<recommended>>)
+
+  This is the UNIX groupname to assign to the files when installed.  If the
+  named group does not exist when the package is installed, the group
+  <<<root>>> will be used.  If not specified, the files will be owned by
+  the group used to create the package.
+
+** {sources}
+
+  The location(s) to find the files to be packaged.  If no sources are
+  specified, the <<<directory>>> will be created using the mapping
+  specification but no contents will be selected for packaging; this allows
+  the attributes of a directory to be specified separately from the
+  attributes of the contents of the directory.  The <<<sources>>> element
+  contains <<<source>>> elements which contain the following:
+
+*** {location} (<<required>>)
+
+  The file or directory to include.  If a directory is specified, all files
+  and subdirectories are also included.  If the path does not start with
+  <<</>>>, it is taken to be relative to the project's base directory.
+
+*** {includes}
+
+  Contains one or more <<<include>>> elements with a wildcard filename
+  expression which identifies the files to be included.
+
+*** {excludes}
+
+  Contains one or more <<<exclude>>> elements with a wildcard filename
+  expression which identifies the files to be excluded.

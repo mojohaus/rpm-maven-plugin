@@ -1,0 +1,96 @@
+ ------
+ Maven RPM Plugin - Advanced Parameters
+ ------
+ Bob Allison
+ ------
+ 11 November 2005
+ -----
+
+Advanced Parameters
+
+  The parameters described in this page are parameters which enable advanced
+  RPM features.  Before using these parameters, it is <<highly>> recommended
+  that you read {{{http://www.rpm.org/max-rpm/}Maximum RPM}} to gain an
+  understanding of what these parameters do.
+
+* RPM Package {Dependency} Management
+
+  <<These parameters relate to the dependencies between RPM packages, not to
+  the dependencies required to build the RPM package contents.>>
+
+  There are three RPM spec file tags related to dependency management:
+
+    * <<<provides>>> defines a <virtual package> which is provided
+      by the package being built
+ 
+    * <<<requires>>> identifies a package that is required to be installed for
+      the package being built to operate correctly
+
+    * <<<conflicts>>> identifies a package which must not be installed if the
+      package being built is installed
+
+  All three of these tags can appear multiple times in the spec file.  To
+  configure these tags in the plugin configuration, specify an element for
+  each instance of the tag in the spec file; the content of the element is the
+  exact text to be placed in the spec file.  Please be careful to ensure that
+  version comparison specifications such as <<< < >>> and <<< > >>> are
+  properly specified in the XML file.  Here is an example:
+
++-----+
+<provides>
+    <provide>dump</provide>
+</provides>
+<requires>
+    <require>trash-truck &gt; 1.0</require>
+</requires>
+<conflicts>
+    <conflict>incinerator</conflict>
+</conflicts>
++-----+
+
+* {Relocation}
+
+  If you specify the <<<prefix>>> parameter to the RPM plugin, you can create
+  a package that can be installed in a user-specified location.  Before doing
+  this, read and understand Maximum RPM
+  {{{http://www.rpm.org/max-rpm/ch-rpm-reloc.html}Chapter 15}} since there are
+  a number of kinks and quirks that must be addressed.
+
+* {Scripts}
+
+  There are a number of scripts that can be included in the RPM package which
+  are executed as part of the installation, removal, or verification of the
+  package.  For each of these scripts, there are two plugin parameters:  one
+  with the script ID (for example, "<<<preinstall>>>") which holds the actual
+  script, and one with the script ID followed by "<<<Script>>>" (for example,
+  "<<<preinstallScript>>>") which has the name of the file containing the
+  script.  If both parameters are specified for a script, the external file
+  will be ignored.  Before writing scripts for RPM packages, understand the
+  {{{http://www.rpm.org/max-rpm/s1-rpm-inside-scripts.html}script docs}} in
+  Maximum RPM since the operation of the scripts must be done correctly or
+  major problems can occur while installing or removing the package.
+
+** <<<preinstall>>>
+
+  This script is run before the package is installed.  It corresponds to the
+  <<<%pre>>> tag in the spec file.
+
+** <<<postinstall>>>
+
+  This script is run after the package is installed.  It corresponds to the
+  <<<%post>>> tag in the spec file.
+
+** <<<preremove>>>
+
+  This script is run before the package is removed.  It corresponds to the
+  <<<%preun>>> tag in the spec file.
+
+** <<<postremove>>>
+
+  This script is run after the package is removed.  It corresponds to the
+  <<<%postun>>> tag in the spec file.
+
+** <<<verify>>>
+
+  This script is run when the package is being verified.  It corresponds to
+  the <<<%verifyScript>>> tag in the spec file.
