@@ -25,9 +25,12 @@
   <name>RPM Maven Plugin</name>
   <version>1.0-alpha-1-SNAPSHOT</version>
   <description>
+Maven plugin which assembles files into an RPM package
+  </description>
+  <!--description>
 Maven plugin which assembles files into an RPM package for installation
 on various target UNIX systems.
-  </description>
+  </description-->
   <inceptionYear>2005</inceptionYear>
   <url>http://mojo.codehaus.org/rpm-maven-plugin/</url>
   <ciManagement>
