@@ -3,7 +3,7 @@
  ------
  Bob Allison
  ------
- 12 November 2005
+ 14 November 2005
  -----
 
 Introduction
@@ -41,6 +41,11 @@ Problems
     the top of your local repository tree (<<<${user.home}/.m2/repository>>>)
     and unzip the file.  This will place the jar and pom files in the correct
     place in the local repository.
+
+  * For easier evaluation, I have built a binary distribution of the plugin.
+    Download the {{{codehaus.org/~boba/rpm-plugin.zip}ZIP file}} and install
+    the contents as described above.  This ZIP file contains the Plexus
+    Archiver component as well as the plugin.
 
 How to Use the Plugin
 
