@@ -3,7 +3,7 @@
  ------
  Bob Allison
  ------
- 14 November 2005
+ 12 January 2006
  -----
 
 Introduction
@@ -34,18 +34,19 @@ Features
 
 Problems
 
-  * For this plug-in to work, it uses a snapshot of the Plexus Archiver
-    component.  To make it easier to try this plugin, I have made a
-    {{{http://beaver.codehaus.org/~boba/plexus-archiver.zip}ZIP file}}
+  * For this plug-in to work, it requires version 1.0-alpha-5-SNAPSHOT of the
+    Plexus Archiver component.  You can download the Plexus source and build the
+    component yourself or, to make it easier to try this plugin, I have made a
+    {{{http://codehaus.org/~boba/plexus-archiver.zip}ZIP file}}
     which contains that snapshot.  After downloading the ZIP file, change to
     the top of your local repository tree (<<<${user.home}/.m2/repository>>>)
     and unzip the file.  This will place the jar and pom files in the correct
     place in the local repository.
 
   * For easier evaluation, I have built a binary distribution of the plugin.
-    Download the {{{codehaus.org/~boba/rpm-plugin.zip}ZIP file}} and install
-    the contents as described above.  This ZIP file contains the Plexus
-    Archiver component as well as the plugin.
+    Download the {{{http://codehaus.org/~boba/rpm-plugin.zip}ZIP file}} and
+    install the contents as described above.  This ZIP file contains the Plexus
+    Archiver component as well as version 1.0-alpha-2-SNAPSHOT of the plugin.
 
 How to Use the Plugin
 

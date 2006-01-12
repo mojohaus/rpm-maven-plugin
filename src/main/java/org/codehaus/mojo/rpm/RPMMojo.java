@@ -120,6 +120,7 @@ public class RPMMojo extends AbstractMojo
     /**
      * The package group for the package.
      * @parameter
+     * @required
      */
     private String group;
     
@@ -412,7 +413,10 @@ public class RPMMojo extends AbstractMojo
     {
         try
         {
+            // Set the destination
             copier.setDestFile(dest);
+
+            // Set the source
             if (src.isDirectory())
             {
                 String[] ia = null;
@@ -433,7 +437,12 @@ public class RPMMojo extends AbstractMojo
             {
                 copier.addFile(src, src.getName());
             }
+
+            // Perform the copy
             copier.createArchive();
+
+            // Clear the list for the next mapping
+            copier.resetArchiver();
         }
         catch (Throwable t)
         {
@@ -476,7 +485,7 @@ public class RPMMojo extends AbstractMojo
                     }
                     else
                     {
-                        getLog().warn("Source location " + src.getLocation() + " does not exist");
+                        throw new MojoExecutionException("Source location " + src.getLocation() + " does not exist");
                     }
                 }
             }
@@ -521,7 +530,7 @@ public class RPMMojo extends AbstractMojo
             }
             if (copyright != null)
             {
-                spec.println("Copyright: " + copyright);
+                spec.println("License: " + copyright);
             }
             if (distribution != null)
             {
