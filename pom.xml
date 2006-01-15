@@ -15,9 +15,9 @@
 
 <project>
   <parent>
+    <artifactId>mojo-sandbox</artifactId>
     <groupId>org.codehaus.mojo</groupId>
-    <artifactId>mojo</artifactId>
-    <version>5</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>rpm-maven-plugin</artifactId>
