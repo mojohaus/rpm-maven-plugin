@@ -3,7 +3,7 @@
  ------
  Bob Allison
  ------
- 11 November 2005
+ 15 January 2006
  -----
 
 Things To Do
@@ -28,7 +28,8 @@ Things To Do
 * Handle Project Modules
 
   I would like to be able to have modules in a project that uses the RPM mojo
-  and be able to include the artifacts from any module into the package.
+  (for example, in a project with packaging="pom") and be able to include the
+  artifacts from all modules into the package.
 
 * Lifecycle
 
@@ -36,3 +37,11 @@ Things To Do
   to have an RPM packaging to allow a project to build the RPMs during the
   build.  This requires that dependencies be included in the RPM-generating
   project to ensure that the RPM is generated after the items to be packaged.
+  It would also be nice if this would work with modules (build the modules
+  then package them into an RPM).
+
+* Tests
+
+  I need to figure out how to make some tests for the plugin so that I can
+  validate proper operation in a manner other than building a sample and
+  manually examining it.

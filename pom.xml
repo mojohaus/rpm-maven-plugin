@@ -23,7 +23,7 @@
   <artifactId>rpm-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>RPM Maven Plugin</name>
-  <version>1.0-alpha-2-SNAPSHOT</version>
+  <version>1.0-alpha-2</version>
   <description>
 Maven plugin which assembles files into an RPM package for installation
  on various target UNIX systems.

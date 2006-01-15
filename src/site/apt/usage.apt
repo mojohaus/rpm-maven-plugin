@@ -1,0 +1,49 @@
+ ------
+ Maven RPM Plugin - Usage Scenarios
+ ------
+ Bob Allison
+ ------
+ 15 January 2006
+ -----
+
+Usage Scenarios
+
+  Listed below are the various scenarios where the RPM plugin can be used
+  along with the proper way to configure the project(s) involved.
+
+RPM on Demand
+
+  In this scenario, an RPM is generated from the project on demand by
+  executing the goal "<<<rpm:rpm>>>" within a project.  The project itself
+  may be configured to produce any sort of packaging, since the RPM is not
+  the primary artifact produced by the project.
+
+  Things which do not work as I envision the 1.0 release working:
+
+  * If this goal is run on a project with modules, it will run the
+    "<<<rpm:rpm>>>" goal on each module, rather than packaging the modules into
+    a single RPM.
+
+  * If you want the project's artifacts packaged, you must specify
+    them in the RPM plugin configuration with a source of the project's build
+    directory.
+
+  * If you want to package the project's dependencies, you must
+    specify them in the RPM plugin configuration with a source of your Maven2
+    repository.
+
+  []
+
+RPM as Primary Artifact
+
+  In this scenario, the RPM is the primary artifact of the projectand is
+  created by executing the phase "<<<package>>>" within the project.  If
+  properly configured, this allows the user to execute "<<<mvn package>>>"
+  on a top-level project (which has the items to build and the RPM project
+  as modules) and have Maven package the items to build into jars, wars, ears,
+  etc. and them assemble the RPM of those items for distribution.
+
+  Things which do not work as I envision the 1.0 release working:
+
+  * Right now, the lifecycle stuff has not been built yet, so none of this
+    works at all.
