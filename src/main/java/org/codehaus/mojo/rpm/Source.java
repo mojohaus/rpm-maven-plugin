@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * A description of a location where files to be packaged can be found.
- * @version $Id: Source.java,v 1.1 2005/11/08 20:11:06 allisord Exp $
+ * @version $Id$
  */
 public class Source
 {

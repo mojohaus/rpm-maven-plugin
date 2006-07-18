@@ -23,7 +23,7 @@ import java.util.List;
  * A description of a file or directory to be installed.  It includes the
  * properties to be assigned and the location(s) where the file(s) can be
  * found for packaging.
- * @version $Id: Mapping.java,v 1.2 2005/11/09 20:35:46 allisord Exp $
+ * @version $Id$
  */
 public class Mapping
 {

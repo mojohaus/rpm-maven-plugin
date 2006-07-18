@@ -36,7 +36,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
  * Construct the RPM file
- * @version $Id: RPMMojo.java,v 1.3 2005/11/10 17:59:42 allisord Exp $
+ * @version $Id$
  * @goal rpm
  */
 public class RPMMojo extends AbstractMojo
