@@ -37,22 +37,10 @@ How to Use the Plugin
   You need to add the following repository to your project's POM:
 
 +----+
-<repositories>
-  <repository>
-    <id>Maven Snapshots</id>
-    <url>http://snapshots.maven.codehaus.org/</url>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-    <releases>
-      <enabled>false</enabled>
-    </releases>
-  </repository>
-</repositories>
 <pluginRepositories>
   <pluginRepository>
-    <id>Maven Snapshots</id>
-    <url>http://snapshots.maven.codehaus.org/</url>
+    <id>Mojo Snapshots</id>
+    <url>http://snapshots.repository.codehaus.org/</url>
     <snapshots>
       <enabled>true</enabled>
     </snapshots>
@@ -64,7 +52,7 @@ How to Use the Plugin
 +----+
 
   For information on how to get the RPM file generated, please refer to the
-  {{{usage.html}Usage Scenarios}} document.
+  {{{usage.html}Usage Scenarios}} and {{{params.html}Parameters}} documents.
 
 Resources
 
