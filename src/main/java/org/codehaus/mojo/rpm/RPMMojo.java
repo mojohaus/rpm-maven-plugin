@@ -59,7 +59,6 @@ public class RPMMojo extends AbstractMojo
      * @required
      */
     private String projversion;
-    private String version;
     
     /**
      * The release portion of the RPM file name.
@@ -163,7 +162,6 @@ public class RPMMojo extends AbstractMojo
      * @parameter expression="${project.build.directory}/rpm"
      */
     private File workarea;
-    private File buildroot;
     
     /**
      * The list of file mappings.
@@ -233,12 +231,14 @@ public class RPMMojo extends AbstractMojo
     private File verifyScript;
     
     /**
+     * A Plexus component to copy files and directories.
      * @component role="org.codehaus.plexus.archiver.Archiver"
      *            roleHint="dir"
      */
     private DirectoryArchiver copier;
 
     /**
+     * The primary project artifact.
      * @parameter expression="${project.artifact}"
      * @required
      * @readonly
@@ -246,46 +246,81 @@ public class RPMMojo extends AbstractMojo
     private Artifact artifact;
 
     /**
+     * Auxillary project artifacts.
      * @parameter expression="${project.attachedArtifacts}
      * @required
      * @readonly
      */
     private List attachedArtifacts;
     
+    
+    /** The root of the build area. */
+    private File buildroot;
+    
+    /** The version string after parsing. */
+    private String version;
+    
     // // //  Consumers for rpmbuild output
     
+    /**
+     * Consumer to receive lines sent to stdout.  The lines are logged
+     * as info.
+     */
     private class StdoutConsumer  implements StreamConsumer
     {
+        /** Logger to receive the lines. */
         private Log logger;
         
-        public StdoutConsumer(Log logger)
+        /**
+         * Constructor.
+         * @param log The logger to receive the lines
+         */
+        public StdoutConsumer( Log log )
         {
-            this.logger = logger;
+            logger = log;
         }
         
-        public void consumeLine(String string)
+        /**
+         * Consume a line.
+         * @param string The line to consume
+         */
+        public void consumeLine( String string )
         {
-            logger.info(string);
+            logger.info( string );
         }
     }
     
+    /**
+     * Consumer to receive lines sent to stderr.  The lines are logged
+     * as warnings.
+     */
     private class StderrConsumer  implements StreamConsumer
     {
+        /** Logger to receive the lines. */
         private Log logger;
         
-        public StderrConsumer(Log logger)
+        /**
+         * Constructor.
+         * @param log The logger to receive the lines
+         */
+        public StderrConsumer( Log log )
         {
-            this.logger = logger;
+            logger = log;
         }
         
-        public void consumeLine(String string)
+        /**
+         * Consume a line.
+         * @param string The line to consume
+         */
+        public void consumeLine( String string )
         {
-            logger.warn(string);
+            logger.warn( string );
         }
     }
     
     // // //  Mojo methods
     
+    /** {@inheritDoc} */
     public void execute() throws MojoExecutionException, MojoFailureException
     {
         checkParams();
@@ -297,28 +332,32 @@ public class RPMMojo extends AbstractMojo
     
     // // //  Internal methods
     
-    private void buildPackage() throws MojoExecutionException, MojoFailureException
+    /**
+     * Run the external command to build the package.
+     * @throws MojoExecutionException if an error occurs
+     */
+    private void buildPackage() throws MojoExecutionException
     {
-        File f = new File(workarea, "SPECS");
+        File f = new File( workarea, "SPECS" );
         
         Commandline cl = new Commandline();
-        cl.setExecutable("rpmbuild");
-        cl.setWorkingDirectory(f.getAbsolutePath());
-        cl.createArgument().setValue("-bb");
-        cl.createArgument().setValue("--define");
-        cl.createArgument().setValue("_topdir " + workarea.getAbsolutePath());
-        if (!needarch)
+        cl.setExecutable( "rpmbuild" );
+        cl.setWorkingDirectory( f.getAbsolutePath() );
+        cl.createArgument().setValue( "-bb" );
+        cl.createArgument().setValue( "--define" );
+        cl.createArgument().setValue( "_topdir " + workarea.getAbsolutePath() );
+        if ( !needarch )
         {
-            cl.createArgument().setValue("--target");
-            cl.createArgument().setValue("noarch");
+            cl.createArgument().setValue( "--target" );
+            cl.createArgument().setValue( "noarch" );
         }
-        cl.createArgument().setValue(name + ".spec");
+        cl.createArgument().setValue( name + ".spec" );
         
-        StreamConsumer stdout = new StdoutConsumer(getLog());
-        StreamConsumer stderr = new StderrConsumer(getLog());
+        StreamConsumer stdout = new StdoutConsumer( getLog() );
+        StreamConsumer stderr = new StderrConsumer( getLog() );
         try
         {
-            int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
             if ( result != 0 )
             {
                 throw new MojoExecutionException( "RPM build execution returned: \'" + result + "\'." );
@@ -330,141 +369,164 @@ public class RPMMojo extends AbstractMojo
         }
     }
     
-    private void buildWorkArea() throws MojoExecutionException, MojoFailureException
+    /**
+     * Build the structure of the work area.
+     * @throws MojoFailureException if a directory cannot be built
+     */
+    private void buildWorkArea() throws MojoFailureException
     {
         final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS" };
         
         // Build the top directory
-        if (!workarea.exists())
+        if ( !workarea.exists() )
         {
-            getLog().info("Creating directory " + workarea.getAbsolutePath());
-            if (!workarea.mkdirs())
+            getLog().info( "Creating directory " + workarea.getAbsolutePath() );
+            if ( !workarea.mkdirs() )
             {
-                throw new MojoFailureException("Unable to create directory " + workarea.getAbsolutePath());
+                throw new MojoFailureException( "Unable to create directory " + workarea.getAbsolutePath() );
             }
         }
         
         // Build each directory in the top directory
-        for (int i = 0; i < topdirs.length; i++)
+        for ( int i = 0; i < topdirs.length; i++ )
         {
-            File d = new File(workarea, topdirs[i]);
-            if (!d.exists())
+            File d = new File( workarea, topdirs[i] );
+            if ( !d.exists() )
             {
-                getLog().info("Creating directory " + d.getAbsolutePath());
-                if (!d.mkdir())
+                getLog().info( "Creating directory " + d.getAbsolutePath() );
+                if ( !d.mkdir() )
                 {
-                    throw new MojoFailureException("Unable to create directory " + d.getAbsolutePath());
+                    throw new MojoFailureException( "Unable to create directory " + d.getAbsolutePath() );
                 }
             }
         }
         
         // Build the build root
-        buildroot = new File(workarea, "buildroot");
-        if (!buildroot.exists())
+        buildroot = new File( workarea, "buildroot" );
+        if ( !buildroot.exists() )
         {
-            getLog().info("Creating directory " + buildroot.getAbsolutePath());
-            if (!buildroot.mkdir())
+            getLog().info( "Creating directory " + buildroot.getAbsolutePath() );
+            if ( !buildroot.mkdir() )
             {
-                throw new MojoFailureException("Unable to create directory " + buildroot.getAbsolutePath());
+                throw new MojoFailureException( "Unable to create directory " + buildroot.getAbsolutePath() );
             }
         }
     }
     
+    /**
+     * Check the parameters for validity.
+     * @throws MojoFailureException if an invalid parameter is found
+     * @throws MojoExecutionException if an error occurs reading a script
+     */
     private void checkParams() throws MojoExecutionException, MojoFailureException
     {
         // Check the version string
-        if (projversion.indexOf("-") == -1)
+        if ( projversion.indexOf( "-" ) == -1 )
         {
             version = projversion;
         }
         else
         {
-            version = projversion.substring(0, projversion.indexOf("-"));
-            getLog().warn("Version string truncated to " + version);
+            version = projversion.substring( 0, projversion.indexOf( "-" ) );
+            getLog().warn( "Version string truncated to " + version );
         }
         
         // Various checks in the mappings
-        for (Iterator it = mappings.iterator(); it.hasNext();)
+        for ( Iterator it = mappings.iterator(); it.hasNext(); )
         {
             Mapping map = (Mapping) it.next();
-            if (map.getDirectory() == null)
+            if ( map.getDirectory() == null )
             {
-                throw new MojoFailureException("<mapping> element must contain the destination directory");
+                throw new MojoFailureException( "<mapping> element must contain the destination directory" );
             }
-            if (map.getSources() != null)
+            if ( map.getSources() != null )
             {
-                for (Iterator sit = map.getSources().iterator(); sit.hasNext();)
+                for ( Iterator sit = map.getSources().iterator(); sit.hasNext(); )
                 {
                     Source src = (Source) sit.next();
-                    if (src.getLocation() == null)
+                    if ( src.getLocation() == null )
                     {
-                        throw new MojoFailureException("<mapping><source> element must contain the source directory");
+                        throw new MojoFailureException( "<mapping><source> tag must contain the source directory" );
                     }
                 }
             }
         }
         
         // Collect the scripts, if necessary
-        if ((preinstall == null) && (preinstallScript != null))
+        if ( ( preinstall == null ) && ( preinstallScript != null ) )
         {
-            preinstall = readFile(preinstallScript);
+            preinstall = readFile( preinstallScript );
         }
-        if ((postinstall == null) && (postinstallScript != null))
+        if ( ( postinstall == null ) && ( postinstallScript != null ) )
         {
-            postinstall = readFile(postinstallScript);
+            postinstall = readFile( postinstallScript );
         }
-        if ((preremove == null) && (preremoveScript != null))
+        if ( ( preremove == null ) && ( preremoveScript != null ) )
         {
-            preremove = readFile(preremoveScript);
+            preremove = readFile( preremoveScript );
         }
-        if ((postremove == null) && (postremoveScript != null))
+        if ( ( postremove == null ) && ( postremoveScript != null ) )
         {
-            postremove = readFile(postremoveScript);
+            postremove = readFile( postremoveScript );
         }
-        if ((verify == null) && (verifyScript != null))
+        if ( ( verify == null ) && ( verifyScript != null ) )
         {
-            verify = readFile(verifyScript);
+            verify = readFile( verifyScript );
         }
     }
     
-    private void copyArtifact(Artifact artifact, File dest) throws MojoExecutionException
+    /**
+     * Copy an artifact.
+     * @param art The artifact to copy
+     * @param dest The destination directory
+     * @throws MojoExecutionException if a problem occurs
+     */
+    private void copyArtifact( Artifact art, File dest ) throws MojoExecutionException
     {
-        if (artifact.getFile() == null)
+        if ( art.getFile() == null )
         {
-            getLog().warn("Artifact " + artifact + " requested in configuration.");
-            getLog().warn("Plugin must run in standard lifecycle for this to work.");
+            getLog().warn( "Artifact " + art + " requested in configuration." );
+            getLog().warn( "Plugin must run in standard lifecycle for this to work." );
             return;
         }
-        copySource(artifact.getFile(), dest, null, null);
+        copySource( art.getFile(), dest, null, null );
     }
     
-    private void copySource(File src, File dest, List incl, List excl) throws MojoExecutionException
+    /**
+     * Copy a set of files.
+     * @param src The file or directory to start copying from
+     * @param dest The destination directory
+     * @param incl The list of inclusions
+     * @param excl The list of exclusions
+     * @throws MojoExecutionException if a problem occurs
+     */
+    private void copySource( File src, File dest, List incl, List excl ) throws MojoExecutionException
     {
         try
         {
             // Set the destination
-            copier.setDestFile(dest);
+            copier.setDestFile( dest );
 
             // Set the source
-            if (src.isDirectory())
+            if ( src.isDirectory() )
             {
                 String[] ia = null;
-                if (incl != null)
+                if ( incl != null )
                 {
-                    ia = (String[])incl.toArray(new String[0]);
+                    ia = (String[]) incl.toArray( new String[0] );
                 }
                 
                 String[] ea = null;
-                if (excl != null)
+                if ( excl != null )
                 {
-                    ea = (String[])excl.toArray(new String[0]);
+                    ea = (String[]) excl.toArray( new String[0] );
                 }
                 
-                copier.addDirectory(src, "", ia, ea);
+                copier.addDirectory( src, "", ia, ea );
             }
             else
             {
-                copier.addFile(src, src.getName());
+                copier.addFile( src, src.getName() );
             }
 
             // Perform the copy
@@ -473,95 +535,108 @@ public class RPMMojo extends AbstractMojo
             // Clear the list for the next mapping
             copier.resetArchiver();
         }
-        catch (Throwable t)
+        catch ( Throwable t )
         {
-            throw new MojoExecutionException("Unable to copy files for packaging: " + t.getMessage(), t);
+            throw new MojoExecutionException( "Unable to copy files for packaging: " + t.getMessage(), t );
         }
     }
     
+    /**
+     * Copy the files from the various mapping sources into the build root.
+     * @throws MojoExecutionException if a problem occurs
+     */
     private void installFiles() throws MojoExecutionException
     {
         // Copy icon, if specified
-        if (icon != null)
+        if ( icon != null )
         {
-            File icondest = new File(workarea, "SOURCES");
-            copySource(icon, icondest, null, null);
+            File icondest = new File( workarea, "SOURCES" );
+            copySource( icon, icondest, null, null );
         }
         
         // Process each mapping
-        for (Iterator it = mappings.iterator(); it.hasNext();)
+        for ( Iterator it = mappings.iterator(); it.hasNext(); )
         {
             Mapping map = (Mapping) it.next();
-            File dest = new File(buildroot + map.getDestination());
+            File dest = new File( buildroot + map.getDestination() );
             
-            if (map.isDirOnly())
+            if ( map.isDirOnly() )
             {
                 // Build the output directory if it doesn't exist
-                if (!dest.exists())
+                if ( !dest.exists() )
                 {
-                    if (!dest.mkdirs())
+                    getLog().info( "Creating empty directory " + dest.getAbsolutePath() );
+                    if ( !dest.mkdirs() )
                     {
-                        throw new MojoExecutionException("Unable to create " + dest.getAbsolutePath());
+                        throw new MojoExecutionException( "Unable to create " + dest.getAbsolutePath() );
                     }
                 }
             }
             else
             {
                 List srcs = map.getSources();
-                if (srcs != null)
+                if ( srcs != null )
                 {
-                    for (Iterator sit = srcs.iterator(); sit.hasNext();)
+                    for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
                     {
                         Source src = (Source) sit.next();
-                        if (src.getLocation().exists())
+                        if ( src.getLocation().exists() )
                         {
                             List elist = src.getExcludes();
-                            if (!src.getNoDefaultExcludes())
+                            if ( !src.getNoDefaultExcludes() )
                             {
-                                if (elist == null)
+                                if ( elist == null )
                                 {
                                     elist = new ArrayList();
                                 }
-                                elist.addAll(FileUtils.getDefaultExcludesAsList());
+                                elist.addAll( FileUtils.getDefaultExcludesAsList() );
                             }
-                            copySource(src.getLocation(), dest, src.getIncludes(), elist);
+                            copySource( src.getLocation(), dest, src.getIncludes(), elist );
                         }
                         else
                         {
-                            throw new MojoExecutionException("Source location " + src.getLocation() + " does not exist");
+                            throw new MojoExecutionException( "Source location " + src.getLocation()
+                                    + " does not exist" );
                         }
                     }
                 }
                 
                 ArtifactMap art = map.getArtifact();
-                if (art != null)
+                if ( art != null )
                 {
-                    List artlist = selectArtifacts(art);
-                    for (Iterator ait = artlist.iterator(); ait.hasNext();) {
-                        copyArtifact((Artifact) ait.next(), dest);
+                    List artlist = selectArtifacts( art );
+                    for ( Iterator ait = artlist.iterator(); ait.hasNext(); )
+                    {
+                        copyArtifact( (Artifact) ait.next(), dest );
                     }
                 }
             }
         }
     }
     
-    private String readFile(File in) throws MojoExecutionException
+    /**
+     * Read a file into a string.
+     * @param in The file to read
+     * @return The file contents
+     * @throws MojoExecutionException if an error occurs reading the file
+     */
+    private String readFile( File in ) throws MojoExecutionException
     {
         try
         {
             StringBuffer sb = new StringBuffer();
-            BufferedReader br = new BufferedReader(new FileReader(in));
-            while (br.ready())
+            BufferedReader br = new BufferedReader( new FileReader( in ) );
+            while ( br.ready() )
             {
                 String line = br.readLine();
-                sb.append(line + "\n");
+                sb.append( line + "\n" );
             }
             br.close();
             return sb.toString();
         }
-        catch (Throwable t)
+        catch ( Throwable t )
         {
-            throw new MojoExecutionException("Unable to read " + in.getAbsolutePath(), t);
+            throw new MojoExecutionException( "Unable to read " + in.getAbsolutePath(), t );
         }
     }
     
@@ -570,7 +645,7 @@ public class RPMMojo extends AbstractMojo
      * @param am The artifact mapping information
      * @return The list of artifacts to package
      */
-    private List selectArtifacts( ArtifactMap am ) throws MojoExecutionException
+    private List selectArtifacts( ArtifactMap am )
     {
         List retval = new ArrayList();
         List clist = am.getClassifiers();
@@ -584,17 +659,14 @@ public class RPMMojo extends AbstractMojo
         {
             if ( clist.contains( null ) )
             {
-                retval.add(artifact);
+                retval.add( artifact );
             }
             for ( Iterator ait = attachedArtifacts.iterator(); ait.hasNext(); )
             {
                 Artifact aa = (Artifact) ait.next();
-                if ( aa.hasClassifier() )
+                if ( ( aa.hasClassifier() ) && ( clist.contains( aa.getClassifier() ) ) )
                 {
-                    if ( clist.contains( aa.getClassifier() ) )
-                    {
-                        retval.add( aa );
-                    }
+                    retval.add( aa );
                 }
             }
         }
@@ -602,127 +674,131 @@ public class RPMMojo extends AbstractMojo
         return retval;
     }
     
+    /**
+     * Write the SPEC file.
+     * @throws MojoExecutionException if an error occurs writing the file
+     */
     private void writeSpecFile() throws MojoExecutionException
     {
-        File f = new File(workarea, "SPECS");
-        File specf = new File(f, name + ".spec");
+        File f = new File( workarea, "SPECS" );
+        File specf = new File( f, name + ".spec" );
         try
         {
-            getLog().info("Creating spec file " + specf.getAbsolutePath());
-            PrintWriter spec = new PrintWriter(new FileWriter(specf));
+            getLog().info( "Creating spec file " + specf.getAbsolutePath() );
+            PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
             
-            spec.println("Name: " + name);
-            spec.println("Version: " + version);
-            spec.println("Release: " + release);
-            if (summary != null)
+            spec.println( "Name: " + name );
+            spec.println( "Version: " + version );
+            spec.println( "Release: " + release );
+            if ( summary != null )
             {
-                spec.println("Summary: " + summary);
+                spec.println( "Summary: " + summary );
             }
-            if (copyright != null)
+            if ( copyright != null )
             {
-                spec.println("License: " + copyright);
+                spec.println( "License: " + copyright );
             }
-            if (distribution != null)
+            if ( distribution != null )
             {
-                spec.println("Distribution: " + distribution);
+                spec.println( "Distribution: " + distribution );
             }
-            if (icon != null)
+            if ( icon != null )
             {
-                spec.println("Icon: " + icon.getName());
+                spec.println( "Icon: " + icon.getName() );
             }
-            if (vendor != null)
+            if ( vendor != null )
             {
-                spec.println("Vendor: " + vendor);
+                spec.println( "Vendor: " + vendor );
             }
-            if (url != null)
+            if ( url != null )
             {
-                spec.println("URL: " + url);
+                spec.println( "URL: " + url );
             }
-            if (group != null)
+            if ( group != null )
             {
-                spec.println("Group: " + group);
+                spec.println( "Group: " + group );
             }
-            if (packager != null)
+            if ( packager != null )
             {
-                spec.println("Packager: " + packager);
+                spec.println( "Packager: " + packager );
             }
-            if (provides != null)
+            if ( provides != null )
             {
-                for (Iterator it = provides.iterator(); it.hasNext();)
+                for ( Iterator it = provides.iterator(); it.hasNext(); )
                 {
-                    spec.println("Provides: " + it.next());
+                    spec.println( "Provides: " + it.next() );
                 }
             }
-            if (requires != null)
+            if ( requires != null )
             {
-                for (Iterator it = requires.iterator(); it.hasNext();)
+                for ( Iterator it = requires.iterator(); it.hasNext(); )
                 {
-                    spec.println("Requires: " + it.next());
+                    spec.println( "Requires: " + it.next() );
                 }
             }
-            if (conflicts != null)
+            if ( conflicts != null )
             {
-                for (Iterator it = conflicts.iterator(); it.hasNext();)
+                for ( Iterator it = conflicts.iterator(); it.hasNext(); )
                 {
-                    spec.println("Conflicts: " + it.next());
+                    spec.println( "Conflicts: " + it.next() );
                 }
             }
-            if (prefix != null)
+            if ( prefix != null )
             {
-                spec.println("Prefix: " + prefix);
+                spec.println( "Prefix: " + prefix );
             }
-            spec.println("BuildRoot: " + buildroot.getAbsolutePath());
+            spec.println( "BuildRoot: " + buildroot.getAbsolutePath() );
             spec.println();
-            spec.println("%description");
-            if (description != null)
+            spec.println( "%description" );
+            if ( description != null )
             {
-                spec.println(description);
+                spec.println( description );
             }
             
             spec.println();
-            spec.println("%files");
-            for (Iterator it = mappings.iterator(); it.hasNext();)
+            spec.println( "%files" );
+            for ( Iterator it = mappings.iterator(); it.hasNext(); )
             {
                 Mapping map = (Mapping) it.next();
-                spec.println(map.getAttrString() + " " + map.getDestination());
+                spec.println( map.getAttrString() + " " + map.getDestination() );
             }
             
-            if (preinstall != null)
+            if ( preinstall != null )
             {
                 spec.println();
-                spec.println("%pre");
-                spec.println(preinstall);
+                spec.println( "%pre" );
+                spec.println( preinstall );
             }
-            if (postinstall != null)
+            if ( postinstall != null )
             {
                 spec.println();
-                spec.println("%post");
-                spec.println(postinstall);
+                spec.println( "%post" );
+                spec.println( postinstall );
             }
-            if (preremove != null)
+            if ( preremove != null )
             {
                 spec.println();
-                spec.println("%preun");
-                spec.println(preremove);
+                spec.println( "%preun" );
+                spec.println( preremove );
             }
-            if (postremove != null)
+            if ( postremove != null )
             {
                 spec.println();
-                spec.println("%postun");
-                spec.println(postremove);
+                spec.println( "%postun" );
+                spec.println( postremove );
             }
-            if (verify != null)
+            if ( verify != null )
             {
                 spec.println();
-                spec.println("%verifyscript");
-                spec.println(verify);
+                spec.println( "%verifyscript" );
+                spec.println( verify );
             }
             
             spec.close();
         }
-        catch (Throwable t)
+        catch ( Throwable t )
         {
-            throw new MojoExecutionException("Unable to write " + specf.getAbsolutePath(), t);
+            throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), t );
         }
     }
 }

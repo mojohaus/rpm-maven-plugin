@@ -17,7 +17,6 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,9 +28,16 @@ public class Source
     
     // // //  Properties
     
+    /** The source location. */
     private File location;
+    
+    /** The list of inclusions. */
     private List includes;
+    
+    /** The list of exclusions. */
     private List excludes;
+    
+    /** <code>true</code> to omit the default exclusions. */
     private boolean noDefaultExcludes;
     
     // // //  Bean methods
@@ -42,16 +48,16 @@ public class Source
      */
     public File getLocation()
     {
-        return this.location;
+        return location;
     }
     
     /**
      * Set the location holding the file(s) to install.
-     * @param location The new location holding the file(s) to install.
+     * @param loc The new location holding the file(s) to install.
      */
-    public void setLocation(File location)
+    public void setLocation( File loc )
     {
-        this.location = location;
+        location = loc;
     }
     
     /**
@@ -60,16 +66,16 @@ public class Source
      */
     public List getIncludes()
     {
-        return this.includes;
+        return includes;
     }
     
     /**
      * Set the list of files to include in the package.
-     * @param includes The new list of files to include in the package.
+     * @param incl The new list of files to include in the package.
      */
-    public void setIncludes(List includes)
+    public void setIncludes( List incl )
     {
-        this.includes = includes;
+        includes = incl;
     }
     
     /**
@@ -78,16 +84,16 @@ public class Source
      */
     public List getExcludes()
     {
-        return this.excludes;
+        return excludes;
     }
     
     /**
      * Set the list of files to exclude from the package.
-     * @param excludes The new list of files to exclude from the package.
+     * @param excl The new list of files to exclude from the package.
      */
-    public void setExcludes(List excludes)
+    public void setExcludes( List excl )
     {
-        this.excludes = excludes;
+        excludes = excl;
     }
     
     /**
@@ -96,51 +102,52 @@ public class Source
      */
     public boolean getNoDefaultExcludes()
     {
-        return this.noDefaultExcludes;
+        return noDefaultExcludes;
     }
     
     /**
      * Set the default exclude status.
-     * @param noDefaultExcludes <code>true</code> if the default excludes
+     * @param noDefExcl <code>true</code> if the default excludes
      *        should be omitted.
      */
-    public void setNoDefaultExcludes(boolean noDefaultExcludes)
+    public void setNoDefaultExcludes( boolean noDefExcl )
     {
-        this.noDefaultExcludes = noDefaultExcludes;
+        noDefaultExcludes = noDefExcl;
     }
     
     // // //  Public methods
     
+    /** {@inheritDoc} */
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        sb.append("{");
+        sb.append( "{" );
         
-        if (location == null)
+        if ( location == null )
         {
-            sb.append("nowhere");
+            sb.append( "nowhere" );
         }
         else
         {
-            sb.append("\"" + location + "\"");
+            sb.append( "\"" + location + "\"" );
         }
         
-        if (includes != null)
+        if ( includes != null )
         {
-            sb.append(" incl:" + includes);
+            sb.append( " incl:" + includes );
         }
         
-        if (excludes != null)
+        if ( excludes != null )
         {
-            sb.append(" excl:" + excludes);
+            sb.append( " excl:" + excludes );
         }
         
-        if (noDefaultExcludes)
+        if ( noDefaultExcludes )
         {
-            sb.append(" [no default excludes]");
+            sb.append( " [no default excludes]" );
         }
         
-        sb.append("}");
+        sb.append( "}" );
         return sb.toString();
     }
 }

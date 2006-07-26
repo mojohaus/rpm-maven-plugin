@@ -29,13 +29,28 @@ public class Mapping
     
     // // //  Properties
     
+    /** Destination directory name. */
     private String directory;
+    
+    /** <code>true</code> if the files are configuration. */
     private boolean configuration;
+    
+    /** <code>true</code> if the files are documentation. */
     private boolean documentation;
+    
+    /** File mode (octal string) to assign to files when installed. */
     private String filemode;
+    
+    /** User name for files when installed. */
     private String username;
+    
+    /** Group name for files when installed. */
     private String groupname;
+    
+    /** Mapping information for source directories. */
     private List sources;
+    
+    /** Mapping information for artifacts. */
     private ArtifactMap artifact;
     
     // // //  Bean methods
@@ -46,16 +61,16 @@ public class Mapping
      */
     public String getDirectory()
     {
-        return this.directory;
+        return directory;
     }
     
     /**
      * Set the destination during package installation.
-     * @param directory The new destination during package installation.
+     * @param dir The new destination during package installation.
      */
-    public void setDirectory(String directory)
+    public void setDirectory( String dir )
     {
-        this.directory = directory;
+        directory = dir;
     }
     
     /**
@@ -65,17 +80,17 @@ public class Mapping
      */
     public boolean isConfiguration()
     {
-        return this.configuration;
+        return configuration;
     }
     
     /**
      * Set the configuration status.  This value is <code>true</code> if
      * the file(s) in this mapping are configuration files.
-     * @param configuration The new configuration status.
+     * @param isCfg The new configuration status.
      */
-    public void setConfiguration(boolean configuration)
+    public void setConfiguration( boolean isCfg )
     {
-        this.configuration = configuration;
+        configuration = isCfg;
     }
     
     /**
@@ -85,17 +100,17 @@ public class Mapping
      */
     public boolean isDocumentation()
     {
-        return this.documentation;
+        return documentation;
     }
     
     /**
      * Set the documentation status.  This value is <code>true</code> if
      * the file(s) in this mapping are documentation files.
-     * @param documentation The new documentation status.
+     * @param isDoc The new documentation status.
      */
-    public void setDocumentation(boolean documentation)
+    public void setDocumentation( boolean isDoc )
     {
-        this.documentation = documentation;
+        documentation = isDoc;
     }
     
     /**
@@ -106,18 +121,18 @@ public class Mapping
      */
     public String getFilemode()
     {
-        return this.filemode;
+        return filemode;
     }
     
     /**
      * Set the UNIX file permissions.  This is a three-digit octal number
      * which specifies the permissions to be applied to each file in the
      * mapping when it is installed.
-     * @param filemode The new UNIX file permissions.
+     * @param fmode The new UNIX file permissions.
      */
-    public void setFilemode(String filemode)
+    public void setFilemode( String fmode )
     {
-        this.filemode = filemode;
+        filemode = fmode;
     }
     
     /**
@@ -127,17 +142,17 @@ public class Mapping
      */
     public String getUsername()
     {
-        return this.username;
+        return username;
     }
     
     /**
      * Set the UNIX user name to own the installed files.  Note that this
      * must be a name, not a numeric user ID.
-     * @param username The new UNIX user name to own the installed files.
+     * @param uname The new UNIX user name to own the installed files.
      */
-    public void setUsername(String username)
+    public void setUsername( String uname )
     {
-        this.username = username;
+        username = uname;
     }
     
     /**
@@ -147,17 +162,17 @@ public class Mapping
      */
     public String getGroupname()
     {
-        return this.groupname;
+        return groupname;
     }
     
     /**
      * Set the UNIX group name to own the installed files.  Note that this
      * must be a name, not a numeric group ID.
-     * @param groupname The new UNIX group name to own the installed files.
+     * @param grpname The new UNIX group name to own the installed files.
      */
-    public void setGroupname(String groupname)
+    public void setGroupname( String grpname )
     {
-        this.groupname = groupname;
+        groupname = grpname;
     }
     
     /**
@@ -166,16 +181,16 @@ public class Mapping
      */
     public List getSources()
     {
-        return this.sources;
+        return sources;
     }
     
     /**
      * Set the list of source file specifications.
-     * @param sources The new list of source file specifications.
+     * @param srclist The new list of source file specifications.
      */
-    public void setSources(List sources)
+    public void setSources( List srclist )
     {
-        this.sources = sources;
+        sources = srclist;
     }
     
     /**
@@ -198,58 +213,66 @@ public class Mapping
     
     // // //  Public methods
     
+    /**
+     * Assemble the RPM SPEC file attributes for a mapping.
+     * @return The attribute string for the SPEC file.
+     */
     public String getAttrString()
     {
         StringBuffer sb = new StringBuffer();
         
-        if (configuration)
+        if ( configuration )
         {
-            sb.append("%config ");
+            sb.append( "%config " );
         }
         
-        if (documentation)
+        if ( documentation )
         {
-            sb.append("%doc ");
+            sb.append( "%doc " );
         }
         
-        if ((sources == null) || (sources.size() == 0))
+        if ( ( sources == null ) || ( sources.size() == 0 ) )
         {
-            sb.append("%dir ");
+            sb.append( "%dir " );
         }
         
-        if (filemode != null)
+        if ( filemode != null )
         {
-            sb.append("%attr(" + filemode + ",");
+            sb.append( "%attr(" + filemode + "," );
         }
         else
         {
-            sb.append("%attr(-,");
+            sb.append( "%attr(-," );
         }
         
-        if (username != null)
+        if ( username != null )
         {
-            sb.append(username + ",");
+            sb.append( username + "," );
         }
         else
         {
-            sb.append("-,");
+            sb.append( "-," );
         }
         
-        if (groupname != null)
+        if ( groupname != null )
         {
-            sb.append(groupname + ")");
+            sb.append( groupname + ")" );
         }
         else
         {
-            sb.append("-)");
+            sb.append( "-)" );
         }
         
         return sb.toString();
     }
     
+    /**
+     * Return the destination directory name.
+     * @return The name of the destination directory.
+     */
     public String getDestination()
     {
-        if (directory == null)
+        if ( directory == null )
         {
             return "nowhere";
         }
@@ -278,17 +301,18 @@ public class Mapping
         return true;
     }
     
+    /** {@inheritDoc} */
     public String toString()
     {
         boolean sourceShown = false;
         StringBuffer sb = new StringBuffer();
         
-        sb.append("[\"" + getDestination() + "\" ");
-        sb.append("{" + getAttrString() + "}");
+        sb.append( "[\"" + getDestination() + "\" " );
+        sb.append( "{" + getAttrString() + "}" );
         
-        if (sources == null)
+        if ( isDirOnly() )
         {
-            sb.append(" (dir only)]");
+            sb.append( " (dir only)]" );
         }
         else
         {
