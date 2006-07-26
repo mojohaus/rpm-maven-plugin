@@ -3,12 +3,12 @@
   <bannerLeft>
       <name>Mojo</name>
       <src>http://mojo.codehaus.org/images/mojo_logo.png</src>
-      <href>http://mojo.codehaus.org</href>
+      <href>http://mojo.codehaus.org/</href>
   </bannerLeft>
    <bannerRight>
       <name>Codehaus</name>
       <src>http://mojo.codehaus.org/images/codehaus-small.png</src>
-      <href>http://www.codehaus.org</href>
+      <href>http://www.codehaus.org/</href>
    </bannerRight>
   <body>
     <links>
@@ -19,41 +19,50 @@
          <item name="Back to Mojo" href="http://mojo.codehaus.org"/>
     </menu>
     <menu name="Maven RPM Plugin">
-      <item name="Plugin Goals" href="index.html"/>
-      <item name="Introduction" href="intro.html"/>
-      <menu name="Project Settings" href="pom.html">
+      <item name="Introduction" href="index.html"/>
+      <item name="Usage Scenarios" href="usage.html"/>
+      <item name="Project Settings" href="pom.html" collapse="true">
           <item name="artifactId" href="pom.html#artifactId"/>
           <item name="description" href="pom.html#description"/>
           <item name="name" href="pom.html#name"/>
           <item name="organization" href="pom.html#organization"/>
-      </menu>
-      <menu name="Basic Parameters" href="basic-params.html">
-          <item name="copyright" href="basic-params.html#copyright"/>
-          <item name="distribution" href="basic-params.html#distribution"/>
-          <item name="group" href="basic-params.html#group"/>
-          <item name="icon" href="basic-params.html#icon"/>
-          <menu name="mappings" href="basic-params.html#mappings">
-              <item name="configuration" href="basic-params.html#configuration"/>
-              <item name="directory" href="basic-params.html#directory"/>
-              <item name="documentation" href="basic-params.html#documentation"/>
-              <item name="filemode" href="basic-params.html#filemode"/>
-              <item name="filename" href="basic-params.html#filename"/>
-              <item name="groupname" href="basic-params.html#groupname"/>
-              <item name="sources" href="basic-params.html#sources"/>
-              <item name="username" href="basic-params.html#username"/>
-          </menu>
-          <item name="needarch" href="basic-params.html#needarch"/>
-          <item name="packager" href="basic-params.html#packager"/>
-          <item name="release" href="basic-params.html#release"/>
-          <item name="version" href="basic-params.html#version"/>
-          <item name="workarea" href="basic-params.html#workarea"/>
-      </menu>
-      <menu name="Advanced Parameters" href="adv-params.html">
-          <item name="RPM Dependencies" href="adv-params.html#Dependency"/>
-          <item name="Relocation" href="adv-params.html#Relocation"/>
-          <item name="Scripts" href="adv-params.html#Scripts"/>
-      </menu>
-      <item name="Usage Scenarios" href="usage.html"/>
+      </item>
+      <item name="Parameters" href="params.html" collapse="true">
+          <item name="Identification Parameters" href="ident-params.html">
+              <item name="copyright" href="ident-params.html#copyright"/>
+              <item name="distribution" href="ident-params.html#distribution"/>
+              <item name="group" href="ident-params.html#group"/>
+              <item name="icon" href="ident-params.html#icon"/>
+              <item name="needarch" href="ident-params.html#needarch"/>
+              <item name="packager" href="ident-params.html#packager"/>
+              <item name="release**" href="ident-params.html#release"/>
+              <item name="version" href="ident-params.html#version"/>
+          </item>
+          <item name="Operation Parameters" href="op-params.html">
+              <item name="workarea" href="op-params.html#workarea"/>
+          </item>
+          <item name="Mapping Parameters" href="map-params.html">
+              <item name="artifact" href="map-params.html#artifact"/>
+              <item name="configuration" href="map-params.html#configuration"/>
+              <item name="directory**" href="map-params.html#directory"/>
+              <item name="documentation" href="map-params.html#documentation"/>
+              <item name="filemode*" href="map-params.html#filemode"/>
+              <item name="groupname*" href="map-params.html#groupname"/>
+              <item name="sources" href="map-params.html#sources"/>
+              <item name="username*" href="map-params.html#username"/>
+          </item>
+          <item name="Source Parameters" href="source-params.html">
+              <item name="location**" href="source-params.html#location"/>
+              <item name="noDefaultExcludes" href="source-params.html#noDefaultExcludes"/>
+              <item name="includes" href="source-params.html#includes"/>
+              <item name="excludes" href="source-params.html#excludes"/>
+          </item>
+          <item name="Advanced Parameters" href="adv-params.html">
+              <item name="RPM Dependencies" href="adv-params.html#Dependency"/>
+              <item name="Relocation" href="adv-params.html#Relocation"/>
+              <item name="Scripts" href="adv-params.html#Scripts"/>
+          </item>
+      </item>
       <item name="Sample Configuration" href="sample.html"/>
       <item name="To Do List" href="todo.html"/>
       <item name="Javadoc" href="apidocs/index.html"/>

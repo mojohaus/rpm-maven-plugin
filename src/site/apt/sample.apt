@@ -3,7 +3,7 @@
  ------
  Bob Allison
  ------
- 11 November 2005
+ 20 June 2006
  -----
 
 Sample Configuration
@@ -27,12 +27,31 @@ This is a sample using trash collection as an example.
         <name>Sanitation Workers of Washington, D.C.</name>
         <url>http://www.trash.gov/</url>
     </organization>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>Maven Snapshots</id>
+        <url>http://snapshots.maven.codehaus.org/maven2/</url>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+        <releases>
+          <enabled>false</enabled>
+        </releases>
+      </pluginRepository>
+    </pluginRepositories>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>rpm-maven-plugin</artifactId>
-                <version>1.0-alpha-1</version>
+                <version>2.0-alpha-3-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>rpm</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <release>1</release>
                     <copyright>2005, SWWDC</copyright>

@@ -3,7 +3,7 @@
  ------
  Bob Allison
  ------
- 12 January 2006
+ 25 July 2006
  -----
 
 Introduction
@@ -32,26 +32,39 @@ Features
   * Scripts for pre- and post-installation and pre- and post-removal are
     supported, as well as a verification script
 
-Problems
-
-  * For this plug-in to work, it requires version 1.0-alpha-5-SNAPSHOT of the
-    Plexus Archiver component.  You can download the Plexus source and build the
-    component yourself or, to make it easier to try this plugin, I have made a
-    {{{http://codehaus.org/~boba/plexus-archiver.zip}ZIP file}}
-    which contains that snapshot.  After downloading the ZIP file, change to
-    the top of your local repository tree (<<<${user.home}/.m2/repository>>>)
-    and unzip the file.  This will place the jar and pom files in the correct
-    place in the local repository.
-
-  * For easier evaluation, I have built a binary distribution of the plugin.
-    Download the {{{http://codehaus.org/~boba/rpm-plugin.zip}ZIP file}} and
-    install the contents as described above.  This ZIP file contains the Plexus
-    Archiver component as well as version 1.0-alpha-2-SNAPSHOT of the plugin.
-
 How to Use the Plugin
 
-  After building the configuration in the project's POM, execute the goal
-  "<<<rpm:rpm>>>" to construct the RPM file.
+  You need to add the following repository to your project's POM:
+
++----+
+<repositories>
+  <repository>
+    <id>Maven Snapshots</id>
+    <url>http://snapshots.maven.codehaus.org/</url>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+  </repository>
+</repositories>
+<pluginRepositories>
+  <pluginRepository>
+    <id>Maven Snapshots</id>
+    <url>http://snapshots.maven.codehaus.org/</url>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+  </pluginRepository>
+</pluginRepositories>
++----+
+
+  For information on how to get the RPM file generated, please refer to the
+  {{{usage.html}Usage Scenarios}} document.
 
 Resources
 

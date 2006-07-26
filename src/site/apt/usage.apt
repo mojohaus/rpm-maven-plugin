@@ -18,21 +18,39 @@ RPM on Demand
   may be configured to produce any sort of packaging, since the RPM is not
   the primary artifact produced by the project.
 
+  If you want the project's artifacts packaged in the RPM, you must generate
+  the RPM as a side effect of the standard lifecycle.
+
   Things which do not work as I envision the 1.0 release working:
 
   * If this goal is run on a project with modules, it will run the
     "<<<rpm:rpm>>>" goal on each module, rather than packaging the modules into
     a single RPM.
 
-  * If you want the project's artifacts packaged, you must specify
-    them in the RPM plugin configuration with a source of the project's build
-    directory.
-
   * If you want to package the project's dependencies, you must
     specify them in the RPM plugin configuration with a source of your Maven2
     repository.
 
   []
+
+RPM as Side Effect
+
+  In this scenario, an RPM is generated from the project whenever the project
+  is packaged.  This must be done whenever the project's primary artifact is
+  intended to be part of the RPM package but can be done anytime.  To set up
+  this configuration, include the following lines in the plugin definition
+  in the project's POM file (see the {{{sample.html}sample configuration}} for
+  an example of this):
+
++-------+
+<executions>
+  <execution>
+    <goals>
+      <goal>rpm</goal>
+    </goals>
+  </execution>
+</executions>
++-------+
 
 RPM as Primary Artifact
 

@@ -1,0 +1,64 @@
+ ------
+ Maven RPM Plugin - Source Parameters
+ ------
+ Bob Allison
+ ------
+ 25 July 2006
+ -----
+
+Source Parameters
+
+  The parameters described in this page specify the set of files to be copied
+  into the work area for inclusion in the RPM package.  By default, files which
+  are related to source control and editor temporary files are excluded.
+
+  The set of parameters which define a single file set are contained within a
+  <<<source>>> tag.  The set of all <<<source>>> tags are contained within
+  a <<<sources>>> tag.  A minimal source configuration looks like:
+
++-----+
+<plugin>
+  ...
+  <configuration>
+    ...
+    <mappings>
+      <mapping>
+        ...
+        <sources>
+          <source>
+            <location>target/classes</location>
+          </source>
+        </sources>
+        ...
+      </mapping>
+    </mappings>
+    ...
+  </configuration>
+  ...
+</plugin>
++-----+
+
+* {location} (<<required>>)
+
+  The file or directory to include.  If a directory is specified, all files
+  and subdirectories are also included.  If the path does not start with
+  <<</>>>, it is taken to be relative to the project's base directory.
+
+  Note that the entire source specification is optional, but each source
+  specification that is present must have this parameter.
+
+* {noDefaultExcludes}
+
+  If given the value <<<true>>>, the default exclusions are not used.
+
+* {includes}
+
+  Contains one or more <<<include>>> elements with a wildcard filename
+  expression which identifies the files to be included.
+
+* {excludes}
+
+  Contains one or more <<<exclude>>> elements with a wildcard filename
+  expression which identifies the files to be excluded.  If
+  <<<noDefaultExcludes>>> is not specified, the default exclusions are added
+  to this list.

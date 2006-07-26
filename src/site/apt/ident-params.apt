@@ -1,0 +1,61 @@
+ ------
+ Maven RPM Plugin - Identification Parameters
+ ------
+ Bob Allison
+ ------
+ 25 July 2006
+ -----
+
+Identification Parameters
+
+  The parameters described in this page provide the identification of the
+  RPM package.  This information will be present in the package file and can be
+  viewed with the "<<<rpm -i>>>" command.
+
+* {version}
+
+  The version number to use for the RPM package.  By default, this is the
+  project version.  This value cannot contain a dash (<<<->>>) due to
+  contraints in the RPM file naming convention.  Any specified value will
+  be truncated at the first dash.
+
+* {release} (<<required>>)
+
+  The release number of the RPM.  This should be an integer initialized to
+  1 when the RPM is first released for a particular version and incremented
+  with each subsequent release.
+
+* {copyright}
+
+  The copyright information for the RPM.  This is a <<one-line>> identifier of
+  the copyright, like "<<<GPL>>>".
+
+* {distribution}
+
+  A one-line string identifying the distribution of which this RPM is a part.
+
+* {group}
+
+  A string which identifies the software group for this package.  This can be
+  used by GUI tools to group packages for display.  Check the RPM documentation
+  (installed in <<</usr/share/doc/rpm->>><version><<</GROUPS>>> on most Linuxes)
+  for a list of current groups.
+
+* {icon}
+
+  The file (GIF or XPM) with an icon for the package.  This can be used by GUI
+  tools to display an icon for the package.
+
+* {needarch}
+
+  If given the value <<<true>>>, the package will be marked as specific to
+  the architecture of the machine building the package.  This should only be
+  necessary in the case of compiled code from languages such as C or C++, and
+  should not be specified if the executable content of the package consists
+  only of scripts (such as shell, perl, or python) and Java code.
+
+* {packager}
+
+  The name of the person or group which is creating the package.  By default,
+  this will be taken from the name specified in the POM's organization
+  information.
