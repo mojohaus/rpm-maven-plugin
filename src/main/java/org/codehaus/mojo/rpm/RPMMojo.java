@@ -21,13 +21,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -38,6 +41,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * Construct the RPM file
  * @version $Id$
  * @goal rpm
+ * @phase package
  */
 public class RPMMojo extends AbstractMojo
 {
@@ -233,6 +237,20 @@ public class RPMMojo extends AbstractMojo
      *            roleHint="dir"
      */
     private DirectoryArchiver copier;
+
+    /**
+     * @parameter expression="${project.artifact}"
+     * @required
+     * @readonly
+     */
+    private Artifact artifact;
+
+    /**
+     * @parameter expression="${project.attachedArtifacts}
+     * @required
+     * @readonly
+     */
+    private List attachedArtifacts;
     
     // // //  Consumers for rpmbuild output
     
@@ -409,6 +427,17 @@ public class RPMMojo extends AbstractMojo
         }
     }
     
+    private void copyArtifact(Artifact artifact, File dest) throws MojoExecutionException
+    {
+        if (artifact.getFile() == null)
+        {
+            getLog().warn("Artifact " + artifact + " requested in configuration.");
+            getLog().warn("Plugin must run in standard lifecycle for this to work.");
+            return;
+        }
+        copySource(artifact.getFile(), dest, null, null);
+    }
+    
     private void copySource(File src, File dest, List incl, List excl) throws MojoExecutionException
     {
         try
@@ -465,27 +494,51 @@ public class RPMMojo extends AbstractMojo
             Mapping map = (Mapping) it.next();
             File dest = new File(buildroot + map.getDestination());
             
-            List srcs = map.getSources();
-            if ((srcs == null) || (srcs.size() == 0))
+            if (map.isDirOnly())
             {
-                // Build the output directory
-                if (!dest.mkdirs())
+                // Build the output directory if it doesn't exist
+                if (!dest.exists())
                 {
-                    throw new MojoExecutionException("Unable to create " + dest.getAbsolutePath());
+                    if (!dest.mkdirs())
+                    {
+                        throw new MojoExecutionException("Unable to create " + dest.getAbsolutePath());
+                    }
                 }
             }
             else
             {
-                for (Iterator sit = srcs.iterator(); sit.hasNext();)
+                List srcs = map.getSources();
+                if (srcs != null)
                 {
-                    Source src = (Source) sit.next();
-                    if (src.getLocation().exists())
+                    for (Iterator sit = srcs.iterator(); sit.hasNext();)
                     {
-                        copySource(src.getLocation(), dest, src.getIncludes(), src.getExcludes());
+                        Source src = (Source) sit.next();
+                        if (src.getLocation().exists())
+                        {
+                            List elist = src.getExcludes();
+                            if (!src.getNoDefaultExcludes())
+                            {
+                                if (elist == null)
+                                {
+                                    elist = new ArrayList();
+                                }
+                                elist.addAll(FileUtils.getDefaultExcludesAsList());
+                            }
+                            copySource(src.getLocation(), dest, src.getIncludes(), elist);
+                        }
+                        else
+                        {
+                            throw new MojoExecutionException("Source location " + src.getLocation() + " does not exist");
+                        }
                     }
-                    else
-                    {
-                        throw new MojoExecutionException("Source location " + src.getLocation() + " does not exist");
+                }
+                
+                ArtifactMap art = map.getArtifact();
+                if (art != null)
+                {
+                    List artlist = selectArtifacts(art);
+                    for (Iterator ait = artlist.iterator(); ait.hasNext();) {
+                        copyArtifact((Artifact) ait.next(), dest);
                     }
                 }
             }
@@ -510,6 +563,43 @@ public class RPMMojo extends AbstractMojo
         {
             throw new MojoExecutionException("Unable to read " + in.getAbsolutePath(), t);
         }
+    }
+    
+    /**
+     * Make a list of the artifacts to package in this mapping.
+     * @param am The artifact mapping information
+     * @return The list of artifacts to package
+     */
+    private List selectArtifacts( ArtifactMap am ) throws MojoExecutionException
+    {
+        List retval = new ArrayList();
+        List clist = am.getClassifiers();
+        
+        if ( clist == null )
+        {
+            retval.add( artifact );
+            retval.addAll( attachedArtifacts );
+        }
+        else
+        {
+            if ( clist.contains( null ) )
+            {
+                retval.add(artifact);
+            }
+            for ( Iterator ait = attachedArtifacts.iterator(); ait.hasNext(); )
+            {
+                Artifact aa = (Artifact) ait.next();
+                if ( aa.hasClassifier() )
+                {
+                    if ( clist.contains( aa.getClassifier() ) )
+                    {
+                        retval.add( aa );
+                    }
+                }
+            }
+        }
+        
+        return retval;
     }
     
     private void writeSpecFile() throws MojoExecutionException

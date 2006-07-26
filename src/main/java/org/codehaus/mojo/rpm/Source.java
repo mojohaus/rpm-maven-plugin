@@ -32,6 +32,7 @@ public class Source
     private File location;
     private List includes;
     private List excludes;
+    private boolean noDefaultExcludes;
     
     // // //  Bean methods
     
@@ -89,16 +90,31 @@ public class Source
         this.excludes = excludes;
     }
     
+    /**
+     * Retrieve the default exclude status.
+     * @return <code>true</code> if the default excludes should be omitted.
+     */
+    public boolean getNoDefaultExcludes()
+    {
+        return this.noDefaultExcludes;
+    }
+    
+    /**
+     * Set the default exclude status.
+     * @param noDefaultExcludes <code>true</code> if the default excludes
+     *        should be omitted.
+     */
+    public void setNoDefaultExcludes(boolean noDefaultExcludes)
+    {
+        this.noDefaultExcludes = noDefaultExcludes;
+    }
+    
     // // //  Public methods
     
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
-        
-        if ((includes != null) || (excludes != null))
-        {
-            sb.append("{");
-        }
+        sb.append("{");
         
         if (location == null)
         {
@@ -119,11 +135,12 @@ public class Source
             sb.append(" excl:" + excludes);
         }
         
-        if ((includes != null) || (excludes != null))
+        if (noDefaultExcludes)
         {
-            sb.append("}");
+            sb.append(" [no default excludes]");
         }
         
+        sb.append("}");
         return sb.toString();
     }
 }

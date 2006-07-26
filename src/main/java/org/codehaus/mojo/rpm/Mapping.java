@@ -16,7 +16,6 @@ package org.codehaus.mojo.rpm;
  * limitations under the License.
  */
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,13 +30,13 @@ public class Mapping
     // // //  Properties
     
     private String directory;
-    private String filename;
     private boolean configuration;
     private boolean documentation;
     private String filemode;
     private String username;
     private String groupname;
     private List sources;
+    private ArtifactMap artifact;
     
     // // //  Bean methods
     
@@ -57,24 +56,6 @@ public class Mapping
     public void setDirectory(String directory)
     {
         this.directory = directory;
-    }
-    
-    /**
-     * Retrieve the file name used during package installation.
-     * @return The file name used during package installation.
-     */
-    public String getFilename()
-    {
-        return this.filename;
-    }
-    
-    /**
-     * Set the file name used during package installation.
-     * @param filename The new file name used during package installation.
-     */
-    public void setFilename(String filename)
-    {
-        this.filename = filename;
     }
     
     /**
@@ -197,6 +178,24 @@ public class Mapping
         this.sources = sources;
     }
     
+    /**
+     * Retrieve the artifact specification.
+     * @return The artifact specification.
+     */
+    public ArtifactMap getArtifact()
+    {
+        return artifact;
+    }
+    
+    /**
+     * Set the artifact specification.
+     * @param am The new artifact specification.
+     */
+    public void setArtifact( ArtifactMap am )
+    {
+        artifact = am;
+    }
+    
     // // //  Public methods
     
     public String getAttrString()
@@ -250,26 +249,38 @@ public class Mapping
     
     public String getDestination()
     {
-        StringBuffer sb = new StringBuffer();
-        
         if (directory == null)
         {
-            sb.append("nowhere");
+            return "nowhere";
         }
         else
         {
-            sb.append(directory);
-            if (filename != null)
-            {
-                sb.append("/" + filename);
-            }
+            return directory;
+        }
+    }
+    
+    /**
+     * Return directory-only status.
+     * @return <code>true</code> if no sources were specified in the mapping
+     */
+    public boolean isDirOnly()
+    {
+        if ( ( sources != null ) && ( !sources.isEmpty() ) )
+        {
+            return false;
         }
         
-        return sb.toString();
+        if ( artifact != null )
+        {
+            return false;
+        }
+        
+        return true;
     }
     
     public String toString()
     {
+        boolean sourceShown = false;
         StringBuffer sb = new StringBuffer();
         
         sb.append("[\"" + getDestination() + "\" ");
@@ -281,7 +292,21 @@ public class Mapping
         }
         else
         {
-            sb.append(" from " + sources + "]");
+            sb.append( " from " );
+            if ( sources != null )
+            {
+                sb.append( sources.toString() );
+                sourceShown = true;
+            }
+            if ( artifact != null )
+            {
+                if ( sourceShown )
+                {
+                    sb.append( ", " );
+                }
+                sb.append( artifact.toString() );
+            }
+            sb.append( "]" );
         }
         
         return sb.toString();
