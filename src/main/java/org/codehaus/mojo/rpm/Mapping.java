@@ -231,7 +231,7 @@ public class Mapping
             sb.append( "%doc " );
         }
         
-        if ( ( sources == null ) || ( sources.size() == 0 ) )
+        if ( ( ( sources == null ) || ( sources.size() == 0 ) ) && ( artifact == null ) )
         {
             sb.append( "%dir " );
         }
