@@ -24,11 +24,16 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
@@ -40,6 +45,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 /**
  * Construct the RPM file
  * @version $Id$
+ * @requiresDependencyResolution runtime
  * @goal rpm
  * @phase package
  */
@@ -252,6 +258,13 @@ public class RPMMojo extends AbstractMojo
      * @readonly
      */
     private List attachedArtifacts;
+    
+    /**
+     * @parameter default-value="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject project;
     
     
     /** The root of the build area. */
@@ -542,6 +555,46 @@ public class RPMMojo extends AbstractMojo
     }
     
     /**
+     * Determine if the dependency matches an include or exclude list.
+     * @param dep The dependency to check
+     * @param list The list to check against
+     * @return <code>true</code> if the dependency was found on the list
+     */
+    private boolean depMatcher(Artifact dep, List list)
+    {
+        if ( list == null )
+        {
+            // No list, not possible to match
+            return false;
+        }
+        
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Artifact item = (Artifact) it.next();
+            getLog().debug("Compare " + dep + " to " + item);
+            if ( item.getGroupId().equals( dep.getGroupId() ) )
+            {
+                getLog().debug("... Group matches");
+                if ( item.getArtifactId().equals( dep.getArtifactId() ) )
+                {
+                    getLog().debug("... Artifact matches");
+                    //ArtifactVersion av = item.getVersionRange().matchVersion( dep.getAvailableVersions() );
+                    try {
+                        if ( item.getVersionRange().containsVersion( dep.getSelectedVersion() ) )
+                        {
+                            getLog().debug("... Version matches");
+                            return true;
+                        }
+                    } catch (OverConstrainedVersionException ocve) {
+                    }
+                }
+            }
+        }
+        
+        // Not found
+        return false;
+    }
+    
+    /**
      * Copy the files from the various mapping sources into the build root.
      * @throws MojoExecutionException if a problem occurs
      */
@@ -610,6 +663,16 @@ public class RPMMojo extends AbstractMojo
                         copyArtifact( (Artifact) ait.next(), dest );
                     }
                 }
+                
+                Dependency dep = map.getDependency();
+                if ( dep != null )
+                {
+                    List deplist = selectDependencies( dep );
+                    for ( Iterator dit = deplist.iterator(); dit.hasNext(); )
+                    {
+                        copyArtifact( (Artifact) dit.next(), dest );
+                    }
+                }
             }
         }
     }
@@ -667,6 +730,41 @@ public class RPMMojo extends AbstractMojo
                 if ( ( aa.hasClassifier() ) && ( clist.contains( aa.getClassifier() ) ) )
                 {
                     retval.add( aa );
+                }
+            }
+        }
+        
+        return retval;
+    }
+    
+    /**
+     * Make a list of the dependencies to package in this mapping.
+     * @param d The artifact mapping information
+     * @return The list of artifacts to package
+     */
+    private List selectDependencies( Dependency d )
+    {
+        List retval = new ArrayList();
+        List inc = d.getIncludes();
+        List exc = d.getExcludes();
+
+        List deps = project.getRuntimeArtifacts();
+        if ( deps == null || deps.isEmpty() )
+        {
+            return retval;
+        }
+
+        for ( Iterator it = deps.iterator(); it.hasNext(); )
+        {
+            Artifact pdep = ( Artifact )it.next();
+            getLog().debug("Dependency is " + pdep + " at " + pdep.getFile());
+            if ( ! depMatcher( pdep, exc ) )
+            {
+                getLog().debug("--> not excluded");
+                if ( ( inc == null ) || ( depMatcher( pdep, inc ) ) )
+                {
+                    getLog().debug("--> included");
+                    retval.add( pdep );
                 }
             }
         }

@@ -53,6 +53,9 @@ public class Mapping
     /** Mapping information for artifacts. */
     private ArtifactMap artifact;
     
+    /** Mapping information for dependencies. */
+    private Dependency dependency;
+    
     // // //  Bean methods
     
     /**
@@ -211,6 +214,24 @@ public class Mapping
         artifact = am;
     }
     
+    /**
+     * Retrieve the dependency specification.
+     * @return The dependency specification.
+     */
+    public Dependency getDependency()
+    {
+        return dependency;
+    }
+    
+    /**
+     * Set the dependency specification.
+     * @param am The new dependency specification.
+     */
+    public void setDependency( Dependency am )
+    {
+        dependency = am;
+    }
+    
     // // //  Public methods
     
     /**
@@ -231,7 +252,8 @@ public class Mapping
             sb.append( "%doc " );
         }
         
-        if ( ( ( sources == null ) || ( sources.size() == 0 ) ) && ( artifact == null ) )
+        if ( ( ( sources == null ) || ( sources.size() == 0 ) ) &&
+                ( dependency == null ) && ( artifact == null ) )
         {
             sb.append( "%dir " );
         }
@@ -298,6 +320,11 @@ public class Mapping
             return false;
         }
         
+        if ( dependency != null )
+        {
+            return false;
+        }
+        
         return true;
     }
     
@@ -329,6 +356,16 @@ public class Mapping
                     sb.append( ", " );
                 }
                 sb.append( artifact.toString() );
+                sourceShown = true;
+            }
+            if ( dependency != null )
+            {
+                if ( sourceShown )
+                {
+                    sb.append( ", " );
+                }
+                sb.append( dependency.toString() );
+                sourceShown = true;
             }
             sb.append( "]" );
         }
