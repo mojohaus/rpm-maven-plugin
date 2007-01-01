@@ -46,6 +46,7 @@
           <item name="Mapping Parameters" href="map-params.html">
               <item name="artifact" href="map-params.html#artifact"/>
               <item name="configuration" href="map-params.html#configuration"/>
+              <item name="dependency" href="map-params.html#dependency"/>
               <item name="directory**" href="map-params.html#directory"/>
               <item name="documentation" href="map-params.html#documentation"/>
               <item name="filemode*" href="map-params.html#filemode"/>

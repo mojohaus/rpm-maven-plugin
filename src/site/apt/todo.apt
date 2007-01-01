@@ -3,27 +3,13 @@
  ------
  Bob Allison
  ------
- 15 January 2006
+ 31 December 2006
  -----
 
 Things To Do
 
   This is a list of things that I want to include in the plug-in before
   its initial release.
-
-* Handle Project Artifacts
-
-  I would like to have a means to reference the artifact(s) created by the
-  project where the mojo is being executed and define where it should be copied
-  (or possibly unpacked) in the RPM package.  This would allow for a fairly
-  simple configuration in the case where the RPM is being used as a means to
-  distribute the project's artifacts.
-
-* Handle Project Dependencies
-
-  I would like to have a means to reference the project dependencies in the
-  mapping list.  This would allow the dependencies to be part of the packaging
-  process without having to perform any hard coding of repository locations.
 
 * Handle Project Modules
 

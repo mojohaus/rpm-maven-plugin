@@ -3,7 +3,7 @@
  ------
  Bob Allison
  ------
- 25 July 2006
+ 31 December 2006
  -----
 
 Mapping Parameters
@@ -91,6 +91,36 @@ Mapping Parameters
   tag which holds one or more "<<<\<classifier\>>>>" tags holding a single
   classifier (use "<<<\<classifier\>\</classifier\>>>>" for the primary
   project artifact).
+
+* {dependency}
+
+  If present, then some or all of the project's transitive runtime dependencies
+  should be included in this mapping.  The dependencies to be included are those
+  which are specified with <<<compile>>> or <<<runtime>>> scope, and all of the
+  dependencies of those artifacts which are similarly defined.  These files will
+  be installed in the directory specified in the <<<directory>>> parameter.
+
+  If the tag is empty ("<<<\<dependency/\>>>>"), then all dependencies will
+  be included in the mapping.  To limit the dependencies to include in the
+  mapping, you must specify "<<<\<includes\>>>>", "<<<\<excludes\>>>>", or
+  both.  Each of these elements contains a list of items; for example, the
+  "<<<\<includes\>>>>" element will have a list of "<<<\<include\>>>>" items.
+  Each item specifies a single dependency to include or exclude with a string
+  in one of the following two formats:
+
+  * "<group><<<:>>><artifact>" which specifies the group ID and artifact ID
+    of the dependency; the version and type are taken from the actual dependency
+    definition in the project
+
+  * "<group><<<:>>><artifact><<<:>>><versionrange>" which extends the above
+    to limit the specification to particular versions of the artifact; note that
+    this will not cause a different version of the dependency to be packaged
+    than what was used to build the project
+
+  []
+
+  If no include items are specified, then all dependencies not explicitly
+  excluded are included.
 
 * {sources}
 
