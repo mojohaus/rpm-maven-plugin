@@ -83,14 +83,12 @@ public class RPMMojo extends AbstractMojo
     /**
      * The long description of the package.
      * @parameter expression="${project.description}"
-     * @readonly
      */
     private String description;
     
     /**
      * The one-line description of the package.
      * @parameter expression="${project.name}"
-     * @readonly
      */
     private String summary;
     
@@ -115,14 +113,12 @@ public class RPMMojo extends AbstractMojo
     /**
      * The vendor supplying the package.
      * @parameter expression="${project.organization.name}"
-     * @readonly
      */
     private String vendor;
     
     /**
      * A URL for the vendor.
      * @parameter expression="${project.organization.url}"
-     * @readonly
      */
     private String url;
     
