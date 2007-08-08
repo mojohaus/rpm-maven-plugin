@@ -197,6 +197,18 @@ public class RPMMojo extends AbstractMojo
     private File postinstallScript;
     
     /**
+     * The installation script.
+     * @parameter
+     */
+    private String install;
+    
+    /**
+     * The location of the installation script.
+     * @parameter
+     */
+    private File installScript;
+    
+    /**
      * The pre-removal script.
      * @parameter
      */
@@ -231,6 +243,18 @@ public class RPMMojo extends AbstractMojo
      * @parameter
      */
     private File verifyScript;
+    
+    /**
+     * The clean script.
+     * @parameter
+     */
+    private String clean;
+    
+    /**
+     * The location of the clean script.
+     * @parameter
+     */
+    private File cleanScript;
     
     /**
      * A Plexus component to copy files and directories.
@@ -466,6 +490,10 @@ public class RPMMojo extends AbstractMojo
         {
             preinstall = readFile( preinstallScript );
         }
+        if ( ( install == null ) && ( installScript != null ) )
+        {
+            install = readFile( installScript );
+        }
         if ( ( postinstall == null ) && ( postinstallScript != null ) )
         {
             postinstall = readFile( postinstallScript );
@@ -481,6 +509,10 @@ public class RPMMojo extends AbstractMojo
         if ( ( verify == null ) && ( verifyScript != null ) )
         {
             verify = readFile( verifyScript );
+        }
+        if ( ( clean == null ) && ( cleanScript != null ) )
+        {
+            clean = readFile( cleanScript );
         }
     }
     
@@ -863,6 +895,12 @@ public class RPMMojo extends AbstractMojo
                 spec.println( "%pre" );
                 spec.println( preinstall );
             }
+            if ( install != null )
+            {
+                spec.println();
+                spec.println( "%install" );
+                spec.println( install );
+            }
             if ( postinstall != null )
             {
                 spec.println();
@@ -886,6 +924,12 @@ public class RPMMojo extends AbstractMojo
                 spec.println();
                 spec.println( "%verifyscript" );
                 spec.println( verify );
+            }
+            if ( clean != null )
+            {
+                spec.println();
+                spec.println( "%clean" );
+                spec.println( clean );
             }
             
             spec.close();
