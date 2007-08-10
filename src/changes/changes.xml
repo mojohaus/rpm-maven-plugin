@@ -11,5 +11,10 @@
         Initial version
       </action>
     </release>
+    <release version="1.0-beta-1" date="2007-08-10">
+      <action dev="kaare" type="add">
+        Added support for %clean and %install scripts
+      </action>
+    </release>
   </body>
 </document>

@@ -74,6 +74,11 @@ Advanced Parameters
 
   This script is run before the package is installed.  It corresponds to the
   <<<%pre>>> tag in the spec file.
+  
+** <<<install>>>
+
+  This script is run as a part of installing the package.  It corresponds to the
+  <<<%install>>> tag in the spec file.
 
 ** <<<postinstall>>>
 
@@ -94,3 +99,8 @@ Advanced Parameters
 
   This script is run when the package is being verified.  It corresponds to
   the <<<%verifyScript>>> tag in the spec file.
+  
+** <<<clean>>>
+
+  This script is run after the package is installed to clean up installation files.  It corresponds to the
+  <<<%clean>>> tag in the spec file.

@@ -34,23 +34,6 @@ Features
 
 How to Use the Plugin
 
-  You need to add the following repository to your project's POM:
-
-+----+
-<pluginRepositories>
-  <pluginRepository>
-    <id>Mojo Snapshots</id>
-    <url>http://snapshots.repository.codehaus.org/</url>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-    <releases>
-      <enabled>false</enabled>
-    </releases>
-  </pluginRepository>
-</pluginRepositories>
-+----+
-
   For information on how to get the RPM file generated, please refer to the
   {{{usage.html}Usage Scenarios}} and {{{params.html}Parameters}} documents.
 
