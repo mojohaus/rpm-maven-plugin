@@ -12,21 +12,18 @@
 <!--WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.-->
 <!--See the License for the specific language governing permissions and     -->
 <!--limitations under the License.                                          -->
-
-<project>
-  <parent>
-    <artifactId>mojo-sandbox</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">  <parent>
+    <artifactId>mojo</artifactId>
     <groupId>org.codehaus.mojo</groupId>
-    <version>2</version>
+    <version>15</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>rpm-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>RPM Maven Plugin</name>
-  <version>2.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <description>
-Maven plugin which assembles files into an RPM package for installation
- on various target UNIX systems.
+    Maven plugin which assembles files into an RPM package for installation on various target UNIX systems.
   </description>
   <inceptionYear>2005</inceptionYear>
   <url>http://mojo.codehaus.org/rpm-maven-plugin/</url>
@@ -53,6 +50,18 @@ Maven plugin which assembles files into an RPM package for installation
       </roles>
     </developer>
   </developers>
+  <contributors>
+    <contributor>
+      <name>Kaare Nilsen</name>
+      <email>kaare.nilsen@gmail.com</email>
+      <organization>Artekk AS</organization>
+      <organizationUrl>http://arktekk.no</organizationUrl>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </contributor>
+  </contributors>
+  
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
