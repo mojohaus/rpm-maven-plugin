@@ -286,6 +286,12 @@ public class RPMMojo extends AbstractMojo
      */
     private MavenProject project;
     
+    /**
+     * A list of %define arguments
+     * @parameter
+     */
+    private List defineStatements;
+    
     
     /** The root of the build area. */
     private File buildroot;
@@ -812,6 +818,13 @@ public class RPMMojo extends AbstractMojo
         {
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
             PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
+            
+            if (null != defineStatements)
+            {
+                Iterator defineIter = defineStatements.iterator();
+                String defineStatement = (String) defineIter.next();
+                spec.println( "%define " + defineStatement );
+            }
             
             spec.println( "Name: " + name );
             spec.println( "Version: " + version );

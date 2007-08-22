@@ -61,6 +61,9 @@ This is a sample using trash collection as an example.
                     <icon>src/main/resources/icon.gif</icon>
                     <packager>SWWDC</packager>
                     <prefix>/usr/local</prefix>
+                    <defineStatements>
+                       <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+                    </defineStatements>
                     <mappings>
                         <mapping>
                             <directory>/usr/local/bin/landfill</directory>

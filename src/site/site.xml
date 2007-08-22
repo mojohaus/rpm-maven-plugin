@@ -42,6 +42,7 @@
           </item>
           <item name="Operation Parameters" href="op-params.html">
               <item name="workarea" href="op-params.html#workarea"/>
+              <item name="defineStatements" href="op-params.html#defineStatements"/>
           </item>
           <item name="Mapping Parameters" href="map-params.html">
               <item name="artifact" href="map-params.html#artifact"/>
