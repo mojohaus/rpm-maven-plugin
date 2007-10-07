@@ -1,35 +1,29 @@
 package org.codehaus.mojo.rpm;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.handler.ArtifactHandler;
-import org.apache.maven.artifact.metadata.ArtifactMetadata;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
-import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.plugin.MojoExecutionException;
 
@@ -69,11 +63,12 @@ public class Dependency
     
     /**
      * Set the list of dependencies to include.
-     * @param dir The new list of dependencies to include.
+     * @param incls The new list of dependencies to include.
+     * @throws MojoExecutionException if the parse fails
      */
-    public void setIncludes( List includes ) throws MojoExecutionException
+    public void setIncludes( List incls ) throws MojoExecutionException
     {
-        this.includes = parseList(includes);
+        includes = parseList( incls );
     }
     
     /**
@@ -87,11 +82,12 @@ public class Dependency
     
     /**
      * Set the list of dependencies to exclude.
-     * @param excludes The new list of dependencies to exclude.
+     * @param excls The new list of dependencies to exclude.
+     * @throws MojoExecutionException if the parse fails
      */
-    public void setExcludes( List excludes ) throws MojoExecutionException
+    public void setExcludes( List excls ) throws MojoExecutionException
     {
-        this.excludes = parseList(excludes);
+        excludes = parseList( excls );
     }
     
     
@@ -124,12 +120,14 @@ public class Dependency
      * Parse the list of dependencies.
      * @param in The list specified in the configuration
      * @return A list of parsed artifact identifiers
+     * @throws MojoExecutionException if the parse fails
      */
     private List parseList( List in ) throws MojoExecutionException
     {
         List retval = new ArrayList();
         
-        for (Iterator it = in.iterator(); it.hasNext();) {
+        for ( Iterator it = in.iterator(); it.hasNext(); )
+        {
             String s = (String) it.next();
             
             // Make sure we have group and artifact
@@ -145,21 +143,28 @@ public class Dependency
             if ( p2 == -1 )
             {
                 p2 = s.length();
-                try {
-                    vr = VersionRange.createFromVersionSpec("[0,]");
-                } catch (InvalidVersionSpecificationException ex) {
+                try
+                {
+                    vr = VersionRange.createFromVersionSpec( "[0,]" );
+                }
+                catch ( InvalidVersionSpecificationException ex )
+                {
                     throw new MojoExecutionException( "Default version string is invalid!" );
                 }
             }
             else
             {
-                try {
+                try
+                {
                     vr = VersionRange.createFromVersionSpec( s.substring( p2 + 1 ) );
-                } catch (InvalidVersionSpecificationException ex) {
+                }
+                catch ( InvalidVersionSpecificationException ex )
+                {
                     throw new MojoExecutionException( "Version string " + s.substring( p2 + 1 ) + " is invalid." );
                 }
             }
-            retval.add(new DefaultArtifact(s.substring(0, p1), s.substring(p1 + 1, p2), vr, null, "", "", null));
+            retval.add( new DefaultArtifact( s.substring( 0, p1 ), s.substring( p1 + 1, p2 ),
+                    vr, null, "", "", null ) );
         }
         
         return retval;

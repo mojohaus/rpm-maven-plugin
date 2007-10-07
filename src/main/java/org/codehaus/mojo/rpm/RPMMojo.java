@@ -1,19 +1,22 @@
 package org.codehaus.mojo.rpm;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.BufferedReader;
@@ -24,10 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.AbstractMojo;
@@ -594,7 +594,7 @@ public class RPMMojo extends AbstractMojo
      * @param list The list to check against
      * @return <code>true</code> if the dependency was found on the list
      */
-    private boolean depMatcher(Artifact dep, List list)
+    private boolean depMatcher( Artifact dep, List list )
     {
         if ( list == null )
         {
@@ -602,23 +602,28 @@ public class RPMMojo extends AbstractMojo
             return false;
         }
         
-        for (Iterator it = list.iterator(); it.hasNext();) {
+        for ( Iterator it = list.iterator(); it.hasNext(); )
+        {
             Artifact item = (Artifact) it.next();
-            getLog().debug("Compare " + dep + " to " + item);
+            getLog().debug( "Compare " + dep + " to " + item );
             if ( item.getGroupId().equals( dep.getGroupId() ) )
             {
-                getLog().debug("... Group matches");
+                getLog().debug( "... Group matches" );
                 if ( item.getArtifactId().equals( dep.getArtifactId() ) )
                 {
-                    getLog().debug("... Artifact matches");
+                    getLog().debug( "... Artifact matches" );
                     //ArtifactVersion av = item.getVersionRange().matchVersion( dep.getAvailableVersions() );
-                    try {
+                    try
+                    {
                         if ( item.getVersionRange().containsVersion( dep.getSelectedVersion() ) )
                         {
-                            getLog().debug("... Version matches");
+                            getLog().debug( "... Version matches" );
                             return true;
                         }
-                    } catch (OverConstrainedVersionException ocve) {
+                    }
+                    catch ( OverConstrainedVersionException ocve )
+                    {
+                        getLog().debug( "... caught OverConstrainedVersionException" );
                     }
                 }
             }
@@ -790,14 +795,14 @@ public class RPMMojo extends AbstractMojo
 
         for ( Iterator it = deps.iterator(); it.hasNext(); )
         {
-            Artifact pdep = ( Artifact )it.next();
-            getLog().debug("Dependency is " + pdep + " at " + pdep.getFile());
+            Artifact pdep = ( Artifact ) it.next();
+            getLog().debug( "Dependency is " + pdep + " at " + pdep.getFile() );
             if ( ! depMatcher( pdep, exc ) )
             {
-                getLog().debug("--> not excluded");
+                getLog().debug( "--> not excluded" );
                 if ( ( inc == null ) || ( depMatcher( pdep, inc ) ) )
                 {
-                    getLog().debug("--> included");
+                    getLog().debug( "--> included" );
                     retval.add( pdep );
                 }
             }
@@ -819,7 +824,7 @@ public class RPMMojo extends AbstractMojo
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
             PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
             
-            if (null != defineStatements)
+            if ( null != defineStatements )
             {
                 Iterator defineIter = defineStatements.iterator();
                 String defineStatement = (String) defineIter.next();
