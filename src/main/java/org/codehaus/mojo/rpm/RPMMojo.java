@@ -51,211 +51,211 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  */
 public class RPMMojo extends AbstractMojo
 {
-    
+
     /**
      * The name portion of the output file name.
      * @parameter expression="${project.artifactId}"
      * @required
      */
     private String name;
-    
+
     /**
      * The version portion of the RPM file name.
      * @parameter alias="version" expression="${project.version}"
      * @required
      */
     private String projversion;
-    
+
     /**
      * The release portion of the RPM file name.
      * @parameter
      * @required
      */
     private String release;
-    
+
     /**
      * Set to <code>true</code> if the package is dependent on the architecture
      * of the build machine.
      * @parameter
      */
     private boolean needarch;
-    
+
     /**
      * The long description of the package.
      * @parameter expression="${project.description}"
      */
     private String description;
-    
+
     /**
      * The one-line description of the package.
      * @parameter expression="${project.name}"
      */
     private String summary;
-    
+
     /**
      * The one-line copyright information.
      * @parameter
      */
     private String copyright;
-    
+
     /**
      * The distribution containing this package.
      * @parameter
      */
     private String distribution;
-    
+
     /**
      * An icon for the package.
      * @parameter
      */
     private File icon;
-    
+
     /**
      * The vendor supplying the package.
      * @parameter expression="${project.organization.name}"
      */
     private String vendor;
-    
+
     /**
      * A URL for the vendor.
      * @parameter expression="${project.organization.url}"
      */
     private String url;
-    
+
     /**
      * The package group for the package.
      * @parameter
      * @required
      */
     private String group;
-    
+
     /**
      * The name of the person or group creating the package.
      * @parameter expression="${project.organization.name}"
      */
     private String packager;
-    
+
     /**
      * The list of virtual packages provided by this package.
      * @parameter
      */
     private List provides;
-    
+
     /**
      * The list of requirements for this package.
      * @parameter
      */
     private List requires;
-    
+
     /**
      * The list of conflicts for this package.
      * @parameter
      */
     private List conflicts;
-    
+
     /**
      * The relocation prefix for this package.
      * @parameter
      */
     private String prefix;
-    
+
     /**
      * The area for RPM to use for building the package.
      * @parameter expression="${project.build.directory}/rpm"
      */
     private File workarea;
-    
+
     /**
      * The list of file mappings.
      * @parameter
      * @required
      */
     private List mappings;
-    
+
     /**
      * The pre-installation script.
      * @parameter
      */
     private String preinstall;
-    
+
     /**
      * The location of the pre-installation script.
      * @parameter
      */
     private File preinstallScript;
-    
+
     /**
      * The post-installation script.
      * @parameter
      */
     private String postinstall;
-    
+
     /**
      * The location of the post-installation script.
      * @parameter
      */
     private File postinstallScript;
-    
+
     /**
      * The installation script.
      * @parameter
      */
     private String install;
-    
+
     /**
      * The location of the installation script.
      * @parameter
      */
     private File installScript;
-    
+
     /**
      * The pre-removal script.
      * @parameter
      */
     private String preremove;
-    
+
     /**
      * The location of the pre-removal script.
      * @parameter
      */
     private File preremoveScript;
-    
+
     /**
      * The post-removal script.
      * @parameter
      */
     private String postremove;
-    
+
     /**
      * The location of the post-removal script.
      * @parameter
      */
     private File postremoveScript;
-    
+
     /**
      * The verification script.
      * @parameter
      */
     private String verify;
-    
+
     /**
      * The location of the verification script.
      * @parameter
      */
     private File verifyScript;
-    
+
     /**
      * The clean script.
      * @parameter
      */
     private String clean;
-    
+
     /**
      * The location of the clean script.
      * @parameter
      */
     private File cleanScript;
-    
+
     /**
      * A Plexus component to copy files and directories.
      * @component role="org.codehaus.plexus.archiver.Archiver"
@@ -278,29 +278,29 @@ public class RPMMojo extends AbstractMojo
      * @readonly
      */
     private List attachedArtifacts;
-    
+
     /**
      * @parameter default-value="${project}"
      * @required
      * @readonly
      */
     private MavenProject project;
-    
+
     /**
      * A list of %define arguments
      * @parameter
      */
     private List defineStatements;
-    
-    
+
+
     /** The root of the build area. */
     private File buildroot;
-    
+
     /** The version string after parsing. */
     private String version;
-    
+
     // // //  Consumers for rpmbuild output
-    
+
     /**
      * Consumer to receive lines sent to stdout.  The lines are logged
      * as info.
@@ -309,7 +309,7 @@ public class RPMMojo extends AbstractMojo
     {
         /** Logger to receive the lines. */
         private Log logger;
-        
+
         /**
          * Constructor.
          * @param log The logger to receive the lines
@@ -318,7 +318,7 @@ public class RPMMojo extends AbstractMojo
         {
             logger = log;
         }
-        
+
         /**
          * Consume a line.
          * @param string The line to consume
@@ -328,7 +328,7 @@ public class RPMMojo extends AbstractMojo
             logger.info( string );
         }
     }
-    
+
     /**
      * Consumer to receive lines sent to stderr.  The lines are logged
      * as warnings.
@@ -337,7 +337,7 @@ public class RPMMojo extends AbstractMojo
     {
         /** Logger to receive the lines. */
         private Log logger;
-        
+
         /**
          * Constructor.
          * @param log The logger to receive the lines
@@ -346,7 +346,7 @@ public class RPMMojo extends AbstractMojo
         {
             logger = log;
         }
-        
+
         /**
          * Consume a line.
          * @param string The line to consume
@@ -356,9 +356,9 @@ public class RPMMojo extends AbstractMojo
             logger.warn( string );
         }
     }
-    
+
     // // //  Mojo methods
-    
+
     /** {@inheritDoc} */
     public void execute() throws MojoExecutionException, MojoFailureException
     {
@@ -368,9 +368,9 @@ public class RPMMojo extends AbstractMojo
         installFiles();
         buildPackage();
     }
-    
+
     // // //  Internal methods
-    
+
     /**
      * Run the external command to build the package.
      * @throws MojoExecutionException if an error occurs
@@ -378,7 +378,7 @@ public class RPMMojo extends AbstractMojo
     private void buildPackage() throws MojoExecutionException
     {
         File f = new File( workarea, "SPECS" );
-        
+
         Commandline cl = new Commandline();
         cl.setExecutable( "rpmbuild" );
         cl.setWorkingDirectory( f.getAbsolutePath() );
@@ -391,7 +391,7 @@ public class RPMMojo extends AbstractMojo
             cl.createArgument().setValue( "noarch" );
         }
         cl.createArgument().setValue( name + ".spec" );
-        
+
         StreamConsumer stdout = new StdoutConsumer( getLog() );
         StreamConsumer stderr = new StderrConsumer( getLog() );
         try
@@ -407,7 +407,7 @@ public class RPMMojo extends AbstractMojo
             throw new MojoExecutionException( "Unable to build the RPM", e );
         }
     }
-    
+
     /**
      * Build the structure of the work area.
      * @throws MojoFailureException if a directory cannot be built
@@ -415,7 +415,7 @@ public class RPMMojo extends AbstractMojo
     private void buildWorkArea() throws MojoFailureException
     {
         final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS" };
-        
+
         // Build the top directory
         if ( !workarea.exists() )
         {
@@ -425,7 +425,7 @@ public class RPMMojo extends AbstractMojo
                 throw new MojoFailureException( "Unable to create directory " + workarea.getAbsolutePath() );
             }
         }
-        
+
         // Build each directory in the top directory
         for ( int i = 0; i < topdirs.length; i++ )
         {
@@ -439,7 +439,7 @@ public class RPMMojo extends AbstractMojo
                 }
             }
         }
-        
+
         // Build the build root
         buildroot = new File( workarea, "buildroot" );
         if ( !buildroot.exists() )
@@ -451,7 +451,7 @@ public class RPMMojo extends AbstractMojo
             }
         }
     }
-    
+
     /**
      * Check the parameters for validity.
      * @throws MojoFailureException if an invalid parameter is found
@@ -469,7 +469,7 @@ public class RPMMojo extends AbstractMojo
             version = projversion.substring( 0, projversion.indexOf( "-" ) );
             getLog().warn( "Version string truncated to " + version );
         }
-        
+
         // Various checks in the mappings
         for ( Iterator it = mappings.iterator(); it.hasNext(); )
         {
@@ -490,7 +490,7 @@ public class RPMMojo extends AbstractMojo
                 }
             }
         }
-        
+
         // Collect the scripts, if necessary
         if ( ( preinstall == null ) && ( preinstallScript != null ) )
         {
@@ -521,7 +521,7 @@ public class RPMMojo extends AbstractMojo
             clean = readFile( cleanScript );
         }
     }
-    
+
     /**
      * Copy an artifact.
      * @param art The artifact to copy
@@ -538,7 +538,7 @@ public class RPMMojo extends AbstractMojo
         }
         copySource( art.getFile(), dest, null, null );
     }
-    
+
     /**
      * Copy a set of files.
      * @param src The file or directory to start copying from
@@ -562,13 +562,13 @@ public class RPMMojo extends AbstractMojo
                 {
                     ia = (String[]) incl.toArray( new String[0] );
                 }
-                
+
                 String[] ea = null;
                 if ( excl != null )
                 {
                     ea = (String[]) excl.toArray( new String[0] );
                 }
-                
+
                 copier.addDirectory( src, "", ia, ea );
             }
             else
@@ -587,7 +587,7 @@ public class RPMMojo extends AbstractMojo
             throw new MojoExecutionException( "Unable to copy files for packaging: " + t.getMessage(), t );
         }
     }
-    
+
     /**
      * Determine if the dependency matches an include or exclude list.
      * @param dep The dependency to check
@@ -601,7 +601,7 @@ public class RPMMojo extends AbstractMojo
             // No list, not possible to match
             return false;
         }
-        
+
         for ( Iterator it = list.iterator(); it.hasNext(); )
         {
             Artifact item = (Artifact) it.next();
@@ -628,11 +628,11 @@ public class RPMMojo extends AbstractMojo
                 }
             }
         }
-        
+
         // Not found
         return false;
     }
-    
+
     /**
      * Copy the files from the various mapping sources into the build root.
      * @throws MojoExecutionException if a problem occurs
@@ -645,13 +645,13 @@ public class RPMMojo extends AbstractMojo
             File icondest = new File( workarea, "SOURCES" );
             copySource( icon, icondest, null, null );
         }
-        
+
         // Process each mapping
         for ( Iterator it = mappings.iterator(); it.hasNext(); )
         {
             Mapping map = (Mapping) it.next();
             File dest = new File( buildroot + map.getDestination() );
-            
+
             if ( map.isDirOnly() )
             {
                 // Build the output directory if it doesn't exist
@@ -692,7 +692,7 @@ public class RPMMojo extends AbstractMojo
                         }
                     }
                 }
-                
+
                 ArtifactMap art = map.getArtifact();
                 if ( art != null )
                 {
@@ -702,7 +702,7 @@ public class RPMMojo extends AbstractMojo
                         copyArtifact( (Artifact) ait.next(), dest );
                     }
                 }
-                
+
                 Dependency dep = map.getDependency();
                 if ( dep != null )
                 {
@@ -715,7 +715,7 @@ public class RPMMojo extends AbstractMojo
             }
         }
     }
-    
+
     /**
      * Read a file into a string.
      * @param in The file to read
@@ -741,7 +741,7 @@ public class RPMMojo extends AbstractMojo
             throw new MojoExecutionException( "Unable to read " + in.getAbsolutePath(), t );
         }
     }
-    
+
     /**
      * Make a list of the artifacts to package in this mapping.
      * @param am The artifact mapping information
@@ -751,7 +751,7 @@ public class RPMMojo extends AbstractMojo
     {
         List retval = new ArrayList();
         List clist = am.getClassifiers();
-        
+
         if ( clist == null )
         {
             retval.add( artifact );
@@ -772,10 +772,10 @@ public class RPMMojo extends AbstractMojo
                 }
             }
         }
-        
+
         return retval;
     }
-    
+
     /**
      * Make a list of the dependencies to package in this mapping.
      * @param d The artifact mapping information
@@ -807,10 +807,10 @@ public class RPMMojo extends AbstractMojo
                 }
             }
         }
-        
+
         return retval;
     }
-    
+
     /**
      * Write the SPEC file.
      * @throws MojoExecutionException if an error occurs writing the file
@@ -823,14 +823,14 @@ public class RPMMojo extends AbstractMojo
         {
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
             PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
-            
+
             if ( null != defineStatements )
             {
                 Iterator defineIter = defineStatements.iterator();
                 String defineStatement = (String) defineIter.next();
                 spec.println( "%define " + defineStatement );
             }
-            
+
             spec.println( "Name: " + name );
             spec.println( "Version: " + version );
             spec.println( "Release: " + release );
@@ -898,7 +898,7 @@ public class RPMMojo extends AbstractMojo
             {
                 spec.println( description );
             }
-            
+
             spec.println();
             spec.println( "%files" );
             for ( Iterator it = mappings.iterator(); it.hasNext(); )
@@ -906,7 +906,7 @@ public class RPMMojo extends AbstractMojo
                 Mapping map = (Mapping) it.next();
                 spec.println( map.getAttrString() + " " + map.getDestination() );
             }
-            
+
             if ( preinstall != null )
             {
                 spec.println();
@@ -949,7 +949,7 @@ public class RPMMojo extends AbstractMojo
                 spec.println( "%clean" );
                 spec.println( clean );
             }
-            
+
             spec.close();
         }
         catch ( Throwable t )
