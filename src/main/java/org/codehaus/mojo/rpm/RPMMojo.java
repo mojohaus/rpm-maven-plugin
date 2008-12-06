@@ -396,10 +396,16 @@ public class RPMMojo extends AbstractMojo
         StreamConsumer stderr = new StderrConsumer( getLog() );
         try
         {
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "About to execute \'" + cl.toString() + "\'" );
+            }
+
             int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
             if ( result != 0 )
             {
-                throw new MojoExecutionException( "RPM build execution returned: \'" + result + "\'." );
+                throw new MojoExecutionException( "RPM build execution returned: \'" + result + "\' executing \'"
+                    + cl.toString() + "\'" );
             }
         }
         catch ( CommandLineException e )
