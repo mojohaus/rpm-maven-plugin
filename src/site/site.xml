@@ -65,6 +65,7 @@
               <item name="RPM Dependencies" href="adv-params.html#Dependency"/>
               <item name="Relocation" href="adv-params.html#Relocation"/>
               <item name="Scripts" href="adv-params.html#Scripts"/>
+              <item name="Signatures" href="adv-params.html#Signatures"/>
           </item>
       </item>
       <item name="Sample Configuration" href="sample.html"/>

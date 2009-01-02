@@ -81,6 +81,14 @@ public class RPMMojo extends AbstractMojo
     private boolean needarch;
 
     /**
+     * Set to a key name to sign the package using GPG.  Note that due
+     * to RPM limitations, this always requires input from the
+     * terminal even if the key has no passphrase.
+     * @parameter expression="${gpg.keyname}"
+     */
+    private String keyname;
+
+    /**
      * The long description of the package.
      * @parameter expression="${project.description}"
      */
@@ -391,6 +399,12 @@ public class RPMMojo extends AbstractMojo
         {
             cl.createArgument().setValue( "--target" );
             cl.createArgument().setValue( "noarch" );
+        }
+        if ( keyname != null )
+        {
+            cl.createArgument().setValue( "--define" );
+            cl.createArgument().setValue( "_gpg_name " + keyname );
+            cl.createArgument().setValue( "--sign" );
         }
         cl.createArgument().setValue( name + ".spec" );
 
@@ -839,7 +853,7 @@ public class RPMMojo extends AbstractMojo
                 {
                     String defineStatement = (String) defineIter.next();
                     spec.println( "%define " + defineStatement );
-                }
+            }
             }
 
             spec.println( "Name: " + name );

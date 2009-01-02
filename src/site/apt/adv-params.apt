@@ -104,3 +104,15 @@ Advanced Parameters
 
   This script is run after the package is installed to clean up installation files.  It corresponds to the
   <<<%clean>>> tag in the spec file.
+
+* {Signatures}
+
+  RPM packages may be signed using GPG or PGP.  Currently the plugin
+  only supports generating GPG signatures.
+
+** <<<keyname>>>
+
+  This parameter sets the name of the GPG key used to sign the
+  package, and also turns on the signature.  Setting this parameter is
+  equivalent to defining the <<<%_gpg_name>>> macro and adding the
+  <<<--sign>>> option to <<<rpmbuild>>>.
