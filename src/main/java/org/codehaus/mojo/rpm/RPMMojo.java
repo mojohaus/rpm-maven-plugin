@@ -914,8 +914,39 @@ public class RPMMojo extends AbstractMojo
             spec.println( "%files" );
             for ( Iterator it = mappings.iterator(); it.hasNext(); )
             {
-                Mapping map = (Mapping) it.next();
-                spec.println( map.getAttrString() + " " + map.getDestination() );
+            	Mapping map = (Mapping) it.next();
+
+            	boolean listFiles = false;
+
+            	if (map.getSources() != null)
+            	{
+            		// Check if all sources contains only files
+            		listFiles = true;
+            		for ( Iterator sources = map.getSources().iterator(); sources.hasNext(); )
+            		{
+            			Source source = (Source) sources.next();
+            			if (source.getLocation().isDirectory())
+            			{
+            				listFiles = false;
+            				break;
+            			}
+            		}
+            	}
+
+            	if (listFiles)
+            	{
+            		// Write a line in the spec file for each file
+            		for ( Iterator sources = map.getSources().iterator(); sources.hasNext(); )
+            		{
+            			Source source = (Source) sources.next();
+            			spec.println( map.getAttrString() + " " + map.getDestination()
+            					+ File.separator + source.getLocation().getName());
+            		}
+            	}
+            	else
+            	{
+            		spec.println( map.getAttrString() + " " + map.getDestination() );
+            	}
             }
 
             if ( preinstall != null )
