@@ -383,6 +383,8 @@ public class RPMMojo extends AbstractMojo
         cl.setExecutable( "rpmbuild" );
         cl.setWorkingDirectory( f.getAbsolutePath() );
         cl.createArgument().setValue( "-bb" );
+        cl.createArgument().setValue( "--buildroot" );
+        cl.createArgument().setValue( buildroot.getAbsolutePath() );
         cl.createArgument().setValue( "--define" );
         cl.createArgument().setValue( "_topdir " + workarea.getAbsolutePath() );
         if ( !needarch )
