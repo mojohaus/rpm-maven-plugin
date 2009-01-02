@@ -833,8 +833,11 @@ public class RPMMojo extends AbstractMojo
             if ( null != defineStatements )
             {
                 Iterator defineIter = defineStatements.iterator();
-                String defineStatement = (String) defineIter.next();
-                spec.println( "%define " + defineStatement );
+                while ( defineIter.hasNext() )
+                {
+                    String defineStatement = (String) defineIter.next();
+                    spec.println( "%define " + defineStatement );
+                }
             }
 
             spec.println( "Name: " + name );
