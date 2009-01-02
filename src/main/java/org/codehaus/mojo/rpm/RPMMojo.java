@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.plugin.logging.Log;
@@ -372,9 +373,19 @@ public class RPMMojo extends AbstractMojo
     {
         checkParams();
         buildWorkArea();
-        writeSpecFile();
         installFiles();
+        writeSpecFile();
         buildPackage();
+
+        if ( "rpm".equals( project.getPackaging() ) )
+        {
+            File rpms = new File( workarea, "RPMS" );
+            File archDir = needarch ? new File( rpms, System.getProperty( "os.arch" ) ) : new File( rpms, "noarch" );
+            String arch = archDir.getName();
+            project.getArtifact().setFile(
+                                           new File( archDir, name + '-' + version + '-' + release + '.' + arch
+                                               + ".rpm" ) );
+        }
     }
 
     // // //  Internal methods
@@ -853,7 +864,7 @@ public class RPMMojo extends AbstractMojo
                 {
                     String defineStatement = (String) defineIter.next();
                     spec.println( "%define " + defineStatement );
-            }
+                }
             }
 
             spec.println( "Name: " + name );
@@ -887,8 +898,7 @@ public class RPMMojo extends AbstractMojo
             if ( copyrightText != null )
             {
                 spec.println( "License: " + copyrightText );
-            } 
-            
+            }
             if ( distribution != null )
             {
                 spec.println( "Distribution: " + distribution );
@@ -950,9 +960,9 @@ public class RPMMojo extends AbstractMojo
             spec.println( "%files" );
             for ( Iterator it = mappings.iterator(); it.hasNext(); )
             {
-            	Mapping map = (Mapping) it.next();
+                Mapping map = (Mapping) it.next();
 
-            	boolean listFiles = false;
+                boolean listFiles = false;
 
             	if (map.getSources() != null)
             	{
