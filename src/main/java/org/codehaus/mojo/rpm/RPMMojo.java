@@ -863,10 +863,32 @@ public class RPMMojo extends AbstractMojo
             {
                 spec.println( "Summary: " + summary );
             }
-            if ( copyright != null )
+
+            /* copyright composition */
+            String copyrightText = copyright;
+            if ( copyrightText == null )
             {
-                spec.println( "License: " + copyright );
+                String year = project.getInceptionYear();
+                String organization = project.getOrganization() == null ? null : project.getOrganization().getName();
+                if ( ( year != null ) && ( organization != null ) )
+                {
+                    copyrightText = year + " " + organization;
+                }
+                else
+                {
+                    if ( year == null )
+                    {
+                        copyrightText = organization;
+                    } else {
+                        copyrightText = year;
+                    }
+                }
             }
+            if ( copyrightText != null )
+            {
+                spec.println( "License: " + copyrightText );
+            } 
+            
             if ( distribution != null )
             {
                 spec.println( "Distribution: " + distribution );
