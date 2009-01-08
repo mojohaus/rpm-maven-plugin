@@ -23,49 +23,52 @@ import java.util.List;
 
 /**
  * A description of which project artifacts to package.
+ * 
  * @version $Id$
  */
 public class ArtifactMap
 {
-    
-    // // //  Properties
-    
+
+    // // // Properties
+
     /** The list of classifiers to package. */
     private List classifiers;
-    
-    // // //  Bean methods
-    
+
+    // // // Bean methods
+
     /**
      * Retrieve the list of classifiers to package.
+     * 
      * @return The list of classifiers to package.
      */
     public List getClassifiers()
     {
         return classifiers;
     }
-    
+
     /**
      * Set the list of classifiers to package.
+     * 
      * @param clist The new list of classifiers to package.
      */
-    public void setClassifiers( List clist ) 
+    public void setClassifiers( List clist )
     {
         classifiers = clist;
     }
-    
-    // // //  Public methods
-    
+
+    // // // Public methods
+
     /** {@inheritDoc} */
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
         sb.append( "[artifacts" );
-        
+
         if ( classifiers != null )
         {
             sb.append( " w/classifiers " + classifiers );
         }
-        
+
         sb.append( "]" );
         return sb.toString();
     }

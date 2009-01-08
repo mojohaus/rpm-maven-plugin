@@ -28,115 +28,119 @@ import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.plugin.MojoExecutionException;
 
 /**
- * A description of the set of project dependencies to include in the mapping.
- * If no includes or excludes are specified, all dependencies will be included
- * in the mapping.
- *
- * <p>Each include or exclude should be specified in the form:
- * "<i>groupID</i><code>:</code><i>artifactID</i>[<code>:</code><i>version</i>]"
- * Any field can be specified as "<code>*</code>" which means any value is
- * a match.  If version is omitted (it usually is), it is the same as specifying
- * "<code>*</code>".
+ * A description of the set of project dependencies to include in the mapping. If no includes or excludes are specified,
+ * all dependencies will be included in the mapping.
+ * <p>
+ * Each include or exclude should be specified in the form: "<i>groupID</i><code>:</code><i>artifactID</i>[<code>:</code><i>version</i>]"
+ * Any field can be specified as "<code>*</code>" which means any value is a match. If version is omitted (it
+ * usually is), it is the same as specifying "<code>*</code>".
+ * 
  * @version $Id$
  */
 public class Dependency
 {
-    
-    // // //  Properties
-    
+
+    // // // Properties
+
     /** List of dependencies to include. */
     private List includes;
-    
+
     /** List of dependencies to exclude. */
     private List excludes;
-    
-    // // //  Bean methods
-    
+
+    // // // Bean methods
+
     /**
      * Retrieve the list of dependencies to include.
+     * 
      * @return The list of dependencies to include.
      */
     public List getIncludes()
     {
         return includes;
     }
-    
+
     /**
      * Set the list of dependencies to include.
+     * 
      * @param incls The new list of dependencies to include.
      * @throws MojoExecutionException if the parse fails
      */
-    public void setIncludes( List incls ) throws MojoExecutionException
+    public void setIncludes( List incls )
+        throws MojoExecutionException
     {
         includes = parseList( incls );
     }
-    
+
     /**
      * Retrieve the list of dependencies to exclude.
+     * 
      * @return The list of dependencies to exclude.
      */
     public List getExcludes()
     {
         return excludes;
     }
-    
+
     /**
      * Set the list of dependencies to exclude.
+     * 
      * @param excls The new list of dependencies to exclude.
      * @throws MojoExecutionException if the parse fails
      */
-    public void setExcludes( List excls ) throws MojoExecutionException
+    public void setExcludes( List excls )
+        throws MojoExecutionException
     {
         excludes = parseList( excls );
     }
-    
-    
-    // // //  Public methods
-    
+
+    // // // Public methods
+
     /** {@inheritDoc} */
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
         sb.append( "[dependencies" );
-        
+
         if ( includes != null )
         {
             sb.append( " include [" + includes + "]" );
         }
-        
+
         if ( excludes != null )
         {
             sb.append( " exclude [" + excludes + "]" );
         }
-        
+
         sb.append( "]" );
         return sb.toString();
     }
-    
-    
-    // // //  Private methods
-    
+
+    // // // Private methods
+
     /**
      * Parse the list of dependencies.
+     * 
      * @param in The list specified in the configuration
      * @return A list of parsed artifact identifiers
      * @throws MojoExecutionException if the parse fails
      */
-    private List parseList( List in ) throws MojoExecutionException
+    private List parseList( List in )
+        throws MojoExecutionException
     {
         List retval = new ArrayList();
-        
+
         for ( Iterator it = in.iterator(); it.hasNext(); )
         {
             String s = (String) it.next();
-            
+
             // Make sure we have group and artifact
             int p1 = s.indexOf( ":" );
             if ( p1 == -1 )
             {
                 throw new MojoExecutionException( "Include and exclude must include both group and artifact IDs." );
             }
-            
+
             // Find end of artifact and create version range
             int p2 = s.indexOf( ":", ( p1 + 1 ) );
             VersionRange vr = null;
@@ -163,10 +167,9 @@ public class Dependency
                     throw new MojoExecutionException( "Version string " + s.substring( p2 + 1 ) + " is invalid." );
                 }
             }
-            retval.add( new DefaultArtifact( s.substring( 0, p1 ), s.substring( p1 + 1, p2 ),
-                    vr, null, "", "", null ) );
+            retval.add( new DefaultArtifact( s.substring( 0, p1 ), s.substring( p1 + 1, p2 ), vr, null, "", "", null ) );
         }
-        
+
         return retval;
     }
 }
