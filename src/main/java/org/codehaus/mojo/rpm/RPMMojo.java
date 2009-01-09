@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -878,7 +879,7 @@ public class RPMMojo
         List inc = d.getIncludes();
         List exc = d.getExcludes();
 
-        List deps = project.getRuntimeArtifacts();
+        Collection deps = project.getArtifacts();
         if ( deps == null || deps.isEmpty() )
         {
             return retval;
