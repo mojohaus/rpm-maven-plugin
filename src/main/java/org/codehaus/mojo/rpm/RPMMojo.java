@@ -30,13 +30,14 @@ import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -690,10 +691,10 @@ public class RPMMojo
         {
             Artifact item = (Artifact) it.next();
             getLog().debug( "Compare " + dep + " to " + item );
-            if ( item.getGroupId().equals( dep.getGroupId() ) )
+            if ( StringUtils.isEmpty( item.getGroupId() ) || item.getGroupId().equals( dep.getGroupId() ) )
             {
                 getLog().debug( "... Group matches" );
-                if ( item.getArtifactId().equals( dep.getArtifactId() ) )
+                if ( StringUtils.isEmpty( item.getArtifactId() ) || item.getArtifactId().equals( dep.getArtifactId() ) )
                 {
                     getLog().debug( "... Artifact matches" );
                     // ArtifactVersion av = item.getVersionRange().matchVersion( dep.getAvailableVersions() );
