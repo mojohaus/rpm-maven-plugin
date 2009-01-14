@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -37,6 +38,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
+import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
@@ -1025,36 +1027,61 @@ public class RPMMojo
             {
                 Mapping map = (Mapping) it.next();
 
-                boolean listFiles = false;
+                List includes = new LinkedList();
+                List excludes = new LinkedList();
 
-                if ( map.getSources() != null )
+                List sources = map.getSources();
+                if ( sources != null )
                 {
-                    // Check if all sources contains only files
-                    listFiles = true;
-                    for ( Iterator sources = map.getSources().iterator(); sources.hasNext(); )
+                    for ( Iterator sit = sources.iterator(); sit.hasNext(); )
                     {
-                        Source source = (Source) sources.next();
-                        if ( source.getLocation().isDirectory() )
+                        Source source = (Source) sit.next();
+
+                        // includes and excludes are only applicable for a directory
+                        File sourceLocation = source.getLocation();
+                        if ( sourceLocation.isDirectory() )
                         {
-                            listFiles = false;
-                            break;
+                            List srcIncludes = source.getIncludes();
+                            if ( srcIncludes != null )
+                            {
+                                includes.addAll( srcIncludes );
+                            }
+
+                            List srcExcludes = source.getExcludes();
+                            if ( srcExcludes != null )
+                            {
+                                excludes.addAll( srcExcludes );
+                            }
+                        }
+                        else
+                        {
+                            // otherwise consider the name given as an "include" for
+                            // the DirectoryScanner
+                            includes.add( sourceLocation.getName() );
                         }
                     }
                 }
 
-                if ( listFiles )
+                DirectoryScanner scanner = new DirectoryScanner();
+                scanner.setBasedir( buildroot.getAbsolutePath() + map.getDestination() );
+                scanner.setIncludes( includes.isEmpty() ? null
+                                : (String[]) includes.toArray( new String[includes.size()] ) );
+                scanner.setExcludes( excludes.isEmpty() ? null
+                                : (String[]) excludes.toArray( new String[excludes.size()] ) );
+                scanner.scan();
+
+                if ( scanner.isEverythingIncluded() )
                 {
-                    // Write a line in the spec file for each file
-                    for ( Iterator sources = map.getSources().iterator(); sources.hasNext(); )
-                    {
-                        Source source = (Source) sources.next();
-                        spec.println( map.getAttrString() + " " + map.getDestination() + File.separator
-                            + source.getLocation().getName() );
-                    }
+                    spec.println( map.getAttrString() + " " + map.getDestination() );
                 }
                 else
                 {
-                    spec.println( map.getAttrString() + " " + map.getDestination() );
+                    String[] files = scanner.getIncludedFiles();
+
+                    for ( int i = 0; i < files.length; ++i )
+                    {
+                        spec.println( map.getAttrString() + " " + map.getDestination() + File.separatorChar + files[i] );
+                    }
                 }
             }
 
