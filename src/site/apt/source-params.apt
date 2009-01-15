@@ -62,3 +62,9 @@ Source Parameters
   expression which identifies the files to be excluded.  If
   <<<noDefaultExcludes>>> is not specified, the default exclusions are added
   to this list.
+
+* {destination} (<<optional>>)
+
+  If the <<location>> is a file (not a directory), this is the name of the file 
+  in the rpm. If this value is not provided, the name of the <<<file>>> will 
+  be used.

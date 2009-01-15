@@ -21,9 +21,13 @@ package org.codehaus.mojo.rpm;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -762,22 +766,66 @@ public class RPMMojo
                     for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
                     {
                         Source src = (Source) sit.next();
-                        if ( src.getLocation().exists() )
+                        File location = src.getLocation();
+                        if ( location.exists() )
                         {
-                            List elist = src.getExcludes();
-                            if ( !src.getNoDefaultExcludes() )
+                            String destination = src.getDestination();
+                            if ( destination == null )
                             {
-                                if ( elist == null )
+                                List elist = src.getExcludes();
+                                if ( !src.getNoDefaultExcludes() )
                                 {
-                                    elist = new ArrayList();
+                                    if (elist == null)
+                                    {
+                                        elist = new ArrayList();
+                                    }
+                                    elist.addAll(FileUtils.getDefaultExcludesAsList());
                                 }
-                                elist.addAll( FileUtils.getDefaultExcludesAsList() );
+                                copySource( src.getLocation(), dest, src.getIncludes(), elist );
                             }
-                            copySource( src.getLocation(), dest, src.getIncludes(), elist );
+                            else
+                            {
+                                if (!location.isFile())
+                                {
+                                    throw new MojoExecutionException(MessageFormat.format("Source has a destination [{0}], but the location [{1}] does not refer to a file.", new String[]{destination, location.getName()}));
+                                }
+                                
+                                File destFile = new File(dest, destination);
+                                
+                                try
+                                {
+                                    if (!destFile.createNewFile())
+                                    {
+                                        throw new IOException("Unable to create file: " + destFile.getAbsolutePath());
+                                    }
+                                    
+                                    FileInputStream fis = new FileInputStream(location);
+                                    try
+                                    {
+                                        FileOutputStream fos = new FileOutputStream(destFile);
+                                        try
+                                        {
+                                            fis.getChannel().transferTo(0, location.length(), fos.getChannel());
+                                        }
+                                        finally
+                                        {
+                                            fos.close();
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        fis.close();
+                                    }
+                                }
+                                catch (IOException e)
+                                {
+                                    throw new MojoExecutionException("Unable to copy files", e);
+                                }
+                            }
                         }
                         else
                         {
-                            throw new MojoExecutionException( "Source location " + src.getLocation()
+                            throw new MojoExecutionException( "Source location " + location
                                 + " does not exist" );
                         }
                     }

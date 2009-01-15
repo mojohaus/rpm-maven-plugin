@@ -40,6 +40,14 @@ public class Source
 
     /** The list of exclusions. */
     private List excludes;
+    
+    /**
+     * Optional destination name for the file identified by {@link #location}.<br/>
+     * 
+     * <b>NOTE:</b> This is only applicable if the {@link #location} is a {@link File#isFile() file},
+     * not a {@link File#isDirectory() directory}.
+     */
+    private String destination;
 
     /** <code>true</code> to omit the default exclusions. */
     private boolean noDefaultExcludes;
@@ -128,6 +136,28 @@ public class Source
 
     // // // Public methods
 
+    /**
+     * @return Returns the {@link #destination}.
+     * @see #setDestination(String)
+     */
+    public String getDestination()
+    {
+        return this.destination;
+    }
+
+    /**
+     * Sets the destination file name. 
+     * <p>
+     * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link File#isFile() file},
+     * not a {@link File#isDirectory() directory}.
+     * </p>
+     * @param destination The destination that the {@link #getLocation() location} should be in the final rpm.
+     */
+    public void setDestination(String destination)
+    {
+        this.destination = destination;
+    }
+
     /** {@inheritDoc} */
     public String toString()
     {
@@ -151,6 +181,12 @@ public class Source
         if ( excludes != null )
         {
             sb.append( " excl:" + excludes );
+        }
+        
+        if (destination != null)
+        {
+            sb.append(" destination: ");
+            sb.append(destination);
         }
 
         if ( noDefaultExcludes )
