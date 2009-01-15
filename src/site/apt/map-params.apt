@@ -43,9 +43,14 @@ Mapping Parameters
 
 * {configuration}
 
-  If given the value <<<true>>>, the files in this mapping are marked as
-  configuration files.  These files get special treatment during package
+  If present or populated with the value <<<true>>>, the files in this mapping 
+  are marked as configuration files.  These files get special treatment during package
   installation to ensure that local changes to the configuration are not lost.
+  
+  If populated with any value other than <<<false>>>, the value will be used
+  as a modifier to the <<<%config>>> declaration in the spec file. As an example,
+  "<<<\<configuration\>noreplace\</configuration\>>>>", would lead to 
+  <<<%config(noreplace)>>> being generated in the spec file.
 
 * {documentation}
 

@@ -34,9 +34,18 @@ public class Mapping
 
     /** Destination directory name. */
     private String directory;
-
-    /** <code>true</code> if the files are configuration. */
-    private boolean configuration;
+    
+    /**
+     * Indicates the configuration value for the files.
+     * <p>
+     * For passivity purposes, a value of <i>true</i> or <i>false</i> will indicate whether the <code>%config</code>
+     * descriptor will be written in the spec file.<br/>
+     * 
+     * However, any other value (such as <i>noreplace</i>) can be passed and will be written into the spec file after <code>%config</code>.
+     * In the case of <i>noreplace</i>, it would look like <code>%config(noreplace)</code>.
+     * </p>
+     */
+    private String configuration;
 
     /** <code>true</code> if the files are documentation. */
     private boolean documentation;
@@ -86,21 +95,32 @@ public class Mapping
      * configuration files.
      * 
      * @return The configuration status.
+     * @deprecated use {@link #getConfiguration()}
      */
     public boolean isConfiguration()
     {
+        return !"FALSE".equalsIgnoreCase(configuration);
+    }
+    
+    /**
+     * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}. However,
+     * modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
+     * @return The configuration value.
+     */
+    public String getConfiguration()
+    {
         return configuration;
     }
-
+    
     /**
-     * Set the configuration status. This value is <code>true</code> if the file(s) in this mapping are configuration
-     * files.
-     * 
-     * @param isCfg The new configuration status.
+     * Set the configuration status.  This value is <code>true</code> if
+     * the file(s) in this mapping are configuration files. Any value other than <code>true</code> or <code>false</code>
+     * will be considered a modifier of the <i>%config</i> declaration in the spec file.
+     * @param cfg The new configuration value.
      */
-    public void setConfiguration( boolean isCfg )
+    public void setConfiguration( String cfg )
     {
-        configuration = isCfg;
+        configuration = cfg;
     }
 
     /**
@@ -258,9 +278,16 @@ public class Mapping
     {
         StringBuffer sb = new StringBuffer();
 
-        if ( configuration )
+        if ( configuration != null  && !"FALSE".equalsIgnoreCase(configuration))
         {
-            sb.append( "%config " );
+            sb.append( "%config" );
+            if (configuration.length() > 0 && !"TRUE".equalsIgnoreCase(configuration))
+            {
+                sb.append('(');
+                sb.append(configuration);
+                sb.append(')');
+            }
+            sb.append(' ');
         }
 
         if ( documentation )
