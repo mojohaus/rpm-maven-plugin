@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
@@ -61,6 +62,13 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 public class RPMMojo
     extends AbstractMojo
 {
+
+    /**
+     * Message for exception indicating that a {@link Source} has a {@link Source#getDestination() destination}, but
+     * refers to a {@link File#isDirectory() directory}.
+     */
+    private static final String DESTINATION_DIRECTORY_ERROR_MSG =
+        "Source has a destination [{0}], but the location [{1}] does not refer to a file.";
 
     /**
      * The name portion of the output file name.
@@ -201,7 +209,7 @@ public class RPMMojo
     private File workarea;
 
     /**
-     * The list of file mappings.
+     * The list of file <a href="map-params.html">mappings</a>.
      * 
      * @parameter
      * @required
@@ -635,9 +643,10 @@ public class RPMMojo
      * @param dest The destination directory
      * @param incl The list of inclusions
      * @param excl The list of exclusions
+     * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private void copySource( File src, File dest, List incl, List excl )
+    private List copySource( File src, File dest, List incl, List excl )
         throws MojoExecutionException
     {
         try
@@ -669,9 +678,22 @@ public class RPMMojo
 
             // Perform the copy
             copier.createArchive();
-
+            
+            Map copiedFilesMap = copier.getFiles();
+            List copiedFiles = new ArrayList( copiedFilesMap.size() );
+            for ( Iterator i = copiedFilesMap.keySet().iterator(); i.hasNext(); )
+            {
+                String key = (String) i.next();
+                if ( key != null && key.length() > 0 )
+                {
+                    copiedFiles.add( key );
+                }
+            }
+            
             // Clear the list for the next mapping
             copier.resetArchiver();
+            
+            return copiedFiles;
         }
         catch ( Throwable t )
         {
@@ -763,6 +785,7 @@ public class RPMMojo
                 List srcs = map.getSources();
                 if ( srcs != null )
                 {
+                    //it is important that for each Source we set the files that are "installed".
                     for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
                     {
                         Source src = (Source) sit.next();
@@ -775,37 +798,40 @@ public class RPMMojo
                                 List elist = src.getExcludes();
                                 if ( !src.getNoDefaultExcludes() )
                                 {
-                                    if (elist == null)
+                                    if ( elist == null )
                                     {
                                         elist = new ArrayList();
                                     }
-                                    elist.addAll(FileUtils.getDefaultExcludesAsList());
+                                    elist.addAll( FileUtils.getDefaultExcludesAsList() );
                                 }
-                                copySource( src.getLocation(), dest, src.getIncludes(), elist );
+                                List copiedFiles = copySource( src.getLocation(), dest, src.getIncludes(), elist );
+                                src.addCopiedFileNamesRelativeToDestination( copiedFiles );
                             }
                             else
                             {
-                                if (!location.isFile())
+                                if ( !location.isFile() )
                                 {
-                                    throw new MojoExecutionException(MessageFormat.format("Source has a destination [{0}], but the location [{1}] does not refer to a file.", new String[]{destination, location.getName()}));
+                                    throw new MojoExecutionException( MessageFormat.format(
+                                        DESTINATION_DIRECTORY_ERROR_MSG,
+                                        new Object[] { destination, location.getName() } ) );
                                 }
                                 
-                                File destFile = new File(dest, destination);
+                                File destFile = new File( dest, destination );
                                 
                                 try
                                 {
-                                    if (!destFile.createNewFile())
+                                    if ( !destFile.createNewFile() )
                                     {
-                                        throw new IOException("Unable to create file: " + destFile.getAbsolutePath());
+                                        throw new IOException( "Unable to create file: " + destFile.getAbsolutePath() );
                                     }
                                     
-                                    FileInputStream fis = new FileInputStream(location);
+                                    FileInputStream fis = new FileInputStream( location );
                                     try
                                     {
-                                        FileOutputStream fos = new FileOutputStream(destFile);
+                                        FileOutputStream fos = new FileOutputStream( destFile );
                                         try
                                         {
-                                            fis.getChannel().transferTo(0, location.length(), fos.getChannel());
+                                            fis.getChannel().transferTo( 0, location.length(), fos.getChannel() );
                                         }
                                         finally
                                         {
@@ -817,10 +843,12 @@ public class RPMMojo
                                         fis.close();
                                     }
                                 }
-                                catch (IOException e)
+                                catch ( IOException e )
                                 {
-                                    throw new MojoExecutionException("Unable to copy files", e);
+                                    throw new MojoExecutionException( "Unable to copy files", e );
                                 }
+                                
+                                src.addCopiedFileNameRelativeToDestination( destination );
                             }
                         }
                         else
@@ -968,15 +996,7 @@ public class RPMMojo
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
             PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
 
-            if ( null != defineStatements )
-            {
-                Iterator defineIter = defineStatements.iterator();
-                while ( defineIter.hasNext() )
-                {
-                    String defineStatement = (String) defineIter.next();
-                    spec.println( "%define " + defineStatement );
-                }
-            }
+            writeList( spec, defineStatements, "%define " );
 
             spec.println( "Name: " + name );
             spec.println( "Version: " + version );
@@ -990,23 +1010,7 @@ public class RPMMojo
             String copyrightText = copyright;
             if ( copyrightText == null )
             {
-                String year = project.getInceptionYear();
-                String organization = project.getOrganization() == null ? null : project.getOrganization().getName();
-                if ( ( year != null ) && ( organization != null ) )
-                {
-                    copyrightText = year + " " + organization;
-                }
-                else
-                {
-                    if ( year == null )
-                    {
-                        copyrightText = organization;
-                    }
-                    else
-                    {
-                        copyrightText = year;
-                    }
-                }
+                copyrightText = generateCopyrightText();
             }
             if ( copyrightText != null )
             {
@@ -1036,27 +1040,9 @@ public class RPMMojo
             {
                 spec.println( "Packager: " + packager );
             }
-            if ( provides != null )
-            {
-                for ( Iterator it = provides.iterator(); it.hasNext(); )
-                {
-                    spec.println( "Provides: " + it.next() );
-                }
-            }
-            if ( requires != null )
-            {
-                for ( Iterator it = requires.iterator(); it.hasNext(); )
-                {
-                    spec.println( "Requires: " + it.next() );
-                }
-            }
-            if ( conflicts != null )
-            {
-                for ( Iterator it = conflicts.iterator(); it.hasNext(); )
-                {
-                    spec.println( "Conflicts: " + it.next() );
-                }
-            }
+            writeList( spec, provides, "Provides: " );
+            writeList( spec, requires, "Requires: " );
+            writeList( spec, conflicts, "Conflicts: " );
             if ( prefix != null )
             {
                 spec.println( "Prefix: " + prefix );
@@ -1075,106 +1061,41 @@ public class RPMMojo
             {
                 Mapping map = (Mapping) it.next();
 
-                List includes = new LinkedList();
-                List excludes = new LinkedList();
+                // For each mapping we need to determine which files in the destination were defined by this
+                // mapping so that we can write the %attr statement correctly.
 
-                List sources = map.getSources();
-                if ( sources != null )
-                {
-                    for ( Iterator sit = sources.iterator(); sit.hasNext(); )
-                    {
-                        Source source = (Source) sit.next();
-
-                        // includes and excludes are only applicable for a directory
-                        File sourceLocation = source.getLocation();
-                        if ( sourceLocation.isDirectory() )
-                        {
-                            List srcIncludes = source.getIncludes();
-                            if ( srcIncludes != null )
-                            {
-                                includes.addAll( srcIncludes );
-                            }
-
-                            List srcExcludes = source.getExcludes();
-                            if ( srcExcludes != null )
-                            {
-                                excludes.addAll( srcExcludes );
-                            }
-                        }
-                        else
-                        {
-                            // otherwise consider the name given as an "include" for
-                            // the DirectoryScanner
-                            includes.add( sourceLocation.getName() );
-                        }
-                    }
-                }
+                List includes = determineFileIncludes( map );
 
                 DirectoryScanner scanner = new DirectoryScanner();
-                scanner.setBasedir( buildroot.getAbsolutePath() + map.getDestination() );
+                final String destination = map.getDestination();
+                scanner.setBasedir( buildroot.getAbsolutePath() + destination );
                 scanner.setIncludes( includes.isEmpty() ? null
                                 : (String[]) includes.toArray( new String[includes.size()] ) );
-                scanner.setExcludes( excludes.isEmpty() ? null
-                                : (String[]) excludes.toArray( new String[excludes.size()] ) );
+                scanner.setExcludes( null );
                 scanner.scan();
 
-                if ( scanner.isEverythingIncluded() )
+                final String attrString = map.getAttrString();
+                if ( scanner.isEverythingIncluded() && map.isDirectoryIncluded() )
                 {
-                    spec.println( map.getAttrString() + " " + map.getDestination() );
+                    getLog().debug( "writing attriute string for directory: " + destination );
+                    spec.println( attrString + " " + destination );
                 }
                 else
                 {
+                    getLog().debug( "writing attribute string for identified files in directory: " + destination );
+
                     String[] files = scanner.getIncludedFiles();
+
+                    String baseFileString = attrString + " " + destination + File.separatorChar;
 
                     for ( int i = 0; i < files.length; ++i )
                     {
-                        spec.println( map.getAttrString() + " " + map.getDestination() + File.separatorChar + files[i] );
+                        spec.println( baseFileString + files[i] );
                     }
                 }
             }
 
-            if ( preinstall != null )
-            {
-                spec.println();
-                spec.println( "%pre" );
-                spec.println( preinstall );
-            }
-            if ( install != null )
-            {
-                spec.println();
-                spec.println( "%install" );
-                spec.println( install );
-            }
-            if ( postinstall != null )
-            {
-                spec.println();
-                spec.println( "%post" );
-                spec.println( postinstall );
-            }
-            if ( preremove != null )
-            {
-                spec.println();
-                spec.println( "%preun" );
-                spec.println( preremove );
-            }
-            if ( postremove != null )
-            {
-                spec.println();
-                spec.println( "%postun" );
-                spec.println( postremove );
-            }
-            if ( verify != null )
-            {
-                spec.println();
-                spec.println( "%verifyscript" );
-                spec.println( verify );
-            }
-            if ( clean != null )
-            {
-                spec.println();
-                spec.println( "%clean" );
-                spec.println( clean );
-            }
+            printScripts( spec );
 
             spec.close();
         }
@@ -1182,5 +1103,131 @@ public class RPMMojo
         {
             throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), t );
         }
+    }
+
+    /**
+     * Print all the script commands to the <i>writer</i>.
+     * @param writer to print script tags to
+     */
+    private void printScripts( PrintWriter writer )
+    {
+        if ( preinstall != null )
+        {
+            writer.println();
+            writer.println( "%pre" );
+            writer.println( preinstall );
+        }
+        if ( install != null )
+        {
+            writer.println();
+            writer.println( "%install" );
+            writer.println( install );
+        }
+        if ( postinstall != null )
+        {
+            writer.println();
+            writer.println( "%post" );
+            writer.println( postinstall );
+        }
+        if ( preremove != null )
+        {
+            writer.println();
+            writer.println( "%preun" );
+            writer.println( preremove );
+        }
+        if ( postremove != null )
+        {
+            writer.println();
+            writer.println( "%postun" );
+            writer.println( postremove );
+        }
+        if ( verify != null )
+        {
+            writer.println();
+            writer.println( "%verifyscript" );
+            writer.println( verify );
+        }
+        if ( clean != null )
+        {
+            writer.println();
+            writer.println( "%clean" );
+            writer.println( clean );
+        }
+    }
+
+    /**
+     * Builds a list of all the file names (relative to {@link Mapping#getDirectory()})
+     * that are included in the {@link Mapping#getSources() sources}.
+     * @param map The Mapping to examine.
+     * @return all the file names (relative to {@link Mapping#getDirectory()})
+     * that are included in the {@link Mapping#getSources() sources}.
+     */
+    private static List determineFileIncludes( Mapping map )
+    {
+        // list of relative files to dest that were defined for this mapping (from all sources).
+        List includes = new LinkedList();
+
+        List sources = map.getSources();
+        if ( sources != null )
+        {
+            for ( Iterator sit = sources.iterator(); sit.hasNext(); )
+            {
+                Source source = (Source) sit.next();
+
+                List copiedFiles = source.getCopiedFileNamesRelativeToDestination();
+                if ( copiedFiles != null && !copiedFiles.isEmpty() )
+                {
+                    includes.addAll( copiedFiles );
+                }
+            }
+        }
+        return includes;
+    }
+    
+    /**
+     * Writes a new line for each element in <i>strings</i> to the <i>writer</i> with the <i>prefix</i>.
+     * @param writer <tt>PrintWriter</tt> to write to.
+     * @param strings <tt>List</tt> of <tt>String</tt>s to write.
+     * @param prefix Prefix to write on each line before the string.
+     */
+    private static void writeList( PrintWriter writer, List strings, String prefix )
+    {
+        if ( strings != null )
+        {
+            for ( Iterator it = strings.iterator(); it.hasNext(); )
+            {
+                writer.print( prefix );
+                writer.println( it.next() );
+            }
+        }
+    }
+
+    /**
+     * Generates the copyright text from {@link MavenProject#getOrganization()} and
+     * {@link MavenProject#getInceptionYear()}.
+     * 
+     * @return Generated copyright text from the organization name and inception year.
+     */
+    private String generateCopyrightText()
+    {
+        String copyrightText;
+        String year = project.getInceptionYear();
+        String organization = project.getOrganization() == null ? null : project.getOrganization().getName();
+        if ( ( year != null ) && ( organization != null ) )
+        {
+            copyrightText = year + " " + organization;
+        }
+        else
+        {
+            if ( year == null )
+            {
+                copyrightText = organization;
+            }
+            else
+            {
+                copyrightText = year;
+            }
+        }
+        return copyrightText;
     }
 }

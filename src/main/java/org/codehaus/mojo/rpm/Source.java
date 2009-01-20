@@ -20,6 +20,8 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,6 +42,15 @@ public class Source
 
     /** The list of exclusions. */
     private List excludes;
+    
+    /**
+     * List of files actually copied into rpm for the Mapping.
+     * 
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to 
+     * the mapping destination. In the case that {@link #location} is a {@link File#isFile() file}, 
+     * it will be {@link #destination} or the {@link File#getName() name}.
+     */
+    private List copiedFileNamesRelativeToDestination;
     
     /**
      * Optional destination name for the file identified by {@link #location}.<br/>
@@ -146,16 +157,63 @@ public class Source
     }
 
     /**
-     * Sets the destination file name. 
+     * Sets the destination file name.
      * <p>
      * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link File#isFile() file},
      * not a {@link File#isDirectory() directory}.
      * </p>
+     * 
      * @param destination The destination that the {@link #getLocation() location} should be in the final rpm.
      */
-    public void setDestination(String destination)
+    public void setDestination( String destination )
     {
         this.destination = destination;
+    }
+
+    /**
+     * Returns the names of files copied to the {@link Mapping} {@link Mapping#getDestination() destination}.<br/>
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the <tt>Mapping</tt>
+     * destination. In the case that {@link #getLocation()} is a {@link File#isFile() file}, the only element will be
+     * either the {@link #getDestination()} (if set) or the {@link File#getName() location name}.
+     * 
+     * @return The names of files copied to the {@link Mapping#getDestination() destination}.
+     */
+    List getCopiedFileNamesRelativeToDestination()
+    {
+        return this.copiedFileNamesRelativeToDestination;
+    }
+
+    /**
+     * Add a <tt>List</tt> of relative file names which have been copied for this <tt>Source</tt>.
+     * 
+     * @param copiedFileNamesRelativeToDestination relative names of files to add
+     * @see #getCopiedFileNamesRelativeToDestination()
+     */
+    void addCopiedFileNamesRelativeToDestination( List copiedFileNamesRelativeToDestination )
+    {
+        if ( this.copiedFileNamesRelativeToDestination == null )
+        {
+            this.copiedFileNamesRelativeToDestination = new ArrayList( copiedFileNamesRelativeToDestination );
+        }
+        else
+        {
+            this.copiedFileNamesRelativeToDestination.addAll( copiedFileNamesRelativeToDestination );
+        }
+    }
+
+    /**
+     * Adds a relative file name that has been copied for this <tt>Source</tt>.
+     * 
+     * @param copiedFileNameRelativeToDestination relative name of file to add to list
+     * @see #getCopiedFileNamesRelativeToDestination()
+     */
+    void addCopiedFileNameRelativeToDestination( String copiedFileNameRelativeToDestination )
+    {
+        if ( this.copiedFileNamesRelativeToDestination == null )
+        {
+            this.copiedFileNamesRelativeToDestination = new LinkedList();
+        }
+        this.copiedFileNamesRelativeToDestination.add( copiedFileNameRelativeToDestination );
     }
 
     /** {@inheritDoc} */
@@ -183,10 +241,10 @@ public class Source
             sb.append( " excl:" + excludes );
         }
         
-        if (destination != null)
+        if ( destination != null )
         {
-            sb.append(" destination: ");
-            sb.append(destination);
+            sb.append( " destination: " );
+            sb.append( destination );
         }
 
         if ( noDefaultExcludes )

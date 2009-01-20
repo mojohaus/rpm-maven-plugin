@@ -39,10 +39,9 @@ public class Mapping
      * Indicates the configuration value for the files.
      * <p>
      * For passivity purposes, a value of <i>true</i> or <i>false</i> will indicate whether the <code>%config</code>
-     * descriptor will be written in the spec file.<br/>
-     * 
-     * However, any other value (such as <i>noreplace</i>) can be passed and will be written into the spec file after <code>%config</code>.
-     * In the case of <i>noreplace</i>, it would look like <code>%config(noreplace)</code>.
+     * descriptor will be written in the spec file.<br/> However, any other value (such as <i>noreplace</i>) can be
+     * passed and will be written into the spec file after <code>%config</code>. In the case of <i>noreplace</i>, it
+     * would look like <code>%config(noreplace)</code>.
      * </p>
      */
     private String configuration;
@@ -67,6 +66,11 @@ public class Mapping
 
     /** Mapping information for dependencies. */
     private Dependency dependency;
+    
+    /**
+     * Indicates if the {@link #directory} should be used for the {@link #getAttrString() attribute string}.
+     */
+    private boolean directoryIncluded = true;
 
     // // // Bean methods
 
@@ -91,6 +95,31 @@ public class Mapping
     }
 
     /**
+     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString() attribute string}
+     * (if and only if {@link #getSources() sources} make up everything that gets copied to the directory).<br/>
+     * 
+     * By default, this returns <code>true</code>.
+     * @return Whether the {@link #getDirectory()} should be used for the 
+     * {@link #getAttrString() attribute string}.
+     */
+    public boolean isDirectoryIncluded()
+    {
+        return this.directoryIncluded;
+    }
+
+    /**
+     * Sets if the {@link #getDirectory()} should be used for the {@link #getAttrString() attribute string} 
+     * (if and only if {@link #getSources() sources} make up everything that gets copied to the directory).<br/>
+     * 
+     * By default, this is <code>true</code>.
+     * @param directoryIncluded The {@link #directoryIncluded} to set.
+     */
+    public void setDirectoryIncluded( boolean directoryIncluded )
+    {
+        this.directoryIncluded = directoryIncluded;
+    }
+
+    /**
      * Retrieve the configuration status. This value is <code>true</code> if the file(s) in this mapping are
      * configuration files.
      * 
@@ -99,12 +128,13 @@ public class Mapping
      */
     public boolean isConfiguration()
     {
-        return !"FALSE".equalsIgnoreCase(configuration);
+        return !"FALSE".equalsIgnoreCase( configuration );
     }
     
     /**
-     * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}. However,
-     * modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
+     * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}.
+     * However, modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
+     * 
      * @return The configuration value.
      */
     public String getConfiguration()
@@ -113,9 +143,10 @@ public class Mapping
     }
     
     /**
-     * Set the configuration status.  This value is <code>true</code> if
-     * the file(s) in this mapping are configuration files. Any value other than <code>true</code> or <code>false</code>
-     * will be considered a modifier of the <i>%config</i> declaration in the spec file.
+     * Set the configuration status. This value is <code>true</code> if the file(s) in this mapping are configuration
+     * files. Any value other than <code>true</code> or <code>false</code> will be considered a modifier of the
+     * <i>%config</i> declaration in the spec file.
+     * 
      * @param cfg The new configuration value.
      */
     public void setConfiguration( String cfg )
@@ -278,16 +309,16 @@ public class Mapping
     {
         StringBuffer sb = new StringBuffer();
 
-        if ( configuration != null  && !"FALSE".equalsIgnoreCase(configuration))
+        if ( configuration != null  && !"FALSE".equalsIgnoreCase( configuration ) )
         {
             sb.append( "%config" );
-            if (configuration.length() > 0 && !"TRUE".equalsIgnoreCase(configuration))
+            if ( configuration.length() > 0 && !"TRUE".equalsIgnoreCase( configuration ) )
             {
-                sb.append('(');
-                sb.append(configuration);
-                sb.append(')');
+                sb.append( '(' );
+                sb.append( configuration );
+                sb.append( ')' );
             }
-            sb.append(' ');
+            sb.append( ' ' );
         }
 
         if ( documentation )

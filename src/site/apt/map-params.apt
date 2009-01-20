@@ -85,6 +85,16 @@ Mapping Parameters
   <<<root>>> will be used.  If not specified, the files will be owned by
   the group used to create the package.
 
+* {directoryIncluded}
+
+  If the value is <<<true>>> then the attribute string will be written for
+  the <<<directory>>> if the <<<sources>>> identify all of the files in the
+  <<<directory>>> (that is, no other mapping contributed files to the 
+  <<<directory>>>). This is the default behavior.
+  
+  If the value is <<<false>>>, the files in this mapping will be listed
+  individually in the spec file. 
+  
 * {artifact}
 
   If present, then the project's artifact should be included in this
