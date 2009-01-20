@@ -16,7 +16,7 @@
   <parent>
     <artifactId>mojo</artifactId>
     <groupId>org.codehaus.mojo</groupId>
-    <version>16</version>
+    <version>17</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>rpm-maven-plugin</artifactId>
@@ -28,6 +28,9 @@
   </description>
   <inceptionYear>2005</inceptionYear>
   <url>http://mojo.codehaus.org/rpm-maven-plugin/</url>
+  <prerequisites>
+    <maven>2.0.9</maven>
+  </prerequisites>
   <ciManagement>
     <system>continuum</system>
     <notifiers>
@@ -49,6 +52,17 @@
         <role>Creator</role>
         <role>Java Developer</role>
       </roles>
+    </developer>
+    <developer>
+        <id>bokken</id>
+        <name>Brett Okken</name>
+        <email>bokken@cerner.com</email>
+        <organization>Cerner</organization>
+        <organizationUrl>http://www.cerner.com</organizationUrl>
+        <timezone>-6</timezone>
+        <roles>
+            <role>Java Developer</role>
+        </roles>
     </developer>
   </developers>
   <contributors>
