@@ -1,3 +1,8 @@
+/**
+ * $Id$
+ * 
+ * Created: Jan 22, 2009
+ */
 package org.codehaus.mojo.rpm;
 
 /*
@@ -21,29 +26,42 @@ package org.codehaus.mojo.rpm;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
 /**
- * Construct the RPM file.
+ * Construct the RPM file and attaches it as a secondary artifact.
  * 
- * @version $Id$
+ * @author Brett Okken, Cerner Corp.
+ * @version $Revision$
+ * @since 2.0-beta-2
  * @requiresDependencyResolution runtime
- * @goal rpm
+ * @goal attached-rpm
  * @phase package
  */
-public class RPMMojo
+public class AttachedRPMMojo
     extends AbstractRPMMojo
 {
+
     /**
-     * If the {@link MavenProject#getPackaging() packaging} is <i>rpm</i>, sets the rpm as the
-     * primary artifact.
+     * The classifier for the rpm secondary artifact.
+     * 
+     * @parameter
+     */
+    private String classifier;
+
+    /**
+     * @component
+     */
+    protected MavenProjectHelper mavenProjectHelper;
+    
+    /**
+     * Attach the rpm as a secondary artifact.
+     * @see MavenProjectHelper#attachArtifact(org.apache.maven.project.MavenProject, String, String, java.io.File)
      */
     protected void afterExecution()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( "rpm".equals( project.getPackaging() ) )
-        {
-            project.getArtifact().setFile( getRPMFile() );
-        }
+        classifier = classifier != null ? classifier : "rpm";
+        mavenProjectHelper.attachArtifact( project, "rpm", classifier, getRPMFile() );
     }
 }

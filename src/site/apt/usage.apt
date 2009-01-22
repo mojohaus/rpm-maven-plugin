@@ -39,7 +39,7 @@ RPM as Side Effect
   is packaged.  This must be done whenever the project's primary artifact is
   intended to be part of the RPM package but can be done anytime.  To set up
   this configuration, include the following lines in the plugin definition
-  in the project's POM file (see the {{{sample.html}sample configuration}} for
+  in the project's POM file (see the {{{example1.html}sample configuration}} for
   an example of this):
 
 +-------+
@@ -47,6 +47,21 @@ RPM as Side Effect
   <execution>
     <goals>
       <goal>rpm</goal>
+    </goals>
+  </execution>
+</executions>
++-------+
+
+RPM as Secondary Artifact
+
+  In this scenario, the rpm is not the primary artifact, but will be deployed as
+  a secondary artifact.
+  
++-------+
+<executions>
+  <execution>
+    <goals>
+      <goal>attached-rpm</goal>
     </goals>
   </execution>
 </executions>
@@ -81,9 +96,11 @@ RPM as Primary Artifact
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>rpm-maven-plugin</artifactId>
+                <version>2.0</version>
                 <extensions>true</extensions>
                 ...
             </plugin>
         </plugins>
     </build>
 +-------+ 
+  
