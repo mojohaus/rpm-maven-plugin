@@ -20,8 +20,6 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,15 +42,6 @@ public class Source
     private List excludes;
     
     /**
-     * List of files actually copied into rpm for the Mapping.
-     * 
-     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to 
-     * the mapping destination. In the case that {@link #location} is a {@link File#isFile() file}, 
-     * it will be {@link #destination} or the {@link File#getName() name}.
-     */
-    private List copiedFileNamesRelativeToDestination;
-    
-    /**
      * Optional destination name for the file identified by {@link #location}.<br/>
      * 
      * <b>NOTE:</b> This is only applicable if the {@link #location} is a {@link File#isFile() file},
@@ -62,6 +51,12 @@ public class Source
 
     /** <code>true</code> to omit the default exclusions. */
     private boolean noDefaultExcludes;
+    
+    /**
+     * If populated, this indicates that the files defined are only applicable if this value matches the
+     * <code>RPMMojo.needarch</code> value.
+     */
+    private String targetArchitecture;
 
     // // // Bean methods
 
@@ -171,49 +166,31 @@ public class Source
     }
 
     /**
-     * Returns the names of files copied to the {@link Mapping} {@link Mapping#getDestination() destination}.<br/>
-     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the <tt>Mapping</tt>
-     * destination. In the case that {@link #getLocation()} is a {@link File#isFile() file}, the only element will be
-     * either the {@link #getDestination()} (if set) or the {@link File#getName() location name}.
-     * 
-     * @return The names of files copied to the {@link Mapping#getDestination() destination}.
+     * @return Returns the {@link #targetArchitecture}.
      */
-    List getCopiedFileNamesRelativeToDestination()
+    public String getTargetArchitecture()
     {
-        return this.copiedFileNamesRelativeToDestination;
+        return this.targetArchitecture;
     }
 
     /**
-     * Add a <tt>List</tt> of relative file names which have been copied for this <tt>Source</tt>.
+     * Sets the target architecture for which files defined by this source are applicable.<br/>
      * 
-     * @param copiedFileNamesRelativeToDestination relative names of files to add
-     * @see #getCopiedFileNamesRelativeToDestination()
+     * @param targetArch The target architecture to set.
      */
-    void addCopiedFileNamesRelativeToDestination( List copiedFileNamesRelativeToDestination )
+    public void setTargetArchitecture( String targetArch )
     {
-        if ( this.copiedFileNamesRelativeToDestination == null )
-        {
-            this.copiedFileNamesRelativeToDestination = new ArrayList( copiedFileNamesRelativeToDestination );
-        }
-        else
-        {
-            this.copiedFileNamesRelativeToDestination.addAll( copiedFileNamesRelativeToDestination );
-        }
+        this.targetArchitecture = targetArch;
     }
-
+    
     /**
-     * Adds a relative file name that has been copied for this <tt>Source</tt>.
-     * 
-     * @param copiedFileNameRelativeToDestination relative name of file to add to list
-     * @see #getCopiedFileNamesRelativeToDestination()
+     * Indicates if the {@link #getTargetArchitecture()} matches the <i>archicture</i>.
+     * @param architecture
+     * @return if the target architecture matches the <i>archicture</i>.
      */
-    void addCopiedFileNameRelativeToDestination( String copiedFileNameRelativeToDestination )
+    boolean matchesArchitecture(String architecture)
     {
-        if ( this.copiedFileNamesRelativeToDestination == null )
-        {
-            this.copiedFileNamesRelativeToDestination = new LinkedList();
-        }
-        this.copiedFileNamesRelativeToDestination.add( copiedFileNameRelativeToDestination );
+        return targetArchitecture == null ? true : targetArchitecture.equalsIgnoreCase( architecture ); 
     }
 
     /** {@inheritDoc} */
@@ -250,6 +227,12 @@ public class Source
         if ( noDefaultExcludes )
         {
             sb.append( " [no default excludes]" );
+        }
+        
+        if (targetArchitecture != null)
+        {
+            sb.append( " targetArch: " );
+            sb.append( targetArchitecture );
         }
 
         sb.append( "}" );

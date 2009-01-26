@@ -36,7 +36,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,11 +98,25 @@ abstract class AbstractRPMMojo
     protected String release;
 
     /**
-     * Set to <code>true</code> if the package is dependent on the architecture of the build machine.
+     * The target architecture for the rpm. The default value is <i>noarch</i>.
+     * <p>
+     * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the
+     * architecture of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the
+     * architecture of the rpm to <tt>x86_64</tt>.
+     * </p>
+     * <p>
+     * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
+     * targetArchitecture</a> to flex the contents of the rpm based on the architecture.
+     * </p>
      * 
      * @parameter
      */
-    protected boolean needarch;
+    protected String needarch;
+    
+    /**
+     * The actual targeted architecture. This will be based on evaluation of {@link #needarch}.
+     */
+    protected String targetArch;
 
     /**
      * Set to a key name to sign the package using GPG. Note that due to RPM limitations, this always requires input
@@ -430,7 +443,7 @@ abstract class AbstractRPMMojo
     /** {@inheritDoc} */
     public final void execute()
         throws MojoExecutionException, MojoFailureException
-    {
+    {        
         checkParams();
         buildWorkArea();
         installFiles();
@@ -442,7 +455,7 @@ abstract class AbstractRPMMojo
     
     /**
      * Will be called on completion of {@link #execute()}. Provides subclasses an opportunity to
-     * perform
+     * perform any post execution logic (such as attaching an artifact).
      * @throws MojoExecutionException
      * @throws MojoFailureException
      */
@@ -451,13 +464,16 @@ abstract class AbstractRPMMojo
         
     }
     
+    /**
+     * Returns the generated rpm {@link File}.
+     * @return The generated rpm <tt>File</tt>.
+     */
     protected File getRPMFile()
     {
         File rpms = new File( workarea, "RPMS" );
-        File archDir = needarch ? new File( rpms, System.getProperty( "os.arch" ) ) : new File( rpms, "noarch" );
-        String arch = archDir.getName();
+        File archDir = new File( rpms, targetArch );
         
-        return new File( archDir, name + '-' + version + '-' + release + '.' + arch + ".rpm" );
+        return new File( archDir, name + '-' + version + '-' + release + '.' + targetArch + ".rpm" );
     }
 
     // // // Internal methods
@@ -480,11 +496,8 @@ abstract class AbstractRPMMojo
         cl.createArgument().setValue( buildroot.getAbsolutePath() );
         cl.createArgument().setValue( "--define" );
         cl.createArgument().setValue( "_topdir " + workarea.getAbsolutePath() );
-        if ( !needarch )
-        {
-            cl.createArgument().setValue( "--target" );
-            cl.createArgument().setValue( "noarch" );
-        }
+        cl.createArgument().setValue( "--target" );
+        cl.createArgument().setValue( targetArch );
         if ( keyname != null )
         {
             cl.createArgument().setValue( "--define" );
@@ -580,6 +593,21 @@ abstract class AbstractRPMMojo
             version = projversion.substring( 0, projversion.indexOf( "-" ) );
             getLog().warn( "Version string truncated to " + version );
         }
+        
+        //evaluate needarch and populate targetArch
+        if ( needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase( needarch ) )
+        {
+            targetArch = "noarch";
+        }
+        else if ( "true".equalsIgnoreCase( needarch ) )
+        {
+            targetArch = System.getProperty( "os.arch" );
+        }
+        else
+        {
+            targetArch = needarch;
+        }
+        getLog().debug( "targetArch = " + targetArch );
 
         // Various checks in the mappings
         for ( Iterator it = mappings.iterator(); it.hasNext(); )
@@ -805,6 +833,13 @@ abstract class AbstractRPMMojo
                     for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
                     {
                         Source src = (Source) sit.next();
+                        
+                        if (!src.matchesArchitecture( targetArch ))
+                        {
+                            getLog().debug( "Source does not match target architecture: " + src.toString() );
+                            continue;
+                        }
+                        
                         File location = src.getLocation();
                         if ( location.exists() )
                         {
@@ -821,7 +856,7 @@ abstract class AbstractRPMMojo
                                     elist.addAll( FileUtils.getDefaultExcludesAsList() );
                                 }
                                 List copiedFiles = copySource( src.getLocation(), dest, src.getIncludes(), elist );
-                                src.addCopiedFileNamesRelativeToDestination( copiedFiles );
+                                map.addCopiedFileNamesRelativeToDestination( copiedFiles );
                             }
                             else
                             {
@@ -866,7 +901,7 @@ abstract class AbstractRPMMojo
                                     throw new MojoExecutionException( "Unable to copy files", e );
                                 }
 
-                                src.addCopiedFileNameRelativeToDestination( destination );
+                                map.addCopiedFileNameRelativeToDestination( destination );
                             }
                         }
                         else
@@ -882,7 +917,9 @@ abstract class AbstractRPMMojo
                     List artlist = selectArtifacts( art );
                     for ( Iterator ait = artlist.iterator(); ait.hasNext(); )
                     {
-                        copyArtifact( (Artifact) ait.next(), dest );
+                        Artifact artifactInstance = (Artifact) ait.next();
+                        copyArtifact( artifactInstance, dest );
+                        map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
                     }
                 }
 
@@ -892,7 +929,23 @@ abstract class AbstractRPMMojo
                     List deplist = selectDependencies( dep );
                     for ( Iterator dit = deplist.iterator(); dit.hasNext(); )
                     {
-                        copyArtifact( (Artifact) dit.next(), dest );
+                        Artifact artifactInstance = (Artifact) dit.next();
+                        copyArtifact( artifactInstance, dest );
+                        map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
+                    }
+                }
+                
+                if (map.getCopiedFileNamesRelativeToDestination().isEmpty())
+                {
+                    getLog().info( "Mapping empty with destination: " + dest.getName() );
+                    // Build the output directory if it doesn't exist
+                    if ( !dest.exists() )
+                    {
+                        getLog().info( "Creating empty directory " + dest.getAbsolutePath() );
+                        if ( !dest.mkdirs() )
+                        {
+                            throw new MojoExecutionException( "Unable to create " + dest.getAbsolutePath() );
+                        }
                     }
                 }
             }
@@ -1081,7 +1134,7 @@ abstract class AbstractRPMMojo
                 // For each mapping we need to determine which files in the destination were defined by this
                 // mapping so that we can write the %attr statement correctly.
 
-                List includes = determineFileIncludes( map );
+                List includes = map.getCopiedFileNamesRelativeToDestination();
 
                 DirectoryScanner scanner = new DirectoryScanner();
                 final String destination = map.getDestination();
@@ -1171,36 +1224,6 @@ abstract class AbstractRPMMojo
             writer.println( "%clean" );
             writer.println( clean );
         }
-    }
-
-    /**
-     * Builds a list of all the file names (relative to {@link Mapping#getDirectory()}) that are included in the
-     * {@link Mapping#getSources() sources}.
-     * 
-     * @param map The Mapping to examine.
-     * @return all the file names (relative to {@link Mapping#getDirectory()}) that are included in the
-     *         {@link Mapping#getSources() sources}.
-     */
-    private static List determineFileIncludes( Mapping map )
-    {
-        // list of relative files to dest that were defined for this mapping (from all sources).
-        List includes = new LinkedList();
-
-        List sources = map.getSources();
-        if ( sources != null )
-        {
-            for ( Iterator sit = sources.iterator(); sit.hasNext(); )
-            {
-                Source source = (Source) sit.next();
-
-                List copiedFiles = source.getCopiedFileNamesRelativeToDestination();
-                if ( copiedFiles != null && !copiedFiles.isEmpty() )
-                {
-                    includes.addAll( copiedFiles );
-                }
-            }
-        }
-        return includes;
     }
 
     /**

@@ -19,6 +19,9 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -71,6 +74,18 @@ public class Mapping
      * Indicates if the {@link #directory} should be used for the {@link #getAttrString() attribute string}.
      */
     private boolean directoryIncluded = true;
+    
+    /**
+     * List of files actually copied for the Mapping.
+     * <p>
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the
+     * {@link #getDestination()}.
+     * </p>
+     * <p>
+     * This is populated by {@link #sources}, {@link #artifact}, and {@link #dependency}.
+     * </p>
+     */
+    private List copiedFileNamesRelativeToDestination;
 
     // // // Bean methods
 
@@ -128,7 +143,7 @@ public class Mapping
      */
     public boolean isConfiguration()
     {
-        return !"FALSE".equalsIgnoreCase( configuration );
+        return configuration == null || !"FALSE".equalsIgnoreCase( configuration );
     }
     
     /**
@@ -401,6 +416,53 @@ public class Mapping
         }
 
         return true;
+    }
+
+    /**
+     * Returns the names of files copied to the {@link #getDestination() destination}.<br/>
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the 
+     * <tt>destination</tt>. 
+     * 
+     * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
+     * <code>null</code>, but may be immutable.
+     */
+    List getCopiedFileNamesRelativeToDestination()
+    {
+        return this.copiedFileNamesRelativeToDestination != null ? this.copiedFileNamesRelativeToDestination
+                        : Collections.EMPTY_LIST;
+    }
+
+    /**
+     * Add a <tt>List</tt> of relative file names which have c
+     * 
+     * @param copiedFileNamesRelativeToDestination relative names of files to add
+     * @see #getCopiedFileNamesRelativeToDestination()
+     */
+    void addCopiedFileNamesRelativeToDestination( List copiedFileNamesRelativeToDestination )
+    {
+        if ( this.copiedFileNamesRelativeToDestination == null )
+        {
+            this.copiedFileNamesRelativeToDestination = new ArrayList( copiedFileNamesRelativeToDestination );
+        }
+        else
+        {
+            this.copiedFileNamesRelativeToDestination.addAll( copiedFileNamesRelativeToDestination );
+        }
+    }
+
+    /**
+     * Adds a relative file name that has been copied to the {@link #getDestination() destination}.
+     * 
+     * @param copiedFileNameRelativeToDestination relative name of file to add to list
+     * @see #getCopiedFileNamesRelativeToDestination()
+     */
+    void addCopiedFileNameRelativeToDestination( String copiedFileNameRelativeToDestination )
+    {
+        if ( this.copiedFileNamesRelativeToDestination == null )
+        {
+            this.copiedFileNamesRelativeToDestination = new LinkedList();
+        }
+        this.copiedFileNamesRelativeToDestination.add( copiedFileNameRelativeToDestination );
     }
 
     /** {@inheritDoc} */

@@ -68,3 +68,26 @@ Source Parameters
   If the <<location>> is a file (not a directory), this is the name of the file 
   in the rpm. If this value is not provided, the name of the <<<file>>> will 
   be used.
+  
+* {targetArchitecture} (<<optional>>)
+
+  If this is populated, the contents defined by this source will only be included
+  if the value for targetArchitecture matches the target architecture of the rpm.
+  This can be used to flex the contents of the rpm based on the architecture:
+  
++-----+
+<mapping>
+    ...
+    <sources>
+        <source>
+            <location>src/main/native/x86_64</location>
+            <targetArchitecture>x86_64</targetArchitecture>
+        </source>
+        <source>
+            <location>src/main/native/i586</location>
+            <targetArchitecture>i586</targetArchitecture>
+        </source>
+    </sources>
+    ...
+</mapping>
++-----+
