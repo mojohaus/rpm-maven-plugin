@@ -53,6 +53,9 @@
         <action dev="bokken" type="add" issue="MOJO-972" system="jira">
             configure target architecture
         </action>
+        <action dev="bokken" type="add" issue="MOJO-1172" system="jira">
+            add support for %defattr
+        </action>
     </release>
   </body>
 </document>

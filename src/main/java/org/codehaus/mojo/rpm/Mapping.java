@@ -72,6 +72,8 @@ public class Mapping
     
     /**
      * Indicates if the {@link #directory} should be used for the {@link #getAttrString() attribute string}.
+     * 
+     * @since 2.0-beta-2
      */
     private boolean directoryIncluded = true;
     
@@ -345,34 +347,39 @@ public class Mapping
         {
             sb.append( "%dir " );
         }
+        
+        /* do not include %attr if no attributes are specified */
+        if ( !( filemode == null && username == null && groupname == null ) )
+        {
 
-        if ( filemode != null )
-        {
-            sb.append( "%attr(" + filemode + "," );
-        }
-        else
-        {
-            sb.append( "%attr(-," );
-        }
+            if ( filemode != null )
+            {
+                sb.append( "%attr(" + filemode + "," );
+            }
+            else
+            {
+                sb.append( "%attr(-," );
+            }
 
-        if ( username != null )
-        {
-            sb.append( username + "," );
-        }
-        else
-        {
-            sb.append( "-," );
-        }
+            if ( username != null )
+            {
+                sb.append( username + "," );
+            }
+            else
+            {
+                sb.append( "-," );
+            }
 
-        if ( groupname != null )
-        {
-            sb.append( groupname + ")" );
+            if ( groupname != null )
+            {
+                sb.append( groupname + ")" );
+            }
+            else
+            {
+                sb.append( "-)" );
+            }
         }
-        else
-        {
-            sb.append( "-)" );
-        }
-
+        
         return sb.toString();
     }
 

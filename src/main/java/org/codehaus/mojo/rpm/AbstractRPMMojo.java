@@ -377,6 +377,54 @@ abstract class AbstractRPMMojo
      */
     private List defineStatements;
 
+    /**
+     * The default file mode (octal string) to assign to files when installed. <br/>
+     * 
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
+     * <a href="map-params.html#username">username</a>, <b>AND</b> <a href="map-params.html#groupname">groupname</a> 
+     * are <b>NOT</b> populated.
+     * 
+     * @parameter
+     * @since 2.0-beta-2
+     */
+    private String defaultFilemode;
+
+    /**
+     * The default directory mode (octal string) to assign to directories when installed.<br/>
+     * 
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
+     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
+     * are <b>NOT</b> populated.
+     * 
+     * @parameter
+     * @since 2.0-beta-2
+     */
+    private String defaultDirmode;
+
+    /**
+     * The default user name for files when installed.<br/>
+     * 
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
+     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
+     * are <b>NOT</b> populated.
+     * 
+     * @parameter
+     * @since 2.0-beta-2
+     */
+    private String defaultUsername;
+
+    /**
+     * The default group name for files when installed.<br/>
+     * 
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
+     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
+     * are <b>NOT</b> populated.
+     * 
+     * @parameter
+     * @since 2.0-beta-2
+     */
+    private String defaultGroupname;
+
     /** The root of the build area. */
     private File buildroot;
 
@@ -1179,6 +1227,7 @@ abstract class AbstractRPMMojo
 
             spec.println();
             spec.println( "%files" );
+            spec.println( getDefAttrString() ); 
             for ( Iterator it = mappings.iterator(); it.hasNext(); )
             {
                 Mapping map = (Mapping) it.next();
@@ -1325,4 +1374,59 @@ abstract class AbstractRPMMojo
         }
         return copyrightText;
     }
+        
+    /**
+     * Assemble the RPM SPEC default file attributes.
+     * 
+     * @return The attribute string for the SPEC file.
+     */
+    private String getDefAttrString()
+    {
+        /* do not include %defattr if no default attributes are specified */
+        if ( defaultFilemode == null && defaultUsername == null && defaultGroupname == null && defaultDirmode == null )
+        {
+            return "";
+        }
+
+        StringBuffer sb = new StringBuffer();
+
+        if ( defaultFilemode != null )
+        {
+            sb.append( "%defattr(" ).append( defaultFilemode ).append( "," );
+        }
+        else
+        {
+            sb.append( "%defattr(-," );
+        }
+
+        if ( defaultUsername != null )
+        {
+            sb.append( defaultUsername ).append( "," );
+        }
+        else
+        {
+            sb.append( "-," );
+        }
+
+        if ( defaultGroupname != null )
+        {
+            sb.append( defaultGroupname ).append( "," );
+        }
+        else
+        {
+            sb.append( "-," );
+        }
+
+        if ( defaultDirmode != null )
+        {
+            sb.append( defaultDirmode ).append( ")" );
+        }
+        else
+        {
+            sb.append( "-)" );
+        }
+
+        return sb.toString();
+    }
+
 }
