@@ -19,5 +19,40 @@
         Added support for %define arguments
       </action>
     </release>
+    <release version="2.0-beta-2">
+        <action dev="carlos" type="fix" issue="MOJO-1275" system="jira">
+            buildroot with rpm 4.6 on fedora
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-649" system="jira">
+            default copyright
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-931" system="jira">
+            allow %attr to be at either directory or individual file level
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-1201" system="jira">
+            support additional %config options
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-1249" system="jira">
+            rpm as primary artifact
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-1250" system="jira">
+            allow renaming of files in mapping
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-1251" system="jira">
+            allow multiple mappings for single directory
+        </action>
+        <action dev="carlos" type="add" issue="MOJO-1262" system="jira">
+            sign rpm
+        </action>
+        <action dev="bokken" type="add">
+            rpm as secondary artifact
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-929" system="jira">
+            handle maven version modifiers as the release value
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-972" system="jira">
+            configure target architecture
+        </action>
+    </release>
   </body>
 </document>

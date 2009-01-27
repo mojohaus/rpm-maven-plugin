@@ -118,4 +118,25 @@
         <version>2.0</version>
     </dependency>
   </dependencies>
+  <reporting>
+    <plugins>
+        <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+            <issueLinkTemplatePerSystem>
+                <jira>%URL%/%ISSUE%</jira>
+            </issueLinkTemplatePerSystem>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
