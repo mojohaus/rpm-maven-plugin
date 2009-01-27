@@ -1,8 +1,3 @@
-/**
- * $Id$
- * 
- * Created: Jan 22, 2009
- */
 package org.codehaus.mojo.rpm;
 
 /*
@@ -33,11 +28,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
@@ -60,7 +58,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * 
  * @author Carlos
  * @author Brett Okken, Cerner Corp.
- * @version $Revision$
+ * @version $Id$
  */
 abstract class AbstractRPMMojo
     extends AbstractMojo
@@ -79,7 +77,7 @@ abstract class AbstractRPMMojo
      * @parameter expression="${project.artifactId}"
      * @required
      */
-    protected String name;
+    private String name;
 
     /**
      * The version portion of the RPM file name.
@@ -87,15 +85,24 @@ abstract class AbstractRPMMojo
      * @parameter alias="version" expression="${project.version}"
      * @required
      */
-    protected String projversion;
+    private String projversion;
 
     /**
      * The release portion of the RPM file name.
+     * <p>
+     * Beginning with 2.0-beta-2, this is an optional parameter. By default, the release will be generated from the
+     * modifier portion of the <a href="#projversion">project version</a> using the following rules:
+     * <ul>
+     * <li>If no modifier exists, the release will be <code>1</code>.</li>
+     * <li>If the modifier ends with <i>SNAPSHOT</i>, the timestamp (in UTC) of the build will be appended to end.</li>
+     * <li>All instances of <code>'-'</code> in the modifier will be replaced with <code>'_'</code>.</li>
+     * <li>If a modifier exists and does not end with <i>SNAPSHOT</i>, <code>"_1"</code> will be appended to end.</li>
+     * </ul>
+     * </p>
      * 
      * @parameter
-     * @required
      */
-    protected String release;
+    private String release;
 
     /**
      * The target architecture for the rpm. The default value is <i>noarch</i>.
@@ -111,12 +118,12 @@ abstract class AbstractRPMMojo
      * 
      * @parameter
      */
-    protected String needarch;
+    private String needarch;
     
     /**
      * The actual targeted architecture. This will be based on evaluation of {@link #needarch}.
      */
-    protected String targetArch;
+    private String targetArch;
 
     /**
      * Set to a key name to sign the package using GPG. Note that due to RPM limitations, this always requires input
@@ -124,56 +131,56 @@ abstract class AbstractRPMMojo
      * 
      * @parameter expression="${gpg.keyname}"
      */
-    protected String keyname;
+    private String keyname;
 
     /**
      * The long description of the package.
      * 
      * @parameter expression="${project.description}"
      */
-    protected String description;
+    private String description;
 
     /**
      * The one-line description of the package.
      * 
      * @parameter expression="${project.name}"
      */
-    protected String summary;
+    private String summary;
 
     /**
      * The one-line copyright information.
      * 
      * @parameter
      */
-    protected String copyright;
+    private String copyright;
 
     /**
      * The distribution containing this package.
      * 
      * @parameter
      */
-    protected String distribution;
+    private String distribution;
 
     /**
      * An icon for the package.
      * 
      * @parameter
      */
-    protected File icon;
+    private File icon;
 
     /**
      * The vendor supplying the package.
      * 
      * @parameter expression="${project.organization.name}"
      */
-    protected String vendor;
+    private String vendor;
 
     /**
      * A URL for the vendor.
      * 
      * @parameter expression="${project.organization.url}"
      */
-    protected String url;
+    private String url;
 
     /**
      * The package group for the package.
@@ -181,49 +188,49 @@ abstract class AbstractRPMMojo
      * @parameter
      * @required
      */
-    protected String group;
+    private String group;
 
     /**
      * The name of the person or group creating the package.
      * 
      * @parameter expression="${project.organization.name}"
      */
-    protected String packager;
+    private String packager;
 
     /**
      * The list of virtual packages provided by this package.
      * 
      * @parameter
      */
-    protected List provides;
+    private List provides;
 
     /**
      * The list of requirements for this package.
      * 
      * @parameter
      */
-    protected List requires;
+    private List requires;
 
     /**
      * The list of conflicts for this package.
      * 
      * @parameter
      */
-    protected List conflicts;
+    private List conflicts;
 
     /**
      * The relocation prefix for this package.
      * 
      * @parameter
      */
-    protected String prefix;
+    private String prefix;
 
     /**
      * The area for RPM to use for building the package.
      * 
      * @parameter expression="${project.build.directory}/rpm"
      */
-    protected File workarea;
+    private File workarea;
 
     /**
      * The list of file <a href="map-params.html">mappings</a>.
@@ -231,112 +238,112 @@ abstract class AbstractRPMMojo
      * @parameter
      * @required
      */
-    protected List mappings;
+    private List mappings;
 
     /**
      * The pre-installation script.
      * 
      * @parameter
      */
-    protected String preinstall;
+    private String preinstall;
 
     /**
      * The location of the pre-installation script.
      * 
      * @parameter
      */
-    protected File preinstallScript;
+    private File preinstallScript;
 
     /**
      * The post-installation script.
      * 
      * @parameter
      */
-    protected String postinstall;
+    private String postinstall;
 
     /**
      * The location of the post-installation script.
      * 
      * @parameter
      */
-    protected File postinstallScript;
+    private File postinstallScript;
 
     /**
      * The installation script.
      * 
      * @parameter
      */
-    protected String install;
+    private String install;
 
     /**
      * The location of the installation script.
      * 
      * @parameter
      */
-    protected File installScript;
+    private File installScript;
 
     /**
      * The pre-removal script.
      * 
      * @parameter
      */
-    protected String preremove;
+    private String preremove;
 
     /**
      * The location of the pre-removal script.
-     * 
+     * protected
      * @parameter
      */
-    protected File preremoveScript;
-
+    private File preremoveScript;
+    
     /**
      * The post-removal script.
      * 
      * @parameter
      */
-    protected String postremove;
+    private String postremove;
 
     /**
      * The location of the post-removal script.
      * 
      * @parameter
      */
-    protected File postremoveScript;
+    private File postremoveScript;
 
     /**
      * The verification script.
      * 
      * @parameter
      */
-    protected String verify;
+    private String verify;
 
     /**
      * The location of the verification script.
      * 
      * @parameter
      */
-    protected File verifyScript;
+    private File verifyScript;
 
     /**
      * The clean script.
      * 
      * @parameter
      */
-    protected String clean;
+    private String clean;
 
     /**
      * The location of the clean script.
      * 
      * @parameter
      */
-    protected File cleanScript;
+    private File cleanScript;
 
     /**
      * A Plexus component to copy files and directories.
      * 
      * @component role="org.codehaus.plexus.archiver.Archiver" roleHint="dir"
      */
-    protected DirectoryArchiver copier;
+    private DirectoryArchiver copier;
 
     /**
      * The primary project artifact.
@@ -345,7 +352,7 @@ abstract class AbstractRPMMojo
      * @required
      * @readonly
      */
-    protected Artifact artifact;
+    private Artifact artifact;
 
     /**
      * Auxillary project artifacts.
@@ -354,27 +361,27 @@ abstract class AbstractRPMMojo
      * @required
      * @readonly
      */
-    protected List attachedArtifacts;
+    private List attachedArtifacts;
 
     /**
      * @parameter default-value="${project}"
      * @required
      * @readonly
      */
-    protected MavenProject project;
+    MavenProject project;
 
     /**
      * A list of %define arguments
      * 
      * @parameter
      */
-    protected List defineStatements;
+    private List defineStatements;
 
     /** The root of the build area. */
-    protected File buildroot;
+    private File buildroot;
 
     /** The version string after parsing. */
-    protected String version;
+    private String version;
 
     // // // Consumers for rpmbuild output
 
@@ -456,8 +463,8 @@ abstract class AbstractRPMMojo
     /**
      * Will be called on completion of {@link #execute()}. Provides subclasses an opportunity to
      * perform any post execution logic (such as attaching an artifact).
-     * @throws MojoExecutionException
-     * @throws MojoFailureException
+     * @throws MojoExecutionException If an error occurs.
+     * @throws MojoFailureException If failure occurs.
      */
     protected void afterExecution() throws MojoExecutionException, MojoFailureException
     {
@@ -583,18 +590,52 @@ abstract class AbstractRPMMojo
     private void checkParams()
         throws MojoExecutionException, MojoFailureException
     {
+        Log log = getLog();
+        log.debug( "project version = " + projversion );
+
         // Check the version string
-        if ( projversion.indexOf( "-" ) == -1 )
+        int modifierIndex = projversion.indexOf( '-' );
+        if ( modifierIndex == -1 )
         {
             version = projversion;
+            if ( release == null || release.length() == 0 )
+            {
+                release = "1";
+
+                log.debug( "Release set to: 1" );
+            }
         }
         else
         {
-            version = projversion.substring( 0, projversion.indexOf( "-" ) );
-            getLog().warn( "Version string truncated to " + version );
+            version = projversion.substring( 0, modifierIndex );
+            log.warn( "Version string truncated to " + version );
+
+            if ( release == null || release.length() == 0 )
+            {
+                String modifier = projversion.substring( modifierIndex + 1, projversion.length() );
+                log.debug( "version modifier = " + modifier );
+
+                modifier = modifier.replace( '-', '_' );
+
+                if ( modifier.endsWith( "SNAPSHOT" ) )
+                {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMddHHmmss" );
+                    simpleDateFormat.setTimeZone( TimeZone.getTimeZone( "UTC" ) );
+                    modifier += simpleDateFormat.format( new Date() );
+                }
+                else
+                {
+                    modifier += "_1";
+                }
+
+                release = modifier;
+
+                log.debug( "Release set to: " + modifier );
+            }
         }
         
-        //evaluate needarch and populate targetArch
+        
+        // evaluate needarch and populate targetArch
         if ( needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase( needarch ) )
         {
             targetArch = "noarch";
@@ -607,7 +648,7 @@ abstract class AbstractRPMMojo
         {
             targetArch = needarch;
         }
-        getLog().debug( "targetArch = " + targetArch );
+        log.debug( "targetArch = " + targetArch );
 
         // Various checks in the mappings
         for ( Iterator it = mappings.iterator(); it.hasNext(); )
@@ -826,90 +867,7 @@ abstract class AbstractRPMMojo
             }
             else
             {
-                List srcs = map.getSources();
-                if ( srcs != null )
-                {
-                    // it is important that for each Source we set the files that are "installed".
-                    for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
-                    {
-                        Source src = (Source) sit.next();
-                        
-                        if (!src.matchesArchitecture( targetArch ))
-                        {
-                            getLog().debug( "Source does not match target architecture: " + src.toString() );
-                            continue;
-                        }
-                        
-                        File location = src.getLocation();
-                        if ( location.exists() )
-                        {
-                            String destination = src.getDestination();
-                            if ( destination == null )
-                            {
-                                List elist = src.getExcludes();
-                                if ( !src.getNoDefaultExcludes() )
-                                {
-                                    if ( elist == null )
-                                    {
-                                        elist = new ArrayList();
-                                    }
-                                    elist.addAll( FileUtils.getDefaultExcludesAsList() );
-                                }
-                                List copiedFiles = copySource( src.getLocation(), dest, src.getIncludes(), elist );
-                                map.addCopiedFileNamesRelativeToDestination( copiedFiles );
-                            }
-                            else
-                            {
-                                if ( !location.isFile() )
-                                {
-                                    throw new MojoExecutionException(
-                                                                      MessageFormat.format(
-                                                                                            DESTINATION_DIRECTORY_ERROR_MSG,
-                                                                                            new Object[] { destination,
-                                                                                                location.getName() } ) );
-                                }
-
-                                File destFile = new File( dest, destination );
-
-                                try
-                                {
-                                    if ( !destFile.createNewFile() )
-                                    {
-                                        throw new IOException( "Unable to create file: " + destFile.getAbsolutePath() );
-                                    }
-
-                                    FileInputStream fis = new FileInputStream( location );
-                                    try
-                                    {
-                                        FileOutputStream fos = new FileOutputStream( destFile );
-                                        try
-                                        {
-                                            fis.getChannel().transferTo( 0, location.length(), fos.getChannel() );
-                                        }
-                                        finally
-                                        {
-                                            fos.close();
-                                        }
-                                    }
-                                    finally
-                                    {
-                                        fis.close();
-                                    }
-                                }
-                                catch ( IOException e )
-                                {
-                                    throw new MojoExecutionException( "Unable to copy files", e );
-                                }
-
-                                map.addCopiedFileNameRelativeToDestination( destination );
-                            }
-                        }
-                        else
-                        {
-                            throw new MojoExecutionException( "Source location " + location + " does not exist" );
-                        }
-                    }
-                }
+                processSources( map, dest );
 
                 ArtifactMap art = map.getArtifact();
                 if ( art != null )
@@ -935,7 +893,7 @@ abstract class AbstractRPMMojo
                     }
                 }
                 
-                if (map.getCopiedFileNamesRelativeToDestination().isEmpty())
+                if ( map.getCopiedFileNamesRelativeToDestination().isEmpty() )
                 {
                     getLog().info( "Mapping empty with destination: " + dest.getName() );
                     // Build the output directory if it doesn't exist
@@ -947,6 +905,100 @@ abstract class AbstractRPMMojo
                             throw new MojoExecutionException( "Unable to create " + dest.getAbsolutePath() );
                         }
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Installs the {@link Mapping#getSources() sources} to <i>dest</i>
+     * @param map The <tt>Mapping</tt> to process the {@link Source sources} for.
+     * @param dest The destination directory for the sources.
+     * @throws MojoExecutionException
+     */
+    private void processSources( Mapping map, File dest )
+        throws MojoExecutionException
+    {
+        List srcs = map.getSources();
+        if ( srcs != null )
+        {
+            // it is important that for each Source we set the files that are "installed".
+            for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
+            {
+                Source src = (Source) sit.next();
+                
+                if ( !src.matchesArchitecture( targetArch ) )
+                {
+                    getLog().debug( "Source does not match target architecture: " + src.toString() );
+                    continue;
+                }
+                
+                File location = src.getLocation();
+                if ( location.exists() )
+                {
+                    String destination = src.getDestination();
+                    if ( destination == null )
+                    {
+                        List elist = src.getExcludes();
+                        if ( !src.getNoDefaultExcludes() )
+                        {
+                            if ( elist == null )
+                            {
+                                elist = new ArrayList();
+                            }
+                            elist.addAll( FileUtils.getDefaultExcludesAsList() );
+                        }
+                        List copiedFiles = copySource( src.getLocation(), dest, src.getIncludes(), elist );
+                        map.addCopiedFileNamesRelativeToDestination( copiedFiles );
+                    }
+                    else
+                    {
+                        if ( !location.isFile() )
+                        {
+                            throw new MojoExecutionException(
+                                MessageFormat.format(
+                                    DESTINATION_DIRECTORY_ERROR_MSG,
+                                    new Object[] { destination, location.getName() } ) );
+                        }
+
+                        File destFile = new File( dest, destination );
+
+                        try
+                        {
+                            if ( !destFile.createNewFile() )
+                            {
+                                throw new IOException( "Unable to create file: " + destFile.getAbsolutePath() );
+                            }
+
+                            FileInputStream fis = new FileInputStream( location );
+                            try
+                            {
+                                FileOutputStream fos = new FileOutputStream( destFile );
+                                try
+                                {
+                                    fis.getChannel().transferTo( 0, location.length(), fos.getChannel() );
+                                }
+                                finally
+                                {
+                                    fos.close();
+                                }
+                            }
+                            finally
+                            {
+                                fis.close();
+                            }
+                        }
+                        catch ( IOException e )
+                        {
+                            throw new MojoExecutionException( "Unable to copy files", e );
+                        }
+
+                        map.addCopiedFileNameRelativeToDestination( destination );
+                    }
+                }
+                else
+                {
+                    throw new MojoExecutionException( "Source location " + location + " does not exist" );
                 }
             }
         }
