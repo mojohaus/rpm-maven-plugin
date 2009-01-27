@@ -185,12 +185,13 @@ public class Source
     
     /**
      * Indicates if the {@link #getTargetArchitecture()} matches the <i>archicture</i>.
-     * @param architecture
+     * 
+     * @param architecture The target architecture for the rpm.
      * @return if the target architecture matches the <i>archicture</i>.
      */
-    boolean matchesArchitecture(String architecture)
+    boolean matchesArchitecture( String architecture )
     {
-        return targetArchitecture == null ? true : targetArchitecture.equalsIgnoreCase( architecture ); 
+        return targetArchitecture == null ? true : targetArchitecture.equalsIgnoreCase( architecture );
     }
 
     /** {@inheritDoc} */
@@ -229,7 +230,7 @@ public class Source
             sb.append( " [no default excludes]" );
         }
         
-        if (targetArchitecture != null)
+        if ( targetArchitecture != null )
         {
             sb.append( " targetArch: " );
             sb.append( targetArchitecture );

@@ -1,8 +1,3 @@
-/**
- * $Id$
- * 
- * Created: Jan 22, 2009
- */
 package org.codehaus.mojo.rpm;
 
 /*
@@ -24,15 +19,13 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProjectHelper;
 
 /**
  * Construct the RPM file and attaches it as a secondary artifact.
  * 
  * @author Brett Okken, Cerner Corp.
- * @version $Revision$
+ * @version $Id$
  * @since 2.0-beta-2
  * @requiresDependencyResolution runtime
  * @goal attached-rpm
@@ -52,14 +45,13 @@ public class AttachedRPMMojo
     /**
      * @component
      */
-    protected MavenProjectHelper mavenProjectHelper;
+    private MavenProjectHelper mavenProjectHelper;
     
     /**
      * Attach the rpm as a secondary artifact.
      * @see MavenProjectHelper#attachArtifact(org.apache.maven.project.MavenProject, String, String, java.io.File)
      */
     protected void afterExecution()
-        throws MojoExecutionException, MojoFailureException
     {
         classifier = classifier != null ? classifier : "rpm";
         mavenProjectHelper.attachArtifact( project, "rpm", classifier, getRPMFile() );

@@ -19,10 +19,6 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-
 /**
  * Construct the RPM file.
  * 
@@ -35,11 +31,10 @@ public class RPMMojo
     extends AbstractRPMMojo
 {
     /**
-     * If the {@link MavenProject#getPackaging() packaging} is <i>rpm</i>, sets the rpm as the
+     * If the {@link org.apache.maven.project.MavenProject#getPackaging() packaging} is <i>rpm</i>, sets the rpm as the
      * primary artifact.
      */
     protected void afterExecution()
-        throws MojoExecutionException, MojoFailureException
     {
         if ( "rpm".equals( project.getPackaging() ) )
         {
