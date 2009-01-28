@@ -20,6 +20,9 @@
       </action>
     </release>
     <release version="2.0-beta-2">
+        <action dev="carlos" type="fix" issue="MOJO-1202" system="jira">
+            handle defineStatement parameter correctly
+        </action>
         <action dev="carlos" type="fix" issue="MOJO-1275" system="jira">
             buildroot with rpm 4.6 on fedora
         </action>
