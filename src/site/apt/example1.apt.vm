@@ -13,7 +13,7 @@ Sample Configuration
   API jar is <<not>> packaged in the RPM because it is not a runtime dependency.
 
 +----+
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>collection.trash</groupId>
@@ -28,24 +28,12 @@ This is a sample using trash collection as an example.
         <name>Sanitation Workers of Washington, D.C.</name>
         <url>http://www.trash.gov/</url>
     </organization>
-    <pluginRepositories>
-      <pluginRepository>
-        <id>Maven Snapshots</id>
-        <url>http://snapshots.maven.codehaus.org/maven2/</url>
-        <snapshots>
-          <enabled>true</enabled>
-        </snapshots>
-        <releases>
-          <enabled>false</enabled>
-        </releases>
-      </pluginRepository>
-    </pluginRepositories>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>rpm-maven-plugin</artifactId>
-                <version>1.0-beta-1</version>
+                <version>${project.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -54,7 +42,6 @@ This is a sample using trash collection as an example.
                     </execution>
                 </executions>
                 <configuration>
-                    <release>1</release>
                     <copyright>2005, SWWDC</copyright>
                     <distribution>Trash 2005</distribution>
                     <group>Application/Collectors</group>

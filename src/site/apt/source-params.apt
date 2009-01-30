@@ -73,21 +73,39 @@ Source Parameters
 
   If this is populated, the contents defined by this source will only be included
   if the value for targetArchitecture matches the target architecture of the rpm.
-  This can be used to flex the contents of the rpm based on the architecture:
+  This can be used to flex the contents of the rpm based on the 
+  {{{rpm-mojo.html#needarch}architecture}}:
   
 +-----+
-<mapping>
-    ...
-    <sources>
-        <source>
-            <location>src/main/native/x86_64</location>
-            <targetArchitecture>x86_64</targetArchitecture>
-        </source>
-        <source>
-            <location>src/main/native/i586</location>
-            <targetArchitecture>i586</targetArchitecture>
-        </source>
-    </sources>
-    ...
-</mapping>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                ...
+                <configuration>
+                    ...
+                    <needarch>true</needarch>
+                    ...
+                    <mapping>
+                        ...
+                        <sources>
+                            <source>
+                                <location>src/main/native/x86_64</location>
+                                <targetArchitecture>x86_64</targetArchitecture>
+                            </source>
+                            <source>
+                                <location>src/main/native/i586</location>
+                                <targetArchitecture>i586</targetArchitecture>
+                            </source>
+                        </sources>
+                        ...
+                    </mapping>
+                    ...
+                </configuration>
+            </plugin>
+            ...
+        </plugins>
+        ...
+    <build>
 +-----+
