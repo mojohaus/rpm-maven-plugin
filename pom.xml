@@ -29,7 +29,7 @@
   <inceptionYear>2005</inceptionYear>
   <url>http://mojo.codehaus.org/rpm-maven-plugin/</url>
   <prerequisites>
-    <maven>2.0.9</maven>
+    <maven>2.0.6</maven>
   </prerequisites>
   <ciManagement>
     <system>continuum</system>
@@ -42,6 +42,11 @@
       </notifier>
     </notifiers>
   </ciManagement>
+  <scm>
+    <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/rpm-maven-plugin</url>
+    <connection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/rpm-maven-plugin</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/rpm-maven-plugin</developerConnection>
+  </scm>
   <developers>
     <developer>
       <id>boba</id>
@@ -100,7 +105,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.2</version>
+      <version>1.5.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
