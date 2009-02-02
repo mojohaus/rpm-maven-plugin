@@ -19,9 +19,12 @@
         Added support for %define arguments
       </action>
     </release>
-    <release version="2.0-beta-2">
+    <release version="2.0-beta-2" date="2009-02-02">
         <action dev="carlos" type="fix" issue="MOJO-1202" system="jira">
             handle defineStatement parameter correctly
+        </action>
+        <action dev="carlos" type="fix" issue="MOJO-1252" system="jira">
+            Runtime dependencies only includes jar files, allow any type of dependency
         </action>
         <action dev="carlos" type="fix" issue="MOJO-1275" system="jira">
             buildroot with rpm 4.6 on fedora
