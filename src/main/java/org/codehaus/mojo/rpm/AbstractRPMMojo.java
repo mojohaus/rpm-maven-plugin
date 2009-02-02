@@ -381,7 +381,7 @@ abstract class AbstractRPMMojo
      * The default file mode (octal string) to assign to files when installed. <br/>
      * 
      * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
-     * <a href="map-params.html#username">username</a>, <b>AND</b> <a href="map-params.html#groupname">groupname</a> 
+     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
      * are <b>NOT</b> populated.
      * 
      * @parameter
