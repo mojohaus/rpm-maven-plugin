@@ -89,8 +89,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  <build>
-  </build>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -121,8 +119,47 @@
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-model</artifactId>
         <version>2.0</version>
-    </dependency>
+    </dependency>       
   </dependencies>
+  <properties>
+    <its>*/pom4test.xml</its>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>shitty-maven-plugin</artifactId>
+        <version>1.0-alpha-3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>clean</goal>
+              <goal>install</goal>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <projects>
+            <project>
+              <directory>src/it</directory>
+              <includes>
+                <include>${its}</include>
+              </includes>
+            </project>
+          </projects>
+          <parallel>true</parallel>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.mojo.unix</groupId>
+            <artifactId>unix-rpm</artifactId>
+            <version>1.0-alpha-1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
   <reporting>
     <plugins>
         <plugin>

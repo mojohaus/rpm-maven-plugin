@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>bar</groupId>
+	<artifactId>project-rpm-1</artifactId>
+	<version>1.1</version>
+	<packaging>rpm</packaging>
+	<organization>
+		<name>my org</name>
+		<url>www.my.org</url>
+	</organization>
+	<inceptionYear>2009</inceptionYear>
+	<dependencies>
+		<dependency>
+			<groupId>org.jvnet.hudson.main</groupId>
+			<artifactId>hudson-war</artifactId>
+			<version>1.255</version>
+			<type>war</type>
+		</dependency>
+		
+		<!-- TEST -->
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>java.net</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>testing</version>
+				<extensions>true</extensions>
+				<configuration>
+					<distribution>My App</distribution>
+					<group>Application/Collectors</group>
+					<defineStatements>
+						<defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+					</defineStatements>
+					<needarch>false</needarch>
+					<defaultUsername>myuser</defaultUsername>
+                    <defaultGroupname>mygroup</defaultGroupname>
+                    <mappings>
+                        <mapping>
+                            <directory>/usr/myusr/app</directory>
+                        </mapping>
+                        <!-- dependencies -->
+                        <mapping>
+                            <directory>/usr/myusr/app/lib</directory>
+                            <dependency />
+                        </mapping>
+                        <!-- scripts -->
+                        <mapping>
+                            <directory>/usr/myusr/app/bin</directory>
+                            <username>myuser</username>
+                            <groupname>mygroup</groupname>
+                            <filemode>755</filemode>
+                            <sources>
+                                <source>
+                                    <location>src/main/bin</location>
+                                    <excludes>
+                                       <exclude>*install.sh</exclude>
+                                    </excludes>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <!-- Configuration files -->
+                        <mapping>
+                            <directory>/usr/myusr/app/conf</directory>
+                        </mapping>
+                        <mapping>
+                            <directory>/usr/myusr/app/conf</directory>
+                            <configuration>true</configuration>
+                            <sources>
+                                <source>
+                                    <location>src/main/conf</location>
+                                    <includes>
+                                        <include>log4j.xml</include>
+                                    </includes>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <!-- Config file origs -->
+                        <mapping>
+                            <directory>/usr/myusr/app/conf</directory>
+                            <sources>
+                                <source>
+                                    <location>src/main/conf/log4j.xml</location>
+                                    <destination>log4j.xml.deliver</destination>
+                                </source>
+                            </sources>
+                        </mapping>
+                    </mappings>
+                    <preinstallScript>src/main/bin/preinstall.sh</preinstallScript>
+                    <postinstallScript>src/main/bin/postinstall.sh</postinstallScript>
+                    <preremoveScript>src/main/bin/preuninstall.sh</preremoveScript>
+                    <requires>
+                        <require>/bin/sh</require>
+                        <require>jre &gt;= 1.5</require>
+                        <require>BASE_PACKAGE</require>
+                    </requires>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
