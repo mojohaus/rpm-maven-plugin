@@ -108,6 +108,7 @@
                     <prereqs>
                         <prereq>dependency</prereq>
                     </prereqs>
+                    <changelogFile>src/changes.txt</changelogFile>
 				</configuration>
 			</plugin>
 		</plugins>

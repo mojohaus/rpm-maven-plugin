@@ -22,6 +22,7 @@
               <item name="packager" href="ident-params.html#packager"/>
               <item name="release**" href="ident-params.html#release"/>
               <item name="version" href="ident-params.html#version"/>
+              <item name="changelogFile" href="ident-params.html#changelogFile"/>
           </item>
           <item name="Operation Parameters" href="op-params.html">
               <item name="workarea" href="op-params.html#workarea"/>

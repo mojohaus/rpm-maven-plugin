@@ -67,6 +67,9 @@
         <action dev="bokken" type="add" issue="MOJO-1376" system="jira">
             add support for %Obsoletes and %PreReq
         </action>
+        <action dev="bokken" type="add" issue="MOJO-1380" system="jira">
+            add support %changelog
+        </action>
     </release>
   </body>
 </document>

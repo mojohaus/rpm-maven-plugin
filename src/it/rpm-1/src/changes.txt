@@ -1,0 +1,7 @@
+* Tue May 23 2000 Vincent Danen <vdanen@linux-mandrake.com> 0.27.2-2mdk
+-update BuildPreReq to include rep-gtk and rep-gtkgnome
+* Thu May 11 2000 Vincent Danen <vdanen@linux-mandrake.com> 0.27.2-1mdk
+-0.27.2
+* Thu May 11 2000 Vincent Danen <vdanen@linux-mandrake.com> 0.27.1-2mdk
+-added BuildPreReq
+-change name from Sawmill to Sawfish

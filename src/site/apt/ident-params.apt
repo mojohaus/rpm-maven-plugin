@@ -19,6 +19,19 @@ Identification Parameters
   contraints in the RPM file naming convention.  Any specified value will
   be truncated at the first dash.
 
+* {changelogFile}
+
+  The file whose content will be put after %changelog in SPEC file.
+  The content will not be validated and must follow the syntax for RPM:
+
+--------------------------
+     * [dow mon dd yyyy] [packager [email address]] [RPM version]
+     -list of changes
+--------------------------
+
+  The list of changes can be as long as is necessary, but this is intended to be
+  a list of changes for the RPM itself and not for the package.
+
 * {release} (<<required>>)
 
   The release number of the RPM.  This should be an integer initialized to

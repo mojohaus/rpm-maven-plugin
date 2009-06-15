@@ -447,6 +447,17 @@ abstract class AbstractRPMMojo
     /** The version string after parsing. */
     private String version;
 
+    /** The changelog string. */
+    private String changelog;
+
+    /**
+     * The changelog file.
+     * 
+     * @parameter
+     * @since 2.0-beta-3
+     */
+    private File changelogFile;
+
     // // // Consumers for rpmbuild output
 
     /**
@@ -763,6 +774,10 @@ abstract class AbstractRPMMojo
         if ( ( clean == null ) && ( cleanScript != null ) )
         {
             clean = readFile( cleanScript );
+        }
+        if ( ( changelog == null ) && ( changelogFile != null ) )
+        {
+            changelog = readFile( changelogFile );
         }
     }
 
@@ -1285,12 +1300,27 @@ abstract class AbstractRPMMojo
             }
 
             printScripts( spec );
-
+            printChangelog( spec );
             spec.close();
         }
         catch ( Throwable t )
         {
             throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), t );
+        }
+    }
+
+    /**
+     * Print changelog to the <i>writer</i>.
+     *
+     * @param writer to print script tags to
+     */
+    private void printChangelog( PrintWriter writer )
+    {
+        if ( changelog != null )
+        {
+            writer.println();
+            writer.println( "%changelog" );
+            writer.println( changelog );
         }
     }
 
