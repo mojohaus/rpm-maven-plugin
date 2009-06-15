@@ -102,6 +102,12 @@
                         <require>jre &gt;= 1.5</require>
                         <require>BASE_PACKAGE</require>
                     </requires>
+                    <obsoletes>
+                        <obsolete>project</obsolete>
+                    </obsoletes>
+                    <prereqs>
+                        <prereq>dependency</prereq>
+                    </prereqs>
 				</configuration>
 			</plugin>
 		</plugins>

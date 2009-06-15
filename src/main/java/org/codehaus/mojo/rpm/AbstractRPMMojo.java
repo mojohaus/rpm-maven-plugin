@@ -210,6 +210,22 @@ abstract class AbstractRPMMojo
      * @parameter
      */
     private List requires;
+    
+    /**
+     * The list of prerequisites for this package.
+     * 
+     * @since 2.0-beta-3
+     * @parameter
+     */
+    private List prereqs;
+    
+    /**
+     * The list of obsoletes for this package.
+     * 
+     * @since 2.0-beta-3
+     * @parameter
+     */
+    private List obsoletes;
 
     /**
      * The list of conflicts for this package.
@@ -1212,6 +1228,8 @@ abstract class AbstractRPMMojo
             }
             writeList( spec, provides, "Provides: " );
             writeList( spec, requires, "Requires: " );
+            writeList( spec, prereqs, "PreReq: ");
+            writeList( spec, obsoletes, "Obsoletes: " );
             writeList( spec, conflicts, "Conflicts: " );
             if ( prefix != null )
             {
