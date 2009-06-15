@@ -63,5 +63,10 @@
             add support for %defattr
         </action>
     </release>
+    <release version="2.0-beta-2" date="2009-02-02">
+        <action dev="bokken" type="add" issue="MOJO-1376" system="jira">
+            add support for %Obsoletes and %PreReq
+        </action>
+    </release>
   </body>
 </document>
