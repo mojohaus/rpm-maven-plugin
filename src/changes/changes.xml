@@ -64,6 +64,9 @@
         </action>
     </release>
     <release version="2.0-beta-2" date="2009-02-02">
+        <action dev="bokken" type="fix" issue="MOJO-1385" system="jira">
+            Mapping.Source.Destination for a Mapping.directory that does not yet exist
+        </action>
         <action dev="bokken" type="add" issue="MOJO-1376" system="jira">
             add support for %Obsoletes and %PreReq
         </action>

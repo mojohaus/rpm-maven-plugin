@@ -60,6 +60,10 @@
                             <filemode>755</filemode>
                             <sources>
                                 <source>
+                                    <location>src/main/bin2/rename.sh</location>
+                                    <destination>name.sh</destination>
+                                </source>
+                                <source>
                                     <location>src/main/bin</location>
                                     <excludes>
                                        <exclude>*install.sh</exclude>

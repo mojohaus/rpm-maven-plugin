@@ -997,7 +997,15 @@ abstract class AbstractRPMMojo
      */
     private void processSources( Mapping map, File dest )
         throws MojoExecutionException
-    {
+    {        
+        if (!dest.exists())
+        {
+            if (!dest.mkdirs())
+            {
+                throw new MojoExecutionException("unable to create directory: " + dest.getAbsolutePath());
+            }
+        }
+        
         List srcs = map.getSources();
         if ( srcs != null )
         {
