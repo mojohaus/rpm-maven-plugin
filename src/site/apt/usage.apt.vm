@@ -27,10 +27,6 @@ RPM on Demand
     "<<<rpm:rpm>>>" goal on each module, rather than packaging the modules into
     a single RPM.
 
-  * If you want to package the project's dependencies, you must
-    specify them in the RPM plugin configuration with a source of your Maven2
-    repository.
-
   []
 
 RPM as Side Effect

@@ -26,8 +26,3 @@ Things To Do
   It would also be nice if this would work with modules (build the modules
   then package them into an RPM).
 
-* Tests
-
-  I need to figure out how to make some tests for the plugin so that I can
-  validate proper operation in a manner other than building a sample and
-  manually examining it.
