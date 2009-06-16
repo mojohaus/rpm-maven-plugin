@@ -8,7 +8,7 @@ import java.util.Iterator
 
 boolean success = true
 
-File rpm = new File((File) basedir, "target/rpm/RPMS/noarch/project-rpm-1-1.1-1.noarch.rpm")
+File rpm = new File((File) basedir, "target/rpm/project-rpm-1/RPMS/noarch/project-rpm-1-1.1-1.noarch.rpm")
 
 success &= rpm.exists()
 

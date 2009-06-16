@@ -243,6 +243,14 @@ abstract class AbstractRPMMojo
 
     /**
      * The area for RPM to use for building the package.
+     * <p>
+     * Beginning with release 2.0-beta-3, sub-directories will be created within the workarea for each execution of the
+     * plugin within a life cycle.<br/>
+     * 
+     * The pattern will be <code>workarea/<i>name[-classifier]</i></code>.<br/>
+     * 
+     * The classifier portion is only applicable for the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.
+     * </p>
      * 
      * @parameter expression="${project.build.directory}/rpm"
      */
@@ -527,6 +535,18 @@ abstract class AbstractRPMMojo
         throws MojoExecutionException, MojoFailureException
     {        
         checkParams();
+        
+        final String classifier = getClassifier();
+        
+        if ( classifier != null )
+        {
+            workarea = new File( workarea, name + '-' + classifier );
+        }
+        else
+        {
+            workarea = new File( workarea, name );
+        }
+        
         buildWorkArea();
         installFiles();
         writeSpecFile();
@@ -544,6 +564,18 @@ abstract class AbstractRPMMojo
     protected void afterExecution() throws MojoExecutionException, MojoFailureException
     {
         
+    }
+    
+    /**
+     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br/> By default
+     * this implementation returns {@code null}, which indicates that no additional classifier should be used.
+     * 
+     * @return An additional classifier to use for the rpm workarea or {@code null} if no additional classifier should
+     * be used.
+     */
+    String getClassifier()
+    {
+        return null;
     }
     
     /**
@@ -997,12 +1029,12 @@ abstract class AbstractRPMMojo
      */
     private void processSources( Mapping map, File dest )
         throws MojoExecutionException
-    {        
-        if (!dest.exists())
+    {
+        if ( !dest.exists() )
         {
-            if (!dest.mkdirs())
+            if ( !dest.mkdirs() )
             {
-                throw new MojoExecutionException("unable to create directory: " + dest.getAbsolutePath());
+                throw new MojoExecutionException( "unable to create directory: " + dest.getAbsolutePath() );
             }
         }
         
@@ -1251,7 +1283,7 @@ abstract class AbstractRPMMojo
             }
             writeList( spec, provides, "Provides: " );
             writeList( spec, requires, "Requires: " );
-            writeList( spec, prereqs, "PreReq: ");
+            writeList( spec, prereqs, "PreReq: " );
             writeList( spec, obsoletes, "Obsoletes: " );
             writeList( spec, conflicts, "Conflicts: " );
             if ( prefix != null )

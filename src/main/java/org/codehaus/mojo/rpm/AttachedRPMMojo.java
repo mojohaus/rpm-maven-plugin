@@ -56,4 +56,14 @@ public class AttachedRPMMojo
         classifier = classifier != null ? classifier : "rpm";
         mavenProjectHelper.attachArtifact( project, "rpm", classifier, getRPMFile() );
     }
+
+    /**
+     * Returns the <a href="../../../../../attached-rpm-mojo.html#classifier">classifier</a> for the secondary artifact.
+     * 
+     * @return The classifier.
+     */
+    protected String getClassifier()
+    {
+        return classifier;
+    }
 }
