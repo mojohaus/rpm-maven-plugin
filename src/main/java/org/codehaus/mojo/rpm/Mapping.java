@@ -88,6 +88,20 @@ public class Mapping
      * </p>
      */
     private List copiedFileNamesRelativeToDestination;
+    
+    /**
+     * List of files that will be added by soft link for the Mapping.
+     * <p>
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the
+     * {@link #getDestination()}.
+     * </p>
+     */
+    private List linkedFileNamesRelativeToDestination;
+    
+    /**
+     * Indicates if the {@link #sources} contain any {@link SoftlinkSource} instances.
+     */
+    private boolean hasSoftLinks = false;
 
     // // // Bean methods
 
@@ -470,6 +484,52 @@ public class Mapping
             this.copiedFileNamesRelativeToDestination = new LinkedList();
         }
         this.copiedFileNamesRelativeToDestination.add( copiedFileNameRelativeToDestination );
+    }
+
+    /**
+     * Returns the names of files linked to in the {@link #getDestination() destination}.<br/> This is a <tt>List</tt>
+     * of <tt>String</tt> objects which identify files which will be created by link relative to the
+     * <tt>destination</tt>.
+     * 
+     * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
+     *         <code>null</code>, but may be immutable.
+     */
+    List getLinkedFileNamesRelativeToDestination()
+    {
+        return this.linkedFileNamesRelativeToDestination != null ? this.linkedFileNamesRelativeToDestination
+                        : Collections.EMPTY_LIST;
+    }
+    
+    /**
+     * Adds a relative file name that will be linked to the {@link #getDestination() destination}.
+     * 
+     * @param linkedFileNameRelativeToDestination
+     * @see #getLinkedFileNamesRelativeToDestination()
+     */
+    void addLinkedFileNameRelativeToDestination( String linkedFileNameRelativeToDestination )
+    {
+        if ( this.linkedFileNamesRelativeToDestination == null )
+        {
+            this.linkedFileNamesRelativeToDestination = new LinkedList();
+        }
+        
+        linkedFileNamesRelativeToDestination.add( linkedFileNameRelativeToDestination );
+    }
+
+    /**
+     * @return Returns the {@link #hasSoftLinks}.
+     */
+    boolean hasSoftLinks()
+    {
+        return this.hasSoftLinks;
+    }
+
+    /**
+     * @param hasSoftLinks The {@link #hasSoftLinks} to set.
+     */
+    void setHasSoftLinks( boolean hasSoftLinks )
+    {
+        this.hasSoftLinks = hasSoftLinks;
     }
 
     /** {@inheritDoc} */

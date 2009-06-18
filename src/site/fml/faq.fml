@@ -30,5 +30,16 @@ under the License.
         </p>
       </answer>
     </faq>
+    <faq id="soft links">
+      <question>How do I create softlinks as part of the RPM?</question>
+      <answer>
+        <p>
+            Use the <a href="map-params.html#softlinkSources">
+            softlink source</a> option in the <a href="map-params.html">
+            Mapping</a>. This will create the soft link in %install and list
+            the link in the %files.
+        </p>
+      </answer>
+    </faq>
   </part>
 </faqs>

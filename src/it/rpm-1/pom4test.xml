@@ -47,6 +47,14 @@
                         <mapping>
                             <directory>/usr/myusr/app</directory>
                         </mapping>
+                        <mapping>
+                            <directory>/usr/myusr/app2</directory>
+                            <sources>
+                                <softlinkSource>
+                                    <location>/usr/myusr/app</location>
+                                </softlinkSource>
+                            </sources>
+                        </mapping>
                         <!-- dependencies -->
                         <mapping>
                             <directory>/usr/myusr/app/lib</directory>
@@ -69,6 +77,10 @@
                                        <exclude>*install.sh</exclude>
                                     </excludes>
                                 </source>
+                                <softlinkSource>
+                                    <location>/usr/myusr/app/bin/name.sh</location>
+                                    <destination>oldname.sh</destination>
+                                </softlinkSource>
                             </sources>
                         </mapping>
                         <!-- Configuration files -->

@@ -33,9 +33,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.Map.Entry;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
@@ -70,6 +73,12 @@ abstract class AbstractRPMMojo
      */
     private static final String DESTINATION_DIRECTORY_ERROR_MSG =
         "Source has a destination [{0}], but the location [{1}] does not refer to a file.";
+    
+    /**
+     * The key of the map is the directory where the files should be linked to. The value is the {@code List}
+     * of {@link SoftlinkSource}s to be linked to.
+     */
+    private final Map linkTargetToSources = new LinkedHashMap();
 
     /**
      * The name portion of the output file name.
@@ -677,15 +686,7 @@ abstract class AbstractRPMMojo
         }
 
         // Build the build root
-        buildroot = new File( workarea, "buildroot" );
-        if ( !buildroot.exists() )
-        {
-            getLog().info( "Creating directory " + buildroot.getAbsolutePath() );
-            if ( !buildroot.mkdir() )
-            {
-                throw new MojoFailureException( "Unable to create directory " + buildroot.getAbsolutePath() );
-            }
-        }
+        buildroot = new File( workarea, "BUILD" );
     }
 
     /**
@@ -947,9 +948,10 @@ abstract class AbstractRPMMojo
      * Copy the files from the various mapping sources into the build root.
      * 
      * @throws MojoExecutionException if a problem occurs
+     * @throws MojoFailureException 
      */
     private void installFiles()
-        throws MojoExecutionException
+        throws MojoExecutionException, MojoFailureException
     {
         // Copy icon, if specified
         if ( icon != null )
@@ -1026,9 +1028,10 @@ abstract class AbstractRPMMojo
      * @param map The <tt>Mapping</tt> to process the {@link Source sources} for.
      * @param dest The destination directory for the sources.
      * @throws MojoExecutionException
+     * @throws MojoFailureException 
      */
     private void processSources( Mapping map, File dest )
-        throws MojoExecutionException
+        throws MojoExecutionException, MojoFailureException
     {
         if ( !dest.exists() )
         {
@@ -1036,6 +1039,12 @@ abstract class AbstractRPMMojo
             {
                 throw new MojoExecutionException( "unable to create directory: " + dest.getAbsolutePath() );
             }
+        }
+        
+        String relativeDestination = map.getDestination();
+        if ( !relativeDestination.endsWith( File.separator ) )
+        {
+            relativeDestination += File.separatorChar;
         }
         
         List srcs = map.getSources();
@@ -1054,8 +1063,8 @@ abstract class AbstractRPMMojo
                 
                 File location = src.getLocation();
                 if ( location.exists() )
-                {
-                    String destination = src.getDestination();
+                {                    
+                    final String destination = src.getDestination();
                     if ( destination == null )
                     {
                         List elist = src.getExcludes();
@@ -1114,6 +1123,20 @@ abstract class AbstractRPMMojo
 
                         map.addCopiedFileNameRelativeToDestination( destination );
                     }
+                }
+                else if ( src instanceof SoftlinkSource ) 
+                {
+                    List sources = (List) linkTargetToSources.get( relativeDestination );
+                    if ( sources == null )
+                    {
+                        sources = new LinkedList();
+                        linkTargetToSources.put( relativeDestination, sources );
+                    }
+                    
+                    sources.add( src );
+                    
+                    ( ( SoftlinkSource ) src ).setSourceMapping( map );
+                    map.setHasSoftLinks( true );
                 }
                 else
                 {
@@ -1297,10 +1320,82 @@ abstract class AbstractRPMMojo
             {
                 spec.println( description );
             }
+            
+            if ( !linkTargetToSources.isEmpty() )
+            {
+                spec.println();
+                spec.println( "%install" );
+                for ( Iterator entryIter = linkTargetToSources.entrySet().iterator(); entryIter.hasNext(); )
+                {
+                    final Map.Entry directoryToSourcesEntry = (Entry) entryIter.next();
+                    String directory = (String) directoryToSourcesEntry.getKey();
+                    if ( directory.startsWith( "/" ) )
+                    {
+                        directory = directory.substring( 1 );
+                    }
+                    if ( directory.endsWith( "/" ) )
+                    {
+                        directory = directory.substring( 0, directory.length() - 1 );
+                    }
+                    
+                    final List sources = (List) directoryToSourcesEntry.getValue();
+                    final int sourceCnt = sources.size();
+                    
+                    if ( sourceCnt == 1 )
+                    {
+                        final SoftlinkSource linkSource = (SoftlinkSource) sources.get( 0 );
+                        final File sourceLocation = linkSource.getLocation();
+                        final File buildSourceLocation = new File( buildroot, sourceLocation.getAbsolutePath() );
+                        if ( buildSourceLocation.isDirectory() )
+                        {
+                            final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
+                            
+                            if ( scanner.isEverythingIncluded() )
+                            {
+                                File destinationFile = new File( buildroot, directory );
+                                destinationFile.delete();
+
+                                spec.print( "ln -s " );
+                                spec.print( sourceLocation.getAbsolutePath() );
+                                spec.print( ' ' );
+                                spec.println( directory );
+                            }
+                            else
+                            {
+                                linkScannedFiles( spec, directory, linkSource, scanner );
+                            }
+                        }
+                        else
+                        {
+                            linkSingleFile( spec, directory, linkSource );
+                        }
+                    }
+                    else
+                    {
+                        for ( Iterator sourceIter = sources.iterator(); sourceIter.hasNext(); )
+                        {
+                            final SoftlinkSource linkSource = (SoftlinkSource) sourceIter.next();
+                            final File sourceLocation = linkSource.getLocation();
+                            final File buildSourceLocation = new File( buildroot, sourceLocation.getAbsolutePath() );
+                            if ( buildSourceLocation.isDirectory() )
+                            {
+                                final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
+
+                                linkScannedFiles( spec, directory, linkSource, scanner );
+                            }
+                            else
+                            {
+                                linkSingleFile( spec, directory, linkSource );
+                            }
+                        }
+                    }
+                }
+            }
 
             spec.println();
             spec.println( "%files" );
-            spec.println( getDefAttrString() ); 
+            spec.println( getDefAttrString() );            
+            
             for ( Iterator it = mappings.iterator(); it.hasNext(); )
             {
                 Mapping map = (Mapping) it.next();
@@ -1308,18 +1403,34 @@ abstract class AbstractRPMMojo
                 // For each mapping we need to determine which files in the destination were defined by this
                 // mapping so that we can write the %attr statement correctly.
 
-                List includes = map.getCopiedFileNamesRelativeToDestination();
-
-                DirectoryScanner scanner = new DirectoryScanner();
                 final String destination = map.getDestination();
-                scanner.setBasedir( buildroot.getAbsolutePath() + destination );
+                final File absoluteDestination = new File( buildroot, destination );
+                
+                if ( map.hasSoftLinks() && !absoluteDestination.exists() )
+                {
+                    getLog().debug( "writing attriute string for directory created by soft link: " + destination );
+                    
+                    final String attributes = map.getAttrString();
+                    
+                    spec.print( attributes );
+                    spec.print( ' ' );
+                    spec.println( destination );
+                    
+                    continue;
+                }
+
+                final List includes = map.getCopiedFileNamesRelativeToDestination();
+                final List links = map.getLinkedFileNamesRelativeToDestination();
+
+                final DirectoryScanner scanner = new DirectoryScanner();
+                scanner.setBasedir( absoluteDestination );
                 scanner.setIncludes( includes.isEmpty() ? null
                                 : (String[]) includes.toArray( new String[includes.size()] ) );
                 scanner.setExcludes( null );
                 scanner.scan();
 
                 final String attrString = map.getAttrString();
-                if ( scanner.isEverythingIncluded() && map.isDirectoryIncluded() )
+                if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded() )
                 {
                     getLog().debug( "writing attriute string for directory: " + destination );
                     spec.println( attrString + " " + destination );
@@ -1330,11 +1441,23 @@ abstract class AbstractRPMMojo
 
                     String[] files = scanner.getIncludedFiles();
 
-                    String baseFileString = attrString + " " + destination + File.separatorChar;
+                    final String baseFileString = attrString + " " + destination + File.separatorChar;
 
                     for ( int i = 0; i < files.length; ++i )
                     {
-                        spec.println( baseFileString + files[i] );
+                        spec.print( baseFileString );
+                        spec.println( files[i] );
+                    }
+                    
+                    if ( !includes.isEmpty() )
+                    {
+                        for ( Iterator linkIter = links.iterator(); linkIter.hasNext(); )
+                        {
+                            String link = (String) linkIter.next();
+    
+                            spec.print( baseFileString );
+                            spec.println( link );
+                        }
                     }
                 }
             }
@@ -1347,6 +1470,81 @@ abstract class AbstractRPMMojo
         {
             throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), t );
         }
+    }
+
+    /**
+     * Writes soft link from <i>linkSource</i> to <i>directory</i> for all files in the <i>scanner</i>.
+     * 
+     * @param spec Writer for spec file.
+     * @param directory Directory to link to.
+     * @param linkSource Source to link from. {@link SoftlinkSource#getLocation()} must be a
+     *            {@link File#isDirectory() directory}.
+     * @param scanner Scanner used to scan the {@link SoftlinkSource#getLocation() linSource location}.
+     */
+    private void linkScannedFiles( PrintWriter spec, String directory, final SoftlinkSource linkSource,
+                                   final DirectoryScanner scanner )
+    {
+        final String[] files = scanner.getIncludedFiles();
+        final File sourceLocation = linkSource.getLocation();
+        
+        final String targetPrefix = sourceLocation.getAbsolutePath() + File.separatorChar;
+        final String sourcePrefix = directory + File.separatorChar;
+        
+        for ( int i = 0; i < files.length; ++i )
+        {
+            spec.print( "ln -s " );
+            spec.print( targetPrefix + files[i] );
+            spec.print( ' ' );
+            spec.println( sourcePrefix + files[i] );
+
+            linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( files[i] );
+        }
+    }
+
+    /**
+     * {@link DirectoryScanner#scan() Scans} the <i>buildSourceLocation</i> using the
+     * {@link SoftlinkSource#getIncludes()} and {@link SoftlinkSource#getExcludes()} from <i>linkSource</i>. Returns
+     * the {@link DirectoryScanner} used for scanning.
+     * 
+     * @param linkSource Source
+     * @param buildSourceLocation Build location where content exists.
+     * @return {@link DirectoryScanner} used for scanning.
+     */
+    private DirectoryScanner scanLinkSource( final SoftlinkSource linkSource, final File buildSourceLocation )
+    {
+        final DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setBasedir( buildSourceLocation );
+        List includes = linkSource.getIncludes();
+        scanner.setIncludes( ( includes == null || includes.isEmpty() ) ? null
+                        : (String[]) includes.toArray( new String[includes.size()] ) );
+        List excludes = linkSource.getExcludes();
+        scanner.setExcludes( ( excludes == null || excludes.isEmpty() ) ? null
+                        : (String[]) excludes.toArray( new String[excludes.size()] ) );
+        scanner.scan();
+        return scanner;
+    }
+
+    /**
+     * Writes soft link from <i>linkSource</i> to <i>directory</i> using optional
+     * {@link SoftlinkSource#getDestination()} as the name of the link in <i>directory</i> if present.
+     * 
+     * @param spec Writer for spec file.
+     * @param directory Directory to link to.
+     * @param linkSource Source to link from.
+     */
+    private void linkSingleFile( PrintWriter spec, String directory, final SoftlinkSource linkSource )
+    {
+        final File sourceLocation = linkSource.getLocation();
+        spec.print( "ln -s " );
+        spec.print( sourceLocation.getAbsolutePath() );
+        spec.print( ' ' );
+        spec.print( directory );
+        spec.print( '/' );
+        final String destination = linkSource.getDestination();
+        final String linkedFileName = destination == null ? sourceLocation.getName() : destination;
+        spec.println( linkedFileName );
+        
+        linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( linkedFileName );
     }
 
     /**

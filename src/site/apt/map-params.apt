@@ -162,3 +162,9 @@ Mapping Parameters
   specification but no contents will be selected for packaging; this allows
   an empty directory to be specified.  The content of this parameter is
   discussed in a {{{source-params.html}separate file}}.
+
+* {softlinkSources}
+ 
+  Provides the opportunity to link to item(s) in the package. The location,
+  therefore, must be a location that exists after all the mappings with 
+  traditional sources have been created in the BUILD directory.

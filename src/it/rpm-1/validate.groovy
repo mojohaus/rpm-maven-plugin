@@ -21,10 +21,14 @@ success &= spec.license.equals("2009 my org")
 
 List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 
+
 int fileCnt = fileInfos.size()
-success &= fileCnt == 9
+System.out.println("File Count: " + fileCnt);
+System.out.println(fileInfos);
+success &= fileCnt == 10
 
 boolean nameScript = false;
+boolean oldNameLink = false;
 
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
@@ -35,15 +39,25 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
     //check for executable mode
     if (fileInfo.path.startsWith("/usr/myusr/app/bin/"))
     {
-        success &= fileInfo.mode.equals("-rwxr-xr-x")
-        
-        if (fileInfo.path.endsWith("/name.sh"))
+        //oldname.sh is a link, so the filemode is different
+        if (fileInfo.path.endsWith("/oldname.sh"))
         {
-            nameScript = true;
+            oldNameLink = true;
+            success &= fileInfo.mode.equals("lrwxr-xr-x")
+        }
+        else
+        {
+            success &= fileInfo.mode.equals("-rwxr-xr-x")
+        
+            if (fileInfo.path.endsWith("/name.sh"))
+            {
+                nameScript = true;
+            }
         }
     }
 }
 
 success &= nameScript;
+success &= oldNameLink;
 
 return success

@@ -77,6 +77,9 @@
         <action dev="bokken" type="add" issue="MOJO-1380" system="jira">
             add support %changelog
         </action>
+        <action dev="bokken" type="add" issue="MOJO-1308" system="jira">
+            add support for creating soft links
+        </action>
     </release>
   </body>
 </document>
