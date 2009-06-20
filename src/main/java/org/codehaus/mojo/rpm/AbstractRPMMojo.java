@@ -686,7 +686,14 @@ abstract class AbstractRPMMojo
         }
 
         // Build the build root
-        buildroot = new File( workarea, "BUILD" );
+        buildroot = new File( workarea, "buildroot" );
+        if ( !buildroot.exists() )
+        {
+            if ( !buildroot.mkdirs() )
+            {
+                throw new MojoFailureException( "Unable to create directory: " + buildroot.getAbsolutePath() );
+            }
+        }
     }
 
     /**
@@ -1357,7 +1364,7 @@ abstract class AbstractRPMMojo
 
                                 spec.print( "ln -s " );
                                 spec.print( sourceLocation.getAbsolutePath() );
-                                spec.print( ' ' );
+                                spec.print( " $RPM_BUILD_ROOT/" );
                                 spec.println( directory );
                             }
                             else
@@ -1494,7 +1501,7 @@ abstract class AbstractRPMMojo
         {
             spec.print( "ln -s " );
             spec.print( targetPrefix + files[i] );
-            spec.print( ' ' );
+            spec.print( " $RPM_BUILD_ROOT/" );
             spec.println( sourcePrefix + files[i] );
 
             linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( files[i] );
@@ -1537,7 +1544,7 @@ abstract class AbstractRPMMojo
         final File sourceLocation = linkSource.getLocation();
         spec.print( "ln -s " );
         spec.print( sourceLocation.getAbsolutePath() );
-        spec.print( ' ' );
+        spec.print( " $RPM_BUILD_ROOT/" );
         spec.print( directory );
         spec.print( '/' );
         final String destination = linkSource.getDestination();
