@@ -8,14 +8,14 @@ import java.util.Iterator
 
 boolean success = true
 
-File rpm = new File((File) basedir, "target/rpm/project-rpm-1/RPMS/noarch/project-rpm-1-1.1-1.noarch.rpm")
+File rpm = new File((File) basedir, "target/rpm/project-rpm-3/RPMS/noarch/project-rpm-3-1.2-1.noarch.rpm")
 
 success &= rpm.exists()
 
 SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
 
-success &= spec.name.equals("project-rpm-1")
-success &= spec.version.equals("1.1")
+success &= spec.name.equals("project-rpm-3")
+success &= spec.version.equals("1.2")
 success &= spec.release == 1
 success &= spec.license.equals("2009 my org")
 
@@ -25,11 +25,11 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-success &= fileCnt == 11
+success &= fileCnt == 8
 
+boolean linuxNameScript = false;
 boolean nameScript = false;
 boolean osNameScript = false;
-String expectedOsNameScript = "name-" + System.getProperty("os.name") + ".sh";
 boolean oldNameLink = false;
 
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
@@ -55,9 +55,13 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
             {
                 nameScript = true;
             }
-            else if (fileInfo.path.endsWith(expectedOsNameScript))
+            else if (fileInfo.path.endsWith("/name-someOS.sh"))
             {
                 osNameScript = true;
+            }
+            else if (fileInfo.path.endsWith("/name-linux.sh"))
+            {
+                linuxNameScript = true;
             }
             
         }
@@ -67,5 +71,6 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
 success &= nameScript;
 success &= osNameScript;
 success &= oldNameLink;
+success &= (!linuxNameScript);
 
 return success

@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.Map.Entry;
@@ -55,6 +56,7 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.StreamConsumer;
+import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 
 /**
  * Abstract base class for building RPMs.
@@ -133,6 +135,24 @@ abstract class AbstractRPMMojo
      * The actual targeted architecture. This will be based on evaluation of {@link #needarch}.
      */
     private String targetArch;
+    
+    /**
+     * The target os for building the RPM. By default, this will be populated to the System property <i>os.name</i>.
+     * <p>
+     * This can be used in conjunction with <a href="source-params.html#targetOSName>Source targetOSName</a> to flex the 
+     * contents of the rpm based on operating system.
+     * </p>
+     * 
+     * @parameter
+     */
+    private String targetOS;
+    
+    /**
+     * The target vendor for building the RPM. By default, this will be populated to the result of <i>rpm -E %{_host_vendor}</i>.
+     * 
+     * @parameter
+     */
+    private String targetVendor;
 
     /**
      * Set to a key name to sign the package using GPG. Note that due to RPM limitations, this always requires input
@@ -600,6 +620,39 @@ abstract class AbstractRPMMojo
     }
 
     // // // Internal methods
+    
+    /**
+     * Gets the default host vendor for system by executing <i>rpm -E %{_host_vendor}</i>.
+     */
+    private String getHostVendor() throws MojoExecutionException
+    {
+        Commandline cl = new Commandline();
+        cl.setExecutable( "rpm" );
+        cl.addArguments( new String[]{ "-E","%{_host_vendor}" } );
+        
+        StringStreamConsumer stdout = new StringStreamConsumer();
+        StreamConsumer stderr = new StderrConsumer( getLog() );
+        try
+        {
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "About to execute \'" + cl.toString() + "\'" );
+            }
+
+            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
+            if ( result != 0 )
+            {
+                throw new MojoExecutionException( "RPM query for default vendor returned: \'" + result + "\' executing \'"
+                    + cl.toString() + "\'" );
+            }
+        }
+        catch ( CommandLineException e )
+        {
+            throw new MojoExecutionException( "Unable to query for default vendor from RPM", e );
+        }
+        
+        return stdout.getOutput().trim();
+    }
 
     /**
      * Run the external command to build the package.
@@ -620,7 +673,7 @@ abstract class AbstractRPMMojo
         cl.createArgument().setValue( "--define" );
         cl.createArgument().setValue( "_topdir " + workarea.getAbsolutePath() );
         cl.createArgument().setValue( "--target" );
-        cl.createArgument().setValue( targetArch );
+        cl.createArgument().setValue( targetArch + '-' + targetVendor + '-' + targetOS );
         if ( keyname != null )
         {
             cl.createArgument().setValue( "--define" );
@@ -764,6 +817,19 @@ abstract class AbstractRPMMojo
             targetArch = needarch;
         }
         log.debug( "targetArch = " + targetArch );
+        
+        //provide default targetOS if value not given
+        if ( targetOS == null || targetOS.length() == 0 )
+        {
+            targetOS = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
+        }
+        log.debug( "targetOS = " + targetOS );
+        
+        if ( targetVendor == null || targetVendor.length() == 0 )
+        {
+            targetVendor = getHostVendor();
+        }
+        log.debug( "targetVendor = " + targetVendor );
 
         // Various checks in the mappings
         for ( Iterator it = mappings.iterator(); it.hasNext(); )
@@ -1065,6 +1131,12 @@ abstract class AbstractRPMMojo
                 if ( !src.matchesArchitecture( targetArch ) )
                 {
                     getLog().debug( "Source does not match target architecture: " + src.toString() );
+                    continue;
+                }
+                
+                if ( !src.matchesOSName( targetOS ) )
+                {
+                    getLog().debug( "Source does not match target os name: " + src.toString() );
                     continue;
                 }
                 

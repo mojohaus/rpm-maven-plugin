@@ -21,6 +21,7 @@ package org.codehaus.mojo.rpm;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * A description of a location where files to be packaged can be found.
@@ -58,6 +59,17 @@ public class Source
      */
     private String targetArchitecture;
 
+    /**
+     * A {@link Pattern regular expression} that, if populated, indicates that the files defined are only applicable if
+     * the expression {@link Pattern#matches(String, CharSequence) matches } the <code>RPMMojo.needOS</code> value.
+     */
+    private String targetOSName;
+    
+    /**
+     * {@link Pattern} compiled from {@link #targetOSName}.
+     */
+    private Pattern targetOSNamePattern;
+    
     // // // Bean methods
 
     /**
@@ -192,6 +204,34 @@ public class Source
     boolean matchesArchitecture( String architecture )
     {
         return targetArchitecture == null ? true : targetArchitecture.equalsIgnoreCase( architecture );
+    }
+
+    /**
+     * @return Returns the {@link #targetOSName}.
+     */
+    public String getTargetOSName()
+    {
+        return this.targetOSName;
+    }
+
+    /**
+     * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if
+     * the expression {@link Pattern#matches(String, CharSequence) matches } the operating system name.
+     * 
+     * @param targetOSName The {@link #targetOSName} to set.
+     */
+    public void setTargetOSName( String targetOSName )
+    {
+        this.targetOSName = targetOSName;
+        this.targetOSNamePattern = targetOSName != null ? Pattern.compile( targetOSName ) : null;
+    }
+    
+    /**
+     * Indicates if the target OS name matches <i>osName</i>.
+     */
+    boolean matchesOSName( String osName )
+    {
+        return targetOSNamePattern == null ? true : targetOSNamePattern.matcher( osName ).matches();
     }
 
     /** {@inheritDoc} */

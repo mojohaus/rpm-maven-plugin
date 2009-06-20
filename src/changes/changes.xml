@@ -71,6 +71,10 @@
             Handle multiple executions. This involves creating unique work areas for each execution. 
             This may break consumers expecting the rpm to be located at a specific path in filesystem.
         </action>
+        <action dev="bokken" type="fix" issue="MOJO-1384" system="jira">
+            populate the --target parameter for rpmbuild command correctly. 
+            Also adds the ability to filter content of rpm based on so.
+        </action>
         <action dev="bokken" type="add" issue="MOJO-1376" system="jira">
             add support for %Obsoletes and %PreReq
         </action>

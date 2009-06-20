@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bar</groupId>
-	<artifactId>project-rpm-1</artifactId>
-	<version>1.1</version>
+	<artifactId>project-rpm-3</artifactId>
+	<version>1.2</version>
 	<packaging>rpm</packaging>
 	<organization>
 		<name>my org</name>
@@ -41,6 +41,7 @@
 						<defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
 					</defineStatements>
 					<needarch>false</needarch>
+					<targetOS>someOS</targetOS>
 					<defaultUsername>myuser</defaultUsername>
                     <defaultGroupname>mygroup</defaultGroupname>
                     <mappings>
@@ -79,8 +80,13 @@
                                 </source>
                                 <source>
                                     <location>src/main/bin2/rename.sh</location>
-                                    <destination>name-${os.name}.sh</destination>
-                                    <targetOSName>(?i)${os.name}</targetOSName>
+                                    <destination>name-someOS.sh</destination>
+                                    <targetOSName>someOS</targetOSName>
+                                </source>
+                                <source>
+                                    <location>src/main/bin2/rename.sh</location>
+                                    <destination>name-linux.sh</destination>
+                                    <targetOSName>linux</targetOSName>
                                 </source>
                                 <softlinkSource>
                                     <location>/usr/myusr/app/bin/name.sh</location>
@@ -88,36 +94,7 @@
                                 </softlinkSource>
                             </sources>
                         </mapping>
-                        <!-- Configuration files -->
-                        <mapping>
-                            <directory>/usr/myusr/app/conf</directory>
-                        </mapping>
-                        <mapping>
-                            <directory>/usr/myusr/app/conf</directory>
-                            <configuration>true</configuration>
-                            <sources>
-                                <source>
-                                    <location>src/main/conf</location>
-                                    <includes>
-                                        <include>log4j.xml</include>
-                                    </includes>
-                                </source>
-                            </sources>
-                        </mapping>
-                        <!-- Config file origs -->
-                        <mapping>
-                            <directory>/usr/myusr/app/conf</directory>
-                            <sources>
-                                <source>
-                                    <location>src/main/conf/log4j.xml</location>
-                                    <destination>log4j.xml.deliver</destination>
-                                </source>
-                            </sources>
-                        </mapping>
                     </mappings>
-                    <preinstallScript>src/main/bin/preinstall.sh</preinstallScript>
-                    <postinstallScript>src/main/bin/postinstall.sh</postinstallScript>
-                    <preremoveScript>src/main/bin/preuninstall.sh</preremoveScript>
                     <requires>
                         <require>/bin/sh</require>
                         <require>jre &gt;= 1.5</require>
@@ -129,7 +106,6 @@
                     <prereqs>
                         <prereq>dependency</prereq>
                     </prereqs>
-                    <changelogFile>src/changes.txt</changelogFile>
 				</configuration>
 			</plugin>
 		</plugins>
