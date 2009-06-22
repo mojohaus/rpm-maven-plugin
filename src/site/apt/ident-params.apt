@@ -32,12 +32,21 @@ Identification Parameters
   The list of changes can be as long as is necessary, but this is intended to be
   a list of changes for the RPM itself and not for the package.
 
-* {release} (<<required>>)
+* {release}
 
-  The release number of the RPM.  This should be an integer initialized to
-  1 when the RPM is first released for a particular version and incremented
-  with each subsequent release.
-
+  The release number of the RPM.
+  
+  Beginning with release 2.0-beta-2,  this is an optional parameter. By default, the release will be generated from the
+  modifier portion of the {{{#version}project version}} using the following rules:
+ 
+     * If no modifier exists, the release will be <<<1>>>.
+     
+     * If the modifier ends with <<<SNAPSHOT>>>, the timestamp (in UTC) of the build will be appended to end.
+     
+     * All instances of <<<'-'>>> in the modifier will be replaced with <<<'_'>>>.
+     
+     * If a modifier exists and does not end with <<<SNAPSHOT>>>, <<<"_1">>> will be appended to end.
+  
 * {copyright}
 
   The copyright information for the RPM.  This is a <<one-line>> identifier of
@@ -61,11 +70,31 @@ Identification Parameters
 
 * {needarch}
 
-  If given the value <<<true>>>, the package will be marked as specific to
-  the architecture of the machine building the package.  This should only be
-  necessary in the case of compiled code from languages such as C or C++, and
-  should not be specified if the executable content of the package consists
-  only of scripts (such as shell, perl, or python) and Java code.
+  The target architecture for the rpm. The default value is <<<noarch>>>.
+  
+  For passivity purposes, a value of <<<true>>> or <<<false>>> will indicate whether the
+  architecture of the build machine will be used. Any other value will set the target
+  architecture of the rpm.
+  
+  In general, this should only be necessary in the case of compiled code from languages 
+  such as C or C++, and should not be specified if the executable content of the package 
+  consists only of scripts (such as shell, perl, or python) and/or Java code.
+  
+  This can be used in conjunction with {{{source-params.html#targetArchitecture}Source targetArchitecture}}
+  to flex the contents of the rpm based on the architecture.
+  
+* {targetOS}
+
+  The target os for building the RPM. By default, this will be populated to 
+  the System property <<<os.name>>>.
+  
+  This can be used in conjunction with {{{source-params.html#targetOSName}Source targetOSName}}
+  to flex the contents of the rpm based on operating system.
+  
+* {targetVendor}
+
+  The target vendor for building the RPM. By default, this will be populated to the result 
+  of <<<rpm -E %\{_host_vendor\}>>>.
 
 * {packager}
 

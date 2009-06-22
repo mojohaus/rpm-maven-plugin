@@ -167,4 +167,4 @@ Mapping Parameters
  
   Provides the opportunity to link to item(s) in the package. The location,
   therefore, must be a location that exists after all the mappings with 
-  traditional sources have been created in the BUILD directory.
+  traditional sources have been created in the <<<buildroot>>> directory.

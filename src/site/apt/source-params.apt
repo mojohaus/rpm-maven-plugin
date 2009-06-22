@@ -109,3 +109,39 @@ Source Parameters
         ...
     <build>
 +-----+
+
+* {targetOSName} (<<optional>>)
+
+  A {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html}regular expression}} that, if populated, indicates 
+  that the files defined are only applicable if the expression matches the {{{ident-params.html#targetOS} MOJO.targetOS}} value.
+  
++-----+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                ...
+                <configuration>
+                    <mapping>
+                        ...
+                        <sources>
+                            <source>
+                                <location>src/main/native/x86_64</location>
+                                <targetArchitecture>x86_64</targetArchitecture>
+                            </source>
+                            <source>
+                                <location>src/main/native/x86</location>
+                                <targetArchitecture>i.86</targetArchitecture>
+                            </source>
+                        </sources>
+                        ...
+                    </mapping>
+                    ...
+                </configuration>
+            </plugin>
+            ...
+        </plugins>
+        ...
+    <build>
++-----+
