@@ -40,7 +40,7 @@
 					<defineStatements>
 						<defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
 					</defineStatements>
-					<needarch>false</needarch>
+					<needarch>someArch</needarch>
 					<targetOS>someOS</targetOS>
 					<defaultUsername>myuser</defaultUsername>
                     <defaultGroupname>mygroup</defaultGroupname>
@@ -81,12 +81,22 @@
                                 <source>
                                     <location>src/main/bin2/rename.sh</location>
                                     <destination>name-someOS.sh</destination>
-                                    <targetOSName>someOS</targetOSName>
+                                    <targetOSName>.*OS</targetOSName>
                                 </source>
                                 <source>
                                     <location>src/main/bin2/rename.sh</location>
                                     <destination>name-linux.sh</destination>
                                     <targetOSName>linux</targetOSName>
+                                </source>
+                                <source>
+                                    <location>src/main/bin2/rename.sh</location>
+                                    <destination>name-someArch.sh</destination>
+                                    <targetArchitecture>.*Arch</targetArchitecture>
+                                </source>
+                                <source>
+                                    <location>src/main/bin2/rename.sh</location>
+                                    <destination>name-x86.sh</destination>
+                                    <targetArchitecture>i386</targetArchitecture>
                                 </source>
                                 <softlinkSource>
                                     <location>/usr/myusr/app/bin/name.sh</location>

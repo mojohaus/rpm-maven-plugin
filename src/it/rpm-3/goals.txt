@@ -1,1 +1,1 @@
--Dmaven.unix.debug=true clean package
+-Dmaven.unix.debug=true clean package -X

@@ -1123,12 +1123,16 @@ abstract class AbstractRPMMojo
         List srcs = map.getSources();
         if ( srcs != null )
         {
+            // for passivity, we will always use lowercase representation of architecture
+            // for comparison purposes.
+            final String targetArchComparison = targetArch.toLowerCase( Locale.ENGLISH );
+            
             // it is important that for each Source we set the files that are "installed".
             for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
             {
                 Source src = (Source) sit.next();
                 
-                if ( !src.matchesArchitecture( targetArch ) )
+                if ( !src.matchesArchitecture( targetArchComparison ) )
                 {
                     getLog().debug( "Source does not match target architecture: " + src.toString() );
                     continue;

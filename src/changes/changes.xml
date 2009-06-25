@@ -84,6 +84,9 @@
         <action dev="bokken" type="add" issue="MOJO-1308" system="jira">
             add support for creating soft links
         </action>
+        <action dev="bokken" type="add" issue="MOJO-1394" system="jira">
+            Change Source.targetArchitecture into a Regular Expression.
+        </action>
     </release>
   </body>
 </document>

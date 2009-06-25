@@ -73,6 +73,11 @@ Source Parameters
 
   If this is populated, the contents defined by this source will only be included
   if the value for targetArchitecture matches the target architecture of the rpm.
+  
+  Beginning with 2.0-beta-3, this is a regular expression. In order to provide backward
+  compatibility, both the architecture (defined for MOJO) and this value will be 
+  converted to lower case to make comparison case insensitive.
+  
   This can be used to flex the contents of the rpm based on the 
   {{{rpm-mojo.html#needarch}architecture}}:
   

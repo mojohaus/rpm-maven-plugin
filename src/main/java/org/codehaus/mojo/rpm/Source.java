@@ -21,6 +21,7 @@ package org.codehaus.mojo.rpm;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -54,10 +55,15 @@ public class Source
     private boolean noDefaultExcludes;
     
     /**
-     * If populated, this indicates that the files defined are only applicable if this value matches the
-     * <code>RPMMojo.needarch</code> value.
+     * A {@link Pattern regular expression} that, if populated, this indicates that the files defined are only
+     * applicable if this value matches the <code>RPMMojo.needarch</code> value.
      */
     private String targetArchitecture;
+
+    /**
+     * {@link Pattern} compiled from {@link #targetArchitecture}.
+     */
+    private Pattern targetArchitecturePattern;
 
     /**
      * A {@link Pattern regular expression} that, if populated, indicates that the files defined are only applicable if
@@ -186,13 +192,18 @@ public class Source
     }
 
     /**
-     * Sets the target architecture for which files defined by this source are applicable.<br/>
+     * Sets the target architecture for which files defined by this source are applicable.
+     * <p>
+     * In order to be backwards compatible, the <i>targetArch</i> will be converted to
+     * {@link String#toLowerCase() lower case} for the purpose of comparison.
+     * </p>
      * 
      * @param targetArch The target architecture to set.
      */
     public void setTargetArchitecture( String targetArch )
     {
         this.targetArchitecture = targetArch;
+        this.targetArchitecturePattern = targetArch == null ? null : Pattern.compile( targetArch.toLowerCase( Locale.ENGLISH ) );
     }
     
     /**
@@ -203,7 +214,7 @@ public class Source
      */
     boolean matchesArchitecture( String architecture )
     {
-        return targetArchitecture == null ? true : targetArchitecture.equalsIgnoreCase( architecture );
+        return targetArchitecturePattern == null ? true : targetArchitecturePattern.matcher( architecture ).matches();
     }
 
     /**
