@@ -192,7 +192,8 @@ public class Source
     }
 
     /**
-     * Sets the target architecture for which files defined by this source are applicable.
+     * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if
+     * the expression {@link Pattern#matches(String, CharSequence) matches } the architecture.
      * <p>
      * In order to be backwards compatible, the <i>targetArch</i> will be converted to
      * {@link String#toLowerCase() lower case} for the purpose of comparison.
@@ -203,7 +204,8 @@ public class Source
     public void setTargetArchitecture( String targetArch )
     {
         this.targetArchitecture = targetArch;
-        this.targetArchitecturePattern = targetArch == null ? null : Pattern.compile( targetArch.toLowerCase( Locale.ENGLISH ) );
+        this.targetArchitecturePattern =
+            targetArch == null ? null : Pattern.compile( targetArch.toLowerCase( Locale.ENGLISH ) );
     }
     
     /**

@@ -139,8 +139,8 @@ abstract class AbstractRPMMojo
     /**
      * The target os for building the RPM. By default, this will be populated to the System property <i>os.name</i>.
      * <p>
-     * This can be used in conjunction with <a href="source-params.html#targetOSName>Source targetOSName</a> to flex the 
-     * contents of the rpm based on operating system.
+     * This can be used in conjunction with <a href="source-params.html#targetOSName>Source targetOSName</a> to flex
+     * the contents of the rpm based on operating system.
      * </p>
      * 
      * @parameter
@@ -148,7 +148,8 @@ abstract class AbstractRPMMojo
     private String targetOS;
     
     /**
-     * The target vendor for building the RPM. By default, this will be populated to the result of <i>rpm -E %{_host_vendor}</i>.
+     * The target vendor for building the RPM. By default, this will be populated to the result of <i>rpm -E
+     * %{_host_vendor}</i>.
      * 
      * @parameter
      */
@@ -624,12 +625,13 @@ abstract class AbstractRPMMojo
     /**
      * Gets the default host vendor for system by executing <i>rpm -E %{_host_vendor}</i>.
      */
-    private String getHostVendor() throws MojoExecutionException
+    private String getHostVendor()
+        throws MojoExecutionException
     {
         Commandline cl = new Commandline();
         cl.setExecutable( "rpm" );
-        cl.addArguments( new String[]{ "-E","%{_host_vendor}" } );
-        
+        cl.addArguments( new String[] { "-E", "%{_host_vendor}" } );
+
         StringStreamConsumer stdout = new StringStreamConsumer();
         StreamConsumer stderr = new StderrConsumer( getLog() );
         try
@@ -642,15 +644,15 @@ abstract class AbstractRPMMojo
             int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
             if ( result != 0 )
             {
-                throw new MojoExecutionException( "RPM query for default vendor returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
+                throw new MojoExecutionException( "RPM query for default vendor returned: \'" + result
+                    + "\' executing \'" + cl.toString() + "\'" );
             }
         }
         catch ( CommandLineException e )
         {
             throw new MojoExecutionException( "Unable to query for default vendor from RPM", e );
         }
-        
+
         return stdout.getOutput().trim();
     }
 
