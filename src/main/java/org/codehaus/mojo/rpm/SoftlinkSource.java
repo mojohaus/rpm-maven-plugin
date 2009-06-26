@@ -25,6 +25,7 @@ package org.codehaus.mojo.rpm;
  * 
  * @author Brett Okken Cerner Corp.
  * @version $Id$
+ * @since 2.0-beta-3
  */
 public class SoftlinkSource
     extends Source

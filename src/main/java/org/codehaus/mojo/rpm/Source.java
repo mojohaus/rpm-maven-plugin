@@ -62,17 +62,20 @@ public class Source
 
     /**
      * {@link Pattern} compiled from {@link #targetArchitecture}.
+     * @since 2.0-beta-3
      */
     private Pattern targetArchitecturePattern;
 
     /**
      * A {@link Pattern regular expression} that, if populated, indicates that the files defined are only applicable if
      * the expression {@link Pattern#matches(String, CharSequence) matches } the <code>RPMMojo.needOS</code> value.
+     * @since 2.0-beta-3
      */
     private String targetOSName;
     
     /**
      * {@link Pattern} compiled from {@link #targetOSName}.
+     * @since 2.0-beta-3
      */
     private Pattern targetOSNamePattern;
     
@@ -221,6 +224,7 @@ public class Source
 
     /**
      * @return Returns the {@link #targetOSName}.
+     * @since 2.0-beta-3
      */
     public String getTargetOSName()
     {
@@ -232,6 +236,7 @@ public class Source
      * the expression {@link Pattern#matches(String, CharSequence) matches } the operating system name.
      * 
      * @param targetOSName The {@link #targetOSName} to set.
+     * @since 2.0-beta-3
      */
     public void setTargetOSName( String targetOSName )
     {
@@ -241,6 +246,7 @@ public class Source
     
     /**
      * Indicates if the target OS name matches <i>osName</i>.
+     * @since 2.0-beta-3
      */
     boolean matchesOSName( String osName )
     {

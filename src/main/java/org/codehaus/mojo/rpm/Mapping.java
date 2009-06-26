@@ -95,11 +95,13 @@ public class Mapping
      * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the
      * {@link #getDestination()}.
      * </p>
+     * @since 2.0-beta-3
      */
     private List linkedFileNamesRelativeToDestination;
     
     /**
      * Indicates if the {@link #sources} contain any {@link SoftlinkSource} instances.
+     * @since 2.0-beta-3
      */
     private boolean hasSoftLinks = false;
 
@@ -493,6 +495,7 @@ public class Mapping
      * 
      * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
      *         <code>null</code>, but may be immutable.
+     * @since 2.0-beta-3
      */
     List getLinkedFileNamesRelativeToDestination()
     {
@@ -505,6 +508,7 @@ public class Mapping
      * 
      * @param linkedFileNameRelativeToDestination
      * @see #getLinkedFileNamesRelativeToDestination()
+     * @since 2.0-beta-3
      */
     void addLinkedFileNameRelativeToDestination( String linkedFileNameRelativeToDestination )
     {
@@ -518,6 +522,7 @@ public class Mapping
 
     /**
      * @return Returns the {@link #hasSoftLinks}.
+     * @since 2.0-beta-3
      */
     boolean hasSoftLinks()
     {
@@ -526,6 +531,7 @@ public class Mapping
 
     /**
      * @param hasSoftLinks The {@link #hasSoftLinks} to set.
+     * @since 2.0-beta-3
      */
     void setHasSoftLinks( boolean hasSoftLinks )
     {

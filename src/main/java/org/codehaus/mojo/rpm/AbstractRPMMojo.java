@@ -79,6 +79,7 @@ abstract class AbstractRPMMojo
     /**
      * The key of the map is the directory where the files should be linked to. The value is the {@code List}
      * of {@link SoftlinkSource}s to be linked to.
+     * @since 2.0-beta-3
      */
     private final Map linkTargetToSources = new LinkedHashMap();
 
@@ -144,6 +145,7 @@ abstract class AbstractRPMMojo
      * </p>
      * 
      * @parameter
+     * @since 2.0-beta-3
      */
     private String targetOS;
     
@@ -152,6 +154,7 @@ abstract class AbstractRPMMojo
      * %{_host_vendor}</i>.
      * 
      * @parameter
+     * @since 2.0-beta-3
      */
     private String targetVendor;
 
@@ -1565,6 +1568,7 @@ abstract class AbstractRPMMojo
      * @param linkSource Source to link from. {@link SoftlinkSource#getLocation()} must be a
      *            {@link File#isDirectory() directory}.
      * @param scanner Scanner used to scan the {@link SoftlinkSource#getLocation() linSource location}.
+     * @since 2.0-beta-3
      */
     private void linkScannedFiles( PrintWriter spec, String directory, final SoftlinkSource linkSource,
                                    final DirectoryScanner scanner )
@@ -1594,6 +1598,7 @@ abstract class AbstractRPMMojo
      * @param linkSource Source
      * @param buildSourceLocation Build location where content exists.
      * @return {@link DirectoryScanner} used for scanning.
+     * @since 2.0-beta-3
      */
     private DirectoryScanner scanLinkSource( final SoftlinkSource linkSource, final File buildSourceLocation )
     {
@@ -1616,6 +1621,7 @@ abstract class AbstractRPMMojo
      * @param spec Writer for spec file.
      * @param directory Directory to link to.
      * @param linkSource Source to link from.
+     * @since 2.0-beta-3
      */
     private void linkSingleFile( PrintWriter spec, String directory, final SoftlinkSource linkSource )
     {
