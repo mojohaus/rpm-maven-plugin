@@ -51,6 +51,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
@@ -119,9 +120,10 @@ abstract class AbstractRPMMojo
     /**
      * The target architecture for the rpm. The default value is <i>noarch</i>.
      * <p>
-     * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the
-     * architecture of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the
-     * architecture of the rpm to <tt>x86_64</tt>.
+     * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
+     * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_ARCH">architecture</a>
+     * of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the architecture of the
+     * rpm to <tt>x86_64</tt>.
      * </p>
      * <p>
      * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
@@ -138,9 +140,10 @@ abstract class AbstractRPMMojo
     private String targetArch;
     
     /**
-     * The target os for building the RPM. By default, this will be populated to the System property <i>os.name</i>.
+     * The target os for building the RPM. By default, this will be populated to <a
+     * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_NAME">Os.OS_NAME</a>.
      * <p>
-     * This can be used in conjunction with <a href="source-params.html#targetOSName>Source targetOSName</a> to flex
+     * This can be used in conjunction with <a href="source-params.html#targetOSName">Source targetOSName</a> to flex
      * the contents of the rpm based on operating system.
      * </p>
      * 
@@ -306,7 +309,9 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the pre-installation script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File preinstallScript;
@@ -320,21 +325,27 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the post-installation script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File postinstallScript;
 
     /**
      * The installation script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private String install;
 
     /**
      * The location of the installation script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File installScript;
@@ -348,7 +359,9 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the pre-removal script.
-     * protected
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File preremoveScript;
@@ -362,7 +375,9 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the post-removal script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File postremoveScript;
@@ -376,7 +391,9 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the verification script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File verifyScript;
@@ -390,7 +407,9 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the clean script.
-     * 
+     * <p>
+     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
+     * </p>
      * @parameter
      */
     private File cleanScript;
@@ -492,7 +511,7 @@ abstract class AbstractRPMMojo
     private String changelog;
 
     /**
-     * The changelog file.
+     * The changelog file. If the file does not exist, it is ignored.
      * 
      * @parameter
      * @since 2.0-beta-3
@@ -815,7 +834,7 @@ abstract class AbstractRPMMojo
         }
         else if ( "true".equalsIgnoreCase( needarch ) )
         {
-            targetArch = System.getProperty( "os.arch" );
+            targetArch = Os.OS_ARCH;
         }
         else
         {
@@ -826,7 +845,7 @@ abstract class AbstractRPMMojo
         //provide default targetOS if value not given
         if ( targetOS == null || targetOS.length() == 0 )
         {
-            targetOS = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
+            targetOS = Os.OS_NAME;
         }
         log.debug( "targetOS = " + targetOS );
         
@@ -1244,6 +1263,12 @@ abstract class AbstractRPMMojo
     private String readFile( File in )
         throws MojoExecutionException
     {
+        if ( !in.exists() )
+        {
+            getLog().debug( in.getAbsolutePath() + " does not exist - ignoring" );
+            return null;
+        }
+        
         try
         {
             StringBuffer sb = new StringBuffer();
@@ -1251,7 +1276,8 @@ abstract class AbstractRPMMojo
             while ( br.ready() )
             {
                 String line = br.readLine();
-                sb.append( line + "\n" );
+                sb.append( line );
+                sb.append( '\n' );
             }
             br.close();
             return sb.toString();
@@ -1409,10 +1435,17 @@ abstract class AbstractRPMMojo
                 spec.println( description );
             }
             
+            boolean printedInstall = false;
+            
             if ( !linkTargetToSources.isEmpty() )
             {
-                spec.println();
-                spec.println( "%install" );
+                if ( !printedInstall )
+                {
+                    spec.println();
+                    spec.println( "%install" );
+                    printedInstall = true;
+                }
+                
                 for ( Iterator entryIter = linkTargetToSources.entrySet().iterator(); entryIter.hasNext(); )
                 {
                     final Map.Entry directoryToSourcesEntry = (Entry) entryIter.next();
@@ -1478,6 +1511,16 @@ abstract class AbstractRPMMojo
                         }
                     }
                 }
+            }
+
+            if ( install != null )
+            {
+                if ( !printedInstall )
+                {
+                    spec.println();
+                    spec.println( "%install" );
+                }
+                spec.println( install );
             }
 
             spec.println();
@@ -1665,12 +1708,6 @@ abstract class AbstractRPMMojo
             writer.println();
             writer.println( "%pre" );
             writer.println( preinstall );
-        }
-        if ( install != null )
-        {
-            writer.println();
-            writer.println( "%install" );
-            writer.println( install );
         }
         if ( postinstall != null )
         {

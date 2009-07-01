@@ -87,6 +87,9 @@
         <action dev="bokken" type="add" issue="MOJO-1394" system="jira">
             Change Source.targetArchitecture into a Regular Expression.
         </action>
+        <action dev="bokken" type="add" issue="MOJO-1388" system="jira">
+            Ignore rpm script files which do not exist.
+        </action>
     </release>
   </body>
 </document>
