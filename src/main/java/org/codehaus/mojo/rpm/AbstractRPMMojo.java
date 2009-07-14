@@ -1169,7 +1169,23 @@ abstract class AbstractRPMMojo
                 }
                 
                 File location = src.getLocation();
-                if ( location.exists() )
+                //it is important that we check if softlink source first as the "location" may
+                //exist in the filesystem of the build machine
+                if ( src instanceof SoftlinkSource ) 
+                {
+                    List sources = (List) linkTargetToSources.get( relativeDestination );
+                    if ( sources == null )
+                    {
+                        sources = new LinkedList();
+                        linkTargetToSources.put( relativeDestination, sources );
+                    }
+                    
+                    sources.add( src );
+                    
+                    ( ( SoftlinkSource ) src ).setSourceMapping( map );
+                    map.setHasSoftLinks( true );
+                }
+                else if ( location.exists() )
                 {                    
                     final String destination = src.getDestination();
                     if ( destination == null )
@@ -1230,20 +1246,6 @@ abstract class AbstractRPMMojo
 
                         map.addCopiedFileNameRelativeToDestination( destination );
                     }
-                }
-                else if ( src instanceof SoftlinkSource ) 
-                {
-                    List sources = (List) linkTargetToSources.get( relativeDestination );
-                    if ( sources == null )
-                    {
-                        sources = new LinkedList();
-                        linkTargetToSources.put( relativeDestination, sources );
-                    }
-                    
-                    sources.add( src );
-                    
-                    ( ( SoftlinkSource ) src ).setSourceMapping( map );
-                    map.setHasSoftLinks( true );
                 }
                 else
                 {

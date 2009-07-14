@@ -25,12 +25,13 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-success &= fileCnt == 11
+success &= fileCnt == 13
 
 boolean nameScript = false;
 boolean osNameScript = false;
 String expectedOsNameScript = "name-" + System.getProperty("os.name") + ".sh";
 boolean oldNameLink = false;
+boolean tempLink = false;
 
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
@@ -62,7 +63,18 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
             
         }
     }
+    else if (fileInfo.path.equals("/tmp/myapp/somefile2"))
+    {
+        tempLink = true;
+        if (!fileInfo.mode.startsWith("l"))
+        {
+            throw new java.lang.AssertionError("temp link mode");
+        }
+    }
 }
+
+if (!tempLink)
+    throw new java.lang.AssertionError("temp link");
 
 success &= nameScript;
 success &= osNameScript;

@@ -29,6 +29,36 @@
 	</repositories>
 	<build>
 		<plugins>
+            <!-- Create directory locally -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <id>createdir</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+		                <configuration>
+		                    <executable>mkdir</executable>
+		                    <commandlineArgs>-p /tmp/myapp</commandlineArgs>
+		                </configuration>
+                    </execution>
+                    <execution>
+                        <id>createfile</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <executable>touch</executable>
+                            <commandlineArgs>/tmp/myapp/somefile</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>rpm-maven-plugin</artifactId>
@@ -55,7 +85,19 @@
                                 </softlinkSource>
                             </sources>
                         </mapping>
-                        <!-- dependencies -->
+                        <mapping>
+                            <directory>/tmp/myapp</directory>
+                            <sources>
+                                <source>
+                                    <location>src/main/bin/start.sh</location>
+                                    <destination>somefile</destination>
+                                </source>
+                                <softlinkSource>
+                                    <location>/tmp/myapp/somefile</location>
+                                    <destination>somefile2</destination>
+                                </softlinkSource>
+                            </sources>
+                        </mapping>
                         <mapping>
                             <directory>/usr/myusr/app/lib</directory>
                             <dependency />
