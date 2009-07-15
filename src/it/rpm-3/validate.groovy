@@ -30,7 +30,7 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-if (fileCnt != 9)
+if (fileCnt != 10)
     throw new java.lang.AssertionError("file count");
 
 boolean x86NameScript = false;
@@ -39,51 +39,64 @@ boolean nameScript = false;
 boolean osNameScript = false;
 boolean archNameScript = false;
 boolean oldNameLink = false;
+boolean serviceLink = false;
 
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
     FileInfo fileInfo = (FileInfo) i.next()
-    if (!fileInfo.user.equals("myuser"))
-        throw new java.lang.AssertionError("file user for: " + fileInfo);
-    if (!fileInfo.group.equals("mygroup"))
-        throw new java.lang.AssertionError("file group for: " + fileInfo);
-    
-    //check for executable mode
-    if (fileInfo.path.startsWith("/usr/myusr/app/bin/"))
-    {
-        //oldname.sh is a link, so the filemode is different
-        if (fileInfo.path.endsWith("/oldname.sh"))
-        {
-            oldNameLink = true;
-            if (!fileInfo.mode.equals("lrwxr-xr-x"))
-                throw new java.lang.AssertionError("file mode for: " + fileInfo);
-        }
-        else
-        {
-            if (!fileInfo.mode.equals("-rwxr-xr-x"))
-                throw new java.lang.AssertionError("file mode for: " + fileInfo);
         
-            if (fileInfo.path.endsWith("/name.sh"))
+    if (fileInfo.path.equals("/etc/init.d/myapp"))
+    {   
+        if (!fileInfo.user.equals("root"))
+            throw new java.lang.AssertionError("file user for: " + fileInfo);
+        if (!fileInfo.group.equals("root"))
+            throw new java.lang.AssertionError("file group for: " + fileInfo);
+        serviceLink = true;
+    }
+    else
+    {
+        if (!fileInfo.user.equals("myuser"))
+            throw new java.lang.AssertionError("file user for: " + fileInfo);
+        if (!fileInfo.group.equals("mygroup"))
+            throw new java.lang.AssertionError("file group for: " + fileInfo);
+        
+        //check for executable mode
+        if (fileInfo.path.startsWith("/usr/myusr/app/bin/"))
+        {
+            //oldname.sh is a link, so the filemode is different
+            if (fileInfo.path.endsWith("/oldname.sh"))
             {
-                nameScript = true;
+                oldNameLink = true;
+                if (!fileInfo.mode.equals("lrwxr-xr-x"))
+                    throw new java.lang.AssertionError("file mode for: " + fileInfo);
             }
-            else if (fileInfo.path.endsWith("/name-someOS.sh"))
+            else
             {
-                osNameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-someArch.sh"))
-            {
-                archNameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-linux.sh"))
-            {
-                linuxNameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-x86.sh"))
-            {
-                x86NameScript = true;
-            }
+                if (!fileInfo.mode.equals("-rwxr-xr-x"))
+                    throw new java.lang.AssertionError("file mode for: " + fileInfo);
             
+                if (fileInfo.path.endsWith("/name.sh"))
+                {
+                    nameScript = true;
+                }
+                else if (fileInfo.path.endsWith("/name-someOS.sh"))
+                {
+                    osNameScript = true;
+                }
+                else if (fileInfo.path.endsWith("/name-someArch.sh"))
+                {
+                    archNameScript = true;
+                }
+                else if (fileInfo.path.endsWith("/name-linux.sh"))
+                {
+                    linuxNameScript = true;
+                }
+                else if (fileInfo.path.endsWith("/name-x86.sh"))
+                {
+                    x86NameScript = true;
+                }
+                
+            }
         }
     }
 }
@@ -105,5 +118,8 @@ if (linuxNameScript)
 
 if (x86NameScript)
     throw new java.lang.AssertionError("x86 name script found")
+    
+if (!serviceLink)
+    throw new java.lang.AssertionError("service link not found")
 
 return true

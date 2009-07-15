@@ -56,6 +56,18 @@
                                 </softlinkSource>
                             </sources>
                         </mapping>
+                        <mapping>
+                            <directory>/etc/init.d</directory>
+                            <directoryIncluded>false</directoryIncluded>
+                            <username>root</username>
+                            <groupname>root</groupname>
+                            <sources>
+                                <softlinkSource>
+                                    <location>/usr/myusr/app/bin/start.sh</location>
+                                    <destination>myapp</destination>
+                                </softlinkSource>
+                            </sources>
+                        </mapping>
                         <!-- dependencies -->
                         <mapping>
                             <directory>/usr/myusr/app/lib</directory>

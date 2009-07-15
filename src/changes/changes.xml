@@ -95,6 +95,9 @@
         <action dev="bokken" type="fix" issue="MRPM-34" system="jira">
             SoftlinkSources do not work correctly if the location exists on the build machine.
         </action>
+        <action dev="bokken" type="fix" issue="MRPM-35" system="jira">
+            SoftlinkSources do not work if location is a file and is only source in mapping. 
+        </action>
     </release>
   </body>
 </document>

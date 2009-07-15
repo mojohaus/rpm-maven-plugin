@@ -1557,6 +1557,9 @@ abstract class AbstractRPMMojo
 
                 final DirectoryScanner scanner = new DirectoryScanner();
                 scanner.setBasedir( absoluteDestination );
+                
+                //the linked files are not present yet (will be "installed" during rpm build)
+                //so they cannot be "included"
                 scanner.setIncludes( includes.isEmpty() ? null
                                 : (String[]) includes.toArray( new String[includes.size()] ) );
                 scanner.setExcludes( null );
@@ -1582,15 +1585,13 @@ abstract class AbstractRPMMojo
                         spec.println( files[i] );
                     }
                     
-                    if ( !includes.isEmpty() )
+                    //since the linked files are not present in directory (yet), the scanner will not find them
+                    for ( Iterator linkIter = links.iterator(); linkIter.hasNext(); )
                     {
-                        for ( Iterator linkIter = links.iterator(); linkIter.hasNext(); )
-                        {
-                            String link = (String) linkIter.next();
-    
-                            spec.print( baseFileString );
-                            spec.println( link );
-                        }
+                        String link = (String) linkIter.next();
+
+                        spec.print( baseFileString );
+                        spec.println( link );
                     }
                 }
             }
