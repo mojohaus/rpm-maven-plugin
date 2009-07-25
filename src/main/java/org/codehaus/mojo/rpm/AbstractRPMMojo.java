@@ -299,6 +299,20 @@ abstract class AbstractRPMMojo
      * @required
      */
     private List mappings;
+    
+    /**
+     * The prepare script.
+     * 
+     * @parameter
+     */
+    private String prepare;
+    
+    /**
+     * The location of the prepare script. A File which does not exist is ignored.
+     * 
+     * @parameter
+     */
+    private File prepareScript;
 
     /**
      * The pre-installation script.
@@ -877,6 +891,10 @@ abstract class AbstractRPMMojo
         }
 
         // Collect the scripts, if necessary
+        if ( ( prepare == null ) && ( prepareScript != null))
+        {
+            prepare = readFile( prepareScript );
+        }
         if ( ( preinstall == null ) && ( preinstallScript != null ) )
         {
             preinstall = readFile( preinstallScript );
@@ -1706,6 +1724,12 @@ abstract class AbstractRPMMojo
      */
     private void printScripts( PrintWriter writer )
     {
+        if ( prepare != null )
+        {
+            writer.println();
+            writer.println( "%prep" );
+            writer.println( prepare );
+        }
         if ( preinstall != null )
         {
             writer.println();

@@ -70,6 +70,11 @@ Advanced Parameters
   Maximum RPM since the operation of the scripts must be done correctly or
   major problems can occur while installing or removing the package.
 
+** <<<prepare>>>
+
+  This script specifies commands to prepare the build.  It corresponds to the
+  <<<%prep>>> tag in the spec file.
+  
 ** <<<preinstall>>>
 
   This script is run before the package is installed.  It corresponds to the
