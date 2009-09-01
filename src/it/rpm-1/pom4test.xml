@@ -100,7 +100,9 @@
                         </mapping>
                         <mapping>
                             <directory>/usr/myusr/app/lib</directory>
-                            <dependency />
+                            <dependency>
+                                <stripVersion>true</stripVersion>
+                            </dependency>
                         </mapping>
                         <!-- scripts -->
                         <mapping>

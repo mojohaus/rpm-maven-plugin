@@ -48,7 +48,13 @@ public class Dependency
 
     /** List of dependencies to exclude. */
     private List excludes;
-
+    
+    /**
+     *  Strip version is false by default.
+     * @since 2.0-beta-4
+     */
+    private boolean stripVersion = false;
+    
     // // // Bean methods
 
     /**
@@ -95,6 +101,28 @@ public class Dependency
         excludes = parseList( excls );
     }
 
+    /**
+     * Retrieve the stripVersion property
+     * 
+     * @return The stripVersion property
+     */
+    public boolean getStripVersion() 
+    {
+        return stripVersion;
+    }
+
+    /**
+     * Set the stripVersion property
+     * 
+     * @param stripVersion
+     * @throws MojoExecutionException if the parse fails
+     */
+    public void setStripVersion( boolean stripVersion )
+        throws MojoExecutionException
+    {
+        this.stripVersion = stripVersion;
+    }
+    
     // // // Public methods
 
     /** {@inheritDoc} */
@@ -112,7 +140,9 @@ public class Dependency
         {
             sb.append( " exclude [" + excludes + "]" );
         }
-
+        
+        sb.append( " stripVersion (" + stripVersion + ")" );
+        
         sb.append( "]" );
         return sb.toString();
     }

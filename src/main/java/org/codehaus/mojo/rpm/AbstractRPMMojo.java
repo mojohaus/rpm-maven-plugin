@@ -961,11 +961,11 @@ abstract class AbstractRPMMojo
         }
         if ( ( pretrans == null ) && ( pretransScript != null ) )
         {
-        	pretrans = readFile( pretransScript );
+            pretrans = readFile( pretransScript );
         }
         if ( ( posttrans == null ) && ( posttransScript != null ) )
         {
-        	posttrans = readFile( posttransScript );
+            posttrans = readFile( posttransScript );
         }
         if ( ( changelog == null ) && ( changelogFile != null ) )
         {
@@ -978,31 +978,55 @@ abstract class AbstractRPMMojo
      * 
      * @param art The artifact to copy
      * @param dest The destination directory
+     * @param stripVersion Whether or not to strip the artifact version from the filename
+     * @return Artifact file name
      * @throws MojoExecutionException if a problem occurs
      */
-    private void copyArtifact( Artifact art, File dest )
+    private String copyArtifact( Artifact art, File dest, boolean stripVersion )
         throws MojoExecutionException
     {
         if ( art.getFile() == null )
         {
             getLog().warn( "Artifact " + art + " requested in configuration." );
             getLog().warn( "Plugin must run in standard lifecycle for this to work." );
-            return;
+            return null;
         }
-        copySource( art.getFile(), dest, null, null );
+
+        String outputFileName;
+        if ( stripVersion )
+        {
+            final String classifier = art.getClassifier();
+            // strip the version from the file name
+            outputFileName = art.getArtifactId();
+            if ( classifier != null )
+            {
+                outputFileName += '-';
+                outputFileName += classifier;
+            }
+            outputFileName += '.';
+            outputFileName += art.getType();
+        }
+        else
+        {
+            outputFileName = art.getFile().getName();
+        }
+
+        copySource( art.getFile(), outputFileName, dest, null, null );
+        return outputFileName;
     }
 
     /**
      * Copy a set of files.
      * 
      * @param src The file or directory to start copying from
+     * @param srcName The src file name to be used in the copy, only used if the src is not a directory.
      * @param dest The destination directory
      * @param incl The list of inclusions
      * @param excl The list of exclusions
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List copySource( File src, File dest, List incl, List excl )
+    private List copySource( File src, String srcName, File dest, List incl, List excl )
         throws MojoExecutionException
     {
         try
@@ -1029,7 +1053,9 @@ abstract class AbstractRPMMojo
             }
             else
             {
-                copier.addFile( src, src.getName() );
+                // set srcName to default if null
+                srcName = srcName != null ? srcName : src.getName();
+                copier.addFile( src, srcName );
             }
 
             // Perform the copy
@@ -1116,7 +1142,7 @@ abstract class AbstractRPMMojo
         if ( icon != null )
         {
             File icondest = new File( workarea, "SOURCES" );
-            copySource( icon, icondest, null, null );
+            copySource( icon, null, icondest, null, null );
         }
 
         // Process each mapping
@@ -1148,7 +1174,7 @@ abstract class AbstractRPMMojo
                     for ( Iterator ait = artlist.iterator(); ait.hasNext(); )
                     {
                         Artifact artifactInstance = (Artifact) ait.next();
-                        copyArtifact( artifactInstance, dest );
+                        copyArtifact( artifactInstance, dest, false );
                         map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
                     }
                 }
@@ -1160,8 +1186,9 @@ abstract class AbstractRPMMojo
                     for ( Iterator dit = deplist.iterator(); dit.hasNext(); )
                     {
                         Artifact artifactInstance = (Artifact) dit.next();
-                        copyArtifact( artifactInstance, dest );
-                        map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
+                        // pass in dependency stripVersion parameter
+                        String outputFileName = copyArtifact( artifactInstance, dest, dep.getStripVersion() );
+                        map.addCopiedFileNameRelativeToDestination( outputFileName );
                     }
                 }
                 
@@ -1261,7 +1288,7 @@ abstract class AbstractRPMMojo
                             }
                             elist.addAll( FileUtils.getDefaultExcludesAsList() );
                         }
-                        List copiedFiles = copySource( src.getLocation(), dest, src.getIncludes(), elist );
+                        List copiedFiles = copySource( src.getLocation(), null, dest, src.getIncludes(), elist );
                         map.addCopiedFileNamesRelativeToDestination( copiedFiles );
                     }
                     else

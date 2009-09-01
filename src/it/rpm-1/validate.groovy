@@ -32,6 +32,7 @@ boolean osNameScript = false;
 String expectedOsNameScript = "name-" + System.getProperty("os.name") + ".sh";
 boolean oldNameLink = false;
 boolean tempLink = false;
+boolean unversionedHudsonWar = false;
 
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
@@ -71,6 +72,10 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
             throw new java.lang.AssertionError("temp link mode");
         }
     }
+    else if (fileInfo.path.endsWith("hudson-war.war"))
+    {
+        unversionedHudsonWar = true;
+    }
 }
 
 if (!tempLink)
@@ -79,5 +84,6 @@ if (!tempLink)
 success &= nameScript;
 success &= osNameScript;
 success &= oldNameLink;
+success &= unversionedHudsonWar;
 
 return success
