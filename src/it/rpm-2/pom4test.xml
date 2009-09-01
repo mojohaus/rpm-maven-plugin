@@ -52,7 +52,6 @@
 		                        <mapping>
 		                            <directory>/usr/myusr/app/bin</directory>
 		                            <username>myuser</username>
-		                            <groupname>mygroup</groupname>
 		                            <filemode>755</filemode>
 		                            <sources>
 		                                <source>
@@ -109,7 +108,6 @@
 		                        <!-- scripts -->
 		                        <mapping>
 		                            <directory>/usr/myusr/app/bin</directory>
-		                            <username>myuser</username>
 		                            <groupname>mygroup</groupname>
 		                            <filemode>755</filemode>
 		                            <sources>

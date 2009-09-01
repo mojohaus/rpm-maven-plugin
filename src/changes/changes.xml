@@ -104,6 +104,9 @@
         <action dev="bokken" type="add" issue="MRPM-36" system="jira">
             Add support for "prep" section.
         </action>
+        <action dev="bokken" type="add" issue="MRPM-44" system="jira">
+            Use the default filemode, group and user for more than just %defattr directive.
+        </action>
     </release>
   </body>
 </document>

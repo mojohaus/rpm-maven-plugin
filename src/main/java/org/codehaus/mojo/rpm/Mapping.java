@@ -133,7 +133,7 @@ public class Mapping
      * 
      * By default, this returns <code>true</code>.
      * @return Whether the {@link #getDirectory()} should be used for the 
-     * {@link #getAttrString() attribute string}.
+     * {@link #getAttrString(String, String, String) attribute string}.
      */
     public boolean isDirectoryIncluded()
     {
@@ -141,10 +141,10 @@ public class Mapping
     }
 
     /**
-     * Sets if the {@link #getDirectory()} should be used for the {@link #getAttrString() attribute string} 
-     * (if and only if {@link #getSources() sources} make up everything that gets copied to the directory).<br/>
+     * Sets if the {@link #getDirectory()} should be used for the
+     * {@link #getAttrString(String, String, String) attribute string} (if and only if {@link #getSources() sources}
+     * make up everything that gets copied to the directory).<br/> By default, this is <code>true</code>.
      * 
-     * By default, this is <code>true</code>.
      * @param directoryIncluded The {@link #directoryIncluded} to set.
      */
     public void setDirectoryIncluded( boolean directoryIncluded )
@@ -336,10 +336,18 @@ public class Mapping
     /**
      * Assemble the RPM SPEC file attributes for a mapping.
      * 
+     * @param defaultFileMode Default file mode to use if not set for this mapping. 
+     * @param defaultGrp Default group to use if not set for this mapping.
+     * @param defaultUsr Default user to use if not set for this mapping.
+     * 
      * @return The attribute string for the SPEC file.
      */
-    public String getAttrString()
+    public String getAttrString( String defaultFileMode, String defaultGrp, String defaultUsr )
     {
+        defaultFileMode = defaultFileMode == null ? "-" : defaultFileMode;
+        defaultGrp = defaultGrp == null ? "-" : defaultGrp;
+        defaultUsr = defaultUsr == null ? "-" : defaultUsr;
+        
         StringBuffer sb = new StringBuffer();
 
         if ( configuration != null  && !"FALSE".equalsIgnoreCase( configuration ) )
@@ -367,33 +375,16 @@ public class Mapping
         /* do not include %attr if no attributes are specified */
         if ( !( filemode == null && username == null && groupname == null ) )
         {
+            sb.append( "%attr(" );
 
-            if ( filemode != null )
-            {
-                sb.append( "%attr(" + filemode + "," );
-            }
-            else
-            {
-                sb.append( "%attr(-," );
-            }
+            sb.append( filemode != null ? filemode : defaultFileMode );
+            sb.append( ',' );
 
-            if ( username != null )
-            {
-                sb.append( username + "," );
-            }
-            else
-            {
-                sb.append( "-," );
-            }
+            sb.append( username != null ? username : defaultUsr );
+            sb.append( ',' );
 
-            if ( groupname != null )
-            {
-                sb.append( groupname + ")" );
-            }
-            else
-            {
-                sb.append( "-)" );
-            }
+            sb.append( groupname != null ? groupname : defaultGrp );
+            sb.append( ')' );
         }
         
         return sb.toString();
@@ -410,10 +401,8 @@ public class Mapping
         {
             return "nowhere";
         }
-        else
-        {
-            return directory;
-        }
+        
+        return directory;
     }
 
     /**
@@ -545,7 +534,7 @@ public class Mapping
         StringBuffer sb = new StringBuffer();
 
         sb.append( "[\"" + getDestination() + "\" " );
-        sb.append( "{" + getAttrString() + "}" );
+        sb.append( "{" + getAttrString( null, null, null ) + "}" );
 
         if ( isDirOnly() )
         {

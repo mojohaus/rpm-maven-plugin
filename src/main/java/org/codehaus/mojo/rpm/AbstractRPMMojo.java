@@ -891,7 +891,7 @@ abstract class AbstractRPMMojo
         }
 
         // Collect the scripts, if necessary
-        if ( ( prepare == null ) && ( prepareScript != null))
+        if ( ( prepare == null ) && ( prepareScript != null ) )
         {
             prepare = readFile( prepareScript );
         }
@@ -1502,9 +1502,9 @@ abstract class AbstractRPMMojo
                                 spec.print( directory );
                                 
                                 final String dest = linkSource.getDestination();
-                                if (dest != null)
+                                if ( dest != null )
                                 {
-                                    spec.print('/');
+                                    spec.print( '/' );
                                     spec.print( dest );
                                     linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( dest );
                                 }
@@ -1571,7 +1571,7 @@ abstract class AbstractRPMMojo
                 {
                     getLog().debug( "writing attribute string for directory created by soft link: " + destination );
                     
-                    final String attributes = map.getAttrString();
+                    final String attributes = map.getAttrString( defaultFilemode, defaultGroupname, defaultUsername );
                     
                     spec.print( attributes );
                     spec.print( ' ' );
@@ -1593,7 +1593,7 @@ abstract class AbstractRPMMojo
                 scanner.setExcludes( null );
                 scanner.scan();
 
-                final String attrString = map.getAttrString();
+                final String attrString = map.getAttrString( defaultFilemode, defaultGroupname, defaultUsername );
                 if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded() )
                 {
                     getLog().debug( "writing attriute string for directory: " + destination );
