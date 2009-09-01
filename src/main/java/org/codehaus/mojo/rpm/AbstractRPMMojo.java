@@ -1499,7 +1499,17 @@ abstract class AbstractRPMMojo
                                 spec.print( "ln -s " );
                                 spec.print( sourceLocation.getAbsolutePath() );
                                 spec.print( " $RPM_BUILD_ROOT/" );
-                                spec.println( directory );
+                                spec.print( directory );
+                                
+                                final String dest = linkSource.getDestination();
+                                if (dest != null)
+                                {
+                                    spec.print('/');
+                                    spec.print( dest );
+                                    linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( dest );
+                                }
+                                
+                                spec.println(); 
                             }
                             else
                             {
@@ -1559,7 +1569,7 @@ abstract class AbstractRPMMojo
                 
                 if ( map.hasSoftLinks() && !absoluteDestination.exists() )
                 {
-                    getLog().debug( "writing attriute string for directory created by soft link: " + destination );
+                    getLog().debug( "writing attribute string for directory created by soft link: " + destination );
                     
                     final String attributes = map.getAttrString();
                     

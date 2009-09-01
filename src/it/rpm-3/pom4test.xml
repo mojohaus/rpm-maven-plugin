@@ -57,6 +57,15 @@
                             </sources>
                         </mapping>
                         <mapping>
+                            <directory>/usr/myusr</directory>
+                            <sources>
+                                <softlinkSource>
+                                    <location>/usr/myusr/app</location>
+                                    <destination>app3</destination>
+                                </softlinkSource>
+                            </sources>
+                        </mapping>
+                        <mapping>
                             <directory>/etc/init.d</directory>
                             <directoryIncluded>false</directoryIncluded>
                             <username>root</username>
