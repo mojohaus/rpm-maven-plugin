@@ -429,6 +429,42 @@ abstract class AbstractRPMMojo
     private File cleanScript;
 
     /**
+     * The pretrans script.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private String pretrans;
+
+    /**
+     * The location of the pretrans script.
+     * <p>
+     * A File which does not exist is ignored.
+     * </p>
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private File pretransScript;
+
+    /**
+     * The posttrans script.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private String posttrans;
+
+    /**
+     * The location of the posttrans script.
+     * <p>
+     * A File which does not exist is ignored.
+     * </p>
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private File posttransScript;
+
+    /**
      * A Plexus component to copy files and directories.
      * 
      * @component role="org.codehaus.plexus.archiver.Archiver" roleHint="dir"
@@ -922,6 +958,14 @@ abstract class AbstractRPMMojo
         if ( ( clean == null ) && ( cleanScript != null ) )
         {
             clean = readFile( cleanScript );
+        }
+        if ( ( pretrans == null ) && ( pretransScript != null ) )
+        {
+        	pretrans = readFile( pretransScript );
+        }
+        if ( ( posttrans == null ) && ( posttransScript != null ) )
+        {
+        	posttrans = readFile( posttransScript );
         }
         if ( ( changelog == null ) && ( changelogFile != null ) )
         {
@@ -1775,6 +1819,18 @@ abstract class AbstractRPMMojo
             writer.println();
             writer.println( "%clean" );
             writer.println( clean );
+        }
+        if ( pretrans != null )
+        {
+            writer.println();
+            writer.println( "%pretrans" );
+            writer.println( pretrans );
+        }
+        if ( posttrans != null )
+        {
+            writer.println();
+            writer.println( "%posttrans" );
+            writer.println( posttrans );
         }
     }
 

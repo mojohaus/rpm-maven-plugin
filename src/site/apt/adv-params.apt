@@ -109,6 +109,16 @@ Advanced Parameters
 
   This script is run after the package is installed to clean up installation files.  It corresponds to the
   <<<%clean>>> tag in the spec file.
+  
+** <<<pretrans>>>
+
+  This script is run at the beginning of the transaction.  It corresponds to the <<<%pretrans>>> tag in 
+  the spec file.
+  
+** <<<posttrans>>>
+
+  This script is run at the end of the transaction.  It corresponds to the <<<%posttrans>>> tag in the spec
+  file.
 
 * {Signatures}
 
