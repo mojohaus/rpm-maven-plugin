@@ -128,7 +128,7 @@ public class Mapping
     }
 
     /**
-     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString() attribute string}
+     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String) attribute string}
      * (if and only if {@link #getSources() sources} make up everything that gets copied to the directory).<br/>
      * 
      * By default, this returns <code>true</code>.

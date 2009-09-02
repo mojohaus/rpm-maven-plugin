@@ -157,9 +157,29 @@
                             </sources>
                         </mapping>
                     </mappings>
-                    <preinstallScript>src/main/bin/preinstall.sh</preinstallScript>
-                    <postinstallScript>src/main/bin/postinstall.sh</postinstallScript>
-                    <preremoveScript>src/main/bin/preuninstall.sh</preremoveScript>
+                    <preinstallScriptlet>
+                        <!-- this is the default -->
+                        <program>/bin/sh</program>
+                        <scriptFile>src/main/bin/preinstall.sh</scriptFile>
+                        <fileEncoding>utf-8</fileEncoding>
+                    </preinstallScriptlet>
+                    <postinstallScriptlet>
+                        <scriptFile>src/main/bin/postinstall.sh</scriptFile>
+                        <fileEncoding>utf-8</fileEncoding>
+                    </postinstallScriptlet>
+                    <preremoveScriptlet>
+                        <scriptFile>src/main/bin/preuninstall.sh</scriptFile>
+                        <fileEncoding>utf-8</fileEncoding>
+                    </preremoveScriptlet>
+                    <triggers>
+                        <installTrigger>
+                            <script>echo "hello from install"</script>
+                            <triggers>
+                                <trigger>dependency</trigger>
+                                <trigger>dependency1</trigger>
+                            </triggers>
+                        </installTrigger>
+                    </triggers>
                     <requires>
                         <require>/bin/sh</require>
                         <require>jre &gt;= 1.5</require>

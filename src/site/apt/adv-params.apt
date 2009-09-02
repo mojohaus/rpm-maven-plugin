@@ -60,27 +60,28 @@ Advanced Parameters
 
   There are a number of scripts that can be included in the RPM package which
   are executed as part of the installation, removal, or verification of the
-  package.  For each of these scripts, there are two plugin parameters:  one
-  with the script ID (for example, "<<<preinstall>>>") which holds the actual
-  script, and one with the script ID followed by "<<<Script>>>" (for example,
-  "<<<preinstallScript>>>") which has the name of the file containing the
-  script.  If both parameters are specified for a script, the external file
-  will be ignored.  Before writing scripts for RPM packages, understand the
+  package.  
+  
+  Each of the scripts can be configured as a 
+  {{{apidocs/org/codehaus/mojo/rpm/Scriptlet.html}Scriptlet}}, which allows
+  the content of the script to be provided either as a String or File. If 
+  both parameters are specified for a script, the external file will be 
+  ignored.  Before writing scripts for RPM packages, understand the
   {{{http://www.rpm.org/max-rpm/s1-rpm-inside-scripts.html}script docs}} in
   Maximum RPM since the operation of the scripts must be done correctly or
   major problems can occur while installing or removing the package.
 
-** <<<prepare>>>
+** <<<prepareScriptlet>>>
 
   This script specifies commands to prepare the build.  It corresponds to the
   <<<%prep>>> tag in the spec file.
   
-** <<<preinstall>>>
+** <<<preinstallScriptlet>>>
 
   This script is run before the package is installed.  It corresponds to the
   <<<%pre>>> tag in the spec file.
   
-** <<<install>>>
+** <<<installScriptlet>>>
 
   This script is run as a part of installing the package.  It corresponds to the
   <<<%install>>> tag in the spec file.
@@ -90,35 +91,43 @@ Advanced Parameters
   This script is run after the package is installed.  It corresponds to the
   <<<%post>>> tag in the spec file.
 
-** <<<preremove>>>
+** <<<preremoveScriptlet>>>
 
   This script is run before the package is removed.  It corresponds to the
   <<<%preun>>> tag in the spec file.
 
-** <<<postremove>>>
+** <<<postremoveScriptlet>>>
 
   This script is run after the package is removed.  It corresponds to the
   <<<%postun>>> tag in the spec file.
 
-** <<<verify>>>
+** <<<verifyScriptlet>>>
 
   This script is run when the package is being verified.  It corresponds to
   the <<<%verifyScript>>> tag in the spec file.
   
-** <<<clean>>>
+** <<<cleanScriptlet>>>
 
   This script is run after the package is installed to clean up installation files.  It corresponds to the
   <<<%clean>>> tag in the spec file.
   
-** <<<pretrans>>>
+** <<<pretransScriptlet>>>
 
   This script is run at the beginning of the transaction.  It corresponds to the <<<%pretrans>>> tag in 
   the spec file.
   
-** <<<posttrans>>>
+** <<<posttransScriptlet>>>
 
   This script is run at the end of the transaction.  It corresponds to the <<<%posttrans>>> tag in the spec
   file.
+  
+* {Triggers}
+
+  Triggers are scripts which can be included in an RPM package to execute based
+  on the action of other packages in a system. Before writing triggers for RPM 
+  packages, understand the {{{http://rpm.org/api/4.4.2.2/triggers.html}triggers}} in
+  the RPM documentation since the operation of the scripts must be done correctly or
+  major problems can occur while installing or removing other packages.
 
 * {Signatures}
 

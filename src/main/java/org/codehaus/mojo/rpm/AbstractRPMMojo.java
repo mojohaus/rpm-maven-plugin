@@ -304,6 +304,7 @@ abstract class AbstractRPMMojo
      * The prepare script.
      * 
      * @parameter
+     * @deprecated Use prepareScriplet
      */
     private String prepare;
     
@@ -311,13 +312,23 @@ abstract class AbstractRPMMojo
      * The location of the prepare script. A File which does not exist is ignored.
      * 
      * @parameter
+     * @deprecated Use prepareScriplet
      */
     private File prepareScript;
+    
+    /**
+     * The prepare scriptlet;
+     * 
+     * @paramater
+     * @since 2.0-beta-4
+     */
+    private Scriptlet prepareScriptlet;
 
     /**
      * The pre-installation script.
      * 
      * @parameter
+     * @deprecated Use preinstallScriplet
      */
     private String preinstall;
 
@@ -327,13 +338,23 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use preinstallScriplet
      */
     private File preinstallScript;
+    
+    /**
+     * The pre-installation scriptlet.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Scriptlet preinstallScriptlet;
 
     /**
      * The post-installation script.
      * 
      * @parameter
+     * @deprecated Use postinstallScriplet
      */
     private String postinstall;
 
@@ -343,8 +364,17 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use postinstallScriplet
      */
     private File postinstallScript;
+    
+    /**
+     * The post install scriptlet.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Scriptlet postinstallScriptlet;
 
     /**
      * The installation script.
@@ -352,6 +382,7 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use installScriplet
      */
     private String install;
 
@@ -361,13 +392,23 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use installScriplet
      */
     private File installScript;
+    
+    /**
+     * The installation scriptlet.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Scriptlet installScriptlet;
 
     /**
      * The pre-removal script.
      * 
      * @parameter
+     * @deprecated Use preremoveScriplet
      */
     private String preremove;
 
@@ -377,13 +418,23 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use preremoveScriplet
      */
     private File preremoveScript;
+    
+    /**
+     * The pre-removal scriptlet.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Scriptlet preremoveScriptlet;
     
     /**
      * The post-removal script.
      * 
      * @parameter
+     * @deprecated Use postremoveScriplet
      */
     private String postremove;
 
@@ -393,13 +444,23 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use postremoveScriplet
      */
     private File postremoveScript;
+    
+    /**
+     * The post-removal scriptlet.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Scriptlet postremoveScriptlet;
 
     /**
      * The verification script.
      * 
      * @parameter
+     * @deprecated Use verifyScriplet
      */
     private String verify;
 
@@ -409,13 +470,23 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use verifyScriplet
      */
     private File verifyScript;
+    
+    /**
+     * The verify scriptlet.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Scriptlet verifyScriptlet;
 
     /**
      * The clean script.
      * 
      * @parameter
+     * @deprecated Use cleanScriplet
      */
     private String clean;
 
@@ -425,26 +496,25 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      * @parameter
+     * @deprecated Use cleanScriplet
      */
     private File cleanScript;
-
+    
     /**
-     * The pretrans script.
+     * The clean scriptlet.
      * 
      * @parameter
      * @since 2.0-beta-4
      */
-    private String pretrans;
+    private Scriptlet cleanScriptlet;
 
     /**
-     * The location of the pretrans script.
-     * <p>
-     * A File which does not exist is ignored.
-     * </p>
+     * The pretrans scriptlet.
+     * 
      * @parameter
      * @since 2.0-beta-4
      */
-    private File pretransScript;
+    private Scriptlet pretransScriptlet;
 
     /**
      * The posttrans script.
@@ -452,17 +522,37 @@ abstract class AbstractRPMMojo
      * @parameter
      * @since 2.0-beta-4
      */
-    private String posttrans;
-
+    private Scriptlet posttransScriptlet;
+    
     /**
-     * The location of the posttrans script.
-     * <p>
-     * A File which does not exist is ignored.
-     * </p>
+     * The list of triggers to take place on installation of other packages.
+     * <pre>
+     *  &lt;triggers>
+     *      &lt;installTrigger>
+     *          &lt;subpackage>optional&lt;/subpackage>
+     *          &lt;program>program to execute (if not shell) optional&lt;/program>
+     *          &lt;script>actual contents of script - optional&lt;/script>
+     *          &lt;scriptFile>location of file containing script - optional&lt;/script>
+     *          &lt;fileEncoding>character encoding for script file - recommended&lt;/fileEncoding>
+     *          &lt;triggers>
+     *              &lt;trigger>package/version to trigger on (i.e. jre > 1.5)&lt;/trigger>
+     *              ...
+     *          &lt;/triggers>
+     *      &lt;/installTrigger>
+     *      &lt;removeTrigger>
+     *          ...
+     *      &lt;/removeTrigger>
+     *      &lt;postRemoveTrigger>
+     *          ...
+     *      &lt;/postRemoveTrigger>
+     *      ...
+     *  &lt;/triggers>
+     * </pre>
      * @parameter
      * @since 2.0-beta-4
+     * @see BaseTrigger
      */
-    private File posttransScript;
+    private List/*<Trigger>*/ triggers;
 
     /**
      * A Plexus component to copy files and directories.
@@ -875,8 +965,7 @@ abstract class AbstractRPMMojo
                 log.debug( "Release set to: " + modifier );
             }
         }
-        
-        
+
         // evaluate needarch and populate targetArch
         if ( needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase( needarch ) )
         {
@@ -891,14 +980,14 @@ abstract class AbstractRPMMojo
             targetArch = needarch;
         }
         log.debug( "targetArch = " + targetArch );
-        
-        //provide default targetOS if value not given
+
+        // provide default targetOS if value not given
         if ( targetOS == null || targetOS.length() == 0 )
         {
             targetOS = Os.OS_NAME;
         }
         log.debug( "targetOS = " + targetOS );
-        
+
         if ( targetVendor == null || targetVendor.length() == 0 )
         {
             targetVendor = getHostVendor();
@@ -926,51 +1015,61 @@ abstract class AbstractRPMMojo
             }
         }
 
-        // Collect the scripts, if necessary
-        if ( ( prepare == null ) && ( prepareScript != null ) )
-        {
-            prepare = readFile( prepareScript );
-        }
-        if ( ( preinstall == null ) && ( preinstallScript != null ) )
-        {
-            preinstall = readFile( preinstallScript );
-        }
-        if ( ( install == null ) && ( installScript != null ) )
-        {
-            install = readFile( installScript );
-        }
-        if ( ( postinstall == null ) && ( postinstallScript != null ) )
-        {
-            postinstall = readFile( postinstallScript );
-        }
-        if ( ( preremove == null ) && ( preremoveScript != null ) )
-        {
-            preremove = readFile( preremoveScript );
-        }
-        if ( ( postremove == null ) && ( postremoveScript != null ) )
-        {
-            postremove = readFile( postremoveScript );
-        }
-        if ( ( verify == null ) && ( verifyScript != null ) )
-        {
-            verify = readFile( verifyScript );
-        }
-        if ( ( clean == null ) && ( cleanScript != null ) )
-        {
-            clean = readFile( cleanScript );
-        }
-        if ( ( pretrans == null ) && ( pretransScript != null ) )
-        {
-            pretrans = readFile( pretransScript );
-        }
-        if ( ( posttrans == null ) && ( posttransScript != null ) )
-        {
-            posttrans = readFile( posttransScript );
-        }
+        prepareScriptlet = passiveScripts( "prepare", prepareScriptlet, prepare, prepareScript );
+        preinstallScriptlet = passiveScripts( "preinstall", preinstallScriptlet, preinstall, preinstallScript );
+        installScriptlet = passiveScripts( "install", installScriptlet, install, installScript );
+        postinstallScriptlet = passiveScripts( "postinstall", postinstallScriptlet, postinstall, postinstallScript );
+        preremoveScriptlet = passiveScripts( "preremove", preremoveScriptlet, preremove, preremoveScript );
+        postremoveScriptlet = passiveScripts( "postremove", postremoveScriptlet, postremove, postremoveScript );
+        verifyScriptlet = passiveScripts( "verify", verifyScriptlet, verify, verifyScript );
+        cleanScriptlet = passiveScripts( "clean", cleanScriptlet, clean, cleanScript );
+
         if ( ( changelog == null ) && ( changelogFile != null ) )
         {
-            changelog = readFile( changelogFile );
+            if ( !changelogFile.exists() )
+            {
+                log.debug( changelogFile.getAbsolutePath() + " does not exist - ignoring" );
+            }
+            else
+            {
+                try
+                {
+                    StringBuffer sb = new StringBuffer();
+                    BufferedReader br = new BufferedReader( new FileReader( changelogFile ) );
+                    while ( br.ready() )
+                    {
+                        String line = br.readLine();
+                        sb.append( line );
+                        sb.append( '\n' );
+                    }
+                    br.close();
+                    changelog = sb.toString();
+                }
+                catch ( Throwable t )
+                {
+                    throw new MojoExecutionException( "Unable to read " + changelogFile.getAbsolutePath(), t );
+                }
+            }
         }
+    }
+
+    /**
+     * Handles the <i>scriptlet</i> and corresponding deprecated <i>script</i> and <i>file</i>. Will return a
+     * {@link Scriptlet} representing the coalesced stated.
+     */
+    private final Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, final File file )
+    {
+        if ( scriptlet != null && ( script != null || file != null ) )
+        {
+            scriptlet = new Scriptlet();
+            scriptlet.setScript( script );
+            scriptlet.setScriptFile( file );
+            getLog().warn(
+                           "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
+                               + "prepareScriptlet>" );
+        }
+
+        return scriptlet;
     }
 
     /**
@@ -1345,41 +1444,6 @@ abstract class AbstractRPMMojo
     }
 
     /**
-     * Read a file into a string.
-     * 
-     * @param in The file to read
-     * @return The file contents
-     * @throws MojoExecutionException if an error occurs reading the file
-     */
-    private String readFile( File in )
-        throws MojoExecutionException
-    {
-        if ( !in.exists() )
-        {
-            getLog().debug( in.getAbsolutePath() + " does not exist - ignoring" );
-            return null;
-        }
-        
-        try
-        {
-            StringBuffer sb = new StringBuffer();
-            BufferedReader br = new BufferedReader( new FileReader( in ) );
-            while ( br.ready() )
-            {
-                String line = br.readLine();
-                sb.append( line );
-                sb.append( '\n' );
-            }
-            br.close();
-            return sb.toString();
-        }
-        catch ( Throwable t )
-        {
-            throw new MojoExecutionException( "Unable to read " + in.getAbsolutePath(), t );
-        }
-    }
-
-    /**
      * Make a list of the artifacts to package in this mapping.
      * 
      * @param am The artifact mapping information
@@ -1614,14 +1678,18 @@ abstract class AbstractRPMMojo
                 }
             }
 
-            if ( install != null )
+            if ( installScriptlet != null )
             {
                 if ( !printedInstall )
                 {
-                    spec.println();
-                    spec.println( "%install" );
+                    installScriptlet.write( spec, "%install" );
                 }
-                spec.println( install );
+                else
+                {
+                    spec.println();
+
+                    installScriptlet.writeContent( spec );
+                }
             }
 
             spec.println();
@@ -1696,6 +1764,9 @@ abstract class AbstractRPMMojo
             }
 
             printScripts( spec );
+            
+            printTriggers( spec );
+            
             printChangelog( spec );
             spec.close();
         }
@@ -1804,60 +1875,67 @@ abstract class AbstractRPMMojo
      * @param writer to print script tags to
      */
     private void printScripts( PrintWriter writer )
+        throws IOException
     {
-        if ( prepare != null )
+        if ( prepareScriptlet != null )
         {
-            writer.println();
-            writer.println( "%prep" );
-            writer.println( prepare );
+            prepareScriptlet.write( writer, "%prep" );
         }
-        if ( preinstall != null )
+
+        if ( pretransScriptlet != null )
         {
-            writer.println();
-            writer.println( "%pre" );
-            writer.println( preinstall );
+            pretransScriptlet.write( writer, "%pretrans" );
         }
-        if ( postinstall != null )
+
+        if ( preinstallScriptlet != null )
         {
-            writer.println();
-            writer.println( "%post" );
-            writer.println( postinstall );
+            preinstallScriptlet.write( writer, "%pre" );
         }
-        if ( preremove != null )
+
+        if ( postinstallScriptlet != null )
         {
-            writer.println();
-            writer.println( "%preun" );
-            writer.println( preremove );
+            postinstallScriptlet.write( writer, "%post" );
         }
-        if ( postremove != null )
+
+        if ( preremoveScriptlet != null )
         {
-            writer.println();
-            writer.println( "%postun" );
-            writer.println( postremove );
+            preremoveScriptlet.write( writer, "%preun" );
         }
-        if ( verify != null )
+
+        if ( postremoveScriptlet != null )
         {
-            writer.println();
-            writer.println( "%verifyscript" );
-            writer.println( verify );
+            postremoveScriptlet.write( writer, "%postun" );
         }
-        if ( clean != null )
+
+        if ( posttransScriptlet != null )
         {
-            writer.println();
-            writer.println( "%clean" );
-            writer.println( clean );
+            posttransScriptlet.write( writer, "%posttrans" );
         }
-        if ( pretrans != null )
+
+        if ( verifyScriptlet != null )
         {
-            writer.println();
-            writer.println( "%pretrans" );
-            writer.println( pretrans );
+            verifyScriptlet.write( writer, "%verifyscript" );
         }
-        if ( posttrans != null )
+
+        if ( cleanScriptlet != null )
         {
-            writer.println();
-            writer.println( "%posttrans" );
-            writer.println( posttrans );
+            cleanScriptlet.write( writer, "%clean" );
+        }
+    }
+    
+    /**
+     * Writes the trigger directives.
+     */
+    private void printTriggers( final PrintWriter writer )
+        throws IOException
+    {
+        if ( triggers != null )
+        {
+            for ( Iterator i = triggers.iterator(); i.hasNext(); )
+            {
+                BaseTrigger trigger = (BaseTrigger) i.next();
+                trigger.writeTrigger( writer );
+            }
         }
     }
 

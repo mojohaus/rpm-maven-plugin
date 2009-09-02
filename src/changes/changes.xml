@@ -104,6 +104,13 @@
         <action dev="bokken" type="add" issue="MRPM-36" system="jira">
             Add support for "prep" section.
         </action>
+        <action dev="bokken" type="add" issue="MRPM-39" system="jira">
+            Add support for triggers.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-40" system="jira">
+            Add support the the special flag '-p' for the scriptlet sections. 
+            This lead to deprecating the existing configuration for all scripts. 
+        </action>
         <action dev="bokken" type="add" issue="MRPM-41" system="jira">
             Add support for the %pretrans and %posttrans scriptlets.
         </action>
