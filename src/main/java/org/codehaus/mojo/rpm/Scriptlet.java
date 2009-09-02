@@ -222,4 +222,25 @@ public class Scriptlet
             }
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String toString()
+    {
+        StringBuilder buffer = new StringBuilder( 64 );
+        buffer.append( "Scriptlet[" );
+        buffer.append( "subpackage=" );
+        buffer.append( subpackage );
+        buffer.append( ",program=" );
+        buffer.append( program );
+        buffer.append( ",script=" );
+        buffer.append( script );
+        buffer.append( ",scriptFile=" );
+        buffer.append( scriptFile );
+        buffer.append( ",fileEncoding=" );
+        buffer.append( fileEncoding );
+        buffer.append( "]" );
+        return buffer.toString();
+    }
 }

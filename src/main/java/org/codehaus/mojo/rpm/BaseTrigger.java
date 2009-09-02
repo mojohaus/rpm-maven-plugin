@@ -1,8 +1,5 @@
 package org.codehaus.mojo.rpm;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,10 +19,13 @@ import java.io.PrintWriter;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * A base class to support <a href="http://rpm.org/api/4.4.2.2/triggers.html">triggers</a>.
  * 
- * @author Brett Okken
+ * @author Brett Okken, Cerner Corporation
  * @version $Id$
  * @since 2.0-beta-4
  */
@@ -83,20 +83,47 @@ public abstract class BaseTrigger
 
         return builder.toString();
     }
-    
+
     /**
      * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String)}.
+     * 
      * @param writer
      * @throws IOException
      */
-    protected void writeTrigger( PrintWriter writer ) throws IOException
+    protected void writeTrigger( PrintWriter writer )
+        throws IOException
     {
         write( writer, getDirective() );
     }
-    
+
     /**
      * Provides the trigger specific directive.
+     * 
      * @return The implementation specific directive.
      */
     protected abstract String getDirective();
+
+    /**
+     * {@inheritDoc}
+     */
+    public String toString()
+    {
+        StringBuilder buffer = new StringBuilder( 128 );
+        buffer.append( getClass().getSimpleName() );
+        buffer.append( '[' );
+        buffer.append( "subpackage=" );
+        buffer.append( getSubpackage() );
+        buffer.append( ",program=" );
+        buffer.append( getProgram() );
+        buffer.append( ",script=" );
+        buffer.append( getScript() );
+        buffer.append( ",scriptFile=" );
+        buffer.append( getScriptFile() );
+        buffer.append( ",fileEncoding=" );
+        buffer.append( getFileEncoding() );
+        buffer.append( ",triggers=" );
+        buffer.append( triggers );
+        buffer.append( "]" );
+        return buffer.toString();
+    }
 }
