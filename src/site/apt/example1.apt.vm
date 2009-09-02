@@ -136,8 +136,14 @@ This is a sample using trash collection as an example.
                             <groupname>dumpgroup</groupname>
                         </mapping>
                     </mappings>
-                    <postinstallScript>src/main/scripts/postinstall</postinstallScript>
-                    <preremoveScript>src/main/scripts/preremove</preremoveScript>
+                    <postinstallScriptlet>
+                        <scriptFile>src/main/scripts/postinstall</scriptFile>
+                        <fileEncoding>utf-8</fileEncoding>
+                    </postinstallScriptlet>
+                    <preremoveScriptlet>
+                        <scriptFile>src/main/scripts/preremove</scriptFile>
+                        <fileEncoding>utf-8</fileEncoding>
+                    </preremoveScript>
                 </configuration>
             </plugin>
         </plugins>
