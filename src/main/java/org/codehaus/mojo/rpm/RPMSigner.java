@@ -34,7 +34,7 @@ import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
- * Utility that uses <a href="">expect</a> to sign rpms automatically (no user interaction).
+ * Utility that uses <a href="http://expect.nist.gov/">expect</a> to sign rpms automatically (no user interaction).
  * 
  * @author Brett Okken, Cerner Corporation
  * @version $Id$
