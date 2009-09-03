@@ -162,12 +162,21 @@ abstract class AbstractRPMMojo
     private String targetVendor;
 
     /**
-     * Set to a key name to sign the package using GPG. Note that due to RPM limitations, this always requires input
-     * from the terminal even if the key has no passphrase.
+     * Set to a key name to sign the package using GPG. If <i>keyPassphrase</i> is not also provided, this will require
+     * the input of the passphrase at the terminal.
      * 
      * @parameter expression="${gpg.keyname}"
      */
     private String keyname;
+
+    /**
+     * The passphrase for the <i>keyname</i> to sign the rpm. This utilizes <a href="http://expect.nist.gov/">expect</a>
+     * and requires that {@code expect} be on the PATH.
+     * 
+     * @parameter
+     * @since 2.0-beta-4
+     */
+    private Passphrase keyPassphrase;
 
     /**
      * The long description of the package.
@@ -658,68 +667,6 @@ abstract class AbstractRPMMojo
      */
     private File changelogFile;
 
-    // // // Consumers for rpmbuild output
-
-    /**
-     * Consumer to receive lines sent to stdout. The lines are logged as info.
-     */
-    private class StdoutConsumer
-        implements StreamConsumer
-    {
-        /** Logger to receive the lines. */
-        private Log logger;
-
-        /**
-         * Constructor.
-         * 
-         * @param log The logger to receive the lines
-         */
-        public StdoutConsumer( Log log )
-        {
-            logger = log;
-        }
-
-        /**
-         * Consume a line.
-         * 
-         * @param string The line to consume
-         */
-        public void consumeLine( String string )
-        {
-            logger.info( string );
-        }
-    }
-
-    /**
-     * Consumer to receive lines sent to stderr. The lines are logged as warnings.
-     */
-    private class StderrConsumer
-        implements StreamConsumer
-    {
-        /** Logger to receive the lines. */
-        private Log logger;
-
-        /**
-         * Constructor.
-         * 
-         * @param log The logger to receive the lines
-         */
-        public StderrConsumer( Log log )
-        {
-            logger = log;
-        }
-
-        /**
-         * Consume a line.
-         * 
-         * @param string The line to consume
-         */
-        public void consumeLine( String string )
-        {
-            logger.warn( string );
-        }
-    }
-
     // // // Mojo methods
 
     /** {@inheritDoc} */
@@ -781,8 +728,6 @@ abstract class AbstractRPMMojo
         
         return new File( archDir, name + '-' + version + '-' + release + '.' + targetArch + ".rpm" );
     }
-
-    // // // Internal methods
     
     /**
      * Gets the default host vendor for system by executing <i>rpm -E %{_host_vendor}</i>.
@@ -795,7 +740,7 @@ abstract class AbstractRPMMojo
         cl.addArguments( new String[] { "-E", "%{_host_vendor}" } );
 
         StringStreamConsumer stdout = new StringStreamConsumer();
-        StreamConsumer stderr = new StderrConsumer( getLog() );
+        StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, getLog() );
         try
         {
             if ( getLog().isDebugEnabled() )
@@ -831,23 +776,26 @@ abstract class AbstractRPMMojo
         Commandline cl = new Commandline();
         cl.setExecutable( "rpmbuild" );
         cl.setWorkingDirectory( f.getAbsolutePath() );
-        cl.createArgument().setValue( "-bb" );
-        cl.createArgument().setValue( "--buildroot" );
-        cl.createArgument().setValue( buildroot.getAbsolutePath() );
-        cl.createArgument().setValue( "--define" );
-        cl.createArgument().setValue( "_topdir " + workarea.getAbsolutePath() );
-        cl.createArgument().setValue( "--target" );
-        cl.createArgument().setValue( targetArch + '-' + targetVendor + '-' + targetOS );
-        if ( keyname != null )
+        cl.createArg().setValue( "-bb" );
+        cl.createArg().setValue( "--buildroot" );
+        cl.createArg().setValue( buildroot.getAbsolutePath() );
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_topdir " + workarea.getAbsolutePath() );
+        cl.createArg().setValue( "--target" );
+        cl.createArg().setValue( targetArch + '-' + targetVendor + '-' + targetOS );
+        
+        //maintain passive behavior for keyPassphrase not being present
+        if ( keyname != null && keyPassphrase == null )
         {
-            cl.createArgument().setValue( "--define" );
-            cl.createArgument().setValue( "_gpg_name " + keyname );
-            cl.createArgument().setValue( "--sign" );
+            cl.createArg().setValue( "--define" );
+            cl.createArg().setValue( "_gpg_name " + keyname );
+            cl.createArg().setValue( "--sign" );
         }
-        cl.createArgument().setValue( name + ".spec" );
+        
+        cl.createArg().setValue( name + ".spec" );
 
-        StreamConsumer stdout = new StdoutConsumer( getLog() );
-        StreamConsumer stderr = new StderrConsumer( getLog() );
+        StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, getLog() );
+        StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, getLog() );
         try
         {
             if ( getLog().isDebugEnabled() )
@@ -865,6 +813,21 @@ abstract class AbstractRPMMojo
         catch ( CommandLineException e )
         {
             throw new MojoExecutionException( "Unable to build the RPM", e );
+        }
+
+        // now if the passphrase has been provided and we want to try and sign automatically
+        if ( keyname != null && keyPassphrase != null )
+        {
+            RPMSigner signer = new RPMSigner( keyname, keyPassphrase.getPassphrase(), getLog() );
+
+            try
+            {
+                signer.sign( getRPMFile() );
+            }
+            catch ( Exception e )
+            {
+                throw new MojoExecutionException( "Unable to sign RPM", e );
+            }
         }
     }
 
@@ -1765,7 +1728,14 @@ abstract class AbstractRPMMojo
 
             printScripts( spec );
             
-            printTriggers( spec );
+            if ( triggers != null )
+            {
+                for ( Iterator i = triggers.iterator(); i.hasNext(); )
+                {
+                    BaseTrigger trigger = (BaseTrigger) i.next();
+                    trigger.writeTrigger( spec );
+                }
+            }
             
             printChangelog( spec );
             spec.close();
@@ -1878,65 +1848,31 @@ abstract class AbstractRPMMojo
         throws IOException
     {
         if ( prepareScriptlet != null )
-        {
             prepareScriptlet.write( writer, "%prep" );
-        }
 
         if ( pretransScriptlet != null )
-        {
             pretransScriptlet.write( writer, "%pretrans" );
-        }
 
         if ( preinstallScriptlet != null )
-        {
             preinstallScriptlet.write( writer, "%pre" );
-        }
 
         if ( postinstallScriptlet != null )
-        {
             postinstallScriptlet.write( writer, "%post" );
-        }
 
         if ( preremoveScriptlet != null )
-        {
             preremoveScriptlet.write( writer, "%preun" );
-        }
 
         if ( postremoveScriptlet != null )
-        {
             postremoveScriptlet.write( writer, "%postun" );
-        }
 
         if ( posttransScriptlet != null )
-        {
             posttransScriptlet.write( writer, "%posttrans" );
-        }
 
         if ( verifyScriptlet != null )
-        {
             verifyScriptlet.write( writer, "%verifyscript" );
-        }
 
         if ( cleanScriptlet != null )
-        {
             cleanScriptlet.write( writer, "%clean" );
-        }
-    }
-    
-    /**
-     * Writes the trigger directives.
-     */
-    private void printTriggers( final PrintWriter writer )
-        throws IOException
-    {
-        if ( triggers != null )
-        {
-            for ( Iterator i = triggers.iterator(); i.hasNext(); )
-            {
-                BaseTrigger trigger = (BaseTrigger) i.next();
-                trigger.writeTrigger( writer );
-            }
-        }
     }
 
     /**
@@ -1975,14 +1911,7 @@ abstract class AbstractRPMMojo
         }
         else
         {
-            if ( year == null )
-            {
-                copyrightText = organization;
-            }
-            else
-            {
-                copyrightText = year;
-            }
+            copyrightText = year == null ? organization : year;
         }
         return copyrightText;
     }

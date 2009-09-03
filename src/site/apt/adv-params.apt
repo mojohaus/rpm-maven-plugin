@@ -140,3 +140,9 @@ Advanced Parameters
   package, and also turns on the signature.  Setting this parameter is
   equivalent to defining the <<<%_gpg_name>>> macro and adding the
   <<<--sign>>> option to <<<rpmbuild>>>.
+  
+** <<<keyPassphrase>>>
+
+  This parameter sets the passphrase for the key to sign the rpm. The use of this
+  attribute requires {{{http://expect.nist.gov/}expect}} to be available on the
+  PATH.
