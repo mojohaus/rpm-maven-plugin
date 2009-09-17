@@ -41,5 +41,16 @@ under the License.
         </p>
       </answer>
     </faq>
+    <faq id="multiple rpms">
+        <question>How can I provide multiple rpms (i.e. different architectures) from one project (pom)?</question>
+        <answer>
+            <p>
+                Set the <i>packaging</i> type to <i>pom</i> and use multiple executions
+                of the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.<br/>
+                In each execution, you need to define a unique
+                <a href="attached-rpm-mojo.html#classifier">classifier</a>.
+            </p>
+        </answer>
+    </faq>
   </part>
 </faqs>
