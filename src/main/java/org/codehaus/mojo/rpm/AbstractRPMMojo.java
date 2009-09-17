@@ -255,7 +255,23 @@ abstract class AbstractRPMMojo
      * @parameter
      */
     private List requires;
+
+    /**
+     * Automatically add provided shared libraries.
+     *
+     * @parameter default-value="true"
+     * @since 2.0-beta-4
+     */
+    private boolean autoProvides;
     
+    /**
+     * Automatically add requirements deduced from included shared libraries.
+     *
+     * @parameter default-value="true"
+     * @since 2.0-beta-4
+     */
+    private boolean autoRequires;
+
     /**
      * The list of prerequisites for this package.
      * 
@@ -1541,6 +1557,10 @@ abstract class AbstractRPMMojo
             writeList( spec, prereqs, "PreReq: " );
             writeList( spec, obsoletes, "Obsoletes: " );
             writeList( spec, conflicts, "Conflicts: " );
+
+            spec.println( "autoprov: " + ( autoProvides ? "yes" : "no" ) );
+            spec.println( "autoreq: " + ( autoRequires ? "yes" : "no" ) ); 
+
             if ( prefix != null )
             {
                 spec.println( "Prefix: " + prefix );

@@ -123,6 +123,9 @@
         <action dev="bokken" type="add" issue="MRPM-45" system="jira">
             Add ability to sign rpms without user interaction.
         </action>
+        <action dev="bokken" type="add" issue="MRPM-48" system="jira">
+            Add suport for autoreq and autoprov tags.
+        </action>
     </release>
   </body>
 </document>
