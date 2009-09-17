@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -66,8 +67,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
  * @author Brett Okken, Cerner Corp.
  * @version $Id$
  */
-abstract class AbstractRPMMojo
-    extends AbstractMojo
+abstract class AbstractRPMMojo extends AbstractMojo
 {
 
     /**
@@ -243,20 +243,6 @@ abstract class AbstractRPMMojo
     private String packager;
 
     /**
-     * The list of virtual packages provided by this package.
-     * 
-     * @parameter
-     */
-    private List provides;
-
-    /**
-     * The list of requirements for this package.
-     * 
-     * @parameter
-     */
-    private List requires;
-
-    /**
      * Automatically add provided shared libraries.
      *
      * @parameter default-value="true"
@@ -273,12 +259,26 @@ abstract class AbstractRPMMojo
     private boolean autoRequires;
 
     /**
+     * The list of virtual packages provided by this package.
+     * 
+     * @parameter
+     */
+    private LinkedHashSet provides;
+
+    /**
+     * The list of requirements for this package.
+     * 
+     * @parameter
+     */
+    private LinkedHashSet requires;
+
+    /**
      * The list of prerequisites for this package.
      * 
      * @since 2.0-beta-3
      * @parameter
      */
-    private List prereqs;
+    private LinkedHashSet prereqs;
     
     /**
      * The list of obsoletes for this package.
@@ -286,14 +286,14 @@ abstract class AbstractRPMMojo
      * @since 2.0-beta-3
      * @parameter
      */
-    private List obsoletes;
+    private LinkedHashSet obsoletes;
 
     /**
      * The list of conflicts for this package.
      * 
      * @parameter
      */
-    private List conflicts;
+    private LinkedHashSet conflicts;
 
     /**
      * The relocation prefix for this package.
@@ -686,8 +686,7 @@ abstract class AbstractRPMMojo
     // // // Mojo methods
 
     /** {@inheritDoc} */
-    public final void execute()
-        throws MojoExecutionException, MojoFailureException
+    public final void execute() throws MojoExecutionException, MojoFailureException
     {        
         checkParams();
         
@@ -748,8 +747,7 @@ abstract class AbstractRPMMojo
     /**
      * Gets the default host vendor for system by executing <i>rpm -E %{_host_vendor}</i>.
      */
-    private String getHostVendor()
-        throws MojoExecutionException
+    private String getHostVendor() throws MojoExecutionException
     {
         Commandline cl = new Commandline();
         cl.setExecutable( "rpm" );
@@ -784,8 +782,7 @@ abstract class AbstractRPMMojo
      * 
      * @throws MojoExecutionException if an error occurs
      */
-    private void buildPackage()
-        throws MojoExecutionException
+    private void buildPackage() throws MojoExecutionException
     {
         File f = new File( workarea, "SPECS" );
 
@@ -852,8 +849,7 @@ abstract class AbstractRPMMojo
      * 
      * @throws MojoFailureException if a directory cannot be built
      */
-    private void buildWorkArea()
-        throws MojoFailureException
+    private void buildWorkArea() throws MojoFailureException
     {
         final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS" };
 
@@ -898,8 +894,7 @@ abstract class AbstractRPMMojo
      * @throws MojoFailureException if an invalid parameter is found
      * @throws MojoExecutionException if an error occurs reading a script
      */
-    private void checkParams()
-        throws MojoExecutionException, MojoFailureException
+    private void checkParams() throws MojoExecutionException, MojoFailureException
     {
         Log log = getLog();
         log.debug( "project version = " + projversion );
@@ -1043,8 +1038,7 @@ abstract class AbstractRPMMojo
             scriptlet = new Scriptlet();
             scriptlet.setScript( script );
             scriptlet.setScriptFile( file );
-            getLog().warn(
-                           "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
+            getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
                                + "prepareScriptlet>" );
         }
 
@@ -1060,8 +1054,7 @@ abstract class AbstractRPMMojo
      * @return Artifact file name
      * @throws MojoExecutionException if a problem occurs
      */
-    private String copyArtifact( Artifact art, File dest, boolean stripVersion )
-        throws MojoExecutionException
+    private String copyArtifact( Artifact art, File dest, boolean stripVersion ) throws MojoExecutionException
     {
         if ( art.getFile() == null )
         {
@@ -1104,8 +1097,7 @@ abstract class AbstractRPMMojo
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List copySource( File src, String srcName, File dest, List incl, List excl )
-        throws MojoExecutionException
+    private List copySource( File src, String srcName, File dest, List incl, List excl ) throws MojoExecutionException
     {
         try
         {
@@ -1213,8 +1205,7 @@ abstract class AbstractRPMMojo
      * @throws MojoExecutionException if a problem occurs
      * @throws MojoFailureException 
      */
-    private void installFiles()
-        throws MojoExecutionException, MojoFailureException
+    private void installFiles() throws MojoExecutionException, MojoFailureException
     {
         // Copy icon, if specified
         if ( icon != null )
@@ -1294,8 +1285,7 @@ abstract class AbstractRPMMojo
      * @throws MojoExecutionException
      * @throws MojoFailureException 
      */
-    private void processSources( Mapping map, File dest )
-        throws MojoExecutionException, MojoFailureException
+    private void processSources( Mapping map, File dest ) throws MojoExecutionException, MojoFailureException
     {
         if ( !dest.exists() )
         {
@@ -1498,8 +1488,7 @@ abstract class AbstractRPMMojo
      * 
      * @throws MojoExecutionException if an error occurs writing the file
      */
-    private void writeSpecFile()
-        throws MojoExecutionException
+    private void writeSpecFile() throws MojoExecutionException
     {
         File f = new File( workarea, "SPECS" );
         File specf = new File( f, name + ".spec" );
@@ -1552,6 +1541,20 @@ abstract class AbstractRPMMojo
             {
                 spec.println( "Packager: " + packager );
             }
+            
+            // if this package obsoletes any packages, make sure those packages are added to the provides list
+            if (obsoletes != null)
+            {
+                if (provides == null)
+                {
+                    provides = obsoletes;
+                }
+                else
+                {
+                    provides.addAll( obsoletes );
+                }
+            }
+            
             writeList( spec, provides, "Provides: " );
             writeList( spec, requires, "Requires: " );
             writeList( spec, prereqs, "PreReq: " );
@@ -1864,8 +1867,7 @@ abstract class AbstractRPMMojo
      * 
      * @param writer to print script tags to
      */
-    private void printScripts( PrintWriter writer )
-        throws IOException
+    private void printScripts( PrintWriter writer ) throws IOException
     {
         if ( prepareScriptlet != null )
             prepareScriptlet.write( writer, "%prep" );
@@ -1902,7 +1904,7 @@ abstract class AbstractRPMMojo
      * @param strings <tt>List</tt> of <tt>String</tt>s to write.
      * @param prefix Prefix to write on each line before the string.
      */
-    private static void writeList( PrintWriter writer, List strings, String prefix )
+    private static void writeList( PrintWriter writer, Collection strings, String prefix )
     {
         if ( strings != null )
         {
@@ -1989,5 +1991,4 @@ abstract class AbstractRPMMojo
 
         return sb.toString();
     }
-
 }

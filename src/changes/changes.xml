@@ -126,6 +126,9 @@
         <action dev="bokken" type="add" issue="MRPM-48" system="jira">
             Add suport for autoreq and autoprov tags.
         </action>
+        <action dev="bokken" type="add" issue="MRPM-49" system="jira">
+            Packages being obsoleted should automatically be added to those provided.
+        </action>
     </release>
   </body>
 </document>
