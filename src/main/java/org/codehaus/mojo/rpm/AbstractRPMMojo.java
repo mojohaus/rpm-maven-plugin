@@ -1034,7 +1034,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
     private final Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, 
                                             final File file )
     {
-        if ( scriptlet != null && ( script != null || file != null ) )
+        if ( scriptlet == null && ( script != null || file != null ) )
         {
             scriptlet = new Scriptlet();
             scriptlet.setScript( script );
