@@ -1031,7 +1031,8 @@ abstract class AbstractRPMMojo extends AbstractMojo
      * Handles the <i>scriptlet</i> and corresponding deprecated <i>script</i> and <i>file</i>. Will return a
      * {@link Scriptlet} representing the coalesced stated.
      */
-    private final Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, final File file )
+    private final Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, 
+                                            final File file )
     {
         if ( scriptlet != null && ( script != null || file != null ) )
         {
@@ -1543,9 +1544,9 @@ abstract class AbstractRPMMojo extends AbstractMojo
             }
             
             // if this package obsoletes any packages, make sure those packages are added to the provides list
-            if (obsoletes != null)
+            if ( obsoletes != null )
             {
-                if (provides == null)
+                if ( provides == null )
                 {
                     provides = obsoletes;
                 }
