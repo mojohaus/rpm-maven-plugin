@@ -42,16 +42,27 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  */
 final class RPMSigner
 {
+    /**
+     * GPG name as defined in the rpm database.
+     */
     private final String gpgName;
 
+    /**
+     * The passphrase for the gpg key.
+     */
     private final char[] passphrase;
 
+    /**
+     * {@code Log} to log to.
+     */
     private final Log log;
 
     /**
-     * @param gpgName
-     * @param passphrase
-     * @param log
+     * Constructor takes all necessary attributes to sign an rpm.
+     * 
+     * @param gpgName The name of the gpg key in the rpm database.
+     * @param passphrase The passphrase for the gpg key.
+     * @param log Used for logging information in the signing process.
      */
     public RPMSigner( String gpgName, char[] passphrase, Log log )
     {
@@ -108,25 +119,25 @@ final class RPMSigner
     /**
      * Writes the expect "script".
      * 
-     * @param rpm file
-     * @return 
+     * @param rpm The rpm to sign.
+     * @return The expect script as a {@code byte[]}.
      * @throws IOException
      */
     private byte[] writeExpectScriptFile( final File rpm )
         throws IOException
     {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-        
-        final PrintWriter writer = new PrintWriter( new OutputStreamWriter(baos) );
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream( 512 );
+
+        final PrintWriter writer = new PrintWriter( new OutputStreamWriter( baos ) );
         try
         {
             writer.print( "spawn rpm --define \"_gpg_name " );
             writer.print( gpgName );
-            writer.print( "\" --addsign ");
+            writer.print( "\" --addsign " );
             writer.println( rpm.getName() );
             writer.println( "expect -exact \"Enter pass phrase: \"" );
-            writer.print( "send -- \"");
-            writer.print( new String(this.passphrase) );
+            writer.print( "send -- \"" );
+            writer.print( new String( this.passphrase ) );
             writer.println( "\r\"" );
             writer.println( "expect eof" );
             writer.println();

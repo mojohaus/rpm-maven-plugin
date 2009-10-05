@@ -1,8 +1,3 @@
-/**
- * $Id$
- * </p>
- * Created: Sep 2, 2009
- */
 package org.codehaus.mojo.rpm;
 
 /*
@@ -33,12 +28,15 @@ package org.codehaus.mojo.rpm;
  */
 public final class Passphrase
 {
+    /**
+     * The passphrase stored as a {@code char[]} to avoid being written to log in plain text.
+     */
     private char[] passphrase;
 
     /**
      * Sets the passphrase.
      * 
-     * @param passphrase
+     * @param passphrase The passphrase to set.
      */
     public void setPassphrase( String passphrase )
     {

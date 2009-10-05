@@ -128,12 +128,12 @@ public class Mapping
     }
 
     /**
-     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String) attribute string}
-     * (if and only if {@link #getSources() sources} make up everything that gets copied to the directory).<br/>
+     * Returns if the {@link #getDirectory()} should be used for the
+     * {@link #getAttrString(String, String, String) attribute string} (if and only if {@link #getSources() sources}
+     * make up everything that gets copied to the directory).<br/> By default, this returns <code>true</code>.
      * 
-     * By default, this returns <code>true</code>.
-     * @return Whether the {@link #getDirectory()} should be used for the 
-     * {@link #getAttrString(String, String, String) attribute string}.
+     * @return Whether the {@link #getDirectory()} should be used for the
+     *         {@link #getAttrString(String, String, String) attribute string}.
      */
     public boolean isDirectoryIncluded()
     {

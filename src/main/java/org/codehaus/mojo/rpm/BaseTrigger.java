@@ -32,6 +32,9 @@ import java.io.PrintWriter;
 public abstract class BaseTrigger
     extends Scriptlet
 {
+    /**
+     * List of triggers.
+     */
     private java.util.List/* <String> */triggers;
 
     /**
@@ -87,7 +90,7 @@ public abstract class BaseTrigger
     /**
      * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String)}.
      * 
-     * @param writer
+     * @param writer {@code PrintWriter} to write the trigger directive to.
      * @throws IOException
      */
     protected void writeTrigger( PrintWriter writer )

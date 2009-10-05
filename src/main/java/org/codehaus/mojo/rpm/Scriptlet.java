@@ -38,14 +38,34 @@ import java.io.Reader;
  */
 public class Scriptlet
 {
+    /**
+     * Optional subpackage.
+     * @see #getSubpackage() 
+     */
     private String subpackage;
 
+    /**
+     * Program to execute script.
+     * @see #getProgram()
+     */
     private String program;
 
+    /**
+     * Contents of the script. Mutually exclusive with {@link #scriptFile}.
+     * @see #getScript()
+     */
     private String script;
 
+    /**
+     * Script to execute. Mutually exclusive with {@link #script}.
+     * @see #getScriptFile()
+     */
     private File scriptFile;
 
+    /**
+     * Encoding of {@link #scriptFile}.
+     * @see #getFileEncoding().
+     */
     private String fileEncoding;
 
     /**
@@ -142,8 +162,8 @@ public class Scriptlet
     /**
      * Writes the scriptlet.
      * 
-     * @param writer
-     * @param directive
+     * @param writer {@code PrintWriter} to write content to.
+     * @param directive The directive for the scriptlet.
      * @throws IOException
      */
     protected final void write( final PrintWriter writer, final String directive )
@@ -161,7 +181,7 @@ public class Scriptlet
     /**
      * Builds the scriptlet line including any optional args.
      * 
-     * @param directive
+     * @param directive The directive for the scriptlet.
      * @return The scriptlet line - this does not include the script.
      */
     protected String buildScriptletLine( final String directive )
@@ -186,7 +206,7 @@ public class Scriptlet
     
     /**
      * Writes the content (either {@link #getScript()} or {@link #getScriptFile()}) to <i>writer</i>.
-     * @param writer
+     * @param writer {@code PrintWriter} to write content to.
      * @throws IOException
      */
     protected final void writeContent( PrintWriter writer ) throws IOException

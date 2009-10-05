@@ -215,7 +215,7 @@ public class Source
      * Indicates if the {@link #getTargetArchitecture()} matches the <i>archicture</i>.
      * 
      * @param architecture The target architecture for the rpm.
-     * @return if the target architecture matches the <i>archicture</i>.
+     * @return if the {@link #getTargetArchitecture()} {@link java.util.regex.Matcher#matches() matches} the <i>archicture</i>.
      */
     boolean matchesArchitecture( String architecture )
     {
@@ -246,6 +246,8 @@ public class Source
     
     /**
      * Indicates if the target OS name matches <i>osName</i>.
+     * @param osName The name of the os to match against the {@link #getTargetOSName()}.
+     * @return if {@link #getTargetOSName()} {@link java.util.regex.Matcher#matches() matches} <i>osName</i>.
      * @since 2.0-beta-3
      */
     boolean matchesOSName( String osName )
