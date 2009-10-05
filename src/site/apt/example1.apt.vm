@@ -102,7 +102,7 @@ This is a sample using trash collection as an example.
                                 </source>
                                 <softlinkSource>
                                     <location>/usr/local/bin/new.sh</location>
-                                    <destination>old.sh<destination>
+                                    <destination>old.sh</destination>
                                 </softlinkSource>
                             </sources>
                         </mapping>
