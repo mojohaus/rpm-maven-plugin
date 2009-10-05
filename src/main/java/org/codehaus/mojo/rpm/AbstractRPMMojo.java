@@ -1039,8 +1039,8 @@ abstract class AbstractRPMMojo extends AbstractMojo
             scriptlet = new Scriptlet();
             scriptlet.setScript( script );
             scriptlet.setScriptFile( file );
-            getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
-                               + "prepareScriptlet>" );
+            getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name 
+                           + "Scriptlet>" );
         }
 
         return scriptlet;
