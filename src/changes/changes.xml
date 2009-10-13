@@ -91,7 +91,7 @@
             Ignore rpm script files which do not exist.
         </action>
     </release>
-    <release version="2.0-beta-4">
+    <release version="2.0-beta-4" date="2009-10-13">
         <action dev="bokken" type="fix" issue="MRPM-34" system="jira">
             SoftlinkSources do not work correctly if the location exists on the build machine.
         </action>
