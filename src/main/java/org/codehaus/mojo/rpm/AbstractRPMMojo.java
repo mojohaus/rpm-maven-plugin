@@ -868,7 +868,20 @@ abstract class AbstractRPMMojo extends AbstractMojo
         for ( int i = 0; i < topdirs.length; i++ )
         {
             File d = new File( workarea, topdirs[i] );
-            if ( !d.exists() )
+            if ( d.exists() )
+            {
+                getLog().info( "Directory " + d.getAbsolutePath() + "already exists. Deleting all contents." );
+                
+                try
+                {
+                    FileUtils.cleanDirectory( d );
+                }
+                catch( IOException e )
+                {
+                    throw new MojoExecutionException( "Unable to clear directory: " + d.getName(), e );
+                }
+            }
+            else
             {
                 getLog().info( "Creating directory " + d.getAbsolutePath() );
                 if ( !d.mkdir() )
@@ -878,15 +891,8 @@ abstract class AbstractRPMMojo extends AbstractMojo
             }
         }
 
-        // Build the build root
+        // set build root variable
         buildroot = new File( workarea, "buildroot" );
-        if ( !buildroot.exists() )
-        {
-            if ( !buildroot.mkdirs() )
-            {
-                throw new MojoFailureException( "Unable to create directory: " + buildroot.getAbsolutePath() );
-            }
-        }
     }
 
     /**
