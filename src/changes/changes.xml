@@ -130,5 +130,10 @@
             Packages being obsoleted should automatically be added to those provided.
         </action>
     </release>
+    <release version="2.0">
+        <action dev="bokken" type="fix" issue="MRPM-55" system="jira">
+            Fix support of prepareScriptlet parameter. 
+        </action>
+    </release>
   </body>
 </document>

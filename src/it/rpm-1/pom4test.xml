@@ -157,6 +157,9 @@
                             </sources>
                         </mapping>
                     </mappings>
+                    <prepareScriptlet>
+                        <script>echo "hello from prepare"</script>
+                    </prepareScriptlet>
                     <preinstallScriptlet>
                         <!-- this is the default -->
                         <program>/bin/sh</program>

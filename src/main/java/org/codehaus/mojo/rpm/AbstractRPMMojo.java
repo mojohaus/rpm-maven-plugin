@@ -344,7 +344,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
     /**
      * The prepare scriptlet;
      * 
-     * @paramater
+     * @parameter
      * @since 2.0-beta-4
      */
     private Scriptlet prepareScriptlet;
@@ -848,10 +848,11 @@ abstract class AbstractRPMMojo extends AbstractMojo
      * Build the structure of the work area.
      * 
      * @throws MojoFailureException if a directory cannot be built
+     * @throws MojoExecutionException if buildroot cannot be cleared (if exists)
      */
-    private void buildWorkArea() throws MojoFailureException
+    private void buildWorkArea() throws MojoFailureException, MojoExecutionException
     {
-        final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS" };
+        final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS", "buildroot" };
 
         // Build the top directory
         if ( !workarea.exists() )
