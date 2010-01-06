@@ -30,7 +30,7 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-if (fileCnt != 11)
+if (fileCnt != 14)
     throw new java.lang.AssertionError("file count");
 
 boolean x86NameScript = false;

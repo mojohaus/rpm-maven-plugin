@@ -44,10 +44,10 @@ public class Dependency
     // // // Properties
 
     /** List of dependencies to include. */
-    private List includes;
+    private List/*Artifact*/ includes;
 
     /** List of dependencies to exclude. */
-    private List excludes;
+    private List/*Artifact*/ excludes;
     
     /**
      *  Strip version is false by default.
@@ -62,7 +62,7 @@ public class Dependency
      * 
      * @return The list of dependencies to include.
      */
-    public List getIncludes()
+    public List/*Artifact*/ getIncludes()
     {
         return includes;
     }
@@ -73,7 +73,7 @@ public class Dependency
      * @param incls The new list of dependencies to include.
      * @throws MojoExecutionException if the parse fails
      */
-    public void setIncludes( List incls )
+    public void setIncludes( List/*String*/ incls )
         throws MojoExecutionException
     {
         includes = parseList( incls );
@@ -84,7 +84,7 @@ public class Dependency
      * 
      * @return The list of dependencies to exclude.
      */
-    public List getExcludes()
+    public List/*Artifact*/ getExcludes()
     {
         return excludes;
     }
@@ -95,7 +95,7 @@ public class Dependency
      * @param excls The new list of dependencies to exclude.
      * @throws MojoExecutionException if the parse fails
      */
-    public void setExcludes( List excls )
+    public void setExcludes( List/*String*/ excls )
         throws MojoExecutionException
     {
         excludes = parseList( excls );
@@ -156,10 +156,10 @@ public class Dependency
      * @return A list of parsed artifact identifiers
      * @throws MojoExecutionException if the parse fails
      */
-    private List parseList( List in )
+    private List parseList( List/*Artifact*/ in )
         throws MojoExecutionException
     {
-        List retval = new ArrayList();
+        List/*Artifact*/ retval = new ArrayList();
 
         for ( Iterator it = in.iterator(); it.hasNext(); )
         {

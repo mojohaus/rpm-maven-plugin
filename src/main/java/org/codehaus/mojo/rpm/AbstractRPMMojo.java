@@ -1192,12 +1192,14 @@ abstract class AbstractRPMMojo extends AbstractMojo
 
         for ( Iterator it = list.iterator(); it.hasNext(); )
         {
-            Artifact item = (Artifact) it.next();
+            final Artifact item = (Artifact) it.next();
             getLog().debug( "Compare " + dep + " to " + item );
-            if ( StringUtils.isEmpty( item.getGroupId() ) || item.getGroupId().equals( dep.getGroupId() ) )
+            final String groupId = item.getGroupId();
+            if ( StringUtils.isEmpty( groupId ) || "*".equals( groupId ) || groupId.equals( dep.getGroupId() ) )
             {
                 getLog().debug( "... Group matches" );
-                if ( StringUtils.isEmpty( item.getArtifactId() ) || item.getArtifactId().equals( dep.getArtifactId() ) )
+                final String artifactId = item.getArtifactId();
+                if ( StringUtils.isEmpty( artifactId ) || "*".equals( artifactId ) || artifactId.equals( dep.getArtifactId() ) )
                 {
                     getLog().debug( "... Artifact matches" );
                     // ArtifactVersion av = item.getVersionRange().matchVersion( dep.getAvailableVersions() );
