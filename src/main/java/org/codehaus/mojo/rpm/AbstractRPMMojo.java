@@ -665,6 +665,14 @@ abstract class AbstractRPMMojo extends AbstractMojo
      * @since 2.0-beta-2
      */
     private String defaultGroupname;
+    
+    /**
+     * Indicates if the execution should be disabled. If <code>true</code>, nothing will occur during execution.
+     * 
+     * @parameter
+     * @since 2.0
+     */
+    private boolean disabled;
 
     /** The root of the build area. */
     private File buildroot;
@@ -687,7 +695,13 @@ abstract class AbstractRPMMojo extends AbstractMojo
 
     /** {@inheritDoc} */
     public final void execute() throws MojoExecutionException, MojoFailureException
-    {        
+    {
+        if ( disabled )
+        {
+            getLog().info( "MOJO is disabled. Doing nothing." );
+            return;
+        }
+        
         checkParams();
         
         final String classifier = getClassifier();

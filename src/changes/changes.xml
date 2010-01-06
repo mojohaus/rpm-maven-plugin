@@ -134,6 +134,9 @@
         <action dev="bokken" type="fix" issue="MRPM-55" system="jira">
             Fix support of prepareScriptlet parameter. 
         </action>
+        <action dev="bokken" type="add" issue="MRPM-52" system="jira">
+            Add ability to disable plugin by configuration. 
+        </action>
         <action dev="bokken" type="add" issue="MRPM-56" system="jira">
             Clear work area directories before each execution. 
         </action>
