@@ -3,6 +3,7 @@ import org.codehaus.mojo.unix.rpm.RpmUtil
 import org.codehaus.mojo.unix.rpm.RpmUtil.FileInfo
 import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile
 
+import java.io.*
 import java.util.List
 import java.util.Iterator
 
@@ -25,7 +26,7 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-success &= fileCnt == 13
+success &= fileCnt == 14
 
 boolean nameScript = false;
 boolean osNameScript = false;
@@ -85,5 +86,23 @@ success &= nameScript;
 success &= osNameScript;
 success &= oldNameLink;
 success &= unversionedHudsonWar;
+
+//now test that we actually filtered the file
+File filteredFile = new File((File) basedir, "target/rpm/project-rpm-1/buildroot/usr/myusr/app/bin/filter.txt")
+
+if (!filteredFile.exists())
+    throw new java.lang.AssertionError("/usr/myusr/app/bin/filter.txt does not exist");
+    
+BufferedReader reader = new BufferedReader(new FileReader(filteredFile));
+try
+{
+    String line = reader.readLine();
+    if (!"bar".equals(line))
+        throw new java.lang.AssertionError("contents of filter.txt expected[bar] actual[" + line + "]");
+}
+finally
+{
+    reader.close()
+}
 
 return success

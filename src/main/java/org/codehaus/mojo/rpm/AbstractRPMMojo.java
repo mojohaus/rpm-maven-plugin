@@ -21,8 +21,6 @@ package org.codehaus.mojo.rpm;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,6 +29,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -44,12 +43,15 @@ import java.util.Map.Entry;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
+import org.apache.maven.shared.filtering.MavenFileFilter;
+import org.apache.maven.shared.filtering.MavenFilteringException;
+import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
@@ -577,14 +579,51 @@ abstract class AbstractRPMMojo extends AbstractMojo
      * @since 2.0-beta-4
      * @see BaseTrigger
      */
-    private List/*<Trigger>*/ triggers;
+    private List/* <Trigger> */triggers;
 
     /**
-     * A Plexus component to copy files and directories.
+     * Filters (property files) to include during the interpolation of the pom.xml.
      * 
-     * @component role="org.codehaus.plexus.archiver.Archiver" roleHint="dir"
+     * @parameter
+     * @since 2.0
      */
-    private DirectoryArchiver copier;
+    private List filters;
+
+    /**
+     * Expression preceded with the String won't be interpolated \${foo} will be replaced with ${foo}
+     * 
+     * @parameter expression="${maven.rpm.escapeString}"
+     * @since 2.0
+     */
+    private String escapeString;
+
+    /**
+     * @parameter expression="${session}"
+     * @readonly
+     * @required
+     * @since 2.0
+     */
+    private MavenSession session;
+
+    /**
+     * A Plexus component to copy files and directories. Using our own custom version of the DirectoryArchiver to allow
+     * filtering of files.
+     */
+    private final FilteringDirectoryArchiver copier = new FilteringDirectoryArchiver();
+
+    /**
+     * @component role="org.apache.maven.shared.filtering.MavenFileFilter" roleHint="default"
+     * @since 2.0
+     */
+    private MavenFileFilter mavenFileFilter;
+
+    /**
+     * The {@link FileUtils.FilterWrapper filter wrappers} to use for file filtering.
+     * 
+     * @since 2.0
+     * @see #mavenFileFilter
+     */
+    private List/* FileUtils.FilterWrapper */defaultFilterWrappers;
 
     /**
      * The primary project artifact.
@@ -701,9 +740,27 @@ abstract class AbstractRPMMojo extends AbstractMojo
             getLog().info( "MOJO is disabled. Doing nothing." );
             return;
         }
-        
+
+        // set up the maven file filter and FilteringDirectoryArchiver
+        final MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution();
+        mavenResourcesExecution.setEscapeString( escapeString );
+
+        try
+        {
+            defaultFilterWrappers =
+                mavenFileFilter.getDefaultFilterWrappers( project, filters, false, this.session,
+                                                          mavenResourcesExecution );
+        }
+        catch ( MavenFilteringException e )
+        {
+            getLog().error( "fail to build filering wrappers " + e.getMessage() );
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
+
+        copier.setMavenFileFilter( mavenFileFilter );
+
         checkParams();
-        
+
         final String classifier = getClassifier();
         
         if ( classifier != null )
@@ -890,7 +947,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
                 {
                     FileUtils.cleanDirectory( d );
                 }
-                catch( IOException e )
+                catch ( IOException e )
                 {
                     throw new MojoExecutionException( "Unable to clear directory: " + d.getName(), e );
                 }
@@ -1104,7 +1161,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
             outputFileName = art.getFile().getName();
         }
 
-        copySource( art.getFile(), outputFileName, dest, null, null );
+        copySource( art.getFile(), outputFileName, dest, null, null, false );
         return outputFileName;
     }
 
@@ -1116,10 +1173,12 @@ abstract class AbstractRPMMojo extends AbstractMojo
      * @param dest The destination directory
      * @param incl The list of inclusions
      * @param excl The list of exclusions
+     * @param filter Indicates if the file(s) being copied should be filtered.
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List copySource( File src, String srcName, File dest, List incl, List excl ) throws MojoExecutionException
+    private List copySource( File src, String srcName, File dest, List incl, List excl, boolean filter )
+        throws MojoExecutionException
     {
         try
         {
@@ -1149,6 +1208,9 @@ abstract class AbstractRPMMojo extends AbstractMojo
                 srcName = srcName != null ? srcName : src.getName();
                 copier.addFile( src, srcName );
             }
+
+            copier.setFilter( filter );
+            copier.setFilterWrappers( defaultFilterWrappers );
 
             // Perform the copy
             copier.createArchive();
@@ -1235,7 +1297,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
         if ( icon != null )
         {
             File icondest = new File( workarea, "SOURCES" );
-            copySource( icon, null, icondest, null, null );
+            copySource( icon, null, icondest, null, null, false );
         }
 
         // Process each mapping
@@ -1367,7 +1429,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
                     map.setHasSoftLinks( true );
                 }
                 else if ( location.exists() )
-                {                    
+                {
                     final String destination = src.getDestination();
                     if ( destination == null )
                     {
@@ -1380,8 +1442,8 @@ abstract class AbstractRPMMojo extends AbstractMojo
                             }
                             elist.addAll( FileUtils.getDefaultExcludesAsList() );
                         }
-                        List copiedFiles = copySource( src.getLocation(), null, dest, src.getIncludes(), elist );
-                        map.addCopiedFileNamesRelativeToDestination( copiedFiles );
+                        map.addCopiedFileNamesRelativeToDestination( 
+                            copySource( src.getLocation(), null, dest, src.getIncludes(), elist, src.isFilter() ) );
                     }
                     else
                     {
@@ -1393,37 +1455,8 @@ abstract class AbstractRPMMojo extends AbstractMojo
                                     new Object[] { destination, location.getName() } ) );
                         }
 
-                        File destFile = new File( dest, destination );
-
-                        try
-                        {
-                            if ( !destFile.createNewFile() )
-                            {
-                                throw new IOException( "Unable to create file: " + destFile.getAbsolutePath() );
-                            }
-
-                            FileInputStream fis = new FileInputStream( location );
-                            try
-                            {
-                                FileOutputStream fos = new FileOutputStream( destFile );
-                                try
-                                {
-                                    fis.getChannel().transferTo( 0, location.length(), fos.getChannel() );
-                                }
-                                finally
-                                {
-                                    fos.close();
-                                }
-                            }
-                            finally
-                            {
-                                fis.close();
-                            }
-                        }
-                        catch ( IOException e )
-                        {
-                            throw new MojoExecutionException( "Unable to copy files", e );
-                        }
+                        copySource( location, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+                                    src.isFilter() );
 
                         map.addCopiedFileNameRelativeToDestination( destination );
                     }

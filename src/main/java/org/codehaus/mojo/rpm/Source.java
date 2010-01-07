@@ -27,11 +27,12 @@ import java.util.regex.Pattern;
 /**
  * A description of a location where files to be packaged can be found.
  * 
+ * @author unknown
+ * @author Brett Okken
  * @version $Id$
  */
 public class Source
 {
-
     // // // Properties
 
     /** The source location. */
@@ -78,6 +79,12 @@ public class Source
      * @since 2.0-beta-3
      */
     private Pattern targetOSNamePattern;
+    
+    /**
+     * Indicates if the source should be filtered.
+     * @since 2.0
+     */
+    private boolean filter;
     
     // // // Bean methods
 
@@ -245,6 +252,24 @@ public class Source
     }
     
     /**
+     * @return Returns the {@link #filter}.
+     * @since 2.0
+     */
+    public boolean isFilter()
+    {
+        return this.filter;
+    }
+
+    /**
+     * @param filter The {@link #filter} to set.
+     * @since 2.0
+     */
+    public void setFilter( boolean filter )
+    {
+        this.filter = filter;
+    }
+
+    /**
      * Indicates if the target OS name matches <i>osName</i>.
      * @param osName The name of the os to match against the {@link #getTargetOSName()}.
      * @return if {@link #getTargetOSName()} {@link java.util.regex.Matcher#matches() matches} <i>osName</i>.
@@ -285,6 +310,8 @@ public class Source
             sb.append( " destination: " );
             sb.append( destination );
         }
+        
+        sb.append( " filter: " + Boolean.toString( filter ) );
 
         if ( noDefaultExcludes )
         {

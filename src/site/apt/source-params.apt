@@ -69,6 +69,10 @@ Source Parameters
   in the rpm. If this value is not provided, the name of the <<<file>>> will 
   be used.
   
+* {filter} (<<optional>>)
+
+  Will filter the file(s) and replace special values with properties.
+  
 * {targetArchitecture} (<<optional>>)
 
   If this is populated, the contents defined by this source will only be included

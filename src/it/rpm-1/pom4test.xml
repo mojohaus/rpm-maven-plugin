@@ -117,7 +117,12 @@
                                     <location>src/main/bin</location>
                                     <excludes>
                                        <exclude>*install.sh</exclude>
+                                       <exclude>filter.txt</exclude>
                                     </excludes>
+                                </source>
+                                <source>
+                                    <location>src/main/bin/filter.txt</location>
+                                    <filter>true</filter>
                                 </source>
                                 <source>
                                     <location>src/main/bin2/rename.sh</location>
