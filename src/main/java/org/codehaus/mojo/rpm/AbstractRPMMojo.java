@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Map.Entry;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
@@ -52,7 +51,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.util.StringUtils;
@@ -71,7 +69,6 @@ import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
  */
 abstract class AbstractRPMMojo extends AbstractMojo
 {
-
     /**
      * Message for exception indicating that a {@link Source} has a {@link Source#getDestination() destination}, but
      * refers to a {@link File#isDirectory() directory}.
@@ -648,7 +645,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
      * @required
      * @readonly
      */
-    MavenProject project;
+    protected MavenProject project;
 
     /**
      * A list of %define arguments
@@ -1103,6 +1100,25 @@ abstract class AbstractRPMMojo extends AbstractMojo
                 }
             }
         }
+
+        //generate copyright text if not set
+        if ( copyright == null )
+        {
+            copyright = generateCopyrightText();
+        }
+        
+        // if this package obsoletes any packages, make sure those packages are added to the provides list
+        if ( obsoletes != null )
+        {
+            if ( provides == null )
+            {
+                provides = obsoletes;
+            }
+            else
+            {
+                provides.addAll( obsoletes );
+            }
+        }
     }
 
     /**
@@ -1261,7 +1277,8 @@ abstract class AbstractRPMMojo extends AbstractMojo
             {
                 getLog().debug( "... Group matches" );
                 final String artifactId = item.getArtifactId();
-                if ( StringUtils.isEmpty( artifactId ) || "*".equals( artifactId ) || artifactId.equals( dep.getArtifactId() ) )
+                if ( StringUtils.isEmpty( artifactId ) || "*".equals( artifactId )
+                    || artifactId.equals( dep.getArtifactId() ) )
                 {
                     getLog().debug( "... Artifact matches" );
                     // ArtifactVersion av = item.getVersionRange().matchVersion( dep.getAvailableVersions() );
@@ -1549,427 +1566,23 @@ abstract class AbstractRPMMojo extends AbstractMojo
     {
         File f = new File( workarea, "SPECS" );
         File specf = new File( f, name + ".spec" );
+
         try
         {
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
             PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
-
-            writeList( spec, defineStatements, "%define " );
-
-            spec.println( "Name: " + name );
-            spec.println( "Version: " + version );
-            spec.println( "Release: " + release );
-            if ( summary != null )
+            try
             {
-                spec.println( "Summary: " + summary );
+                new SpecWriter( this, spec ).writeSpecFile();
             }
-
-            /* copyright composition */
-            String copyrightText = copyright;
-            if ( copyrightText == null )
+            finally
             {
-                copyrightText = generateCopyrightText();
+                spec.close();
             }
-            if ( copyrightText != null )
-            {
-                spec.println( "License: " + copyrightText );
-            }
-            if ( distribution != null )
-            {
-                spec.println( "Distribution: " + distribution );
-            }
-            if ( icon != null )
-            {
-                spec.println( "Icon: " + icon.getName() );
-            }
-            if ( vendor != null )
-            {
-                spec.println( "Vendor: " + vendor );
-            }
-            if ( url != null )
-            {
-                spec.println( "URL: " + url );
-            }
-            if ( group != null )
-            {
-                spec.println( "Group: " + group );
-            }
-            if ( packager != null )
-            {
-                spec.println( "Packager: " + packager );
-            }
-            
-            // if this package obsoletes any packages, make sure those packages are added to the provides list
-            if ( obsoletes != null )
-            {
-                if ( provides == null )
-                {
-                    provides = obsoletes;
-                }
-                else
-                {
-                    provides.addAll( obsoletes );
-                }
-            }
-            
-            writeList( spec, provides, "Provides: " );
-            writeList( spec, requires, "Requires: " );
-            writeList( spec, prereqs, "PreReq: " );
-            writeList( spec, obsoletes, "Obsoletes: " );
-            writeList( spec, conflicts, "Conflicts: " );
-
-            spec.println( "autoprov: " + ( autoProvides ? "yes" : "no" ) );
-            spec.println( "autoreq: " + ( autoRequires ? "yes" : "no" ) ); 
-
-            if ( prefix != null )
-            {
-                spec.println( "Prefix: " + prefix );
-            }
-            spec.println( "BuildRoot: " + buildroot.getAbsolutePath() );
-            spec.println();
-            spec.println( "%description" );
-            if ( description != null )
-            {
-                spec.println( description );
-            }
-            
-            boolean printedInstall = false;
-            
-            if ( !linkTargetToSources.isEmpty() )
-            {
-                if ( !printedInstall )
-                {
-                    spec.println();
-                    spec.println( "%install" );
-                    printedInstall = true;
-                }
-                
-                for ( Iterator entryIter = linkTargetToSources.entrySet().iterator(); entryIter.hasNext(); )
-                {
-                    final Map.Entry directoryToSourcesEntry = (Entry) entryIter.next();
-                    String directory = (String) directoryToSourcesEntry.getKey();
-                    if ( directory.startsWith( "/" ) )
-                    {
-                        directory = directory.substring( 1 );
-                    }
-                    if ( directory.endsWith( "/" ) )
-                    {
-                        directory = directory.substring( 0, directory.length() - 1 );
-                    }
-                    
-                    final List sources = (List) directoryToSourcesEntry.getValue();
-                    final int sourceCnt = sources.size();
-                    
-                    if ( sourceCnt == 1 )
-                    {
-                        final SoftlinkSource linkSource = (SoftlinkSource) sources.get( 0 );
-                        final File sourceLocation = linkSource.getLocation();
-                        final File buildSourceLocation = new File( buildroot, sourceLocation.getAbsolutePath() );
-                        if ( buildSourceLocation.isDirectory() )
-                        {
-                            final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
-                            
-                            if ( scanner.isEverythingIncluded() )
-                            {
-                                File destinationFile = new File( buildroot, directory );
-                                destinationFile.delete();
-
-                                spec.print( "ln -s " );
-                                spec.print( sourceLocation.getAbsolutePath() );
-                                spec.print( " $RPM_BUILD_ROOT/" );
-                                spec.print( directory );
-                                
-                                final String dest = linkSource.getDestination();
-                                if ( dest != null )
-                                {
-                                    spec.print( '/' );
-                                    spec.print( dest );
-                                    linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( dest );
-                                }
-                                
-                                spec.println(); 
-                            }
-                            else
-                            {
-                                linkScannedFiles( spec, directory, linkSource, scanner );
-                            }
-                        }
-                        else
-                        {
-                            linkSingleFile( spec, directory, linkSource );
-                        }
-                    }
-                    else
-                    {
-                        for ( Iterator sourceIter = sources.iterator(); sourceIter.hasNext(); )
-                        {
-                            final SoftlinkSource linkSource = (SoftlinkSource) sourceIter.next();
-                            final File sourceLocation = linkSource.getLocation();
-                            final File buildSourceLocation = new File( buildroot, sourceLocation.getAbsolutePath() );
-                            if ( buildSourceLocation.isDirectory() )
-                            {
-                                final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
-
-                                linkScannedFiles( spec, directory, linkSource, scanner );
-                            }
-                            else
-                            {
-                                linkSingleFile( spec, directory, linkSource );
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( installScriptlet != null )
-            {
-                if ( !printedInstall )
-                {
-                    installScriptlet.write( spec, "%install" );
-                }
-                else
-                {
-                    spec.println();
-
-                    installScriptlet.writeContent( spec );
-                }
-            }
-
-            spec.println();
-            spec.println( "%files" );
-            spec.println( getDefAttrString() );            
-            
-            for ( Iterator it = mappings.iterator(); it.hasNext(); )
-            {
-                Mapping map = (Mapping) it.next();
-
-                // For each mapping we need to determine which files in the destination were defined by this
-                // mapping so that we can write the %attr statement correctly.
-
-                final String destination = map.getDestination();
-                final File absoluteDestination = new File( buildroot, destination );
-                
-                if ( map.hasSoftLinks() && !absoluteDestination.exists() )
-                {
-                    getLog().debug( "writing attribute string for directory created by soft link: " + destination );
-                    
-                    final String attributes = map.getAttrString( defaultFilemode, defaultGroupname, defaultUsername );
-                    
-                    spec.print( attributes );
-                    spec.print( ' ' );
-                    spec.println( destination );
-                    
-                    continue;
-                }
-
-                final List includes = map.getCopiedFileNamesRelativeToDestination();
-                final List links = map.getLinkedFileNamesRelativeToDestination();
-
-                final DirectoryScanner scanner = new DirectoryScanner();
-                scanner.setBasedir( absoluteDestination );
-                
-                //the linked files are not present yet (will be "installed" during rpm build)
-                //so they cannot be "included"
-                scanner.setIncludes( includes.isEmpty() ? null
-                                : (String[]) includes.toArray( new String[includes.size()] ) );
-                scanner.setExcludes( null );
-                scanner.scan();
-
-                final String attrString = map.getAttrString( defaultFilemode, defaultGroupname, defaultUsername );
-                if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded() )
-                {
-                    getLog().debug( "writing attriute string for directory: " + destination );
-                    spec.println( attrString + " " + destination );
-                }
-                else
-                {
-                    getLog().debug( "writing attribute string for identified files in directory: " + destination );
-
-                    String[] files = scanner.getIncludedFiles();
-
-                    final String baseFileString = attrString + " " + destination + File.separatorChar;
-
-                    for ( int i = 0; i < files.length; ++i )
-                    {
-                        spec.print( baseFileString );
-                        spec.println( files[i] );
-                    }
-                    
-                    //since the linked files are not present in directory (yet), the scanner will not find them
-                    for ( Iterator linkIter = links.iterator(); linkIter.hasNext(); )
-                    {
-                        String link = (String) linkIter.next();
-
-                        spec.print( baseFileString );
-                        spec.println( link );
-                    }
-                }
-            }
-
-            printScripts( spec );
-            
-            if ( triggers != null )
-            {
-                for ( Iterator i = triggers.iterator(); i.hasNext(); )
-                {
-                    BaseTrigger trigger = (BaseTrigger) i.next();
-                    trigger.writeTrigger( spec );
-                }
-            }
-            
-            printChangelog( spec );
-            spec.close();
         }
-        catch ( Throwable t )
+        catch ( IOException e )
         {
-            throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), t );
-        }
-    }
-
-    /**
-     * Writes soft link from <i>linkSource</i> to <i>directory</i> for all files in the <i>scanner</i>.
-     * 
-     * @param spec Writer for spec file.
-     * @param directory Directory to link to.
-     * @param linkSource Source to link from. {@link SoftlinkSource#getLocation()} must be a
-     *            {@link File#isDirectory() directory}.
-     * @param scanner Scanner used to scan the {@link SoftlinkSource#getLocation() linSource location}.
-     * @since 2.0-beta-3
-     */
-    private void linkScannedFiles( PrintWriter spec, String directory, final SoftlinkSource linkSource,
-                                   final DirectoryScanner scanner )
-    {
-        final String[] files = scanner.getIncludedFiles();
-        final File sourceLocation = linkSource.getLocation();
-        
-        final String targetPrefix = sourceLocation.getAbsolutePath() + File.separatorChar;
-        final String sourcePrefix = directory + File.separatorChar;
-        
-        for ( int i = 0; i < files.length; ++i )
-        {
-            spec.print( "ln -s " );
-            spec.print( targetPrefix + files[i] );
-            spec.print( " $RPM_BUILD_ROOT/" );
-            spec.println( sourcePrefix + files[i] );
-
-            linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( files[i] );
-        }
-    }
-
-    /**
-     * {@link DirectoryScanner#scan() Scans} the <i>buildSourceLocation</i> using the
-     * {@link SoftlinkSource#getIncludes()} and {@link SoftlinkSource#getExcludes()} from <i>linkSource</i>. Returns
-     * the {@link DirectoryScanner} used for scanning.
-     * 
-     * @param linkSource Source
-     * @param buildSourceLocation Build location where content exists.
-     * @return {@link DirectoryScanner} used for scanning.
-     * @since 2.0-beta-3
-     */
-    private DirectoryScanner scanLinkSource( final SoftlinkSource linkSource, final File buildSourceLocation )
-    {
-        final DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir( buildSourceLocation );
-        List includes = linkSource.getIncludes();
-        scanner.setIncludes( ( includes == null || includes.isEmpty() ) ? null
-                        : (String[]) includes.toArray( new String[includes.size()] ) );
-        List excludes = linkSource.getExcludes();
-        scanner.setExcludes( ( excludes == null || excludes.isEmpty() ) ? null
-                        : (String[]) excludes.toArray( new String[excludes.size()] ) );
-        scanner.scan();
-        return scanner;
-    }
-
-    /**
-     * Writes soft link from <i>linkSource</i> to <i>directory</i> using optional
-     * {@link SoftlinkSource#getDestination()} as the name of the link in <i>directory</i> if present.
-     * 
-     * @param spec Writer for spec file.
-     * @param directory Directory to link to.
-     * @param linkSource Source to link from.
-     * @since 2.0-beta-3
-     */
-    private void linkSingleFile( PrintWriter spec, String directory, final SoftlinkSource linkSource )
-    {
-        final File sourceLocation = linkSource.getLocation();
-        spec.print( "ln -s " );
-        spec.print( sourceLocation.getAbsolutePath() );
-        spec.print( " $RPM_BUILD_ROOT/" );
-        spec.print( directory );
-        spec.print( '/' );
-        final String destination = linkSource.getDestination();
-        final String linkedFileName = destination == null ? sourceLocation.getName() : destination;
-        spec.println( linkedFileName );
-        
-        linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( linkedFileName );
-    }
-
-    /**
-     * Print changelog to the <i>writer</i>.
-     *
-     * @param writer to print script tags to
-     */
-    private void printChangelog( PrintWriter writer )
-    {
-        if ( changelog != null )
-        {
-            writer.println();
-            writer.println( "%changelog" );
-            writer.println( changelog );
-        }
-    }
-
-    /**
-     * Print all the script commands to the <i>writer</i>.
-     * 
-     * @param writer to print script tags to
-     */
-    private void printScripts( PrintWriter writer ) throws IOException
-    {
-        if ( prepareScriptlet != null )
-            prepareScriptlet.write( writer, "%prep" );
-
-        if ( pretransScriptlet != null )
-            pretransScriptlet.write( writer, "%pretrans" );
-
-        if ( preinstallScriptlet != null )
-            preinstallScriptlet.write( writer, "%pre" );
-
-        if ( postinstallScriptlet != null )
-            postinstallScriptlet.write( writer, "%post" );
-
-        if ( preremoveScriptlet != null )
-            preremoveScriptlet.write( writer, "%preun" );
-
-        if ( postremoveScriptlet != null )
-            postremoveScriptlet.write( writer, "%postun" );
-
-        if ( posttransScriptlet != null )
-            posttransScriptlet.write( writer, "%posttrans" );
-
-        if ( verifyScriptlet != null )
-            verifyScriptlet.write( writer, "%verifyscript" );
-
-        if ( cleanScriptlet != null )
-            cleanScriptlet.write( writer, "%clean" );
-    }
-
-    /**
-     * Writes a new line for each element in <i>strings</i> to the <i>writer</i> with the <i>prefix</i>.
-     * 
-     * @param writer <tt>PrintWriter</tt> to write to.
-     * @param strings <tt>List</tt> of <tt>String</tt>s to write.
-     * @param prefix Prefix to write on each line before the string.
-     */
-    private static void writeList( PrintWriter writer, Collection strings, String prefix )
-    {
-        if ( strings != null )
-        {
-            for ( Iterator it = strings.iterator(); it.hasNext(); )
-            {
-                writer.print( prefix );
-                writer.println( it.next() );
-            }
+            throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), e );
         }
     }
 
@@ -1994,58 +1607,324 @@ abstract class AbstractRPMMojo extends AbstractMojo
         }
         return copyrightText;
     }
-        
+
     /**
-     * Assemble the RPM SPEC default file attributes.
-     * 
-     * @return The attribute string for the SPEC file.
+     * @return Returns the {@link #linkTargetToSources}.
      */
-    private String getDefAttrString()
+    final Map getLinkTargetToSources()
     {
-        /* do not include %defattr if no default attributes are specified */
-        if ( defaultFilemode == null && defaultUsername == null && defaultGroupname == null && defaultDirmode == null )
-        {
-            return "";
-        }
+        return this.linkTargetToSources;
+    }
 
-        StringBuffer sb = new StringBuffer();
+    /**
+     * @return Returns the {@link #name}.
+     */
+    final String getName()
+    {
+        return this.name;
+    }
 
-        if ( defaultFilemode != null )
-        {
-            sb.append( "%defattr(" ).append( defaultFilemode ).append( "," );
-        }
-        else
-        {
-            sb.append( "%defattr(-," );
-        }
+    /**
+     * @return Returns the {@link #release}.
+     */
+    final String getRelease()
+    {
+        return this.release;
+    }
 
-        if ( defaultUsername != null )
-        {
-            sb.append( defaultUsername ).append( "," );
-        }
-        else
-        {
-            sb.append( "-," );
-        }
+    /**
+     * @return Returns the {@link #description}.
+     */
+    final String getDescription()
+    {
+        return this.description;
+    }
 
-        if ( defaultGroupname != null )
-        {
-            sb.append( defaultGroupname ).append( "," );
-        }
-        else
-        {
-            sb.append( "-," );
-        }
+    /**
+     * @return Returns the {@link #summary}.
+     */
+    final String getSummary()
+    {
+        return this.summary;
+    }
 
-        if ( defaultDirmode != null )
-        {
-            sb.append( defaultDirmode ).append( ")" );
-        }
-        else
-        {
-            sb.append( "-)" );
-        }
+    /**
+     * @return Returns the {@link #copyright}.
+     */
+    final  String getCopyright()
+    {
+        return this.copyright;
+    }
 
-        return sb.toString();
+    /**
+     * @return Returns the {@link #distribution}.
+     */
+    final String getDistribution()
+    {
+        return this.distribution;
+    }
+
+    /**
+     * @return Returns the {@link #icon}.
+     */
+    final File getIcon()
+    {
+        return this.icon;
+    }
+
+    /**
+     * @return Returns the {@link #vendor}.
+     */
+    final String getVendor()
+    {
+        return this.vendor;
+    }
+
+    /**
+     * @return Returns the {@link #url}.
+     */
+    final String getUrl()
+    {
+        return this.url;
+    }
+
+    /**
+     * @return Returns the {@link #group}.
+     */
+    final String getGroup()
+    {
+        return this.group;
+    }
+
+    /**
+     * @return Returns the {@link #packager}.
+     */
+    final String getPackager()
+    {
+        return this.packager;
+    }
+
+    /**
+     * @return Returns the {@link #autoProvides}.
+     */
+    final boolean isAutoProvides()
+    {
+        return this.autoProvides;
+    }
+
+    /**
+     * @return Returns the {@link #autoRequires}.
+     */
+    final boolean isAutoRequires()
+    {
+        return this.autoRequires;
+    }
+
+    /**
+     * @return Returns the {@link #provides}.
+     */
+    final LinkedHashSet getProvides()
+    {
+        return this.provides;
+    }
+
+    /**
+     * @return Returns the {@link #requires}.
+     */
+    final LinkedHashSet getRequires()
+    {
+        return this.requires;
+    }
+
+    /**
+     * @return Returns the {@link #prereqs}.
+     */
+    final LinkedHashSet getPrereqs()
+    {
+        return this.prereqs;
+    }
+
+    /**
+     * @return Returns the {@link #obsoletes}.
+     */
+    final LinkedHashSet getObsoletes()
+    {
+        return this.obsoletes;
+    }
+
+    /**
+     * @return Returns the {@link #conflicts}.
+     */
+    final LinkedHashSet getConflicts()
+    {
+        return this.conflicts;
+    }
+
+    /**
+     * @return Returns the {@link #prefix}.
+     */
+    final String getPrefix()
+    {
+        return this.prefix;
+    }
+
+    /**
+     * @return Returns the {@link #mappings}.
+     */
+    final List getMappings()
+    {
+        return this.mappings;
+    }
+
+    /**
+     * @return Returns the {@link #prepareScriptlet}.
+     */
+    final Scriptlet getPrepareScriptlet()
+    {
+        return this.prepareScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #preinstallScriptlet}.
+     */
+    final Scriptlet getPreinstallScriptlet()
+    {
+        return this.preinstallScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #postinstallScriptlet}.
+     */
+    final Scriptlet getPostinstallScriptlet()
+    {
+        return this.postinstallScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #installScriptlet}.
+     */
+    final Scriptlet getInstallScriptlet()
+    {
+        return this.installScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #preremoveScriptlet}.
+     */
+    final Scriptlet getPreremoveScriptlet()
+    {
+        return this.preremoveScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #postremoveScriptlet}.
+     */
+    final  Scriptlet getPostremoveScriptlet()
+    {
+        return this.postremoveScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #verifyScriptlet}.
+     */
+    final Scriptlet getVerifyScriptlet()
+    {
+        return this.verifyScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #cleanScriptlet}.
+     */
+    final Scriptlet getCleanScriptlet()
+    {
+        return this.cleanScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #pretransScriptlet}.
+     */
+    final Scriptlet getPretransScriptlet()
+    {
+        return this.pretransScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #posttransScriptlet}.
+     */
+    final Scriptlet getPosttransScriptlet()
+    {
+        return this.posttransScriptlet;
+    }
+
+    /**
+     * @return Returns the {@link #triggers}.
+     */
+    final List getTriggers()
+    {
+        return this.triggers;
+    }
+
+    /**
+     * @return Returns the {@link #defineStatements}.
+     */
+    final List getDefineStatements()
+    {
+        return this.defineStatements;
+    }
+
+    /**
+     * @return Returns the {@link #defaultFilemode}.
+     */
+    final String getDefaultFilemode()
+    {
+        return this.defaultFilemode;
+    }
+
+    /**
+     * @return Returns the {@link #defaultDirmode}.
+     */
+    final String getDefaultDirmode()
+    {
+        return this.defaultDirmode;
+    }
+
+    /**
+     * @return Returns the {@link #defaultUsername}.
+     */
+    final String getDefaultUsername()
+    {
+        return this.defaultUsername;
+    }
+
+    /**
+     * @return Returns the {@link #defaultGroupname}.
+     */
+    final String getDefaultGroupname()
+    {
+        return this.defaultGroupname;
+    }
+
+    /**
+     * @return Returns the {@link #buildroot}.
+     */
+    final File getBuildroot()
+    {
+        return this.buildroot;
+    }
+
+    /**
+     * @return Returns the {@link #version}.
+     */
+    final String getVersion()
+    {
+        return this.version;
+    }
+
+    /**
+     * @return Returns the {@link #changelog}.
+     */
+    final String getChangelog()
+    {
+        return this.changelog;
     }
 }

@@ -27,7 +27,8 @@ import java.util.regex.Pattern;
 /**
  * A description of a location where files to be packaged can be found.
  * 
- * @author unknown
+ * @author Bob Allison
+ * @author Carlos
  * @author Brett Okken
  * @version $Id$
  */
