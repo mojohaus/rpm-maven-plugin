@@ -146,6 +146,12 @@
         <action dev="bokken" type="add" issue="MRPM-56" system="jira">
             Clear work area directories before each execution. 
         </action>
+        <action dev="bokken" type="add">
+            Add integration test for reactor build. 
+        </action>
+        <action dev="bokken" type="add">
+            Add integration test for rpm as secondary artifact containing primary and other secondary artifacts. 
+        </action>
     </release>
   </body>
 </document>
