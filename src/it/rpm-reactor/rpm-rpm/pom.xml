@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <groupId>org.codehaus.mojo.rpm</groupId>
+    <artifactId>mojo-rpm-it-module-rpm</artifactId>
+    <name>mojo-rpm-it-module-rpm</name>
+	<version>1.0</version>
+	<packaging>rpm</packaging>
+	<organization>
+		<name>my org</name>
+		<url>www.my.org</url>
+	</organization>
+	<inceptionYear>2009</inceptionYear>
+	<dependencies>
+		<dependency>
+            <groupId>org.codehaus.mojo.rpm</groupId>
+            <artifactId>mojo-rpm-it-module-war</artifactId>
+			<version>1.0</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>testing</version>
+				<extensions>true</extensions>
+				<configuration>
+					<distribution>My App</distribution>
+					<group>Application/Collectors</group>
+					<needarch>false</needarch>
+					<defaultUsername>myuser</defaultUsername>
+                    <defaultGroupname>mygroup</defaultGroupname>
+                    <mappings>
+                        <mapping>
+                            <directory>/usr/myusr/app</directory>
+                            <dependency />
+                            <directoryIncluded>false</directoryIncluded>
+                        </mapping>
+                    </mappings>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
