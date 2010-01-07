@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.codehaus.mojo.rpm</groupId>
+    <artifactId>mojo-rpm-it-artifact</artifactId>
+    <name>mojo-rpm-it-artifact</name>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+    <description>JAR with RPM as secondary artifact wrapping the jar and source.</description>
+    <prerequisites>
+        <maven>2.0.9</maven>
+    </prerequisites>
+    <inceptionYear>2010</inceptionYear>
+    <organization>
+        <name>My Org</name>
+    </organization>
+    <developers>
+        <developer>
+            <name>Brett Okken</name>
+            <id>bokken</id>
+            <email>bokken@cerner.com</email>
+            <organization>Cerner Corp. (CAMM)</organization>
+            <roles>
+                <role>owner</role>
+            </roles>
+        </developer>
+    </developers>
+    <dependencies>     
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <encoding>utf-8</encoding>
+                    <source>1.4</source>
+                    <target>1.4</target>
+                </configuration>
+            </plugin> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                <version>testing</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>attached-rpm</goal>
+                        </goals>
+                        <configuration>
+                            <distribution>My App</distribution>
+                            <group>Application/Collectors</group>
+                            <needarch>false</needarch>
+		                    <defaultUsername>myuser</defaultUsername>
+		                    <defaultGroupname>mygroup</defaultGroupname>
+                            <mappings>
+                                <mapping>
+                                    <directory>/usr/myusr/app/lib</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <artifact />
+                                </mapping>
+                                <mapping>
+                                    <directory>/usr/myusr/app/sources</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <artifact>
+                                        <classifiers>
+                                            <classifier>sources</classifier>
+                                        </classifiers>
+                                    </artifact>
+                                </mapping>
+                            </mappings>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
