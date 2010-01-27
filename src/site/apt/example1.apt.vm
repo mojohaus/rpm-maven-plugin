@@ -136,6 +136,9 @@ This is a sample using trash collection as an example.
                             <groupname>dumpgroup</groupname>
                         </mapping>
                     </mappings>
+                    <preinstallScriptlet>
+                        <script>echo "installing now"</script>
+                    </preinstallScriptlet>
                     <postinstallScriptlet>
                         <scriptFile>src/main/scripts/postinstall</scriptFile>
                         <fileEncoding>utf-8</fileEncoding>

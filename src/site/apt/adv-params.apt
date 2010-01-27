@@ -71,6 +71,19 @@ Advanced Parameters
   Maximum RPM since the operation of the scripts must be done correctly or
   major problems can occur while installing or removing the package.
 
+  Here are examples of passing the content of the script in the pom
+  (using <<<<script>>>>) and in a file (using <<<<scriptFile>>>>):
+  
++-----+
+<prepareScriptlet>
+    <script>echo "prepare"</script>
+</prepareScriptlet>
+<preinstallScriptlet>
+    <scriptFile>/src/main/bin/preinstall.sh</scriptFile>
+    <fileEncoding>utf-8</fileEncoding>
+</preinstallScriptlet>
++-----+
+
 ** <<<prepareScriptlet>>>
 
   This script specifies commands to prepare the build.  It corresponds to the
@@ -86,7 +99,7 @@ Advanced Parameters
   This script is run as a part of installing the package.  It corresponds to the
   <<<%install>>> tag in the spec file.
 
-** <<<postinstall>>>
+** <<<postinstallScriptlet>>>
 
   This script is run after the package is installed.  It corresponds to the
   <<<%post>>> tag in the spec file.

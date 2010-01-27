@@ -137,6 +137,10 @@
         <action dev="bokken" type="fix" issue="MRPM-55" system="jira">
             Fix support of prepareScriptlet parameter. 
         </action>
+        <action dev="bokken" type="fix" issue="MRPM-58" system="jira">
+            Improve documentation around scripting including examples
+            and fixing erroneous postinstall reference. 
+        </action>
         <action dev="bokken" type="add" issue="MRPM-38" system="jira">
             Allow filtering of sources. 
         </action>
