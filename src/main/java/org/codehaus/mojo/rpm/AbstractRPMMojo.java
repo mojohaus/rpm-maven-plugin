@@ -25,14 +25,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
@@ -44,6 +41,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
+import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
 
@@ -54,7 +52,7 @@ import org.codehaus.plexus.util.Os;
  * @author Brett Okken, Cerner Corp.
  * @version $Id$
  */
-abstract class AbstractRPMMojo extends AbstractMojo
+abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMojo
 {
     /**
      * The key of the map is the directory where the files should be linked to. The value is the {@code List}
@@ -74,7 +72,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
     /**
      * The version portion of the RPM file name.
      * 
-     * @parameter alias="version" expression="${project.version}"
+     * @parameter alias="version" expression="${project.version}" 
      * @required
      */
     private String projversion;
@@ -686,10 +684,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
 
     /** The root of the build area. */
     private File buildroot;
-
-    /** The version string after parsing. */
-    private String version;
-
+    
     /** The changelog string. */
     private String changelog;
 
@@ -773,7 +768,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
         File rpms = new File( workarea, "RPMS" );
         File archDir = new File( rpms, targetArch );
         
-        return new File( archDir, name + '-' + version + '-' + release + '.' + targetArch + ".rpm" );
+        return new File( archDir, name + '-' + projversion + '-' + release + '.' + targetArch + ".rpm" );
     }
 
     /**
@@ -860,46 +855,11 @@ abstract class AbstractRPMMojo extends AbstractMojo
         Log log = getLog();
         log.debug( "project version = " + projversion );
 
-        // Check the version string
-        int modifierIndex = projversion.indexOf( '-' );
-        if ( modifierIndex == -1 )
-        {
-            version = projversion;
-            if ( release == null || release.length() == 0 )
-            {
-                release = "1";
-
-                log.debug( "Release set to: 1" );
-            }
-        }
-        else
-        {
-            version = projversion.substring( 0, modifierIndex );
-            log.warn( "Version string truncated to " + version );
-
-            if ( release == null || release.length() == 0 )
-            {
-                String modifier = projversion.substring( modifierIndex + 1, projversion.length() );
-                log.debug( "version modifier = " + modifier );
-
-                modifier = modifier.replace( '-', '_' );
-
-                if ( modifier.endsWith( "SNAPSHOT" ) )
-                {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMddHHmmss" );
-                    simpleDateFormat.setTimeZone( TimeZone.getTimeZone( "UTC" ) );
-                    modifier += simpleDateFormat.format( new Date() );
-                }
-                else
-                {
-                    modifier += "_1";
-                }
-
-                release = modifier;
-
-                log.debug( "Release set to: " + modifier );
-            }
-        }
+        // check/calculate the version string
+        final VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
+        log.debug( "calculated version: " + version );
+        this.projversion = version.version;
+        this.release = version.release;
 
         // evaluate needarch and populate targetArch
         if ( needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase( needarch ) )
@@ -1096,7 +1056,7 @@ abstract class AbstractRPMMojo extends AbstractMojo
     /**
      * @return Returns the {@link #release}.
      */
-    final String getRelease()
+    public final String getRelease()
     {
         return this.release;
     }
@@ -1384,9 +1344,9 @@ abstract class AbstractRPMMojo extends AbstractMojo
     /**
      * @return Returns the {@link #version}.
      */
-    final String getVersion()
+    public final String getVersion()
     {
-        return this.version;
+        return this.projversion;
     }
 
     /**

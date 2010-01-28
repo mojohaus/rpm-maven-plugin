@@ -126,14 +126,6 @@ final class FilteringDirectoryArchiver
             File inFile = entry.getFile();
             File outFile = new File( vPath );
 
-            if ( outFile.exists() && outFile.lastModified() >= inFile.lastModified() )
-            {
-                // already up to date...
-                return;
-            }
-
-            outFile.setLastModified( inFile.lastModified() );
-
             if ( !inFile.isDirectory() )
             {
                 try

@@ -26,7 +26,7 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-success &= fileCnt == 14
+success &= fileCnt == 15
 
 boolean nameScript = false;
 boolean osNameScript = false;
@@ -103,6 +103,23 @@ try
 finally
 {
     reader.close()
+}
+
+File filteredVersionFile = new File((File) basedir, "target/rpm/project-rpm-1/buildroot/usr/myusr/app/bin/filter-version.txt")
+
+if (!filteredVersionFile.exists())
+    throw new java.lang.AssertionError("/usr/myusr/app/bin/filter-version.txt does not exist");
+    
+BufferedReader reader2 = new BufferedReader(new FileReader(filteredVersionFile));
+try
+{
+    String line = reader2.readLine();
+    if (!"1.1-1".equals(line))
+        throw new java.lang.AssertionError("contents of filter-version.txt expected[1.1-1] actual[" + line + "]");
+}
+finally
+{
+    reader2.close()
 }
 
 return success

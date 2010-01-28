@@ -22,6 +22,7 @@
       <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
       <configuration>
         <phases>
+          <initialize>org.codehaus.mojo:rpm-maven-plugin:version</initialize>
           <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
           <compile>org.apache.maven.plugins:maven-compiler-plugin:compile</compile>
           <package>org.codehaus.mojo:rpm-maven-plugin:rpm</package>

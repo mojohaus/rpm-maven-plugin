@@ -52,5 +52,15 @@ under the License.
             </p>
         </answer>
     </faq>
+    <faq id="calculated version and release">
+        <question>Can I access the calculated project version and release attributes?</question>
+        <answer>
+            <p>
+                Yes! The <a href="version-mojo.html">version</a> goal will set the calculated version and release to
+                properties. This goal will execute by default as part of the default rpm build lifecycle (for project or 
+                packaging type of rpm).
+            </p>
+        </answer>
+    </faq>
   </part>
 </faqs>

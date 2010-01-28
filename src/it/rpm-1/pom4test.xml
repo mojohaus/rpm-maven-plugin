@@ -64,6 +64,20 @@
 				<artifactId>rpm-maven-plugin</artifactId>
 				<version>testing</version>
 				<extensions>true</extensions>
+				<!--<executions>
+				    <execution>
+				        <id>version</id>
+				        <goals>
+				            <goal>version</goal>
+				        </goals>
+				    </execution>
+				    <execution>
+				        <id>rpm</id>
+				        <goals>
+				            <goal>rpm</goal>
+				        </goals>
+				    </execution>
+				</executions>-->
 				<configuration>
 					<distribution>My App</distribution>
 					<group>Application/Collectors</group>
@@ -121,7 +135,10 @@
                                     </excludes>
                                 </source>
                                 <source>
-                                    <location>src/main/bin/filter.txt</location>
+                                    <location>src/main/bin</location>
+                                    <includes>
+                                        <include>filter*</include>
+                                    </includes>
                                     <filter>true</filter>
                                 </source>
                                 <source>
