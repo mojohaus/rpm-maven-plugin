@@ -280,7 +280,9 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     private String prefix;
 
     /**
-     * The area for RPM to use for building the package.
+     * The area for RPM to use for building the package.<br/>
+     * 
+     * <b>NOTE:</b> The absolute path to the workarea <i>MUST NOT</i> have a space in any of the directory names.
      * <p>
      * Beginning with release 2.0-beta-3, sub-directories will be created within the workarea for each execution of the
      * plugin within a life cycle.<br/>
@@ -813,6 +815,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             }
         }
 
+        validateWorkarea();
+
         // Build each directory in the top directory
         for ( int i = 0; i < topdirs.length; i++ )
         {
@@ -964,6 +968,26 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             {
                 provides.addAll( obsoletes );
             }
+        }
+    }
+
+    /**
+     * Validate that {@link #workarea} is a {@link File#isDirectory() directory} and that the
+     * {@link File#getAbsolutePath()} does not contain any spaces.
+     * 
+     * @throws MojoExecutionException
+     */
+    private void validateWorkarea()
+        throws MojoExecutionException
+    {
+        if ( !workarea.isDirectory() )
+        {
+            throw new MojoExecutionException( workarea + " is not a directory" );
+        }
+
+        if ( workarea.getAbsolutePath().trim().contains( " " ) )
+        {
+            throw new MojoExecutionException( workarea + " contains a space in path" );
         }
     }
 

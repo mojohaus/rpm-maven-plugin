@@ -141,6 +141,9 @@
             Improve documentation around scripting including examples
             and fixing erroneous postinstall reference. 
         </action>
+        <action dev="bokken" type="fix" issue="MRPM-61" system="jira">
+            Improve documentation around spaces in absolute path to workarea.
+        </action>
         <action dev="bokken" type="add" issue="MRPM-38" system="jira">
             Allow filtering of sources. 
         </action>

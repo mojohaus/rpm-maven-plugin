@@ -15,6 +15,8 @@ Operation Parameters
   The directory to use to build the RPM.  By default, this is a directory
   named <<<rpm>>> in the project's build directory.
   
+  <<NOTE:>> The absolute path to the workarea <MUST NOT> have a space in any of the directory names.
+  
   Beginning with release 2.0-beta-3, sub-directories will be created within the 
   workarea for each execution of the plugin within a life cycle.
 
