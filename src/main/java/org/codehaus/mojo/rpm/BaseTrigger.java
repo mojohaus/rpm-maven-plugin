@@ -67,7 +67,7 @@ public abstract class BaseTrigger
      */
     protected String buildScriptletLine( String directive )
     {
-        final StringBuilder builder = new StringBuilder( super.buildScriptletLine( directive ) );
+        final StringBuffer builder = new StringBuffer( super.buildScriptletLine( directive ) );
 
         builder.append( " -- " );
 
@@ -111,8 +111,8 @@ public abstract class BaseTrigger
      */
     public String toString()
     {
-        StringBuilder buffer = new StringBuilder( 128 );
-        buffer.append( getClass().getSimpleName() );
+        StringBuffer buffer = new StringBuffer( 128 );
+        buffer.append( getClass().getName().substring( getClass().getName().lastIndexOf( '.' ) ) );
         buffer.append( '[' );
         buffer.append( "subpackage=" );
         buffer.append( getSubpackage() );

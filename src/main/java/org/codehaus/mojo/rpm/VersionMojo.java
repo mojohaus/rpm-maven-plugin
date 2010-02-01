@@ -96,7 +96,7 @@ public class VersionMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        VersionHelper.Version version = new VersionHelper(this).calculateVersion();
+        VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
 
         setProperty( versionProperty, version.version );
         setProperty( releaseProperty, version.release );

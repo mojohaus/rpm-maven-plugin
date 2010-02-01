@@ -186,7 +186,7 @@ public class Scriptlet
      */
     protected String buildScriptletLine( final String directive )
     {
-        final StringBuilder builder = new StringBuilder();
+        final StringBuffer builder = new StringBuffer();
 
         builder.append( directive );
         if ( subpackage != null )
@@ -248,7 +248,7 @@ public class Scriptlet
      */
     public String toString()
     {
-        StringBuilder buffer = new StringBuilder( 64 );
+        StringBuffer buffer = new StringBuffer( 64 );
         buffer.append( "Scriptlet[" );
         buffer.append( "subpackage=" );
         buffer.append( subpackage );

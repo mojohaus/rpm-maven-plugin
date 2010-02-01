@@ -985,7 +985,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             throw new MojoExecutionException( workarea + " is not a directory" );
         }
 
-        if ( workarea.getAbsolutePath().trim().contains( " " ) )
+        if ( workarea.getAbsolutePath().trim().indexOf( " " ) != -1 )
         {
             throw new MojoExecutionException( workarea + " contains a space in path" );
         }

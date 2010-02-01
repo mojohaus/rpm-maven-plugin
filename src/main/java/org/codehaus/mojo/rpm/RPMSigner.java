@@ -112,7 +112,9 @@ final class RPMSigner
         }
         catch ( CommandLineException e )
         {
-            throw new IllegalStateException( "Unable to sign the RPM", e );
+            final IllegalStateException ise = new IllegalStateException( "Unable to sign the RPM" );
+            ise.initCause( e );
+            throw ise;
         }
     }
 
