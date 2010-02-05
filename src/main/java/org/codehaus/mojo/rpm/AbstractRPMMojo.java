@@ -1366,7 +1366,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     }
 
     /**
-     * @return Returns the {@link #version}.
+     * @inheritDoc}
      */
     public final String getVersion()
     {

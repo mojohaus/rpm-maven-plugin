@@ -189,7 +189,7 @@
           <configuration>
             <type>date</type>
             <dates>
-              <date implementation="java.lang.String">2009-07-09</date>
+              <date implementation="java.lang.String">2009-10-14</date>
             </dates>
             <dateFormat>yyyyMMdd HH:mm:ss z</dateFormat>
           </configuration>
