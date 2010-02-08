@@ -110,7 +110,7 @@ final class VersionHelper
         else
         {
             response.version = version.substring( 0, modifierIndex );
-            mojo.getLog().warn( "rpm version string truncated to " + version );
+            mojo.getLog().warn( "rpm version string truncated to " + response.version );
 
             if ( release == null || release.length() == 0 )
             {

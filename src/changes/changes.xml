@@ -164,6 +164,9 @@
         </action>
     </release>
     <release version="2.0.1">
+        <action dev="bokken" type="fix" issue="MRPM-63" system="jira">
+            warning message for truncated version does not include the truncated value
+        </action>
         <action dev="bokken" type="fix" issue="MRPM-64" system="jira">
             Version MOJO fails with NPE when a release value is configured rather than calculated.
         </action>
