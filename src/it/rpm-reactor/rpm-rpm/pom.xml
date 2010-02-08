@@ -30,6 +30,7 @@
 				<configuration>
 					<distribution>My App</distribution>
 					<group>Application/Collectors</group>
+					<release>rel</release>
 					<needarch>false</needarch>
 					<defaultUsername>myuser</defaultUsername>
                     <defaultGroupname>mygroup</defaultGroupname>

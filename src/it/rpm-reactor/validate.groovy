@@ -16,7 +16,7 @@ File war = new File((File) basedir, "rpm-war/target/mojo-rpm-it-module-war-1.0.w
 if (!war.exists())
     throw new java.lang.AssertionError("war file does not exist");
 
-File rpm = new File((File) basedir, "rpm-rpm/target/rpm/mojo-rpm-it-module-rpm/RPMS/noarch/mojo-rpm-it-module-rpm-1.0-1.noarch.rpm")
+File rpm = new File((File) basedir, "rpm-rpm/target/rpm/mojo-rpm-it-module-rpm/RPMS/noarch/mojo-rpm-it-module-rpm-1.0-rel.noarch.rpm")
 if (!rpm.exists())
     throw new java.lang.AssertionError("rpm file does not exist");
 

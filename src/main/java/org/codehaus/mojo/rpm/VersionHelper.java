@@ -93,6 +93,9 @@ final class VersionHelper
 
         final String version = mojo.getVersion();
         final String release = mojo.getRelease();
+        
+        //this will get overwritten if we calculate a "release" value
+        response.release = release;
 
         int modifierIndex = version.indexOf( '-' );
         if ( modifierIndex == -1 )
