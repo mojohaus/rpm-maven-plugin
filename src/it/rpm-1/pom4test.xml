@@ -64,20 +64,6 @@
 				<artifactId>rpm-maven-plugin</artifactId>
 				<version>testing</version>
 				<extensions>true</extensions>
-				<!--<executions>
-				    <execution>
-				        <id>version</id>
-				        <goals>
-				            <goal>version</goal>
-				        </goals>
-				    </execution>
-				    <execution>
-				        <id>rpm</id>
-				        <goals>
-				            <goal>rpm</goal>
-				        </goals>
-				    </execution>
-				</executions>-->
 				<configuration>
 					<distribution>My App</distribution>
 					<group>Application/Collectors</group>
@@ -147,7 +133,7 @@
                                     <targetOSName>(?i)${os.name}</targetOSName>
                                 </source>
                                 <softlinkSource>
-                                    <location>/usr/myusr/app/bin/name.sh</location>
+                                    <location>name.sh</location>
                                     <destination>oldname.sh</destination>
                                 </softlinkSource>
                             </sources>

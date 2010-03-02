@@ -171,5 +171,10 @@
             Version MOJO fails with NPE when a release value is configured rather than calculated.
         </action>
     </release>
+    <release version="2.1">
+        <action dev="bokken" type="fix" issue="MRPM-65" system="jira">
+            Fix softlinks with relative locations.
+        </action>
+    </release>
   </body>
 </document>

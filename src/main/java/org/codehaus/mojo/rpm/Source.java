@@ -37,7 +37,7 @@ public class Source
     // // // Properties
 
     /** The source location. */
-    private File location;
+    private String location;
 
     /** The list of inclusions. */
     private List includes;
@@ -94,7 +94,7 @@ public class Source
      * 
      * @return The location holding the file(s) to install.
      */
-    public File getLocation()
+    public String getLocation()
     {
         return location;
     }
@@ -104,7 +104,7 @@ public class Source
      * 
      * @param loc The new location holding the file(s) to install.
      */
-    public void setLocation( File loc )
+    public void setLocation( String loc )
     {
         location = loc;
     }

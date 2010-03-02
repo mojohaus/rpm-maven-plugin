@@ -261,8 +261,22 @@ final class SpecWriter
                 if ( sourceCnt == 1 )
                 {
                     final SoftlinkSource linkSource = (SoftlinkSource) sources.get( 0 );
-                    final File sourceLocation = linkSource.getLocation();
-                    final File buildSourceLocation = new File( mojo.getBuildroot(), sourceLocation.getAbsolutePath() );
+
+                    final String sourceLocation = linkSource.getLocation();
+//                    final File locationFile = location.startsWith( "/" ) ? new File(location) : new File(mojo.project.getBasedir(), location);
+                    
+                    final File buildSourceLocation;
+                    if ( sourceLocation.startsWith( "/" ) )
+                    {
+                        buildSourceLocation = new File( mojo.project.getBasedir(), sourceLocation );
+                    }
+                    else
+                    {
+                        buildSourceLocation =
+                            new File( mojo.project.getBasedir(), directory + '/' + sourceLocation );
+                    }
+                    
+                    //final File buildSourceLocation = new File( mojo.getBuildroot(), sourceLocation.getAbsolutePath() );
                     if ( buildSourceLocation.isDirectory() )
                     {
                         final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
@@ -273,7 +287,7 @@ final class SpecWriter
                             destinationFile.delete();
 
                             spec.print( "ln -s " );
-                            spec.print( sourceLocation.getAbsolutePath() );
+                            spec.print( sourceLocation );
                             spec.print( " $RPM_BUILD_ROOT/" );
                             spec.print( directory );
 
@@ -302,9 +316,19 @@ final class SpecWriter
                     for ( Iterator sourceIter = sources.iterator(); sourceIter.hasNext(); )
                     {
                         final SoftlinkSource linkSource = (SoftlinkSource) sourceIter.next();
-                        final File sourceLocation = linkSource.getLocation();
-                        final File buildSourceLocation =
-                            new File( mojo.getBuildroot(), sourceLocation.getAbsolutePath() );
+                        final String sourceLocation = linkSource.getLocation();
+                        
+                        final File buildSourceLocation;
+                        if ( sourceLocation.startsWith( "/" ) )
+                        {
+                            buildSourceLocation = new File( mojo.project.getBasedir(), sourceLocation );
+                        }
+                        else
+                        {
+                            buildSourceLocation =
+                                new File( mojo.project.getBasedir(), directory + '/' + sourceLocation );
+                        }
+                        
                         if ( buildSourceLocation.isDirectory() )
                         {
                             final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
@@ -333,9 +357,9 @@ final class SpecWriter
     private void linkScannedFiles( String directory, final SoftlinkSource linkSource, final DirectoryScanner scanner )
     {
         final String[] files = scanner.getIncludedFiles();
-        final File sourceLocation = linkSource.getLocation();
+        final String sourceLocation = linkSource.getLocation();
 
-        final String targetPrefix = sourceLocation.getAbsolutePath() + File.separatorChar;
+        final String targetPrefix = sourceLocation + File.separatorChar;
         final String sourcePrefix = directory + File.separatorChar;
 
         for ( int i = 0; i < files.length; ++i )
@@ -441,14 +465,14 @@ final class SpecWriter
      */
     private void linkSingleFile( String directory, final SoftlinkSource linkSource )
     {
-        final File sourceLocation = linkSource.getLocation();
+        final String sourceLocation = linkSource.getLocation();
         spec.print( "ln -s " );
-        spec.print( sourceLocation.getAbsolutePath() );
+        spec.print( sourceLocation );
         spec.print( " $RPM_BUILD_ROOT/" );
         spec.print( directory );
         spec.print( '/' );
         final String destination = linkSource.getDestination();
-        final String linkedFileName = destination == null ? sourceLocation.getName() : destination;
+        final String linkedFileName = destination == null ? new File(sourceLocation).getName() : destination;
         spec.println( linkedFileName );
 
         linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( linkedFileName );

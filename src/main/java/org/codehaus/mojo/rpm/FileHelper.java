@@ -403,7 +403,8 @@ final class FileHelper
                     continue;
                 }
 
-                File location = src.getLocation();
+                final String location = src.getLocation();
+                final File locationFile = location.startsWith( "/" ) ? new File(location) : new File(mojo.project.getBasedir(), location);
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
                 if ( src instanceof SoftlinkSource )
@@ -420,7 +421,7 @@ final class FileHelper
                     ( (SoftlinkSource) src ).setSourceMapping( map );
                     map.setHasSoftLinks( true );
                 }
-                else if ( location.exists() )
+                else if ( locationFile.exists() )
                 {
                     final String destination = src.getDestination();
                     if ( destination == null )
@@ -434,20 +435,20 @@ final class FileHelper
                             }
                             elist.addAll( FileUtils.getDefaultExcludesAsList() );
                         }
-                        map.addCopiedFileNamesRelativeToDestination( copySource( src.getLocation(), null, dest,
+                        map.addCopiedFileNamesRelativeToDestination( copySource( locationFile, null, dest,
                                                                                  src.getIncludes(), elist,
                                                                                  src.isFilter() ) );
                     }
                     else
                     {
-                        if ( !location.isFile() )
+                        if ( !locationFile.isFile() )
                         {
                             throw new MojoExecutionException( MessageFormat.format( DESTINATION_DIRECTORY_ERROR_MSG,
                                                                                     new Object[] { destination,
-                                                                                        location.getName() } ) );
+                                                                                        location } ) );
                         }
 
-                        copySource( location, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+                        copySource( locationFile, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
                                     src.isFilter() );
 
                         map.addCopiedFileNameRelativeToDestination( destination );
