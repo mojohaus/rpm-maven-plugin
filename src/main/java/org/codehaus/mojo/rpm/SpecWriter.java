@@ -102,28 +102,22 @@ final class SpecWriter
         {
             spec.println( "Prefix: " + mojo.getPrefix() );
         }
-        spec.println( "BuildRoot: " + mojo.getBuildroot().getAbsolutePath() );
+        spec.println( "BuildRoot: " + mojo.getRPMBuildroot().getAbsolutePath() );
         spec.println();
         spec.println( "%description" );
         if ( mojo.getDescription() != null )
         {
             spec.println( mojo.getDescription() );
         }
+        
+        writeMove();
 
-        boolean printedInstall = writeLinks();
+        writeLinks();
 
         if ( mojo.getInstallScriptlet() != null )
         {
-            if ( !printedInstall )
-            {
-                mojo.getInstallScriptlet().write( spec, "%install" );
-            }
-            else
-            {
-                spec.println();
-
-                mojo.getInstallScriptlet().writeContent( spec );
-            }
+            spec.println();
+            mojo.getInstallScriptlet().writeContent( spec );
         }
 
         writeFiles();
@@ -228,19 +222,35 @@ final class SpecWriter
     }
 
     /**
-     * Writes the install commands to link files.
-     * 
-     * @return An indication if the %install directive has been written.
+     * Writes the beginning of the <i>%install</i> which includes moving all files from the
+     * {@link AbstractRPMMojo#getBuildroot()} to {@link AbstractRPMMojo#getRPMBuildroot()}.
      */
-    private boolean writeLinks()
+    private void writeMove()
     {
-        boolean printedInstall = false;
+        final String tmpBuildRoot = mojo.getBuildroot().getAbsolutePath();
 
+        spec.println();
+        spec.println( "%install" );
+        spec.println( "if [ -e $RPM_BUILD_ROOT ];" );
+        spec.println( "then" );
+        spec.print( "  mv " );
+        spec.print( tmpBuildRoot );
+        spec.println( "/* $RPM_BUILD_ROOT" );
+        spec.println( "else" );
+        spec.print( "  mv " );
+        spec.print( tmpBuildRoot );
+        spec.println( " $RPM_BUILD_ROOT" );
+        spec.println( "fi" );
+    }
+
+    /**
+     * Writes the install commands to link files.
+     */
+    private void writeLinks()
+    {
         if ( !mojo.getLinkTargetToSources().isEmpty() )
         {
             spec.println();
-            spec.println( "%install" );
-            printedInstall = true;
 
             for ( Iterator entryIter = mojo.getLinkTargetToSources().entrySet().iterator(); entryIter.hasNext(); )
             {
@@ -343,7 +353,6 @@ final class SpecWriter
                 }
             }
         }
-        return printedInstall;
     }
 
     /**

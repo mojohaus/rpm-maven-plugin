@@ -684,8 +684,11 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      */
     private boolean disabled;
 
-    /** The root of the build area. */
+    /** The root of the build area prior to calling rpmbuild. */
     private File buildroot;
+
+    /** The root of the build area as used by rpmbuild. */
+    private File rpmBuildroot;
     
     /** The changelog string. */
     private String changelog;
@@ -803,7 +806,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      */
     private void buildWorkArea() throws MojoFailureException, MojoExecutionException
     {
-        final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS", "buildroot" };
+        final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS", "tmp-buildroot", "buildroot" };
 
         // Build the top directory
         if ( !workarea.exists() )
@@ -845,7 +848,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
         }
 
         // set build root variable
-        buildroot = new File( workarea, "buildroot" );
+        buildroot = new File( workarea, "tmp-buildroot" );
+        rpmBuildroot = new File( workarea, "buildroot" );
     }
 
     /**
@@ -1363,6 +1367,14 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     final File getBuildroot()
     {
         return this.buildroot;
+    }
+    
+    /**
+     * @return Returns the {@link #rpmBuildroot}.
+     */
+    final File getRPMBuildroot()
+    {
+        return this.rpmBuildroot;
     }
 
     /**

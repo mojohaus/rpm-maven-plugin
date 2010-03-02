@@ -115,7 +115,7 @@ final class RPMHelper
         cl.setWorkingDirectory( f.getAbsolutePath() );
         cl.createArg().setValue( "-bb" );
         cl.createArg().setValue( "--buildroot" );
-        cl.createArg().setValue( mojo.getBuildroot().getAbsolutePath() );
+        cl.createArg().setValue( mojo.getRPMBuildroot().getAbsolutePath() );
         cl.createArg().setValue( "--define" );
         cl.createArg().setValue( "_topdir " + workarea.getAbsolutePath() );
         cl.createArg().setValue( "--target" );
