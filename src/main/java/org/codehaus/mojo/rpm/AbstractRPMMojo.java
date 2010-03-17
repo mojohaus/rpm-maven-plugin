@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -54,6 +55,13 @@ import org.codehaus.plexus.util.Os;
  */
 abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMojo
 {
+    /**
+     * Maintains a mapping of macro keys to their values (either {@link RPMHelper#evaluateMacro(String) evaluated} or
+     * set via {@link #defineStatements}.
+     * @since 2.1
+     */
+    private final Map/* <String,String> */macroKeyToValue = new HashMap();
+    
     /**
      * The key of the map is the directory where the files should be linked to. The value is the {@code List}
      * of {@link SoftlinkSource}s to be linked to.
@@ -700,6 +708,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @since 2.0-beta-3
      */
     private File changelogFile;
+    
+    /**
+     * This is not set until {@link #execute() is called}.
+     * @since 2.1
+     */
+    private RPMHelper helper;
 
     // // // Mojo methods
 
@@ -712,7 +726,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             return;
         }
 
-        final RPMHelper helper = new RPMHelper( this );
+        helper = new RPMHelper( this );
         
         checkParams( helper );
 
@@ -973,6 +987,29 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
                 provides.addAll( obsoletes );
             }
         }
+        
+        processDefineStatements();
+    }
+
+    /**
+     * Put all name/value pairs in {@link #defineStatements} in {@link #macroKeyToValue}.
+     * @since 2.1
+     */
+    private void processDefineStatements()
+    {
+        if (defineStatements == null)
+        {
+            return;
+        }
+        for ( Iterator i = defineStatements.iterator(); i.hasNext(); )
+        {
+            final String define = (String) i.next();
+            String[] parts = define.split( " " );
+            if ( parts.length == 2 )
+            {
+                macroKeyToValue.put( parts[0], parts[1] );
+            }
+        }
     }
 
     /**
@@ -1012,6 +1049,27 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
         }
 
         return scriptlet;
+    }
+    
+    /**
+     * Determines the actual value for the <i>macro</i>. Will check both {@link #defineStatements} and
+     * {@link RPMHelper#evaluateMacro(String)}.
+     * @param macro The macro to evaluate.
+     * @return The literal value or name of macro if it has no value.
+     * @throws MojoExecutionException
+     * @since 2.1
+     */
+    String evaluateMacro( String macro ) throws MojoExecutionException    
+    {
+        if (macroKeyToValue.containsKey( macro ))
+        {
+            return (String) macroKeyToValue.get( macro );
+        }
+        
+        final String value = helper.evaluateMacro( macro );
+        macroKeyToValue.put( macro, value );
+        
+        return value;
     }
 
     /**

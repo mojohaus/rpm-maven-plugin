@@ -29,6 +29,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
@@ -53,6 +55,12 @@ final class FileHelper
      */
     private static final String DESTINATION_DIRECTORY_ERROR_MSG =
         "Source has a destination [{0}], but the location [{1}] does not refer to a file.";
+    
+    /**
+     * {@code Pattern} to identify macros.
+     * @since 2.1
+     */
+    private static final Pattern MACRO_PATTERN = Pattern.compile( "%\\{([^}]*)\\}" );
 
     /**
      * A Plexus component to copy files and directories. Using our own custom version of the DirectoryArchiver to allow
@@ -99,7 +107,11 @@ final class FileHelper
         for ( Iterator it = mojo.getMappings().iterator(); it.hasNext(); )
         {
             Mapping map = (Mapping) it.next();
-            File dest = new File( buildroot + map.getDestination() );
+            final String destinationString = map.getDestination();
+            final String macroEvaluatedDestination = evaluateMacros( destinationString );
+            
+            File dest = new File( buildroot, macroEvaluatedDestination );
+            map.setAbsoluteDestination( dest );
 
             if ( map.isDirOnly() )
             {
@@ -403,8 +415,10 @@ final class FileHelper
                     continue;
                 }
 
-                final String location = src.getLocation();
-                final File locationFile = location.startsWith( "/" ) ? new File(location) : new File(mojo.project.getBasedir(), location);
+                final String macroEvaluatedLocation = evaluateMacros( src.getLocation() );
+                src.setMacroEvaluatedLocation( macroEvaluatedLocation );
+                
+                final File locationFile = macroEvaluatedLocation.startsWith( "/" ) ? new File(macroEvaluatedLocation) : new File(mojo.project.getBasedir(), macroEvaluatedLocation);
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
                 if ( src instanceof SoftlinkSource )
@@ -445,7 +459,7 @@ final class FileHelper
                         {
                             throw new MojoExecutionException( MessageFormat.format( DESTINATION_DIRECTORY_ERROR_MSG,
                                                                                     new Object[] { destination,
-                                                                                        location } ) );
+                                                                                    macroEvaluatedLocation } ) );
                         }
 
                         copySource( locationFile, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
@@ -456,10 +470,34 @@ final class FileHelper
                 }
                 else
                 {
-                    throw new MojoExecutionException( "Source location " + location + " does not exist" );
+                    throw new MojoExecutionException( "Source location " + macroEvaluatedLocation + " does not exist" );
                 }
             }
         }
+    }
+    
+    /**
+     * Determine if there are any macros in the <i>value</i> and replace any/all occurrences with the
+     * {@link AbstractRPMMojo#evaluateMacro(String) evaluated} value.
+     * @param value String to replace macros in.
+     * @return Result of evaluating all macros in <i>value</i>. 
+     * @throws MojoExecutionException
+     * @since 2.1
+     */
+    private String evaluateMacros(String value) throws MojoExecutionException
+    {
+        final Matcher matcher = MACRO_PATTERN.matcher( value );
+
+        final StringBuffer newValue = new StringBuffer(value.length());
+        while(matcher.find())
+        {
+            final String macro = matcher.group( 1 );
+            final String evaluatedValue = mojo.evaluateMacro( macro );
+            matcher.appendReplacement( newValue, evaluatedValue.replaceAll( "\\\\", "\\\\\\\\" ) );
+        }
+        
+        matcher.appendTail( newValue );
+        return newValue.toString();
     }
 
     /**

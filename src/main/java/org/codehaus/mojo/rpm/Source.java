@@ -87,8 +87,12 @@ public class Source
      */
     private boolean filter;
     
-    // // // Bean methods
-
+    /**
+     * The {@link #location} with any/all macros {@link AbstractRPMMojo#evaluateMacro(String) evaluated}.
+     * @since 2.1
+     */
+    private String macroEvaluatedLocation;
+    
     /**
      * Retrieve the location holding the file(s) to install.
      * 
@@ -279,6 +283,24 @@ public class Source
     boolean matchesOSName( String osName )
     {
         return targetOSNamePattern == null ? true : targetOSNamePattern.matcher( osName ).matches();
+    }
+
+    /**
+     * @return Returns the {@link #macroEvaluatedLocation}.
+     * @since 2.1
+     */
+    final String getMacroEvaluatedLocation()
+    {
+        return this.macroEvaluatedLocation;
+    }
+
+    /**
+     * @param macroEvaluatedLocation The {@link #macroEvaluatedLocation} to set.
+     * @since 2.1
+     */
+    final void setMacroEvaluatedLocation( String macroEvaluatedLocation )
+    {
+        this.macroEvaluatedLocation = macroEvaluatedLocation;
     }
 
     /** {@inheritDoc} */

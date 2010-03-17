@@ -19,6 +19,7 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -105,7 +106,13 @@ public class Mapping
      */
     private boolean hasSoftLinks = false;
 
-    // // // Bean methods
+    /**
+     * The absolute destination in the {@link AbstractRPMMojo#getBuildroot() buildroot}. This includes evaluating
+     * any/all macros.
+     * 
+     * @since 2.1
+     */
+    private File absoluteDestination;
 
     /**
      * Retrieve the destination during package installation.
@@ -525,6 +532,24 @@ public class Mapping
     void setHasSoftLinks( boolean hasSoftLinks )
     {
         this.hasSoftLinks = hasSoftLinks;
+    }
+
+    /**
+     * @return Returns the {@link #absoluteDestination}.
+     * @since 2.1
+     */
+    final File getAbsoluteDestination()
+    {
+        return this.absoluteDestination;
+    }
+
+    /**
+     * @param absoluteDestination The {@link #absoluteDestination} to set.
+     * @since 2.1
+     */
+    final void setAbsoluteDestination( File absoluteDestination )
+    {
+        this.absoluteDestination = absoluteDestination;
     }
 
     /** {@inheritDoc} */

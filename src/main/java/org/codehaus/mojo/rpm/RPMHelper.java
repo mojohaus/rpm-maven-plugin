@@ -171,4 +171,43 @@ final class RPMHelper
             }
         }
     }
+    
+    /**
+     * Evaluates the <i>macro</i> by executing <code>rpm --eval %<i>macro</i></code>.
+     * @param macro The macro to evaluate.
+     * @return The result of rpm --eval.
+     * @throws MojoExecutionException
+     * @since 2.1
+     */
+    public String evaluateMacro(String macro) throws MojoExecutionException
+    {
+        final Commandline cl = new Commandline();
+        cl.setExecutable( "rpm" );
+        cl.createArg().setValue( "--eval" );
+        cl.createArg().setValue( '%' + macro );
+
+        final Log log = mojo.getLog();
+        
+        final StringStreamConsumer stdout = new StringStreamConsumer();
+        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, log );
+        try
+        {
+            if ( log.isDebugEnabled() )
+            {
+                log.debug( "About to execute \'" + cl.toString() + "\'" );
+            }
+
+            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
+            if ( result != 0 )
+            {
+                throw new MojoExecutionException( "rpm --eval returned: \'" + result + "\' executing \'" + cl.toString() + "\'" );
+            }
+        }
+        catch ( CommandLineException e )
+        {
+            throw new MojoExecutionException( "Unable to evaluate macro: " + macro, e );
+        }
+        
+        return stdout.getOutput().trim();
+    }
 }

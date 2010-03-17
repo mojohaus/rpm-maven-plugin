@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>bar</groupId>
+	<artifactId>rpm-macros</artifactId>
+	<version>1.0</version>
+	<packaging>rpm</packaging>
+	<organization>
+		<name>my org</name>
+		<url>www.my.org</url>
+	</organization>
+	<inceptionYear>2009</inceptionYear>
+	<dependencies>
+		<dependency>
+			<groupId>org.jvnet.hudson.main</groupId>
+			<artifactId>hudson-war</artifactId>
+			<version>1.255</version>
+			<type>war</type>
+		</dependency>
+		
+		<!-- TEST -->
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>java.net</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>testing</version>
+				<extensions>true</extensions>
+				<configuration>
+					<distribution>My App</distribution>
+					<group>Application/Collectors</group>
+					<defineStatements>
+						<defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+                        <defineStatement>_some_cool_dir /usr/mygrp</defineStatement>
+					</defineStatements>
+					<needarch>false</needarch>
+					<defaultUsername>myuser</defaultUsername>
+                    <defaultGroupname>mygroup</defaultGroupname>
+                    <mappings>
+                        <mapping>
+                            <directory>%{_some_cool_dir}</directory>
+                        </mapping>
+                        <mapping>
+                            <directory>%{_some_cool_dir}/app</directory>
+                            <sources>
+                                <source>
+                                    <location>src/main/bin/start.sh</location>
+                                    <destination>somefile</destination>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>%{_some_cool_dir}/app/lib</directory>
+                            <dependency>
+                                <stripVersion>true</stripVersion>
+                            </dependency>
+                        </mapping>
+                        <mapping>
+                            <directory>%{_datadir}/app2</directory>
+                            <sources>
+                                <softlinkSource>
+                                    <location>%{_some_cool_dir}/app</location>
+                                </softlinkSource>
+                            </sources>
+                        </mapping>
+                    </mappings>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
