@@ -417,8 +417,10 @@ final class FileHelper
 
                 final String macroEvaluatedLocation = evaluateMacros( src.getLocation() );
                 src.setMacroEvaluatedLocation( macroEvaluatedLocation );
-                
-                final File locationFile = macroEvaluatedLocation.startsWith( "/" ) ? new File(macroEvaluatedLocation) : new File(mojo.project.getBasedir(), macroEvaluatedLocation);
+
+                final File locationFile =
+                    macroEvaluatedLocation.startsWith( "/" ) ? new File( macroEvaluatedLocation )
+                                    : new File( mojo.project.getBasedir(), macroEvaluatedLocation );
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
                 if ( src instanceof SoftlinkSource )
@@ -488,14 +490,14 @@ final class FileHelper
     {
         final Matcher matcher = MACRO_PATTERN.matcher( value );
 
-        final StringBuffer newValue = new StringBuffer(value.length());
-        while(matcher.find())
+        final StringBuffer newValue = new StringBuffer( value.length() );
+        while ( matcher.find() )
         {
             final String macro = matcher.group( 1 );
             final String evaluatedValue = mojo.evaluateMacro( macro );
             matcher.appendReplacement( newValue, evaluatedValue.replaceAll( "\\\\", "\\\\\\\\" ) );
         }
-        
+
         matcher.appendTail( newValue );
         return newValue.toString();
     }

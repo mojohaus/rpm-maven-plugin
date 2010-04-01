@@ -997,7 +997,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      */
     private void processDefineStatements()
     {
-        if (defineStatements == null)
+        if ( defineStatements == null )
         {
             return;
         }
@@ -1061,14 +1061,14 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      */
     String evaluateMacro( String macro ) throws MojoExecutionException    
     {
-        if (macroKeyToValue.containsKey( macro ))
+        if ( macroKeyToValue.containsKey( macro ) )
         {
             return (String) macroKeyToValue.get( macro );
         }
-        
+
         final String value = helper.evaluateMacro( macro );
         macroKeyToValue.put( macro, value );
-        
+
         return value;
     }
 

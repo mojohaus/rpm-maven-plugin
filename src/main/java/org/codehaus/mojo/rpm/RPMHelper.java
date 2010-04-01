@@ -171,15 +171,16 @@ final class RPMHelper
             }
         }
     }
-    
+
     /**
      * Evaluates the <i>macro</i> by executing <code>rpm --eval %<i>macro</i></code>.
+     * 
      * @param macro The macro to evaluate.
      * @return The result of rpm --eval.
      * @throws MojoExecutionException
      * @since 2.1
      */
-    public String evaluateMacro(String macro) throws MojoExecutionException
+    public String evaluateMacro( String macro ) throws MojoExecutionException
     {
         final Commandline cl = new Commandline();
         cl.setExecutable( "rpm" );
@@ -200,7 +201,8 @@ final class RPMHelper
             int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
             if ( result != 0 )
             {
-                throw new MojoExecutionException( "rpm --eval returned: \'" + result + "\' executing \'" + cl.toString() + "\'" );
+                throw new MojoExecutionException( "rpm --eval returned: \'" + result + "\' executing \'"
+                    + cl.toString() + "\'" );
             }
         }
         catch ( CommandLineException e )
