@@ -6,18 +6,127 @@
     <author email="boba@codehaus.org">Bob Allison</author>
   </properties>
   <body>
-    <release version="1.0-alpha-1" date="2005-11-11">
-      <action dev="boba" type="add">
-        Initial version
-      </action>
+    <release version="2.1">
+        <action dev="bokken" type="fix" issue="MRPM-65" system="jira">
+            Fix softlinks with relative locations.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-69" system="jira">
+            Automatically declare subdirectories created from sources in %files.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-66" system="jira">
+            Assemble in temp buildroot and move to real buildroot as part of %install.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-5" system="jira">
+            Allow use of macros (including from define statements) in Mappings. 
+        </action>
     </release>
-    <release version="1.0-beta-1" date="2007-08-10">
-      <action dev="kaare" type="add">
-        Added support for %clean and %install scripts
-      </action>
-      <action dev="kaare" type="add">
-        Added support for %define arguments
-      </action>
+    <release version="2.0.1" date="2010-02-11">
+        <action dev="bokken" type="fix" issue="MRPM-63" system="jira">
+            warning message for truncated version does not include the truncated value
+        </action>
+        <action dev="bokken" type="fix" issue="MRPM-64" system="jira">
+            Version MOJO fails with NPE when a release value is configured rather than calculated.
+        </action>
+    </release>
+    <release version="2.0" date="2010-02-05">
+        <action dev="bokken" type="fix" issue="MRPM-50" system="jira">
+            Support '*' in artifact names for dependencies. 
+        </action>
+        <action dev="bokken" type="fix" issue="MRPM-55" system="jira">
+            Fix support of prepareScriptlet parameter. 
+        </action>
+        <action dev="bokken" type="fix" issue="MRPM-58" system="jira">
+            Improve documentation around scripting including examples
+            and fixing erroneous postinstall reference. 
+        </action>
+        <action dev="bokken" type="fix" issue="MRPM-61" system="jira">
+            Improve documentation around spaces in absolute path to workarea.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-38" system="jira">
+            Allow filtering of sources. 
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-52" system="jira">
+            Add ability to disable plugin by configuration. 
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-56" system="jira">
+            Clear work area directories before each execution. 
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-62" system="jira">
+            Make version and release available as properties (creating VersionMojo). 
+        </action>
+        <action dev="bokken" type="add">
+            Add integration test for reactor build. 
+        </action>
+        <action dev="bokken" type="add">
+            Add integration test for rpm as secondary artifact containing primary and other secondary artifacts. 
+        </action>
+    </release>
+    <release version="2.0-beta-4" date="2009-10-13">
+        <action dev="bokken" type="fix" issue="MRPM-34" system="jira">
+            SoftlinkSources do not work correctly if the location exists on the build machine.
+        </action>
+        <action dev="bokken" type="fix" issue="MRPM-35" system="jira">
+            SoftlinkSources do not work if location is a file and is only source in mapping. 
+        </action>
+        <action dev="bokken" type="fix" issue="MRPM-43" system="jira">
+            Links to directory ignore the SoftlinkSource.destination. 
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-36" system="jira">
+            Add support for "prep" section.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-39" system="jira">
+            Add support for triggers.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-40" system="jira">
+            Add support the the special flag '-p' for the scriptlet sections. 
+            This lead to deprecating the existing configuration for all scripts. 
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-41" system="jira">
+            Add support for the %pretrans and %posttrans scriptlets.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-42" system="jira">
+            Add ability to strip the version from dependencies.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-44" system="jira">
+            Use the default filemode, group and user for more than just %defattr directive.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-45" system="jira">
+            Add ability to sign rpms without user interaction.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-48" system="jira">
+            Add suport for autoreq and autoprov tags.
+        </action>
+        <action dev="bokken" type="add" issue="MRPM-49" system="jira">
+            Packages being obsoleted should automatically be added to those provided.
+        </action>
+    </release>
+    <release version="2.0-beta-3" date="2009-06-30">
+        <action dev="bokken" type="fix" issue="MOJO-1385" system="jira">
+            Mapping.Source.Destination for a Mapping.directory that does not yet exist
+        </action>
+        <action dev="bokken" type="fix" issue="MOJO-1383" system="jira">
+            Handle multiple executions. This involves creating unique work areas for each execution. 
+            This may break consumers expecting the rpm to be located at a specific path in filesystem.
+        </action>
+        <action dev="bokken" type="fix" issue="MOJO-1384" system="jira">
+            populate the --target parameter for rpmbuild command correctly. 
+            Also adds the ability to filter content of rpm based on so.
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-1376" system="jira">
+            add support for %Obsoletes and %PreReq
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-1380" system="jira">
+            add support %changelog
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-1308" system="jira">
+            add support for creating soft links
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-1394" system="jira">
+            Change Source.targetArchitecture into a Regular Expression.
+        </action>
+        <action dev="bokken" type="add" issue="MOJO-1388" system="jira">
+            Ignore rpm script files which do not exist.
+        </action>
     </release>
     <release version="2.0-beta-2" date="2009-02-02">
         <action dev="carlos" type="fix" issue="MOJO-1202" system="jira">
@@ -63,124 +172,18 @@
             add support for %defattr
         </action>
     </release>
-    <release version="2.0-beta-3" date="2009-06-30">
-        <action dev="bokken" type="fix" issue="MOJO-1385" system="jira">
-            Mapping.Source.Destination for a Mapping.directory that does not yet exist
-        </action>
-        <action dev="bokken" type="fix" issue="MOJO-1383" system="jira">
-            Handle multiple executions. This involves creating unique work areas for each execution. 
-            This may break consumers expecting the rpm to be located at a specific path in filesystem.
-        </action>
-        <action dev="bokken" type="fix" issue="MOJO-1384" system="jira">
-            populate the --target parameter for rpmbuild command correctly. 
-            Also adds the ability to filter content of rpm based on so.
-        </action>
-        <action dev="bokken" type="add" issue="MOJO-1376" system="jira">
-            add support for %Obsoletes and %PreReq
-        </action>
-        <action dev="bokken" type="add" issue="MOJO-1380" system="jira">
-            add support %changelog
-        </action>
-        <action dev="bokken" type="add" issue="MOJO-1308" system="jira">
-            add support for creating soft links
-        </action>
-        <action dev="bokken" type="add" issue="MOJO-1394" system="jira">
-            Change Source.targetArchitecture into a Regular Expression.
-        </action>
-        <action dev="bokken" type="add" issue="MOJO-1388" system="jira">
-            Ignore rpm script files which do not exist.
-        </action>
+    <release version="1.0-beta-1" date="2007-08-10">
+      <action dev="kaare" type="add">
+        Added support for %clean and %install scripts
+      </action>
+      <action dev="kaare" type="add">
+        Added support for %define arguments
+      </action>
     </release>
-    <release version="2.0-beta-4" date="2009-10-13">
-        <action dev="bokken" type="fix" issue="MRPM-34" system="jira">
-            SoftlinkSources do not work correctly if the location exists on the build machine.
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-35" system="jira">
-            SoftlinkSources do not work if location is a file and is only source in mapping. 
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-43" system="jira">
-            Links to directory ignore the SoftlinkSource.destination. 
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-36" system="jira">
-            Add support for "prep" section.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-39" system="jira">
-            Add support for triggers.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-40" system="jira">
-            Add support the the special flag '-p' for the scriptlet sections. 
-            This lead to deprecating the existing configuration for all scripts. 
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-41" system="jira">
-            Add support for the %pretrans and %posttrans scriptlets.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-42" system="jira">
-            Add ability to strip the version from dependencies.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-44" system="jira">
-            Use the default filemode, group and user for more than just %defattr directive.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-45" system="jira">
-            Add ability to sign rpms without user interaction.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-48" system="jira">
-            Add suport for autoreq and autoprov tags.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-49" system="jira">
-            Packages being obsoleted should automatically be added to those provided.
-        </action>
-    </release>
-    <release version="2.0" date="2010-02-05">
-        <action dev="bokken" type="fix" issue="MRPM-50" system="jira">
-            Support '*' in artifact names for dependencies. 
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-55" system="jira">
-            Fix support of prepareScriptlet parameter. 
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-58" system="jira">
-            Improve documentation around scripting including examples
-            and fixing erroneous postinstall reference. 
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-61" system="jira">
-            Improve documentation around spaces in absolute path to workarea.
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-38" system="jira">
-            Allow filtering of sources. 
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-52" system="jira">
-            Add ability to disable plugin by configuration. 
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-56" system="jira">
-            Clear work area directories before each execution. 
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-62" system="jira">
-            Make version and release available as properties (creating VersionMojo). 
-        </action>
-        <action dev="bokken" type="add">
-            Add integration test for reactor build. 
-        </action>
-        <action dev="bokken" type="add">
-            Add integration test for rpm as secondary artifact containing primary and other secondary artifacts. 
-        </action>
-    </release>
-    <release version="2.0.1" date="2010-02-11">
-        <action dev="bokken" type="fix" issue="MRPM-63" system="jira">
-            warning message for truncated version does not include the truncated value
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-64" system="jira">
-            Version MOJO fails with NPE when a release value is configured rather than calculated.
-        </action>
-    </release>
-    <release version="2.1">
-        <action dev="bokken" type="add" issue="MRPM-5" system="jira">
-            Allow use of macros (including from define statements) in Mappings. 
-        </action>
-        <action dev="bokken" type="add" issue="MRPM-66" system="jira">
-            Assemble in temp buildroot and move to real buildroot as part of %install.
-        </action>
-        <action dev="bokken" type="fix" issue="MRPM-65" system="jira">
-            Fix softlinks with relative locations.
-        </action>
+    <release version="1.0-alpha-1" date="2005-11-11">
+      <action dev="boba" type="add">
+        Initial version
+      </action>
     </release>
   </body>
 </document>

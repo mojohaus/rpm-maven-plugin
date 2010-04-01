@@ -108,6 +108,7 @@
                         <mapping>
                             <directory>/usr/myusr/app/bin</directory>
                             <filemode>755</filemode>
+                            <recurseDirectories>true</recurseDirectories>
                             <sources>
                                 <source>
                                     <location>src/main/bin2/rename.sh</location>

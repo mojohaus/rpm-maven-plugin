@@ -184,13 +184,15 @@ final class SpecWriter
 
             // the linked files are not present yet (will be "installed" during rpm build)
             // so they cannot be "included"
-            scanner.setIncludes( includes.isEmpty() ? null : (String[]) includes.toArray( new String[includes.size()] ) );
+            scanner.setIncludes( includes.isEmpty() ? null : 
+                (String[]) includes.toArray( new String[ includes.size() ] ) );
             scanner.setExcludes( null );
             scanner.scan();
 
             final String attrString =
                 map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
-            if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded() )
+            if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded()
+                && !map.isRecurseDirectories() )
             {
                 log.debug( "writing attriute string for directory: " + destination );
                 spec.println( attrString + " " + destination );
@@ -199,14 +201,35 @@ final class SpecWriter
             {
                 log.debug( "writing attribute string for identified files in directory: " + destination );
 
-                String[] files = scanner.getIncludedFiles();
-
                 final String baseFileString = attrString + " " + destination + File.separatorChar;
 
-                for ( int i = 0; i < files.length; ++i )
+                // only list files if requested (directoryIncluded == false) or we have to
+                if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() ) )
                 {
-                    spec.print( baseFileString );
-                    spec.println( files[i] );
+                    final String[] files = scanner.getIncludedFiles();
+
+                    for ( int i = 0; i < files.length; ++i )
+                    {
+                        spec.print( baseFileString );
+                        spec.println( files[i] );
+                    }
+                }
+
+                if ( map.isRecurseDirectories() )
+                {
+                    final String[] dirs = scanner.getIncludedDirectories();
+
+                    if ( map.isDirectoryIncluded() )
+                    {
+                        // write out destination first
+                        spec.println( baseFileString );
+                    }
+
+                    for ( int i = 0; i < dirs.length; ++i )
+                    {
+                        spec.print( baseFileString );
+                        spec.println( dirs[i] );
+                    }
                 }
 
                 // since the linked files are not present in directory (yet), the scanner will not find them

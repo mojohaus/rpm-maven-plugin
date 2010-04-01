@@ -77,7 +77,16 @@ public class Mapping
      * @since 2.0-beta-2
      */
     private boolean directoryIncluded = true;
-    
+
+    /**
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
+     * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
+     * is {@code true}.
+     * 
+     * @since 2.1
+     */
+    private boolean recurseDirectories = false;
+
     /**
      * List of files actually copied for the Mapping.
      * <p>
@@ -270,7 +279,8 @@ public class Mapping
 
     /**
      * Set the UNIX group name to own the installed files. Note that this must be a name, not a numeric group ID.
-     * 
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
+     * {@code %files}.
      * @param grpname The new UNIX group name to own the installed files.
      */
     public void setGroupname( String grpname )
@@ -338,7 +348,31 @@ public class Mapping
         dependency = am;
     }
 
-    // // // Public methods
+    /**
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
+     * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
+     * is {@code true}.
+     * 
+     * @return Returns the {@link #recurseDirectories}.
+     * @since 2.1
+     */
+    public final boolean isRecurseDirectories()
+    {
+        return this.recurseDirectories;
+    }
+
+    /**
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
+     * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
+     * is {@code true}.
+     * 
+     * @param recurseDirectories The {@link #recurseDirectories} to set.
+     * @since 2.1
+     */
+    public final void setRecurseDirectories( boolean recurseDirectories )
+    {
+        this.recurseDirectories = recurseDirectories;
+    }
 
     /**
      * Assemble the RPM SPEC file attributes for a mapping.

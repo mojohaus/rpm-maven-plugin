@@ -30,7 +30,7 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 System.out.println("File Count: " + fileCnt);
 System.out.println(fileInfos);
-if (fileCnt != 14)
+if (fileCnt != 17)
     throw new java.lang.AssertionError("file count");
 
 boolean x86NameScript = false;
@@ -40,6 +40,7 @@ boolean osNameScript = false;
 boolean archNameScript = false;
 boolean oldNameLink = false;
 boolean serviceLink = false;
+boolean subdir = false;
 
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
@@ -63,39 +64,36 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
         //check for executable mode
         if (fileInfo.path.startsWith("/usr/myusr/app/bin/"))
         {
-            //oldname.sh is a link, so the filemode is different
-            if (fileInfo.path.endsWith("/oldname.sh"))
+            if (!fileInfo.mode.endsWith("rwxr-xr-x"))
+                throw new java.lang.AssertionError("file mode for: " + fileInfo);
+
+            if (fileInfo.path.endsWith("/name.sh"))
+            {
+                nameScript = true;
+            }
+            else if (fileInfo.path.endsWith("/name-someOS.sh"))
+            {
+                osNameScript = true;
+            }
+            else if (fileInfo.path.endsWith("/name-someArch.sh"))
+            {
+                archNameScript = true;
+            }
+            else if (fileInfo.path.endsWith("/name-linux.sh"))
+            {
+                linuxNameScript = true;
+            }
+            else if (fileInfo.path.endsWith("/name-x86.sh"))
+            {
+                x86NameScript = true;
+            }
+            else if (fileInfo.path.endsWith("/oldname.sh"))
             {
                 oldNameLink = true;
-                if (!fileInfo.mode.equals("lrwxr-xr-x"))
-                    throw new java.lang.AssertionError("file mode for: " + fileInfo);
             }
-            else
+            else if (fileInfo.path.endsWith("/subdir"))
             {
-                if (!fileInfo.mode.equals("-rwxr-xr-x"))
-                    throw new java.lang.AssertionError("file mode for: " + fileInfo);
-            
-                if (fileInfo.path.endsWith("/name.sh"))
-                {
-                    nameScript = true;
-                }
-                else if (fileInfo.path.endsWith("/name-someOS.sh"))
-                {
-                    osNameScript = true;
-                }
-                else if (fileInfo.path.endsWith("/name-someArch.sh"))
-                {
-                    archNameScript = true;
-                }
-                else if (fileInfo.path.endsWith("/name-linux.sh"))
-                {
-                    linuxNameScript = true;
-                }
-                else if (fileInfo.path.endsWith("/name-x86.sh"))
-                {
-                    x86NameScript = true;
-                }
-                
+                subdir = true;
             }
         }
     }
@@ -121,5 +119,8 @@ if (x86NameScript)
     
 if (!serviceLink)
     throw new java.lang.AssertionError("service link not found")
+    
+if (!subdir)
+    throw new java.lang.AssertionError("subdir directory not found")
 
 return true
