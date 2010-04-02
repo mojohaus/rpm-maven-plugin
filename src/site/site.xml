@@ -37,6 +37,7 @@
               <item name="filemode*" href="map-params.html#filemode"/>
               <item name="groupname*" href="map-params.html#groupname"/>
               <item name="directoryIncluded" href="map-params.html#directoryIncluded"/>
+              <item name="recurseDirectories" href="map-params.html#recurseDirectories"/>
               <item name="sources" href="map-params.html#sources"/>
               <item name="username*" href="map-params.html#username"/>
           </item>
@@ -54,7 +55,6 @@
               <item name="Signatures" href="adv-params.html#Signatures"/>
           </item>
       </item>
-      
       <item name="Release Notes" href="changes-report.html"/>
     </menu>
     <menu name="Examples">

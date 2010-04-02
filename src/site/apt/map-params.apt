@@ -113,6 +113,11 @@ Mapping Parameters
   If the value is <<<false>>>, the files in this mapping will be listed
   individually in the spec file. 
   
+* {recurseDirectories}
+
+  Indicates if sub-directories contained in the <<<sources>>> should be explicitly listed in <<<%files>>>.
+  This includes listing the <<<destination>>> if <<<directoryIncluded>>> is <<<true>>>.
+  
 * {artifact}
 
   If present, then the project's artifact should be included in this
