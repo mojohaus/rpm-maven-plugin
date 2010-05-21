@@ -157,7 +157,16 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     /**
      * The passphrase for the <i>keyname</i> to sign the rpm. This utilizes <a href="http://expect.nist.gov/">expect</a>
      * and requires that {@code expect} be on the PATH.
-     * 
+     * <p>
+     * Note that the data type used is <b>NOT</b> {@code String}.
+     * <pre>
+     * &lt;configuration&gt;
+     *     ...
+     *     &lt;keyPassphrase&gt;
+     *         &lt;passphrase&gt;<i>password</i>&lt;/passphrase&gt;
+     *     &lt;/keyPassphrase&gt;
+     * </pre>
+     * </p>
      * @parameter
      * @since 2.0-beta-4
      */
