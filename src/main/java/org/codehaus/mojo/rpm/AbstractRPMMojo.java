@@ -849,7 +849,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             File d = new File( workarea, topdirs[i] );
             if ( d.exists() )
             {
-                getLog().info( "Directory " + d.getAbsolutePath() + "already exists. Deleting all contents." );
+                getLog().info( "Directory " + d.getAbsolutePath() + " already exists. Deleting all contents." );
                 
                 try
                 {

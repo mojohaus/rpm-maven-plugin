@@ -10,6 +10,9 @@
         <action dev="bokken" type="fix" issue="MRPM-72" system="jira">
             Clarify documentation on configuring passphrase.
         </action>
+        <action dev="bokken" type="fix" issue="MRPM-71" system="jira">
+            Insert space in message saying the content is deleted.
+        </action>
         <action dev="bokken" type="fix" issue="MRPM-65" system="jira">
             Fix softlinks with relative locations.
         </action>
