@@ -83,7 +83,7 @@ public class Mapping
      * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
      * is {@code true}.
      * 
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private boolean recurseDirectories = false;
 
@@ -119,7 +119,7 @@ public class Mapping
      * The absolute destination in the {@link AbstractRPMMojo#getBuildroot() buildroot}. This includes evaluating
      * any/all macros.
      * 
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private File absoluteDestination;
 
@@ -354,7 +354,7 @@ public class Mapping
      * is {@code true}.
      * 
      * @return Returns the {@link #recurseDirectories}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     public final boolean isRecurseDirectories()
     {
@@ -367,7 +367,7 @@ public class Mapping
      * is {@code true}.
      * 
      * @param recurseDirectories The {@link #recurseDirectories} to set.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     public final void setRecurseDirectories( boolean recurseDirectories )
     {
@@ -570,7 +570,7 @@ public class Mapping
 
     /**
      * @return Returns the {@link #absoluteDestination}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     final File getAbsoluteDestination()
     {
@@ -579,7 +579,7 @@ public class Mapping
 
     /**
      * @param absoluteDestination The {@link #absoluteDestination} to set.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     final void setAbsoluteDestination( File absoluteDestination )
     {

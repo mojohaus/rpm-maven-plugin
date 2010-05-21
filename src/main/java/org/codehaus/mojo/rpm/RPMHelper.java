@@ -178,7 +178,7 @@ final class RPMHelper
      * @param macro The macro to evaluate.
      * @return The result of rpm --eval.
      * @throws MojoExecutionException
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     public String evaluateMacro( String macro ) throws MojoExecutionException
     {

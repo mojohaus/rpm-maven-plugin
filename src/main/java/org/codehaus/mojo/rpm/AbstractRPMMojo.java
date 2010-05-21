@@ -58,7 +58,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     /**
      * Maintains a mapping of macro keys to their values (either {@link RPMHelper#evaluateMacro(String) evaluated} or
      * set via {@link #defineStatements}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private final Map/* <String,String> */macroKeyToValue = new HashMap();
     
@@ -711,7 +711,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     
     /**
      * This is not set until {@link #execute() is called}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private RPMHelper helper;
 
@@ -993,7 +993,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * Put all name/value pairs in {@link #defineStatements} in {@link #macroKeyToValue}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private void processDefineStatements()
     {
@@ -1057,7 +1057,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @param macro The macro to evaluate.
      * @return The literal value or name of macro if it has no value.
      * @throws MojoExecutionException
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     String evaluateMacro( String macro ) throws MojoExecutionException    
     {

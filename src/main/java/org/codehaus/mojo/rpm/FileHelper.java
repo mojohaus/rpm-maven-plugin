@@ -58,7 +58,7 @@ final class FileHelper
     
     /**
      * {@code Pattern} to identify macros.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private static final Pattern MACRO_PATTERN = Pattern.compile( "%\\{([^}]*)\\}" );
 
@@ -484,7 +484,7 @@ final class FileHelper
      * @param value String to replace macros in.
      * @return Result of evaluating all macros in <i>value</i>. 
      * @throws MojoExecutionException
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private String evaluateMacros(String value) throws MojoExecutionException
     {

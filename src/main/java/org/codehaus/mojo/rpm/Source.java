@@ -89,7 +89,7 @@ public class Source
     
     /**
      * The {@link #location} with any/all macros {@link AbstractRPMMojo#evaluateMacro(String) evaluated}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     private String macroEvaluatedLocation;
     
@@ -287,7 +287,7 @@ public class Source
 
     /**
      * @return Returns the {@link #macroEvaluatedLocation}.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     final String getMacroEvaluatedLocation()
     {
@@ -296,7 +296,7 @@ public class Source
 
     /**
      * @param macroEvaluatedLocation The {@link #macroEvaluatedLocation} to set.
-     * @since 2.1
+     * @since 2.1-alpha-1
      */
     final void setMacroEvaluatedLocation( String macroEvaluatedLocation )
     {
