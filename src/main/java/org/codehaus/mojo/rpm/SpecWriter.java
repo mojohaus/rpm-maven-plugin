@@ -194,7 +194,7 @@ final class SpecWriter
             if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded()
                 && !map.isRecurseDirectories() )
             {
-                log.debug( "writing attriute string for directory: " + destination );
+                log.debug( "writing attribute string for directory: " + destination );
                 spec.println( attrString + " " + destination );
             }
             else
@@ -218,7 +218,7 @@ final class SpecWriter
                 if ( map.isRecurseDirectories() )
                 {
                     final String[] dirs = scanner.getIncludedDirectories();
-
+                    
                     if ( map.isDirectoryIncluded() )
                     {
                         // write out destination first
@@ -227,8 +227,12 @@ final class SpecWriter
 
                     for ( int i = 0; i < dirs.length; ++i )
                     {
-                        spec.print( baseFileString );
-                        spec.println( dirs[i] );
+                        //do not write out base file (destination) again
+                        if (dirs[i].length() > 0)
+                        {
+                            spec.print( baseFileString );
+                            spec.println( dirs[i] );
+                        }
                     }
                 }
 
