@@ -227,8 +227,8 @@ final class SpecWriter
 
                     for ( int i = 0; i < dirs.length; ++i )
                     {
-                        //do not write out base file (destination) again
-                        if (dirs[i].length() > 0)
+                        // do not write out base file (destination) again
+                        if ( dirs[i].length() > 0 )
                         {
                             spec.print( baseFileString );
                             spec.println( dirs[i] );
