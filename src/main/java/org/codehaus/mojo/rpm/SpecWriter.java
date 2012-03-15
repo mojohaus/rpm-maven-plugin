@@ -90,6 +90,7 @@ final class SpecWriter
         writeNonNullDirective( "Packager", mojo.getPackager() );
 
         writeList( mojo.getProvides(), "Provides: " );
+        writeList( mojo.getBuildRequires(), "BuildRequires: " );
         writeList( mojo.getRequires(), "Requires: " );
         writeList( mojo.getPrereqs(), "PreReq: " );
         writeList( mojo.getObsoletes(), "Obsoletes: " );
