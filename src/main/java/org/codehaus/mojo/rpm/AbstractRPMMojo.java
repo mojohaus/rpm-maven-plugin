@@ -268,7 +268,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * The list of build requirements for this package.
-     * 
+     *
+     * @since 2.1
      * @parameter
      */
     private LinkedHashSet buildRequires;
