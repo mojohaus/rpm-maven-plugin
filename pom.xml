@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>23</version>
+    <version>30</version>
   </parent>
   <artifactId>rpm-maven-plugin</artifactId>
   <version>2.1-alpha-2-SNAPSHOT</version>
