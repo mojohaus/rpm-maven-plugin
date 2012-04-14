@@ -168,10 +168,7 @@ final class SpecWriter
 
                 final String attributes =
                     map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
-
-                spec.print( attributes );
-                spec.print( ' ' );
-                spec.println( destination );
+                spec.println( attributes + " \"" + destination + "\"" );
 
                 continue;
             }
@@ -195,13 +192,13 @@ final class SpecWriter
                 && !map.isRecurseDirectories() )
             {
                 log.debug( "writing attribute string for directory: " + destination );
-                spec.println( attrString + " " + destination );
+                spec.println( attrString + " \"" + destination + "\"" );
             }
             else
             {
                 log.debug( "writing attribute string for identified files in directory: " + destination );
 
-                final String baseFileString = attrString + " " + destination + File.separatorChar;
+                final String baseFileString = attrString + "  \"" + destination + File.separatorChar;
 
                 // only list files if requested (directoryIncluded == false) or we have to
                 if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() ) )
@@ -211,7 +208,7 @@ final class SpecWriter
                     for ( int i = 0; i < files.length; ++i )
                     {
                         spec.print( baseFileString );
-                        spec.println( files[i] );
+                        spec.println( files[i] + "\"" );
                     }
                 }
 
@@ -222,7 +219,7 @@ final class SpecWriter
                     if ( map.isDirectoryIncluded() )
                     {
                         // write out destination first
-                        spec.println( baseFileString );
+                        spec.println( baseFileString + "\"" );
                     }
 
                     for ( int i = 0; i < dirs.length; ++i )
@@ -231,7 +228,7 @@ final class SpecWriter
                         if ( dirs[i].length() > 0 )
                         {
                             spec.print( baseFileString );
-                            spec.println( dirs[i] );
+                            spec.println( dirs[i] + "\"" );
                         }
                     }
                 }
@@ -242,7 +239,7 @@ final class SpecWriter
                     String link = (String) linkIter.next();
 
                     spec.print( baseFileString );
-                    spec.println( link );
+                    spec.println( link + "\"" );
                 }
             }
         }
