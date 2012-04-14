@@ -1,5 +1,7 @@
 package org.codehaus.mojo.rpm;
 
+import java.io.File;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -38,7 +40,16 @@ public class RPMMojo
     {
         if ( "rpm".equals( project.getPackaging() ) )
         {
+            File primaryArtifact = getRPMFile();
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "Adding RPM as primary artifact: " + primaryArtifact.getAbsolutePath() );
+            }
             project.getArtifact().setFile( getRPMFile() );
+        }
+        else
+        {
+            getLog().debug( "RPM not added as an artifact because project's packaging type is not 'rpm'" );
         }
     }
 }

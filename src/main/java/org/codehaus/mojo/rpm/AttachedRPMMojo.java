@@ -19,6 +19,8 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import java.io.File;
+
 import org.apache.maven.project.MavenProjectHelper;
 
 /**
@@ -54,7 +56,13 @@ public class AttachedRPMMojo
     protected void afterExecution()
     {
         classifier = classifier != null ? classifier : "rpm";
-        mavenProjectHelper.attachArtifact( project, "rpm", classifier, getRPMFile() );
+        File attachedArtifact = getRPMFile();
+        if ( getLog().isDebugEnabled() )
+        {
+            getLog().debug( "Adding RPM as attached artifact with '" + classifier + "' classifier: "
+                            + attachedArtifact.getAbsolutePath() );
+        }
+        mavenProjectHelper.attachArtifact( project, "rpm", classifier, attachedArtifact );
     }
 
     /**
