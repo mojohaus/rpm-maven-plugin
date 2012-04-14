@@ -222,7 +222,7 @@
               <!-- Used by verification scripts -->
               <groupId>org.codehaus.mojo.unix</groupId>
               <artifactId>unix-rpm</artifactId>
-              <version>1.0-alpha-4</version>
+              <version>1.0-alpha-1</version>
             </dependency>
           </dependencies>
           </plugin>
