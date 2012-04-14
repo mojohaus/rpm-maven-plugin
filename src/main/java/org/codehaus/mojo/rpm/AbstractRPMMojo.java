@@ -267,14 +267,6 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     private LinkedHashSet requires;
 
     /**
-     * The list of build requirements for this package.
-     *
-     * @since 2.1
-     * @parameter
-     */
-    private LinkedHashSet buildRequires;
-    
-    /**
      * The list of prerequisites for this package.
      * 
      * @since 2.0-beta-3
@@ -1266,13 +1258,6 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     final LinkedHashSet getRequires()
     {
         return this.requires;
-    }
-
-    /**
-     * @return Returns the {@link #buildRequires}
-     */
-    final LinkedHashSet getBuildRequires() {
-	return this.buildRequires;
     }
 
     /**

@@ -48,36 +48,6 @@ Advanced Parameters
 </conflicts>
 +-----+
 
-* {BuildRequires}
-
-  This parameters is given to express dependencies during the build of an RPM.
-
-
-+-----+
-<buildrequires>
-    <buildrequire>trash-truck &gt; 1.0</require>
-</buildrequire>
-+-----+
-
-+-----+
-<buildrequires>
-    <buildrequire>trash-truck = 1.0</require>
-</buildrequire>
-+-----+
-
-+-----+
-<buildrequires>
-    <buildrequire>trash-truck &lt; 1.0</require>
-</buildrequire>
-+-----+
-
-+-----+
-<buildrequires>
-    <buildrequire>trash-truck</require>
-    <buildrequire>dep1</require>
-</buildrequire>
-
-+-----+
 * {Relocation}
 
   If you specify the <<<prefix>>> parameter to the RPM plugin, you can create
