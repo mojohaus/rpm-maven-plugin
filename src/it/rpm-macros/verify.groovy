@@ -33,11 +33,11 @@ System.out.println(fileInfos);
 if (fileCnt != 5)
     throw new java.lang.AssertionError("file count");
     
-
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
     FileInfo fileInfo = (FileInfo) i.next()
-        
+    
+    //TODO
 }
     
 return true

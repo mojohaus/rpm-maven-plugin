@@ -7,7 +7,7 @@ import java.util.List
 import java.util.Iterator
 
 
-File rpm = new File((File) basedir, "target/rpm/mojo-rpm-it-artifact/RPMS/noarch/mojo-rpm-it-artifact-1.0-1.noarch.rpm")
+File rpm = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-artifact/1.0/rpm-artifact-1.0-rpm.rpm")
 
 if (!rpm.exists())
 {
@@ -16,7 +16,7 @@ if (!rpm.exists())
 
 SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
 
-if (!spec.name.equals("mojo-rpm-it-artifact"))
+if (!spec.name.equals("rpm-artifact"))
     throw new java.lang.AssertionError("spec name");
 if (!spec.version.equals("1.0"))
     throw new java.lang.AssertionError("spec version");
@@ -39,15 +39,15 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {
     FileInfo fileInfo = (FileInfo) i.next()
     
-    if ("/usr/myusr/app/lib/mojo-rpm-it-artifact-1.0.jar".equals(fileInfo.path))
+    if ("/usr/myusr/app/lib/rpm-artifact-1.0.jar".equals(fileInfo.path))
     {
         foundLibJar = true;
     }
-    else if ("/usr/myusr/app/lib/mojo-rpm-it-artifact-1.0-sources.jar".equals(fileInfo.path))
+    else if ("/usr/myusr/app/lib/rpm-artifact-1.0-sources.jar".equals(fileInfo.path))
     {
         foundLibSource = true;
     }
-    else if ("/usr/myusr/app/sources/mojo-rpm-it-artifact-1.0-sources.jar".equals(fileInfo.path))
+    else if ("/usr/myusr/app/sources/rpm-artifact-1.0-sources.jar".equals(fileInfo.path))
     {
         foundSource = true;
     }

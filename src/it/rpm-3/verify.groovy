@@ -7,7 +7,7 @@ import java.util.List
 import java.util.Iterator
 
 
-File rpm = new File((File) basedir, "target/rpm/project-rpm-3/RPMS/somearch/project-rpm-3-1.2-1.somearch.rpm")
+File rpm = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-3/1.0/rpm-3-1.0.rpm")
 
 if (!rpm.exists())
 {
@@ -16,7 +16,7 @@ if (!rpm.exists())
 
 SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
 
-if (!spec.name.equals("project-rpm-3"))
+if (!spec.name.equals("rpm-3"))
     throw new java.lang.AssertionError("spec name");
 if (!spec.version.equals("1.2"))
     throw new java.lang.AssertionError("spec version");

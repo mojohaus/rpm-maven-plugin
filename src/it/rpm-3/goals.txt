@@ -1,1 +1,0 @@
--Dmaven.unix.debug=true clean package -X
