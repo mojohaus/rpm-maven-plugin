@@ -8,7 +8,7 @@ if (!attachedRpm5.exists())
 }
 
 File attachedRpm6 = new File((File) basedir, "target/rpm/rpm-disable-attached-jre6/RPMS/noarch/rpm-disable-1.0-1.noarch.rpm")
-if (!attachedRpm6.exists())
+if (attachedRpm6.exists())
 {
     throw new java.lang.AssertionError("attached-jre6 RPM should have been disabled");
 }
