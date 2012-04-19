@@ -126,10 +126,10 @@ if (!unversionedWar)
 }
 
 //now test that we actually filtered the file
-File filteredFile = new File((File) basedir, "target/rpm/rpm-1/buildroot/usr/myusr/app/bin/filter.txt")
-
-if (!filteredFile.exists())
+File filteredFile = new File((File) basedir, "target/rpm/rpm-1/buildroot/usr/myusr/app/bin/filter.txt");
+if (!filteredFile.exists()) {
     throw new java.lang.AssertionError("/usr/myusr/app/bin/filter.txt does not exist");
+}
     
 BufferedReader reader = new BufferedReader(new FileReader(filteredFile));
 try
