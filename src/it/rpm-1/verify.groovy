@@ -9,13 +9,13 @@ import java.util.Iterator
 
 boolean success = true
 
-File rpm = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-1/1.0/rpm-1-1.0.rpm")
+def rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-1/1.0/rpm-1-1.0.rpm")
 if (!rpm.exists())
 {
     throw new java.lang.AssertionError("RPM artifact not created");
 }
 
-SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
+def spec = RpmUtil.getSpecFileFromRpm(rpm)
 if (!spec.name.equals("rpm-1"))
 {
     throw new java.lang.AssertionError("Incorrect name in spec file: " + spec.name);
