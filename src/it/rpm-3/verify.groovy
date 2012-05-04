@@ -18,7 +18,7 @@ SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
 
 if (!spec.name.equals("rpm-3"))
     throw new java.lang.AssertionError("spec name");
-if (!spec.version.equals("1.2"))
+if (!spec.version.equals("1.0"))
     throw new java.lang.AssertionError("spec version");
 if (spec.release != 1)
     throw new java.lang.AssertionError("spec release");
