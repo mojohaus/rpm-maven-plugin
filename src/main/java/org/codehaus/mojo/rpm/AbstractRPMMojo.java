@@ -724,6 +724,26 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      */
     private RPMHelper helper;
 
+    /**
+     * The system property to read the calculated version from, normally set by the
+     * version mojo.
+     * 
+     * @parameter default-value="rpm.version"
+     * @required
+     * @since 2.1-alpha-2
+     */
+    private String versionProperty;
+
+    /**
+     * The system property to read the calculated release from, normally set by the
+     * version mojo.
+     * 
+     * @parameter default-value="rpm.release"
+     * @required
+     * @since 2.1-alpha-2
+     */
+    private String releaseProperty;
+
     // // // Mojo methods
 
     /** {@inheritDoc} */
@@ -884,13 +904,27 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     private void checkParams( RPMHelper helper ) throws MojoExecutionException, MojoFailureException
     {
         Log log = getLog();
-        log.debug( "project version = " + projversion );
 
-        // check/calculate the version string
-        final VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
-        log.debug( "calculated version: " + version );
-        this.projversion = version.version;
-        this.release = version.release;
+        // Retrieve any versions set by the VersionMojo
+        String projversion = this.project.getProperties().getProperty( versionProperty );
+        if ( projversion != null ) {
+            this.projversion = projversion;
+        }
+        String release = this.project.getProperties().getProperty( releaseProperty );
+        if ( release != null ) {
+            this.release = release;
+        }
+
+        // If not set, calculate versions
+        if ( this.projversion == null || this.release == null )
+        {
+            final VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
+            this.projversion = version.version;
+            this.release = version.release;
+        }
+
+        log.debug( "project version = " + this.projversion );
+        log.debug( "project release = " + this.release );
 
         // evaluate needarch and populate targetArch
         if ( needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase( needarch ) )
