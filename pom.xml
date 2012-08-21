@@ -36,15 +36,8 @@
   </prerequisites>
 
   <ciManagement>
-    <system>continuum</system>
-    <notifiers>
-      <notifier>
-        <type>mail</type>
-        <configuration>
-          <address>boba@codehaus.org</address>
-        </configuration>
-      </notifier>
-    </notifiers>
+    <system>Bamboo</system>
+    <url>http://bamboo.ci.codehaus.org/browse/MOJO-MRPM</url>
   </ciManagement>
   <scm>
     <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/rpm-maven-plugin</url>
