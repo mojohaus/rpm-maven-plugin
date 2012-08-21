@@ -51,9 +51,6 @@ result = checkForActivationAndMailArtifact (fileInfos );
 assert result['activation'] : "Activation artifact missing in built JRE5 RPM"
 assert result['mail']  : "Mail artifact missing in built JRE5 RPM"
 
-success &= result['activation'];
-success &= result['mail'];
-
 
 File rpm6 = new File((File) basedir, "target/rpm/jre6/RPMS/noarch/jre6-1.0-1.noarch.rpm")
 assert rpm6.exists()
