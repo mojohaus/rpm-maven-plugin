@@ -180,7 +180,7 @@
       <id>run-its</id>
       <activation>
         <property>
-          <name>maven.test.skip</name>
+          <name>skipTests</name>
           <value>!true</value>
         </property>
       </activation>
@@ -189,42 +189,36 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
+            <configuration>
+              <debug>true</debug>
+              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+              <postBuildHookScript>verify</postBuildHookScript>
+              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+              <properties>
+                <maven.unix.debug>true</maven.unix.debug>
+              </properties>
+              <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+              </goals>
+            </configuration>
             <executions>
               <execution>
                 <id>integration-test</id>
-                <phase>integration-test</phase>
                 <goals>
                   <goal>install</goal>
                   <goal>run</goal>
                 </goals>
-                <configuration>
-                  <debug>true</debug>
-                  <projectsDirectory>src/it</projectsDirectory>
-                  <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-                  <pomIncludes>
-                    <pomInclude>*/pom.xml</pomInclude>
-                  </pomIncludes>
-                  <postBuildHookScript>verify</postBuildHookScript>
-                  <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                  <showErrors>true</showErrors>
-                  <properties>
-                    <maven.unix.debug>true</maven.unix.debug>
-                  </properties>
-                  <goals>
-                    <goal>clean</goal>
-                    <goal>install</goal>
-                  </goals>
-                </configuration>
               </execution>
             </executions>
-          <dependencies>
-            <dependency>
-              <!-- Used by verification scripts -->
-              <groupId>org.codehaus.mojo.unix</groupId>
-              <artifactId>unix-rpm</artifactId>
-              <version>1.0-alpha-1</version>
-            </dependency>
-          </dependencies>
+            <dependencies>
+              <dependency>
+                <!-- Used by verification scripts -->
+                <groupId>org.codehaus.mojo.unix</groupId>
+                <artifactId>unix-rpm</artifactId>
+                <version>1.0-alpha-1</version>
+              </dependency>
+            </dependencies>
           </plugin>
         </plugins>
       </build>
