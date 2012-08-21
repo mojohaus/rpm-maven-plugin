@@ -12,25 +12,25 @@ boolean success = true
 def rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-1/1.0/rpm-1-1.0.rpm")
 if (!rpm.exists())
 {
-    throw new java.lang.AssertionError("RPM artifact not created");
+    throw new java.lang.AssertionError("RPM artifact not created: " + rpm.getAbsolutePath());
 }
 
 def spec = RpmUtil.getSpecFileFromRpm(rpm)
 if (!spec.name.equals("rpm-1"))
 {
-    throw new java.lang.AssertionError("Incorrect name in spec file: " + spec.name);
+    throw new java.lang.AssertionError("Incorrect name in spec file: rpm-1 =! " + spec.name);
 }
 if (!spec.version.equals("1.0"))
 {
-    throw new java.lang.AssertionError("Incorrect version in spec file: " + spec.version);
+    throw new java.lang.AssertionError("Incorrect version in spec file: 1.0 != " + spec.version);
 }
 if (!spec.release == 1)
 {
-    throw new java.lang.AssertionError("Incorrect release in spec file: " + spec.release);
+    throw new java.lang.AssertionError("Incorrect release in spec file: 1 != " + spec.release);
 }
 if (!spec.license.equals("2009 my org"))
 {
-    throw new java.lang.AssertionError("Incorrect license in spec file: " + spec.license);
+    throw new java.lang.AssertionError("Incorrect license in spec file: 2009 my org != " + spec.license);
 }
 
 List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
@@ -38,7 +38,7 @@ List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 int fileCnt = fileInfos.size()
 if (fileCnt != 15)
 {
-    throw new java.lang.AssertionError("Incorrect file count: " + fileCnt);
+    throw new java.lang.AssertionError("Incorrect file count: 15 != " + fileCnt);
 }
 
 boolean nameScript = false;
@@ -54,11 +54,11 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
     System.out.println("File: " + fileInfo.path);
     if (!fileInfo.user.equals("myuser"))
     {
-        throw new java.lang.AssertionError("Incorrect user in file info: " + fileInfo.user);
+        throw new java.lang.AssertionError("Incorrect user in file info: myuser !=" + fileInfo.user);
     }
     if (!fileInfo.group.equals("mygroup"))
     {
-        throw new java.lang.AssertionError("Incorrect group in file info: " + fileInfo.group);
+        throw new java.lang.AssertionError("Incorrect group in file info: mygroup != " + fileInfo.group);
     }
     
     //check for executable mode
@@ -70,14 +70,14 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
             oldNameLink = true;
             if (!fileInfo.mode.equals("lrwxr-xr-x"))
             {
-                throw new java.lang.AssertionError("Incorrect mode for '" + fileInfo.path + "':" + fileInfo.mode);
+                throw new java.lang.AssertionError("Incorrect mode for '" + fileInfo.path + "': lrwxr-xr-x != " + fileInfo.mode);
             }
         }
         else
         {
             if (!fileInfo.mode.equals("-rwxr-xr-x"))
             {
-                throw new java.lang.AssertionError("Incorrect mode for '" + fileInfo.path + "':" + fileInfo.mode);
+                throw new java.lang.AssertionError("Incorrect mode for '" + fileInfo.path + "': -rwxr-xr-x != " + fileInfo.mode);
             }
         
             if (fileInfo.path.endsWith("/name.sh"))
@@ -95,7 +95,7 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
         tempLink = true;
         if (!fileInfo.mode.startsWith("l"))
         {
-            throw new java.lang.AssertionError("temp link mode");
+            throw new java.lang.AssertionError("temp link mode: '" + fileInfo.mode + "' doesn't start with 'l'");
         }
     }
     else if (fileInfo.path.endsWith("grizzly-comet-counter.war"))

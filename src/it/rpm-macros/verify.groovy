@@ -19,19 +19,17 @@ if (!rpm.exists())
 SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
 
 if (!spec.name.equals("rpm-macros"))
-    throw new java.lang.AssertionError("spec name");
+    throw new java.lang.AssertionError("spec name: 'rpm-macros' != '" + spec.name + "'");
 if (!spec.version.equals("1.0"))
-    throw new java.lang.AssertionError("spec version");
+    throw new java.lang.AssertionError("spec version: '1.0' != '" + spec.version + "'");
 if (spec.release != 1)
-    throw new java.lang.AssertionError("spec release");
+    throw new java.lang.AssertionError("spec release: '1' != '" + spec.release + "'");
 
 List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 
 int fileCnt = fileInfos.size()
-System.out.println("File Count: " + fileCnt);
-System.out.println(fileInfos);
 if (fileCnt != 5)
-    throw new java.lang.AssertionError("file count");
+    throw new java.lang.AssertionError("file count: 5 != " + fileCnt);
     
 for (Iterator i = fileInfos.iterator(); i.hasNext();)
 {

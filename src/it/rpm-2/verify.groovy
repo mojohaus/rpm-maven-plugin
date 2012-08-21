@@ -46,7 +46,7 @@ File primary = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/r
 // no primary rpm artifact should have been added
 if (primary.exists())
 {
-    throw new java.lang.AssertionError("RPM incorrectly added as primary artifact");
+    throw new java.lang.AssertionError("RPM incorrectly added as primary artifact: " + primary.getAbsolutePath());
 }
 
 

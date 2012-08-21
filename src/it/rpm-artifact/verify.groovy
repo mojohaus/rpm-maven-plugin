@@ -17,11 +17,11 @@ if (!rpm.exists())
 SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
 
 if (!spec.name.equals("rpm-artifact"))
-    throw new java.lang.AssertionError("spec name");
+    throw new java.lang.AssertionError("spec name ('rpm-artifact' != '" + spec.name + "')");
 if (!spec.version.equals("1.0"))
-    throw new java.lang.AssertionError("spec version");
+    throw new java.lang.AssertionError("spec version ('1.0' != '" + spec.version + "')");
 if (spec.release != 1)
-    throw new java.lang.AssertionError("spec release");
+    throw new java.lang.AssertionError("spec release ('1' != '" + spec.release +  "')");
 
 List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
 
@@ -54,12 +54,12 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
 }
 
 if (!foundLibJar)
-    throw new java.lang.AssertionError("jar artifact not present in lib folder");
+    throw new java.lang.AssertionError("jar artifact '/usr/myusr/app/lib/rpm-artifact-1.0.jar' not present in lib folder '" + fileInfo.path + "'");
 
 if (!foundLibSource)
-    throw new java.lang.AssertionError("sources jar secondary artifact not present in lib folder");
+    throw new java.lang.AssertionError("sources jar secondary artifact '/usr/myusr/app/lib/rpm-artifact-1.0-sources.jar' not present in lib folder '" + fileInfo.path + "'");
 
 if (!foundSource)
-    throw new java.lang.AssertionError("sources jar secondary artifact not present in sources folder");
+    throw new java.lang.AssertionError("sources jar secondary artifact '/usr/myusr/app/sources/rpm-artifact-1.0-sources.jar' not present in sources folder '" + fileInfo.path + "'");
 
 return true
