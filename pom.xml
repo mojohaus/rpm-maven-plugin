@@ -101,7 +101,8 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>2.1.2</version>
+      <!-- Upgrading to 1.0-alpha-8+ makes rpm-1 fail, see MRPM-121 -->
+      <version>1.0-alpha-7</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
