@@ -49,7 +49,7 @@
           <defineStatements>
             <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
           </defineStatements>
-          <needarch>someArch</needarch>
+          <needarch>somearch</needarch>
           <targetOS>someOS</targetOS>
           <defaultUsername>myuser</defaultUsername>
           <defaultGroupname>mygroup</defaultGroupname>
@@ -131,8 +131,8 @@
                 </source>
                 <source>
                   <location>src/main/bin2/rename.sh</location>
-                  <destination>name-someArch.sh</destination>
-                  <targetArchitecture>.*Arch</targetArchitecture>
+                  <destination>name-somearch.sh</destination>
+                  <targetArchitecture>.*arch</targetArchitecture>
                 </source>
                 <source>
                   <location>src/main/bin2/rename.sh</location>

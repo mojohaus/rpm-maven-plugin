@@ -75,7 +75,7 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
             {
                 osNameScript = true;
             }
-            else if (fileInfo.path.endsWith("/name-someArch.sh"))
+            else if (fileInfo.path.endsWith("/name-somearch.sh"))
             {
                 archNameScript = true;
             }
