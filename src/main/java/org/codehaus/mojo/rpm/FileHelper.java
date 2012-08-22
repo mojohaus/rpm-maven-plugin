@@ -218,10 +218,11 @@ final class FileHelper
             copier.setFilter( filter );
             copier.setFilterWrappers( mojo.getFilterWrappers() );
 
+            Map copiedFilesMap = copier.getFiles();
+
             // Perform the copy
             copier.createArchive();
 
-            Map copiedFilesMap = copier.getFiles();
             List copiedFiles = new ArrayList( copiedFilesMap.size() );
             for ( Iterator i = copiedFilesMap.keySet().iterator(); i.hasNext(); )
             {
