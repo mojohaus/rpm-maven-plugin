@@ -72,10 +72,10 @@ Mapping Parameters
   filemode assigned to them when copied to the RPM work area.
   
   If none of the file attributes (filemode, username, and groupname) are 
-  populated, the defaults ({{{rpm-mojo.html#defaultFilemode}defaultFileMode}},
-  {{{rpm-mojo.html#defaultUsername}defaultUsername}},
-  {{{rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
-  {{{rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
+  populated, the defaults ({{{./rpm-mojo.html#defaultFilemode}defaultFileMode}},
+  {{{./rpm-mojo.html#defaultUsername}defaultUsername}},
+  {{{./rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
+  {{{./rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
 
 * {username} (<<recommended>>)
 
@@ -85,10 +85,10 @@ Mapping Parameters
   the user used to create the package.
   
   If none of the file attributes (filemode, username, and groupname) are 
-  populated, the defaults ({{{rpm-mojo.html#defaultFilemode}defaultFileMode}},
-  {{{rpm-mojo.html#defaultUsername}defaultUsername}},
-  {{{rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
-  {{{rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
+  populated, the defaults ({{{./rpm-mojo.html#defaultFilemode}defaultFileMode}},
+  {{{./rpm-mojo.html#defaultUsername}defaultUsername}},
+  {{{./rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
+  {{{./rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
 
 * {groupname} (<<recommended>>)
 
@@ -98,10 +98,10 @@ Mapping Parameters
   the group used to create the package.
   
   If none of the file attributes (filemode, username, and groupname) are 
-  populated, the defaults ({{{rpm-mojo.html#defaultFilemode}defaultFileMode}},
-  {{{rpm-mojo.html#defaultUsername}defaultUsername}},
-  {{{rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
-  {{{rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
+  populated, the defaults ({{{./rpm-mojo.html#defaultFilemode}defaultFileMode}},
+  {{{./rpm-mojo.html#defaultUsername}defaultUsername}},
+  {{{./rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
+  {{{./rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
 
 * {directoryIncluded}
 
@@ -166,7 +166,7 @@ Mapping Parameters
   specified, the <<<directory>>> will be created using the mapping
   specification but no contents will be selected for packaging; this allows
   an empty directory to be specified.  The content of this parameter is
-  discussed in a {{{source-params.html}separate file}}.
+  discussed in a {{{./source-params.html}separate file}}.
 
 * {softlinkSources}
  

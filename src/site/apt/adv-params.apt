@@ -63,7 +63,7 @@ Advanced Parameters
   package.  
   
   Each of the scripts can be configured as a 
-  {{{apidocs/org/codehaus/mojo/rpm/Scriptlet.html}Scriptlet}}, which allows
+  {{{./apidocs/org/codehaus/mojo/rpm/Scriptlet.html}Scriptlet}}, which allows
   the content of the script to be provided either as a String or File. If 
   both parameters are specified for a script, the external file will be 
   ignored.  Before writing scripts for RPM packages, understand the

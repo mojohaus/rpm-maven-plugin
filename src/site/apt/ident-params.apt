@@ -37,7 +37,7 @@ Identification Parameters
   The release number of the RPM.
   
   Beginning with release 2.0-beta-2,  this is an optional parameter. By default, the release will be generated from the
-  modifier portion of the {{{#version}project version}} using the following rules:
+  modifier portion of the {{{version}project version}} using the following rules:
  
      * If no modifier exists, the release will be <<<1>>>.
      
@@ -80,7 +80,7 @@ Identification Parameters
   such as C or C++, and should not be specified if the executable content of the package 
   consists only of scripts (such as shell, perl, or python) and/or Java code.
   
-  This can be used in conjunction with {{{source-params.html#targetArchitecture}Source targetArchitecture}}
+  This can be used in conjunction with {{{./source-params.html#targetArchitecture}Source targetArchitecture}}
   to flex the contents of the rpm based on the architecture.
   
 * {targetOS}
@@ -88,7 +88,7 @@ Identification Parameters
   The target os for building the RPM. By default, this will be populated to 
   the System property <<<os.name>>>.
   
-  This can be used in conjunction with {{{source-params.html#targetOSName}Source targetOSName}}
+  This can be used in conjunction with {{{./source-params.html#targetOSName}Source targetOSName}}
   to flex the contents of the rpm based on operating system.
   
 * {targetVendor}
