@@ -55,9 +55,10 @@ final class FileHelper
      */
     private static final String DESTINATION_DIRECTORY_ERROR_MSG =
         "Source has a destination [{0}], but the location [{1}] does not refer to a file.";
-    
+
     /**
      * {@code Pattern} to identify macros.
+     * 
      * @since 2.1-alpha-1
      */
     private static final Pattern MACRO_PATTERN = Pattern.compile( "%\\{([^}]*)\\}" );
@@ -109,7 +110,7 @@ final class FileHelper
             Mapping map = (Mapping) it.next();
             final String destinationString = map.getDestination();
             final String macroEvaluatedDestination = evaluateMacros( destinationString );
-            
+
             File dest = new File( buildroot, macroEvaluatedDestination );
             map.setAbsoluteDestination( dest );
 
@@ -462,7 +463,7 @@ final class FileHelper
                         {
                             throw new MojoExecutionException( MessageFormat.format( DESTINATION_DIRECTORY_ERROR_MSG,
                                                                                     new Object[] { destination,
-                                                                                    macroEvaluatedLocation } ) );
+                                                                                        macroEvaluatedLocation } ) );
                         }
 
                         copySource( locationFile, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
@@ -478,16 +479,18 @@ final class FileHelper
             }
         }
     }
-    
+
     /**
      * Determine if there are any macros in the <i>value</i> and replace any/all occurrences with the
      * {@link AbstractRPMMojo#evaluateMacro(String) evaluated} value.
+     * 
      * @param value String to replace macros in.
-     * @return Result of evaluating all macros in <i>value</i>. 
+     * @return Result of evaluating all macros in <i>value</i>.
      * @throws MojoExecutionException
      * @since 2.1-alpha-1
      */
-    private String evaluateMacros(String value) throws MojoExecutionException
+    private String evaluateMacros( String value )
+        throws MojoExecutionException
     {
         final Matcher matcher = MACRO_PATTERN.matcher( value );
 

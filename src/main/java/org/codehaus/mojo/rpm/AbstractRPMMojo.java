@@ -53,21 +53,25 @@ import org.codehaus.plexus.util.Os;
  * @author Brett Okken, Cerner Corp.
  * @version $Id$
  */
-abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMojo
+abstract class AbstractRPMMojo
+    extends AbstractMojo
+    implements RPMVersionableMojo
 {
     /**
      * Maintains a mapping of macro keys to their values (either {@link RPMHelper#evaluateMacro(String) evaluated} or
      * set via {@link #defineStatements}.
+     * 
      * @since 2.1-alpha-1
      */
     private final Map/* <String,String> */macroKeyToValue = new HashMap();
-    
+
     /**
-     * The key of the map is the directory where the files should be linked to. The value is the {@code List}
-     * of {@link SoftlinkSource}s to be linked to.
+     * The key of the map is the directory where the files should be linked to. The value is the {@code List} of
+     * {@link SoftlinkSource}s to be linked to.
+     * 
      * @since 2.0-beta-3
      */
-    private final Map/*<String, List<Source>>*/ linkTargetToSources = new LinkedHashMap();
+    private final Map/* <String, List<Source>> */linkTargetToSources = new LinkedHashMap();
 
     /**
      * The name portion of the output file name.
@@ -80,7 +84,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     /**
      * The version portion of the RPM file name.
      * 
-     * @parameter alias="version" expression="${project.version}" 
+     * @parameter alias="version" expression="${project.version}"
      * @required
      */
     private String projversion;
@@ -107,8 +111,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
      * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_ARCH">architecture</a>
-     * of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the architecture of the
-     * rpm to <tt>x86_64</tt>.
+     * of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the architecture of the rpm
+     * to <tt>x86_64</tt>.
      * </p>
      * <p>
      * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
@@ -118,12 +122,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @parameter
      */
     private String needarch;
-    
+
     /**
      * The actual targeted architecture. This will be based on evaluation of {@link #needarch}.
      */
     private String targetArch;
-    
+
     /**
      * The target os for building the RPM. By default, this will be populated to <a
      * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_NAME">Os.OS_NAME</a>.
@@ -136,7 +140,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @since 2.0-beta-3
      */
     private String targetOS;
-    
+
     /**
      * The target vendor for building the RPM. By default, this will be populated to the result of <i>rpm -E
      * %{_host_vendor}</i>.
@@ -159,6 +163,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * and requires that {@code expect} be on the PATH.
      * <p>
      * Note that the data type used is <b>NOT</b> {@code String}.
+     * 
      * <pre>
      * &lt;configuration&gt;
      *     ...
@@ -166,7 +171,9 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      *         &lt;passphrase&gt;<i>password</i>&lt;/passphrase&gt;
      *     &lt;/keyPassphrase&gt;
      * </pre>
+     * 
      * </p>
+     * 
      * @parameter
      * @since 2.0-beta-4
      */
@@ -238,15 +245,15 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * Automatically add provided shared libraries.
-     *
+     * 
      * @parameter default-value="true"
      * @since 2.0-beta-4
      */
     private boolean autoProvides;
-    
+
     /**
      * Automatically add requirements deduced from included shared libraries.
-     *
+     * 
      * @parameter default-value="true"
      * @since 2.0-beta-4
      */
@@ -273,7 +280,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @parameter
      */
     private LinkedHashSet prereqs;
-    
+
     /**
      * The list of obsoletes for this package.
      * 
@@ -298,14 +305,11 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * The area for RPM to use for building the package.<br/>
-     * 
      * <b>NOTE:</b> The absolute path to the workarea <i>MUST NOT</i> have a space in any of the directory names.
      * <p>
      * Beginning with release 2.0-beta-3, sub-directories will be created within the workarea for each execution of the
      * plugin within a life cycle.<br/>
-     * 
      * The pattern will be <code>workarea/<i>name[-classifier]</i></code>.<br/>
-     * 
      * The classifier portion is only applicable for the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.
      * </p>
      * 
@@ -320,7 +324,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @required
      */
     private List mappings;
-    
+
     /**
      * The prepare script.
      * 
@@ -328,7 +332,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @deprecated Use prepareScriplet
      */
     private String prepare;
-    
+
     /**
      * The location of the prepare script. A File which does not exist is ignored.
      * 
@@ -336,7 +340,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @deprecated Use prepareScriplet
      */
     private File prepareScript;
-    
+
     /**
      * The prepare scriptlet;
      * 
@@ -358,11 +362,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use preinstallScriplet
      */
     private File preinstallScript;
-    
+
     /**
      * The pre-installation scriptlet.
      * 
@@ -384,11 +389,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use postinstallScriplet
      */
     private File postinstallScript;
-    
+
     /**
      * The post install scriptlet.
      * 
@@ -402,6 +408,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use installScriplet
      */
@@ -412,11 +419,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use installScriplet
      */
     private File installScript;
-    
+
     /**
      * The installation scriptlet.
      * 
@@ -438,11 +446,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use preremoveScriplet
      */
     private File preremoveScript;
-    
+
     /**
      * The pre-removal scriptlet.
      * 
@@ -450,7 +459,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @since 2.0-beta-4
      */
     private Scriptlet preremoveScriptlet;
-    
+
     /**
      * The post-removal script.
      * 
@@ -464,11 +473,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use postremoveScriplet
      */
     private File postremoveScript;
-    
+
     /**
      * The post-removal scriptlet.
      * 
@@ -490,11 +500,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use verifyScriplet
      */
     private File verifyScript;
-    
+
     /**
      * The verify scriptlet.
      * 
@@ -516,11 +527,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
+     * 
      * @parameter
      * @deprecated Use cleanScriplet
      */
     private File cleanScript;
-    
+
     /**
      * The clean scriptlet.
      * 
@@ -544,9 +556,10 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @since 2.0-beta-4
      */
     private Scriptlet posttransScriptlet;
-    
+
     /**
      * The list of triggers to take place on installation of other packages.
+     * 
      * <pre>
      *  &lt;triggers>
      *      &lt;installTrigger>
@@ -569,6 +582,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      *      ...
      *  &lt;/triggers>
      * </pre>
+     * 
      * @parameter
      * @since 2.0-beta-4
      * @see BaseTrigger
@@ -647,10 +661,9 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * The default file mode (octal string) to assign to files when installed. <br/>
-     * 
-     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
-     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
-     * are <b>NOT</b> populated.
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
+     * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
+     * <b>NOT</b> populated.
      * 
      * @parameter
      * @since 2.0-beta-2
@@ -659,10 +672,9 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * The default directory mode (octal string) to assign to directories when installed.<br/>
-     * 
-     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
-     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
-     * are <b>NOT</b> populated.
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
+     * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
+     * <b>NOT</b> populated.
      * 
      * @parameter
      * @since 2.0-beta-2
@@ -671,10 +683,9 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * The default user name for files when installed.<br/>
-     * 
-     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
-     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
-     * are <b>NOT</b> populated.
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
+     * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
+     * <b>NOT</b> populated.
      * 
      * @parameter
      * @since 2.0-beta-2
@@ -683,16 +694,15 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /**
      * The default group name for files when installed.<br/>
-     * 
-     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>,
-     * <a href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> 
-     * are <b>NOT</b> populated.
+     * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
+     * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
+     * <b>NOT</b> populated.
      * 
      * @parameter
      * @since 2.0-beta-2
      */
     private String defaultGroupname;
-    
+
     /**
      * Indicates if the execution should be disabled. If <code>true</code>, nothing will occur during execution.
      * 
@@ -706,7 +716,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
 
     /** The root of the build area as used by rpmbuild. */
     private File rpmBuildroot;
-    
+
     /** The changelog string. */
     private String changelog;
 
@@ -717,16 +727,16 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @since 2.0-beta-3
      */
     private File changelogFile;
-    
+
     /**
      * This is not set until {@link #execute() is called}.
+     * 
      * @since 2.1-alpha-1
      */
     private RPMHelper helper;
 
     /**
-     * The system property to read the calculated version from, normally set by the
-     * version mojo.
+     * The system property to read the calculated version from, normally set by the version mojo.
      * 
      * @parameter default-value="rpm.version"
      * @required
@@ -735,8 +745,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     private String versionProperty;
 
     /**
-     * The system property to read the calculated release from, normally set by the
-     * version mojo.
+     * The system property to read the calculated release from, normally set by the version mojo.
      * 
      * @parameter default-value="rpm.release"
      * @required
@@ -747,7 +756,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     // // // Mojo methods
 
     /** {@inheritDoc} */
-    public final void execute() throws MojoExecutionException, MojoFailureException
+    public final void execute()
+        throws MojoExecutionException, MojoFailureException
     {
         if ( disabled )
         {
@@ -756,11 +766,11 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
         }
 
         helper = new RPMHelper( this );
-        
+
         checkParams( helper );
 
         final String classifier = getClassifier();
-        
+
         if ( classifier != null )
         {
             workarea = new File( workarea, name + '-' + classifier );
@@ -769,53 +779,57 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
         {
             workarea = new File( workarea, name );
         }
-        
+
         buildWorkArea();
 
         // set up the maven file filter and FilteringDirectoryArchiver
-        setDefaultWrappers();        
-        final FilteringDirectoryArchiver copier = new FilteringDirectoryArchiver();        
-        copier.setMavenFileFilter( mavenFileFilter );        
+        setDefaultWrappers();
+        final FilteringDirectoryArchiver copier = new FilteringDirectoryArchiver();
+        copier.setMavenFileFilter( mavenFileFilter );
         new FileHelper( this, copier ).installFiles();
-        
+
         writeSpecFile();
         helper.buildPackage();
-        
+
         afterExecution();
     }
-    
+
     /**
-     * Will be called on completion of {@link #execute()}. Provides subclasses an opportunity to
-     * perform any post execution logic (such as attaching an artifact).
+     * Will be called on completion of {@link #execute()}. Provides subclasses an opportunity to perform any post
+     * execution logic (such as attaching an artifact).
+     * 
      * @throws MojoExecutionException If an error occurs.
      * @throws MojoFailureException If failure occurs.
      */
-    protected void afterExecution() throws MojoExecutionException, MojoFailureException
+    protected void afterExecution()
+        throws MojoExecutionException, MojoFailureException
     {
-        
+
     }
-    
+
     /**
-     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br/> By default
-     * this implementation returns {@code null}, which indicates that no additional classifier should be used.
+     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br/>
+     * By default this implementation returns {@code null}, which indicates that no additional classifier should be
+     * used.
      * 
      * @return An additional classifier to use for the rpm workarea or {@code null} if no additional classifier should
-     * be used.
+     *         be used.
      */
     String getClassifier()
     {
         return null;
     }
-    
+
     /**
      * Returns the generated rpm {@link File}.
+     * 
      * @return The generated rpm <tt>File</tt>.
      */
     protected File getRPMFile()
     {
         File rpms = new File( workarea, "RPMS" );
         File archDir = new File( rpms, targetArch );
-        
+
         return new File( archDir, name + '-' + projversion + '-' + release + '.' + targetArch + ".rpm" );
     }
 
@@ -847,7 +861,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @throws MojoFailureException if a directory cannot be built
      * @throws MojoExecutionException if buildroot cannot be cleared (if exists)
      */
-    private void buildWorkArea() throws MojoFailureException, MojoExecutionException
+    private void buildWorkArea()
+        throws MojoFailureException, MojoExecutionException
     {
         final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS", "tmp-buildroot", "buildroot" };
 
@@ -870,7 +885,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             if ( d.exists() )
             {
                 getLog().info( "Directory " + d.getAbsolutePath() + " already exists. Deleting all contents." );
-                
+
                 try
                 {
                     FileUtils.cleanDirectory( d );
@@ -901,17 +916,20 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * @throws MojoFailureException if an invalid parameter is found
      * @throws MojoExecutionException if an error occurs reading a script
      */
-    private void checkParams( RPMHelper helper ) throws MojoExecutionException, MojoFailureException
+    private void checkParams( RPMHelper helper )
+        throws MojoExecutionException, MojoFailureException
     {
         Log log = getLog();
 
         // Retrieve any versions set by the VersionMojo
         String projversion = this.project.getProperties().getProperty( versionProperty );
-        if ( projversion != null ) {
+        if ( projversion != null )
+        {
             this.projversion = projversion;
         }
         String release = this.project.getProperties().getProperty( releaseProperty );
-        if ( release != null ) {
+        if ( release != null )
+        {
             this.release = release;
         }
 
@@ -1012,12 +1030,12 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
             }
         }
 
-        //generate copyright text if not set
+        // generate copyright text if not set
         if ( copyright == null )
         {
             copyright = generateCopyrightText();
         }
-        
+
         // if this package obsoletes any packages, make sure those packages are added to the provides list
         if ( obsoletes != null )
         {
@@ -1030,12 +1048,13 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
                 provides.addAll( obsoletes );
             }
         }
-        
+
         processDefineStatements();
     }
 
     /**
      * Put all name/value pairs in {@link #defineStatements} in {@link #macroKeyToValue}.
+     * 
      * @since 2.1-alpha-1
      */
     private void processDefineStatements()
@@ -1079,30 +1098,31 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * Handles the <i>scriptlet</i> and corresponding deprecated <i>script</i> and <i>file</i>. Will return a
      * {@link Scriptlet} representing the coalesced stated.
      */
-    private final Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, 
-                                            final File file )
+    private Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, final File file )
     {
         if ( scriptlet == null && ( script != null || file != null ) )
         {
             scriptlet = new Scriptlet();
             scriptlet.setScript( script );
             scriptlet.setScriptFile( file );
-            getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name 
-                           + "Scriptlet>" );
+            getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
+                               + "Scriptlet>" );
         }
 
         return scriptlet;
     }
-    
+
     /**
      * Determines the actual value for the <i>macro</i>. Will check both {@link #defineStatements} and
      * {@link RPMHelper#evaluateMacro(String)}.
+     * 
      * @param macro The macro to evaluate.
      * @return The literal value or name of macro if it has no value.
      * @throws MojoExecutionException
      * @since 2.1-alpha-1
      */
-    String evaluateMacro( String macro ) throws MojoExecutionException    
+    String evaluateMacro( String macro )
+        throws MojoExecutionException
     {
         if ( macroKeyToValue.containsKey( macro ) )
         {
@@ -1120,7 +1140,8 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
      * 
      * @throws MojoExecutionException if an error occurs writing the file
      */
-    private void writeSpecFile() throws MojoExecutionException
+    private void writeSpecFile()
+        throws MojoExecutionException
     {
         File f = new File( workarea, "SPECS" );
         File specf = new File( f, name + ".spec" );
@@ -1169,7 +1190,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     /**
      * @return Returns the {@link #linkTargetToSources}.
      */
-    final Map/*<String, List<Source>>*/ getLinkTargetToSources()
+    final Map/* <String, List<Source>> */getLinkTargetToSources()
     {
         return this.linkTargetToSources;
     }
@@ -1209,7 +1230,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     /**
      * @return Returns the {@link #copyright}.
      */
-    final  String getCopyright()
+    final String getCopyright()
     {
         return this.copyright;
     }
@@ -1377,7 +1398,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     /**
      * @return Returns the {@link #postremoveScriptlet}.
      */
-    final  Scriptlet getPostremoveScriptlet()
+    final Scriptlet getPostremoveScriptlet()
     {
         return this.postremoveScriptlet;
     }
@@ -1469,7 +1490,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     {
         return this.buildroot;
     }
-    
+
     /**
      * @return Returns the {@link #rpmBuildroot}.
      */
@@ -1479,7 +1500,7 @@ abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMoj
     }
 
     /**
-     * @inheritDoc}
+     * @inheritDoc
      */
     public final String getVersion()
     {

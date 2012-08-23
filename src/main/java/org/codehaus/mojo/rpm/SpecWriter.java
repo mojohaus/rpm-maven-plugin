@@ -109,7 +109,7 @@ final class SpecWriter
         {
             spec.println( mojo.getDescription() );
         }
-        
+
         writeMove();
 
         writeLinks();
@@ -167,7 +167,9 @@ final class SpecWriter
                 log.debug( "writing attribute string for directory created by soft link: " + destination );
 
                 final String attributes =
-                    map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
+                    map.getAttrString( mojo.getDefaultFilemode(),
+                                       mojo.getDefaultGroupname(),
+                                       mojo.getDefaultUsername() );
                 spec.println( attributes + " \"" + destination + "\"" );
 
                 continue;
@@ -181,8 +183,7 @@ final class SpecWriter
 
             // the linked files are not present yet (will be "installed" during rpm build)
             // so they cannot be "included"
-            scanner.setIncludes( includes.isEmpty() ? null : 
-                (String[]) includes.toArray( new String[ includes.size() ] ) );
+            scanner.setIncludes( includes.isEmpty() ? null : (String[]) includes.toArray( new String[includes.size()] ) );
             scanner.setExcludes( null );
             scanner.scan();
 
@@ -215,7 +216,7 @@ final class SpecWriter
                 if ( map.isRecurseDirectories() )
                 {
                     final String[] dirs = scanner.getIncludedDirectories();
-                    
+
                     if ( map.isDirectoryIncluded() )
                     {
                         // write out destination first
@@ -297,7 +298,7 @@ final class SpecWriter
                     final SoftlinkSource linkSource = (SoftlinkSource) sources.get( 0 );
 
                     final String macroEvaluatedLocation = linkSource.getMacroEvaluatedLocation();
-                    
+
                     final File buildSourceLocation;
                     if ( macroEvaluatedLocation.startsWith( "/" ) )
                     {
@@ -305,10 +306,9 @@ final class SpecWriter
                     }
                     else
                     {
-                        buildSourceLocation =
-                            new File( mojo.getBuildroot(), directory + '/' + macroEvaluatedLocation );
+                        buildSourceLocation = new File( mojo.getBuildroot(), directory + '/' + macroEvaluatedLocation );
                     }
-                    
+
                     if ( buildSourceLocation.isDirectory() )
                     {
                         final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
@@ -349,7 +349,7 @@ final class SpecWriter
                     {
                         final SoftlinkSource linkSource = (SoftlinkSource) sourceIter.next();
                         final String sourceLocation = linkSource.getMacroEvaluatedLocation();
-                        
+
                         final File buildSourceLocation;
                         if ( sourceLocation.startsWith( "/" ) )
                         {
@@ -357,10 +357,9 @@ final class SpecWriter
                         }
                         else
                         {
-                            buildSourceLocation =
-                                new File( mojo.getBuildroot(), directory + '/' + sourceLocation );
+                            buildSourceLocation = new File( mojo.getBuildroot(), directory + '/' + sourceLocation );
                         }
-                        
+
                         if ( buildSourceLocation.isDirectory() )
                         {
                             final DirectoryScanner scanner = scanLinkSource( linkSource, buildSourceLocation );
@@ -432,7 +431,7 @@ final class SpecWriter
      * 
      * @return The attribute string for the SPEC file.
      */
-    private final String getDefAttrString()
+    private String getDefAttrString()
     {
         final String defaultFilemode = mojo.getDefaultFilemode();
         final String defaultUsername = mojo.getDefaultUsername();
@@ -544,7 +543,7 @@ final class SpecWriter
      * @param directive
      * @param value
      */
-    private final void writeNonNullDirective( final String directive, final String value )
+    private void writeNonNullDirective( final String directive, final String value )
     {
         if ( value != null )
         {

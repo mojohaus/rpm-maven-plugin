@@ -19,7 +19,6 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -44,18 +43,17 @@ public class Source
 
     /** The list of exclusions. */
     private List excludes;
-    
+
     /**
      * Optional destination name for the file identified by {@link #location}.<br/>
-     * 
-     * <b>NOTE:</b> This is only applicable if the {@link #location} is a {@link File#isFile() file},
-     * not a {@link File#isDirectory() directory}.
+     * <b>NOTE:</b> This is only applicable if the {@link #location} is a {@link File#isFile() file}, not a
+     * {@link File#isDirectory() directory}.
      */
     private String destination;
 
     /** <code>true</code> to omit the default exclusions. */
     private boolean noDefaultExcludes;
-    
+
     /**
      * A {@link Pattern regular expression} that, if populated, this indicates that the files defined are only
      * applicable if this value matches the <code>RPMMojo.needarch</code> value.
@@ -64,6 +62,7 @@ public class Source
 
     /**
      * {@link Pattern} compiled from {@link #targetArchitecture}.
+     * 
      * @since 2.0-beta-3
      */
     private Pattern targetArchitecturePattern;
@@ -71,28 +70,32 @@ public class Source
     /**
      * A {@link Pattern regular expression} that, if populated, indicates that the files defined are only applicable if
      * the expression {@link Pattern#matches(String, CharSequence) matches } the <code>RPMMojo.needOS</code> value.
+     * 
      * @since 2.0-beta-3
      */
     private String targetOSName;
-    
+
     /**
      * {@link Pattern} compiled from {@link #targetOSName}.
+     * 
      * @since 2.0-beta-3
      */
     private Pattern targetOSNamePattern;
-    
+
     /**
      * Indicates if the source should be filtered.
+     * 
      * @since 2.0
      */
     private boolean filter;
-    
+
     /**
      * The {@link #location} with any/all macros {@link AbstractRPMMojo#evaluateMacro(String) evaluated}.
+     * 
      * @since 2.1-alpha-1
      */
     private String macroEvaluatedLocation;
-    
+
     /**
      * Retrieve the location holding the file(s) to install.
      * 
@@ -187,8 +190,8 @@ public class Source
     /**
      * Sets the destination file name.
      * <p>
-     * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link File#isFile() file},
-     * not a {@link File#isDirectory() directory}.
+     * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link File#isFile() file}, not
+     * a {@link File#isDirectory() directory}.
      * </p>
      * 
      * @param destination The destination that the {@link #getLocation() location} should be in the final rpm.
@@ -207,11 +210,11 @@ public class Source
     }
 
     /**
-     * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if
-     * the expression {@link Pattern#matches(String, CharSequence) matches } the architecture.
+     * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if the
+     * expression {@link Pattern#matches(String, CharSequence) matches } the architecture.
      * <p>
-     * In order to be backwards compatible, the <i>targetArch</i> will be converted to
-     * {@link String#toLowerCase() lower case} for the purpose of comparison.
+     * In order to be backwards compatible, the <i>targetArch</i> will be converted to {@link String#toLowerCase() lower
+     * case} for the purpose of comparison.
      * </p>
      * 
      * @param targetArch The target architecture to set.
@@ -222,12 +225,13 @@ public class Source
         this.targetArchitecturePattern =
             targetArch == null ? null : Pattern.compile( targetArch.toLowerCase( Locale.ENGLISH ) );
     }
-    
+
     /**
      * Indicates if the {@link #getTargetArchitecture()} matches the <i>archicture</i>.
      * 
      * @param architecture The target architecture for the rpm.
-     * @return if the {@link #getTargetArchitecture()} {@link java.util.regex.Matcher#matches() matches} the <i>archicture</i>.
+     * @return if the {@link #getTargetArchitecture()} {@link java.util.regex.Matcher#matches() matches} the
+     *         <i>archicture</i>.
      */
     boolean matchesArchitecture( String architecture )
     {
@@ -244,8 +248,8 @@ public class Source
     }
 
     /**
-     * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if
-     * the expression {@link Pattern#matches(String, CharSequence) matches } the operating system name.
+     * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if the
+     * expression {@link Pattern#matches(String, CharSequence) matches } the operating system name.
      * 
      * @param targetOSName The {@link #targetOSName} to set.
      * @since 2.0-beta-3
@@ -255,7 +259,7 @@ public class Source
         this.targetOSName = targetOSName;
         this.targetOSNamePattern = targetOSName != null ? Pattern.compile( targetOSName ) : null;
     }
-    
+
     /**
      * @return Returns the {@link #filter}.
      * @since 2.0
@@ -276,6 +280,7 @@ public class Source
 
     /**
      * Indicates if the target OS name matches <i>osName</i>.
+     * 
      * @param osName The name of the os to match against the {@link #getTargetOSName()}.
      * @return if {@link #getTargetOSName()} {@link java.util.regex.Matcher#matches() matches} <i>osName</i>.
      * @since 2.0-beta-3
@@ -327,20 +332,20 @@ public class Source
         {
             sb.append( " excl:" + excludes );
         }
-        
+
         if ( destination != null )
         {
             sb.append( " destination: " );
             sb.append( destination );
         }
-        
+
         sb.append( " filter: " + Boolean.toString( filter ) );
 
         if ( noDefaultExcludes )
         {
             sb.append( " [no default excludes]" );
         }
-        
+
         if ( targetArchitecture != null )
         {
             sb.append( " targetArch: " );
