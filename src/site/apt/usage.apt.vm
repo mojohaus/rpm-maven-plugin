@@ -35,7 +35,7 @@ RPM as Side Effect
   is packaged.  This must be done whenever the project's primary artifact is
   intended to be part of the RPM package but can be done anytime.  To set up
   this configuration, include the following lines in the plugin definition
-  in the project's POM file (see the {{{example1.html}sample configuration}} for
+  in the project's POM file (see the {{{./example1.html}sample configuration}} for
   an example of this):
 
 +-------+
