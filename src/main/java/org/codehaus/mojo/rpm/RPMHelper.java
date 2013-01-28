@@ -25,9 +25,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.StreamConsumer;
-import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 
 /**
  * Utility to interact with rpm and rpmbuild commands.
@@ -114,12 +114,12 @@ final class RPMHelper
         cl.setExecutable( "rpmbuild" );
         cl.setWorkingDirectory( f.getAbsolutePath() );
         cl.createArg().setValue( "-bb" );
+        cl.createArg().setValue( "--target" );
+        cl.createArg().setValue( mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS() );
         cl.createArg().setValue( "--buildroot" );
         cl.createArg().setValue( mojo.getRPMBuildroot().getAbsolutePath() );
         cl.createArg().setValue( "--define" );
         cl.createArg().setValue( "_topdir " + workarea.getAbsolutePath() );
-        cl.createArg().setValue( "--target" );
-        cl.createArg().setValue( mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS() );
 
         // maintain passive behavior for keyPassphrase not being present
         final String keyname = mojo.getKeyname();
