@@ -1,8 +1,11 @@
 // $Id$
 import org.codehaus.mojo.unix.rpm.RpmUtil
 import org.codehaus.mojo.unix.rpm.RpmUtil.FileInfo
+import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile
 
 import java.io.*
+import java.util.List
+import java.util.Iterator
 
 boolean success = true
 
@@ -57,7 +60,7 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
     {
         throw new java.lang.AssertionError("Incorrect group in file info: mygroup != " + fileInfo.group);
     }
-
+    
     //check for executable mode
     if (fileInfo.path.startsWith("/usr/myusr/app/bin/"))
     {
@@ -76,7 +79,7 @@ for (Iterator i = fileInfos.iterator(); i.hasNext();)
             {
                 throw new java.lang.AssertionError("Incorrect mode for '" + fileInfo.path + "': -rwxr-xr-x != " + fileInfo.mode);
             }
-
+        
             if (fileInfo.path.endsWith("/name.sh"))
             {
                 nameScript = true;
@@ -123,18 +126,38 @@ if (!unversionedWar)
 }
 
 //now test that we actually filtered the file
-def proc = ["sh", "-c", "rpm2cpio ${rpm.getAbsolutePath()} | cpio -iv --to-stdout '.*filter.txt'"].execute()
-proc.waitFor()
-content = proc.in.text
+File filteredFile = new File((File) basedir, "target/rpm/rpm-1/buildroot/usr/myusr/app/bin/filter.txt");
+if (!filteredFile.exists()) {
+    throw new java.lang.AssertionError("/usr/myusr/app/bin/filter.txt does not exist");
+}
+    
+BufferedReader reader = new BufferedReader(new FileReader(filteredFile));
+try
+{
+    String line = reader.readLine();
+    if (!"org.codehaus.mojo.rpm.its".equals(line))
+        throw new java.lang.AssertionError("contents of filter.txt expected[org.codehaus.mojo.rpm.its] actual[" + line + "]");
+}
+finally
+{
+    reader.close()
+}
 
-if (!"org.codehaus.mojo.rpm.its".equals(content))
-    throw new java.lang.AssertionError("contents of filter.txt expected[org.codehaus.mojo.rpm.its] actual[${content}]");
+File filteredVersionFile = new File((File) basedir, "target/rpm/rpm-1/buildroot/usr/myusr/app/bin/filter-version.txt")
 
-proc = ["sh", "-c", "rpm2cpio ${rpm.getAbsolutePath()} | cpio -iv --to-stdout '.*filter-version.txt'"].execute()
-proc.waitFor()
-content = proc.in.text
-
-if (!"1.0-1".equals(content))
-    throw new java.lang.AssertionError("contents of filter-version.txt expected[1.0-1] actual[${content}]");
+if (!filteredVersionFile.exists())
+    throw new java.lang.AssertionError("/usr/myusr/app/bin/filter-version.txt does not exist");
+    
+BufferedReader reader2 = new BufferedReader(new FileReader(filteredVersionFile));
+try
+{
+    String line = reader2.readLine();
+    if (!"1.0-1".equals(line))
+        throw new java.lang.AssertionError("contents of filter-version.txt expected[1.0-1] actual[" + line + "]");
+}
+finally
+{
+    reader2.close()
+}
 
 return success
