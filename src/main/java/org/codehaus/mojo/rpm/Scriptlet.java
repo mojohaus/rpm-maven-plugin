@@ -220,9 +220,10 @@ public class Scriptlet
             final Reader reader =
                 fileEncoding != null ? new InputStreamReader( new FileInputStream( scriptFile ), fileEncoding )
                                 : new FileReader( scriptFile );
+            BufferedReader bufferedReader = null;
             try
             {
-                final BufferedReader bufferedReader = new BufferedReader( reader );
+                bufferedReader = new BufferedReader( reader );
                 String line;
                 while ( ( line = bufferedReader.readLine() ) != null )
                 {
@@ -231,6 +232,17 @@ public class Scriptlet
             }
             finally
             {
+                if ( bufferedReader != null )
+                {
+                    try
+                    {
+                        bufferedReader.close();
+                    }
+                    catch ( IOException e )
+                    {
+                        // ignore - it does not matter
+                    }
+                }
                 try
                 {
                     reader.close();
