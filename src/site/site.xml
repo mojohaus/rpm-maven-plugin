@@ -68,6 +68,7 @@ under the License.
               <item name="noDefaultExcludes" href="source-params.html#noDefaultExcludes"/>
               <item name="includes" href="source-params.html#includes"/>
               <item name="excludes" href="source-params.html#excludes"/>
+              <item name="softlinkSource" href="source-params.html#softlinkSource"/>
           </item>
           <item name="Advanced Parameters" href="adv-params.html">
               <item name="RPM Dependencies" href="adv-params.html#Dependency"/>

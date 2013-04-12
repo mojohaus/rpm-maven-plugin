@@ -116,7 +116,56 @@ Source Parameters
             ...
         </plugins>
         ...
-    <build>
+    </build>
++-----+
+
+* {softlinkSource} (<<optional>>)
+
+  Provides the opportunity to link to item(s) in the package. The location,
+  therefore, must be a location that exists after all the mappings with
+  traditional sources have been created in the <<<buildroot>>> directory.
+
+  Example: Create a link from <<<ccc.txt>>> to <<</usr/files/aaa.txt>>>.
+
++-----+
+    ...
+    <mapping>
+        <directory>/usr/files</directory>
+        <sources>
+            <softlinkSource>
+                <destination>ccc.txt</destination>
+                <location>aaa.txt</location>
+            </softlinkSource>
+        </sources>
+    </mapping>
++-----+
+
+  Example: Create a link from <<</usr/bin/script.sh>>> to <<</usr/files/script.sh>>>.
+
++-----+
+    ...
+    <mapping>
+        <directory>/usr/bin</directory>
+        <sources>
+            <softlinkSource>
+                <location>/usr/files/script.sh</location>
+            </softlinkSource>
+        </sources>
+    </mapping>
++-----+
+
+  Example: Create a link from <<</usr/local/something>>> to <<</usr/local/something-A>>>
+
++-----+
+    ...
+    <mapping>
+        <directory>/usr/local/something</directory>
+        <sources>
+            <softlinkSource>
+                <location>/usr/local/something-A</location>
+            </softlinkSource>
+        </sources>
+    </mapping>
 +-----+
 
 * {targetOSName} (<<optional>>)
