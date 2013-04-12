@@ -109,7 +109,7 @@ final class FilteringDirectoryArchiver
      * {@inheritDoc}
      */
     protected void copyFile( ArchiveEntry entry, String vPath )
-        throws ArchiverException, IOException
+        throws IOException
     {
         if ( !filter || mavenFileFilter == null )
         {
