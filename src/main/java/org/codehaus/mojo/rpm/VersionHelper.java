@@ -63,7 +63,7 @@ final class VersionHelper
      * Interface for the rpm related Mojos to implement. Provides access to the configured/default version and release
      * attributes.
      */
-    static interface RPMVersionableMojo
+    interface RPMVersionableMojo
         extends Mojo
     {
         String getVersion();
