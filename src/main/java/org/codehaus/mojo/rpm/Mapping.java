@@ -486,7 +486,7 @@ public class Mapping
     }
 
     /**
-     * Add a <tt>List</tt> of relative file names which have c
+     * Add a <tt>List</tt> of relative file names which have been copied to the {@link #getDestination() destination}.
      * 
      * @param copiedFileNamesRelativeToDestination relative names of files to add
      * @see #getCopiedFileNamesRelativeToDestination()
