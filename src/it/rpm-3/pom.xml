@@ -146,7 +146,6 @@
               </sources>
             </mapping>
           </mappings>
-          <preinstallScript>src/main/bin/preinstall.sh</preinstallScript>
           <requires>
             <require>/bin/sh</require>
             <require>jre &gt;= 1.5</require>

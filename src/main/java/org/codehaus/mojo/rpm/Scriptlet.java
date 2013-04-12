@@ -1,22 +1,13 @@
 package org.codehaus.mojo.rpm;
 
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE
+ * file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+ * applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 
 import java.io.BufferedReader;
@@ -29,8 +20,8 @@ import java.io.PrintWriter;
 import java.io.Reader;
 
 /**
- * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional)
- * contents can be provided by either {@link #getScript()} or {@link #getScriptFile()}.
+ * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional) contents
+ * can be provided by either {@link #getScript()} or {@link #getScriptFile()}.
  * 
  * @author Brett Okken, Cerner Corp.
  * @version $Id$
@@ -40,30 +31,35 @@ public class Scriptlet
 {
     /**
      * Optional subpackage.
-     * @see #getSubpackage() 
+     * 
+     * @see #getSubpackage()
      */
     private String subpackage;
 
     /**
      * Program to execute script.
+     * 
      * @see #getProgram()
      */
     private String program;
 
     /**
      * Contents of the script. Mutually exclusive with {@link #scriptFile}.
+     * 
      * @see #getScript()
      */
     private String script;
 
     /**
      * Script to execute. Mutually exclusive with {@link #script}.
+     * 
      * @see #getScriptFile()
      */
     private File scriptFile;
 
     /**
      * Encoding of {@link #scriptFile}.
+     * 
      * @see #getFileEncoding().
      */
     private String fileEncoding;
@@ -169,7 +165,13 @@ public class Scriptlet
     protected final void write( final PrintWriter writer, final String directive )
         throws IOException
     {
-        if ( script != null || scriptFile.exists() || program != null )
+        if ( scriptFile != null && !scriptFile.exists() )
+        {
+            throw new RuntimeException( "Invalid scriptlet declaration found - defined scriptFile does not exist: "
+                + scriptFile.getPath() );
+        }
+
+        if ( script != null || ( scriptFile != null && scriptFile.exists() ) || program != null )
         {
             writer.println();
             writer.println( buildScriptletLine( directive ) );
@@ -203,13 +205,15 @@ public class Scriptlet
 
         return builder.toString();
     }
-    
+
     /**
      * Writes the content (either {@link #getScript()} or {@link #getScriptFile()}) to <i>writer</i>.
+     * 
      * @param writer {@code PrintWriter} to write content to.
      * @throws IOException
      */
-    protected final void writeContent( PrintWriter writer ) throws IOException
+    protected final void writeContent( PrintWriter writer )
+        throws IOException
     {
         if ( script != null )
         {
