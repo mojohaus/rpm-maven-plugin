@@ -160,6 +160,9 @@ Mapping Parameters
   If no include items are specified, then all dependencies not explicitly
   excluded are included.
 
+  * "<<<\<stripVersion\>true\</stripVersion\>>>>" will strip the version from the
+    name of the dependencies when installed in the RPM package.
+
 * {sources}
 
   The location(s) to find the files to be packaged.  If no sources are
