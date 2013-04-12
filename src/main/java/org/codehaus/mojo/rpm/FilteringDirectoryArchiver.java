@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.codehaus.plexus.archiver.ArchiveEntry;
-import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
 
 /**
