@@ -33,6 +33,7 @@ under the License.
       </item>
       <item name="Parameters" href="params.html" collapse="true">
           <item name="Identification Parameters" href="ident-params.html">
+              <item name="name" href="ident-params.html#name"/>
               <item name="copyright" href="ident-params.html#copyright"/>
               <item name="distribution" href="ident-params.html#distribution"/>
               <item name="group" href="ident-params.html#group"/>
@@ -42,6 +43,8 @@ under the License.
               <item name="release**" href="ident-params.html#release"/>
               <item name="version" href="ident-params.html#version"/>
               <item name="changelogFile" href="ident-params.html#changelogFile"/>
+              <item name="targetOS" href="ident-params.html#targetOS"/>
+              <item name="targetVendor" href="ident-params.html#targetVendor"/>
           </item>
           <item name="Operation Parameters" href="op-params.html">
               <item name="workarea" href="op-params.html#workarea"/>

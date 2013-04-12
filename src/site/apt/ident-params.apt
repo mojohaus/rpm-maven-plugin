@@ -12,6 +12,11 @@ Identification Parameters
   RPM package.  This information will be present in the package file and can be
   viewed with the "<<<rpm -i>>>" command.
 
+* {name}
+
+  Can be used to set the Name of the RPM package. Defaults to the artifactId of 
+  the Maven project.
+
 * {version}
 
   The version number to use for the RPM package.  By default, this is the
