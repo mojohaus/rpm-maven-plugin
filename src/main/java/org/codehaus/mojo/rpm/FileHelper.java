@@ -261,8 +261,8 @@ final class FileHelper
         {
             final Log log = mojo.getLog();
             log.warn( "Artifact " + art + " requested in configuration." );
-            log.warn( "Plugin must run in standard lifecycle for this to work." );
-            return null;
+            log.warn( "Plugin must be run in Maven's build lifecycle for this to work." );
+            throw new MojoExecutionException("Unable to resolve artifact.");
         }
 
         String outputFileName;

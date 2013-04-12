@@ -62,5 +62,17 @@ under the License.
             </p>
         </answer>
     </faq>
+    <faq id="cannot resolve artifact">
+        <question>When trying to build an RPM I get an exception saying 'Unable to resolve artifact'!</question>
+        <answer>
+            <p>
+                If you want to include an artifact from the same project that you're building the RPM package in,
+                the RPM execution needs to be built in Maven's build lifecycle. Otherwise Maven can't resolve the
+                project's artifact(s).<br/>
+                The easiest way to do this is to bind the rpm goal to Maven's lifecycle as explained on the
+                Usage page under <a href="usage.html#RPM_as_Side_Effect">RPM as Side Effect</a>.
+            </p>
+        </answer>
+    </faq>
   </part>
 </faqs>

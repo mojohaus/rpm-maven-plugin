@@ -41,6 +41,7 @@ RPM as Side Effect
 +-------+
 <executions>
   <execution>
+    <id>generate-rpm</id>
     <goals>
       <goal>rpm</goal>
     </goals>
@@ -56,6 +57,7 @@ RPM as Secondary Artifact
 +-------+
 <executions>
   <execution>
+    <id>attach-rpm</id>
     <goals>
       <goal>attached-rpm</goal>
     </goals>
