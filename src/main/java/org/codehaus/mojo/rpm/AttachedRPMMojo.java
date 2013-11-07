@@ -32,6 +32,7 @@ import org.apache.maven.project.MavenProjectHelper;
  * @requiresDependencyResolution runtime
  * @goal attached-rpm
  * @phase package
+ * @threadSafe true
  */
 public class AttachedRPMMojo
     extends AbstractRPMMojo

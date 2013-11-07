@@ -28,6 +28,7 @@ import java.io.File;
  * @requiresDependencyResolution runtime
  * @goal rpm
  * @phase package
+ * @threadSafe true
  */
 public class RPMMojo
     extends AbstractRPMMojo

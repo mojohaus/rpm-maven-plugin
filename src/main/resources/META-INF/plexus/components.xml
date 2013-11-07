@@ -20,6 +20,7 @@
       <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
       <role-hint>rpm</role-hint>
       <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
       <configuration>
         <phases>
           <initialize>org.codehaus.mojo:rpm-maven-plugin:version</initialize>

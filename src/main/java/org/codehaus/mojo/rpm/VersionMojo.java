@@ -35,6 +35,7 @@ import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
  * @since 2.0
  * @goal version
  * @phase initialize
+ * @threadSafe true
  */
 public class VersionMojo
     extends AbstractMojo
