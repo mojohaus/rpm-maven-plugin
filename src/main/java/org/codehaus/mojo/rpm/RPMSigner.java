@@ -141,9 +141,17 @@ final class RPMSigner
             writer.print( "send -- \"" );
             writer.print( new String( this.passphrase ) );
             writer.println( "\r\"" );
-            writer.println( "expect eof" );
+            writer.println( "expect {" );
+            writer.println( " \"Pass phrase is good.\" {" );
+            writer.println( "      expect eof" );
+            writer.println( "      exit 0" );
+            writer.println( "  }" );
+            writer.println( " \"signing failed\" {" );
+            writer.println( "      expect eof" );
+            writer.println( "      exit 1" );
+            writer.println( "  }" );
+            writer.println( "}" );
             writer.println();
-
             writer.flush();
         }
         finally
