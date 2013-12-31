@@ -295,8 +295,17 @@ abstract class AbstractRPMMojo
      * The relocation prefix for this package.
      * 
      * @parameter
+     * @deprecated use prefixes instead.
      */
     private String prefix;
+
+    /**
+     * The relocation prefixes for this package.
+     *
+     * @parameter alias="prefixes"
+     * @since 2.1-alpha-4
+     */
+    private String[] prefixes;
 
     /**
      * The area for RPM to use for building the package.<br/>
@@ -1340,10 +1349,15 @@ abstract class AbstractRPMMojo
 
     /**
      * @return Returns the {@link #prefix}.
+     * @deprecated
      */
     final String getPrefix()
     {
         return this.prefix;
+    }
+
+    final String[] getPrefixes() {
+        return prefixes;
     }
 
     /**

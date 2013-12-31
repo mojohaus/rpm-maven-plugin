@@ -102,6 +102,14 @@ final class SpecWriter
         {
             spec.println( "Prefix: " + mojo.getPrefix() );
         }
+
+        if (mojo.getPrefixes() != null) {
+            for ( int i = 0; i < mojo.getPrefixes().length; i++ ) {
+                String s = mojo.getPrefixes()[i];
+                spec.println( "Prefix: " + s );
+            }
+        }
+
         spec.println( "BuildRoot: " + mojo.getRPMBuildroot().getAbsolutePath() );
         spec.println();
         spec.println( "%description" );

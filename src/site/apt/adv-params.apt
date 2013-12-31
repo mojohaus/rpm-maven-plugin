@@ -50,7 +50,7 @@ Advanced Parameters
 
 * {Relocation}
 
-  If you specify the <<<prefix>>> parameter to the RPM plugin, you can create
+  If you specify the <<<prefixes>>> parameter to the RPM plugin, you can create
   a package that can be installed in a user-specified location.  Before doing
   this, read and understand Maximum RPM
   {{{http://www.rpm.org/max-rpm/ch-rpm-reloc.html}Chapter 15}} since there are
