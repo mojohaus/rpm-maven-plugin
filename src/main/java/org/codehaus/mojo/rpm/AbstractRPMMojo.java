@@ -1205,6 +1205,11 @@ abstract class AbstractRPMMojo
         return this.release;
     }
 
+    public Date getBuildTimestamp()
+    {
+        return session.getStartTime();
+    }
+
     /**
      * @return Returns the {@link #description}.
      */

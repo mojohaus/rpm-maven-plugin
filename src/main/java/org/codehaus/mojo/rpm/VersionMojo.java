@@ -20,7 +20,9 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.text.MessageFormat;
+import java.util.Date;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -49,6 +51,15 @@ public class VersionMojo
      * @readonly
      */
     private MavenProject project;
+
+    /**
+     * The maven session.
+     *
+     * @parameter expression="${session}"
+     * @required
+     * @readonly
+     */
+    private MavenSession session;
 
     /**
      * The version portion of the RPM file name.
@@ -124,5 +135,10 @@ public class VersionMojo
     public final String getRelease()
     {
         return this.release;
+    }
+
+    public Date getBuildTimestamp()
+    {
+        return session.getStartTime();
     }
 }

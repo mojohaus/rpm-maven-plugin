@@ -69,6 +69,8 @@ final class VersionHelper
         String getVersion();
 
         String getRelease();
+
+        Date getBuildTimestamp();
     }
 
     private final RPMVersionableMojo mojo;
@@ -122,7 +124,7 @@ final class VersionHelper
                 {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMddHHmmss" );
                     simpleDateFormat.setTimeZone( TimeZone.getTimeZone( "UTC" ) );
-                    modifier += simpleDateFormat.format( new Date() );
+                    modifier += simpleDateFormat.format( mojo.getBuildTimestamp() );
                 }
                 else
                 {
