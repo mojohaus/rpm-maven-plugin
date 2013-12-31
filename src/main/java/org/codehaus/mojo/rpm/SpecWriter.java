@@ -110,6 +110,10 @@ final class SpecWriter
             }
         }
 
+        if ("noarch".equals(mojo.getTargetArch()))
+        {
+            spec.println( "BuildArch: " + mojo.getTargetArch() );
+        }
         spec.println( "BuildRoot: " + mojo.getRPMBuildroot().getAbsolutePath() );
         spec.println();
         spec.println( "%description" );
