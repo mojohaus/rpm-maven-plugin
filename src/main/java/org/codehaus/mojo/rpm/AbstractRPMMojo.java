@@ -945,7 +945,7 @@ abstract class AbstractRPMMojo
         }
         else if ( "true".equalsIgnoreCase( needarch ) )
         {
-            targetArch = Os.OS_ARCH;
+            targetArch = helper.getArch();
         }
         else
         {

@@ -212,4 +212,31 @@ final class RPMHelper
         
         return stdout.getOutput().trim();
     }
+
+    /**
+     * Gets the architecure for system by executing <i>rpm -E %{_arch}</i>.
+     */
+    public String getArch() throws MojoExecutionException
+    {
+        final Commandline cl = new Commandline();
+        cl.setExecutable( "rpm" );
+        cl.addArguments( new String[] { "-E", "%{_arch}" } );
+
+        final StringStreamConsumer stdConsumer = new StringStreamConsumer();
+        final StreamConsumer errConsumer = new LogStreamConsumer( LogStreamConsumer.WARN, mojo.getLog() );
+        try
+        {
+            if ( mojo.getLog().isDebugEnabled() )
+                mojo.getLog().debug( "About to execute \'" + cl.toString() + "\'" );
+            final int result = CommandLineUtils.executeCommandLine( cl, stdConsumer, errConsumer );
+            if ( result != 0 )
+                throw new MojoExecutionException( "rpm -E %{_arch} returned: \'" + result + "\' executing \'"
+                        + cl.toString() + "\'" );
+        } catch ( CommandLineException e )
+        {
+            throw new MojoExecutionException( "Unable get system architecture", e );
+        }
+
+        return stdConsumer.getOutput().trim();
+    }
 }
