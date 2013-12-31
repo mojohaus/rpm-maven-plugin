@@ -261,7 +261,7 @@ final class SpecWriter
 
         spec.println();
         spec.println( "%install" );
-        spec.println( "if [ -e $RPM_BUILD_ROOT ];" );
+        spec.println( "if [ -d $RPM_BUILD_ROOT ];" );
         spec.println( "then" );
         spec.print( "  mv " );
         spec.print( tmpBuildRoot );
