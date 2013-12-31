@@ -23,7 +23,6 @@ package org.codehaus.mojo.rpm;
  * Trigger after the removal of a package (%triggerpostun).
  * 
  * @author Brett Okken, Cerner Corporation
- * @version $Id$
  * @since 2.0-beta-4
  */
 public class PostRemoveTrigger

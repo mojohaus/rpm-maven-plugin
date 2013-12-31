@@ -33,7 +33,6 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * Utility to interact with rpm and rpmbuild commands.
  * 
  * @author Brett Okken
- * @version $Id$
  * @since 2.0
  */
 final class RPMHelper

@@ -23,7 +23,6 @@ package org.codehaus.mojo.rpm;
  * Wraps a pass phrase in such a way that it is not stored as a {@link String}.
  * 
  * @author Brett Okken, Cerner Corporation
- * @version $Id$
  * @since 2.0-beta-4
  */
 public final class Passphrase

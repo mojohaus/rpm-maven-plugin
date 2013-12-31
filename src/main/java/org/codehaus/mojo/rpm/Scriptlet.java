@@ -33,7 +33,6 @@ import java.io.Reader;
  * can be provided by either {@link #getScript()} or {@link #getScriptFile()}.
  * 
  * @author Brett Okken, Cerner Corp.
- * @version $Id$
  * @since 2.0-beta-4
  */
 public class Scriptlet
@@ -218,7 +217,7 @@ public class Scriptlet
      */
     protected String buildScriptletLine( final String directive )
     {
-        final StringBuffer builder = new StringBuffer();
+        final StringBuilder builder = new StringBuilder();
 
         builder.append( directive );
         if ( subpackage != null )
@@ -294,7 +293,7 @@ public class Scriptlet
      */
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer( 64 );
+        StringBuilder buffer = new StringBuilder( 64 );
         buffer.append( "Scriptlet[" );
         buffer.append( "subpackage=" );
         buffer.append( subpackage );

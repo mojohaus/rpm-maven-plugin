@@ -21,12 +21,12 @@ package org.codehaus.mojo.rpm;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * A base class to support <a href="http://rpm.org/api/4.4.2.2/triggers.html">triggers</a>.
  * 
  * @author Brett Okken, Cerner Corporation
- * @version $Id$
  * @since 2.0-beta-4
  */
 public abstract class BaseTrigger
@@ -35,7 +35,7 @@ public abstract class BaseTrigger
     /**
      * List of triggers.
      */
-    private java.util.List/* <String> */triggers;
+    private List<String> triggers;
 
     /**
      * Gets the packages/versions to trigger on.
@@ -46,7 +46,7 @@ public abstract class BaseTrigger
      * 
      * @return Returns the {@link #triggers}.
      */
-    public java.util.List getTriggers()
+    public List<String> getTriggers()
     {
         return this.triggers;
     }
@@ -57,7 +57,7 @@ public abstract class BaseTrigger
      * @param triggers The {@link #triggers} to set.
      * @see #getTriggers()
      */
-    public void setTriggers( java.util.List triggers )
+    public void setTriggers( List<String> triggers )
     {
         this.triggers = triggers;
     }
@@ -67,14 +67,14 @@ public abstract class BaseTrigger
      */
     protected String buildScriptletLine( String directive )
     {
-        final StringBuffer builder = new StringBuffer( super.buildScriptletLine( directive ) );
+        final StringBuilder builder = new StringBuilder( super.buildScriptletLine( directive ) );
 
         builder.append( " -- " );
 
         final int size = triggers.size();
         for ( int i = 0; i < size; ++i )
         {
-            final String trigger = (String) triggers.get( i );
+            final String trigger = triggers.get( i );
 
             if ( i != 0 )
             {
@@ -111,7 +111,7 @@ public abstract class BaseTrigger
      */
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer( 128 );
+        StringBuilder buffer = new StringBuilder( 128 );
         buffer.append( getClass().getName().substring( getClass().getName().lastIndexOf( '.' ) ) );
         buffer.append( '[' );
         buffer.append( "subpackage=" );

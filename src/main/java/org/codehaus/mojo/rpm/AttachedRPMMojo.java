@@ -21,33 +21,28 @@ package org.codehaus.mojo.rpm;
 
 import java.io.File;
 
+import org.apache.maven.plugins.annotations.*;
+
 import org.apache.maven.project.MavenProjectHelper;
 
 /**
  * Construct the RPM file and attaches it as a secondary artifact.
  * 
  * @author Brett Okken, Cerner Corp.
- * @version $Id$
  * @since 2.0-beta-2
- * @requiresDependencyResolution runtime
- * @goal attached-rpm
- * @phase package
- * @threadSafe true
  */
+@Mojo( name = "attached-rpm", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
 public class AttachedRPMMojo
     extends AbstractRPMMojo
 {
 
     /**
      * The classifier for the rpm secondary artifact.
-     * 
-     * @parameter
      */
+    @Parameter
     private String classifier;
 
-    /**
-     * @component
-     */
+    @Component
     private MavenProjectHelper mavenProjectHelper;
     
     /**

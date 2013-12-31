@@ -37,7 +37,6 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * Utility that uses <a href="http://expect.nist.gov/">expect</a> to sign rpms automatically (no user interaction).
  * 
  * @author Brett Okken, Cerner Corporation
- * @version $Id$
  * @since 2.0-beta-4
  */
 final class RPMSigner

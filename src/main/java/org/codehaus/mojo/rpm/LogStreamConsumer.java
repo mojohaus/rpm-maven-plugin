@@ -26,7 +26,6 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * A {@link StreamConsumer} that writes to a {@link Log}.
  * 
  * @author Brett Okken, Cerner Corporation
- * @version $Id$
  * @since 2.0-beta-4
  */
 final class LogStreamConsumer

@@ -23,10 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -36,7 +34,6 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * Utility to write spec file based on {@link AbstractRPMMojo} instance.
  * 
  * @author Brett Okken
- * @version $Revision$
  * @since 2.0
  */
 final class SpecWriter
@@ -60,9 +57,7 @@ final class SpecWriter
 
     /**
      * Writes the spec file to <i>spec</i> using the attributes of <i>mojo</i>.
-     * 
-     * @param mojo The mojo with the attributes to generate a spec file for.
-     * @param spec The target to write the spec file to.
+     *
      * @throws MojoExecutionException
      * @throws IOException
      */
@@ -141,9 +136,8 @@ final class SpecWriter
 
         if ( mojo.getTriggers() != null )
         {
-            for ( Iterator i = mojo.getTriggers().iterator(); i.hasNext(); )
+            for ( BaseTrigger trigger : mojo.getTriggers() )
             {
-                BaseTrigger trigger = (BaseTrigger) i.next();
                 trigger.writeTrigger( spec );
             }
         }
@@ -167,10 +161,8 @@ final class SpecWriter
         spec.println( "%files" );
         spec.println( getDefAttrString() );
 
-        for ( Iterator it = mojo.getMappings().iterator(); it.hasNext(); )
+        for ( Mapping map : mojo.getMappings() )
         {
-            Mapping map = (Mapping) it.next();
-
             // For each mapping we need to determine which files in the destination were defined by this
             // mapping so that we can write the %attr statement correctly.
 
@@ -190,15 +182,15 @@ final class SpecWriter
                 continue;
             }
 
-            final List includes = map.getCopiedFileNamesRelativeToDestination();
-            final List links = map.getLinkedFileNamesRelativeToDestination();
+            final List<String> includes = map.getCopiedFileNamesRelativeToDestination();
+            final List<String> links = map.getLinkedFileNamesRelativeToDestination();
 
             final DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( absoluteDestination );
 
             // the linked files are not present yet (will be "installed" during rpm build)
             // so they cannot be "included"
-            scanner.setIncludes( includes.isEmpty() ? null : (String[]) includes.toArray( new String[includes.size()] ) );
+            scanner.setIncludes( includes.isEmpty() ? null : includes.toArray( new String[includes.size()] ) );
             scanner.setExcludes( null );
             scanner.scan();
 
@@ -221,10 +213,10 @@ final class SpecWriter
                 {
                     final String[] files = scanner.getIncludedFiles();
 
-                    for ( int i = 0; i < files.length; ++i )
+                    for ( String file : files )
                     {
                         spec.print( baseFileString );
-                        spec.println( files[i] + "\"" );
+                        spec.println( file + "\"" );
                     }
                 }
 
@@ -238,22 +230,20 @@ final class SpecWriter
                         spec.println( baseFileString + "\"" );
                     }
 
-                    for ( int i = 0; i < dirs.length; ++i )
+                    for ( String dir : dirs )
                     {
                         // do not write out base file (destination) again
-                        if ( dirs[i].length() > 0 )
+                        if ( dir.length() > 0 )
                         {
                             spec.print( baseFileString );
-                            spec.println( dirs[i] + "\"" );
+                            spec.println( dir + "\"" );
                         }
                     }
                 }
 
                 // since the linked files are not present in directory (yet), the scanner will not find them
-                for ( Iterator linkIter = links.iterator(); linkIter.hasNext(); )
+                for ( String link : links )
                 {
-                    String link = (String) linkIter.next();
-
                     spec.print( baseFileString );
                     spec.println( link + "\"" );
                 }
@@ -292,10 +282,9 @@ final class SpecWriter
         {
             spec.println();
 
-            for ( Iterator entryIter = mojo.getLinkTargetToSources().entrySet().iterator(); entryIter.hasNext(); )
+            for (Map.Entry<String, List<SoftlinkSource>> directoryToSourcesEntry : mojo.getLinkTargetToSources().entrySet() )
             {
-                final Map.Entry directoryToSourcesEntry = (Entry) entryIter.next();
-                String directory = (String) directoryToSourcesEntry.getKey();
+                String directory = directoryToSourcesEntry.getKey();
                 if ( directory.startsWith( "/" ) )
                 {
                     directory = directory.substring( 1 );
@@ -305,12 +294,12 @@ final class SpecWriter
                     directory = directory.substring( 0, directory.length() - 1 );
                 }
 
-                final List sources = (List) directoryToSourcesEntry.getValue();
+                final List<SoftlinkSource> sources = directoryToSourcesEntry.getValue();
                 final int sourceCnt = sources.size();
 
                 if ( sourceCnt == 1 )
                 {
-                    final SoftlinkSource linkSource = (SoftlinkSource) sources.get( 0 );
+                    final SoftlinkSource linkSource = sources.get( 0 );
 
                     final String macroEvaluatedLocation = linkSource.getMacroEvaluatedLocation();
 
@@ -360,11 +349,9 @@ final class SpecWriter
                 }
                 else
                 {
-                    for ( Iterator sourceIter = sources.iterator(); sourceIter.hasNext(); )
+                    for ( SoftlinkSource linkSource : sources )
                     {
-                        final SoftlinkSource linkSource = (SoftlinkSource) sourceIter.next();
                         final String sourceLocation = linkSource.getMacroEvaluatedLocation();
-
                         final File buildSourceLocation;
                         if ( sourceLocation.startsWith( "/" ) )
                         {
@@ -407,14 +394,14 @@ final class SpecWriter
         final String targetPrefix = sourceLocation + File.separatorChar;
         final String sourcePrefix = directory + File.separatorChar;
 
-        for ( int i = 0; i < files.length; ++i )
+        for ( String file : files )
         {
             spec.print( "ln -s " );
-            spec.print( targetPrefix + files[i] );
+            spec.print( targetPrefix + file );
             spec.print( " $RPM_BUILD_ROOT/" );
-            spec.println( sourcePrefix + files[i] );
+            spec.println( sourcePrefix + file );
 
-            linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( files[i] );
+            linkSource.getSourceMapping().addLinkedFileNameRelativeToDestination( file );
         }
     }
 
@@ -460,7 +447,7 @@ final class SpecWriter
             return "";
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         if ( defaultFilemode != null )
         {
@@ -574,14 +561,14 @@ final class SpecWriter
      * @param strings <tt>List</tt> of <tt>String</tt>s to write.
      * @param prefix Prefix to write on each line before the string.
      */
-    private void writeList( Collection strings, String prefix )
+    private void writeList( Collection<String> strings, String prefix )
     {
         if ( strings != null )
         {
-            for ( Iterator it = strings.iterator(); it.hasNext(); )
+            for ( String str : strings )
             {
-                String str = (String) it.next();
-                if (str != null && !str.equals(""))
+
+                if (!str.equals(""))
                 {
                     spec.print( prefix );
                     spec.println( str );

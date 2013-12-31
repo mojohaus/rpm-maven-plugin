@@ -34,7 +34,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -46,6 +45,8 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
@@ -59,7 +60,6 @@ import org.codehaus.plexus.util.Os;
  *
  * @author Carlos
  * @author Brett Okken, Cerner Corp.
- * @version $Id$
  */
 abstract class AbstractRPMMojo
     extends AbstractMojo
@@ -71,7 +71,7 @@ abstract class AbstractRPMMojo
      *
      * @since 2.1-alpha-1
      */
-    private final Map/* <String,String> */macroKeyToValue = new HashMap();
+    private final Map<String, String> macroKeyToValue = new HashMap<String, String>();
 
     /**
      * The key of the map is the directory where the files should be linked to. The value is the {@code List} of
@@ -79,22 +79,18 @@ abstract class AbstractRPMMojo
      *
      * @since 2.0-beta-3
      */
-    private final Map/* <String, List<Source>> */linkTargetToSources = new LinkedHashMap();
+    private final Map<String, List<SoftlinkSource>> linkTargetToSources = new LinkedHashMap<String, List<SoftlinkSource>>();
 
     /**
      * The name portion of the output file name.
-     *
-     * @parameter expression="${project.artifactId}"
-     * @required
      */
+    @Parameter( required = true, property = "project.artifactId")
     private String name;
 
     /**
      * The version portion of the RPM file name.
-     *
-     * @parameter alias="version" expression="${project.version}"
-     * @required
      */
+    @Parameter( required = true, alias = "version", property = "project.version" )
     private String projversion;
 
     /**
@@ -109,9 +105,8 @@ abstract class AbstractRPMMojo
      * <li>If a modifier exists and does not end with <i>SNAPSHOT</i>, <code>"_1"</code> will be appended to end.</li>
      * </ul>
      * </p>
-     *
-     * @parameter
      */
+    @Parameter
     private String release;
 
     /**
@@ -126,9 +121,8 @@ abstract class AbstractRPMMojo
      * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
      * targetArchitecture</a> to flex the contents of the rpm based on the architecture.
      * </p>
-     *
-     * @parameter
      */
+    @Parameter
     private String needarch;
 
     /**
@@ -144,26 +138,25 @@ abstract class AbstractRPMMojo
      * the contents of the rpm based on operating system.
      * </p>
      *
-     * @parameter
      * @since 2.0-beta-3
      */
+    @Parameter
     private String targetOS;
 
     /**
      * The target vendor for building the RPM. By default, this will be populated to the result of <i>rpm -E
      * %{_host_vendor}</i>.
      *
-     * @parameter
      * @since 2.0-beta-3
      */
+    @Parameter
     private String targetVendor;
 
     /**
      * Set to a key name to sign the package using GPG. If <i>keyPassphrase</i> is not also provided, this will require
      * the input of the passphrase at the terminal.
-     *
-     * @parameter expression="${gpg.keyname}"
      */
+    @Parameter( property = "gpg.keyname" )
     private String keyname;
 
     /**
@@ -182,152 +175,141 @@ abstract class AbstractRPMMojo
      *
      * </p>
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Passphrase keyPassphrase;
 
     /**
      * The long description of the package.
-     *
-     * @parameter expression="${project.description}"
      */
+    @Parameter( property = "project.description" )
     private String description;
 
     /**
      * The one-line description of the package.
-     *
-     * @parameter expression="${project.name}"
      */
+    @Parameter( property = "project.name" )
     private String summary;
 
     /**
      * The one-line license information.
      *
-     * @parameter
      * @since 2.1-alpha-4
      */
+    @Parameter
     private String license;
 
     /**
-     * @deprecated use license instead!
-
      * The one-line copyright information.
      *
-     * @parameter
+     * @deprecated use license instead!
      */
+    @Parameter
+    @Deprecated
     private String copyright;
 
     /**
      * The distribution containing this package.
-     *
-     * @parameter
      */
+    @Parameter
     private String distribution;
 
     /**
      * An icon for the package.
-     *
-     * @parameter
      */
+    @Parameter
     private File icon;
 
     /**
      * The vendor supplying the package.
-     *
-     * @parameter expression="${project.organization.name}"
      */
+    @Parameter( property = "project.organization.name" )
     private String vendor;
 
     /**
      * A URL for the vendor.
-     *
-     * @parameter expression="${project.organization.url}"
      */
+    @Parameter( property = "project.organization.url" )
     private String url;
 
     /**
      * The package group for the package.
-     *
-     * @parameter
-     * @required
      */
+    @Parameter( required = true )
     private String group;
 
     /**
      * The name of the person or group creating the package.
-     *
-     * @parameter expression="${project.organization.name}"
      */
+    @Parameter( property = "project.organization.name" )
     private String packager;
 
     /**
      * Automatically add provided shared libraries.
      *
-     * @parameter default-value="true"
      * @since 2.0-beta-4
      */
+    @Parameter( defaultValue = "true" )
     private boolean autoProvides;
 
     /**
      * Automatically add requirements deduced from included shared libraries.
      *
-     * @parameter default-value="true"
      * @since 2.0-beta-4
      */
+    @Parameter( defaultValue = "true" )
     private boolean autoRequires;
 
     /**
      * The list of virtual packages provided by this package.
-     *
-     * @parameter
      */
+    @Parameter
     private LinkedHashSet provides;
 
     /**
      * The list of requirements for this package.
-     *
-     * @parameter
      */
+    @Parameter
     private LinkedHashSet requires;
 
     /**
      * The list of prerequisites for this package.
      *
      * @since 2.0-beta-3
-     * @parameter
      */
+    @Parameter
     private LinkedHashSet prereqs;
 
     /**
      * The list of obsoletes for this package.
      *
      * @since 2.0-beta-3
-     * @parameter
      */
+    @Parameter
     private LinkedHashSet obsoletes;
 
     /**
      * The list of conflicts for this package.
-     *
-     * @parameter
      */
+    @Parameter
     private LinkedHashSet conflicts;
 
     /**
      * The relocation prefix for this package.
      *
-     * @parameter
      * @deprecated use prefixes instead.
      */
+    @Parameter
+    @Deprecated
     private String prefix;
 
     /**
      * The relocation prefixes for this package.
      *
-     * @parameter alias="prefixes"
      * @since 2.1-alpha-4
      */
+    @Parameter( alias = "prefixes" )
     private String[] prefixes;
 
     /**
@@ -339,48 +321,49 @@ abstract class AbstractRPMMojo
      * The pattern will be <code>workarea/<i>name[-classifier]</i></code>.<br/>
      * The classifier portion is only applicable for the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.
      * </p>
-     *
-     * @parameter expression="${project.build.directory}/rpm"
      */
+    @Parameter( defaultValue = "${project.build.directory}/rpm" )
     private File workarea;
 
     /**
      * The list of file <a href="map-params.html">mappings</a>.
-     *
-     * @parameter
      */
-    private List mappings = Collections.EMPTY_LIST;
+    @Parameter
+    private List<Mapping> mappings = Collections.EMPTY_LIST;
 
     /**
      * The prepare script.
      *
-     * @parameter
      * @deprecated Use prepareScriplet
      */
+    @Parameter
+    @Deprecated
     private String prepare;
 
     /**
      * The location of the prepare script. A File which does not exist is ignored.
      *
-     * @parameter
      * @deprecated Use prepareScriplet
      */
+    @Parameter
+    @Deprecated
     private File prepareScript;
 
     /**
      * The prepare scriptlet;
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet prepareScriptlet;
 
     /**
      * The pre-installation script.
      *
-     * @parameter
      * @deprecated Use preinstallScriplet
      */
+    @Parameter
+    @Deprecated
     private String preinstall;
 
     /**
@@ -389,25 +372,27 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use preinstallScriplet
      */
+    @Parameter
+    @Deprecated
     private File preinstallScript;
 
     /**
      * The pre-installation scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet preinstallScriptlet;
 
     /**
      * The post-installation script.
      *
-     * @parameter
      * @deprecated Use postinstallScriplet
      */
+    @Parameter
+    @Deprecated
     private String postinstall;
 
     /**
@@ -416,17 +401,18 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use postinstallScriplet
      */
+    @Parameter
+    @Deprecated
     private File postinstallScript;
 
     /**
      * The post install scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet postinstallScriptlet;
 
     /**
@@ -435,9 +421,10 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use installScriplet
      */
+    @Parameter
+    @Deprecated
     private String install;
 
     /**
@@ -446,25 +433,27 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use installScriplet
      */
+    @Parameter
+    @Deprecated
     private File installScript;
 
     /**
      * The installation scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet installScriptlet;
 
     /**
      * The pre-removal script.
      *
-     * @parameter
      * @deprecated Use preremoveScriplet
      */
+    @Parameter
+    @Deprecated
     private String preremove;
 
     /**
@@ -473,25 +462,27 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use preremoveScriplet
      */
+    @Parameter
+    @Deprecated
     private File preremoveScript;
 
     /**
      * The pre-removal scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet preremoveScriptlet;
 
     /**
      * The post-removal script.
      *
-     * @parameter
      * @deprecated Use postremoveScriplet
      */
+    @Parameter
+    @Deprecated
     private String postremove;
 
     /**
@@ -500,25 +491,27 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use postremoveScriplet
      */
+    @Parameter
+    @Deprecated
     private File postremoveScript;
 
     /**
      * The post-removal scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet postremoveScriptlet;
 
     /**
      * The verification script.
      *
-     * @parameter
      * @deprecated Use verifyScriplet
      */
+    @Parameter
+    @Deprecated
     private String verify;
 
     /**
@@ -527,25 +520,27 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use verifyScriplet
      */
+    @Parameter
+    @Deprecated
     private File verifyScript;
 
     /**
      * The verify scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet verifyScriptlet;
 
     /**
      * The clean script.
      *
-     * @parameter
      * @deprecated Use cleanScriplet
      */
+    @Parameter
+    @Deprecated
     private String clean;
 
     /**
@@ -554,33 +549,34 @@ abstract class AbstractRPMMojo
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
      *
-     * @parameter
      * @deprecated Use cleanScriplet
      */
+    @Parameter
+    @Deprecated
     private File cleanScript;
 
     /**
      * The clean scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet cleanScriptlet;
 
     /**
      * The pretrans scriptlet.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet pretransScriptlet;
 
     /**
      * The posttrans script.
      *
-     * @parameter
      * @since 2.0-beta-4
      */
+    @Parameter
     private Scriptlet posttransScriptlet;
 
     /**
@@ -609,48 +605,44 @@ abstract class AbstractRPMMojo
      *  &lt;/triggers>
      * </pre>
      *
-     * @parameter
      * @since 2.0-beta-4
      * @see BaseTrigger
      */
-    private List/* <Trigger> */triggers;
+    @Parameter
+    private List<BaseTrigger> triggers;
 
     /**
      * Filters (property files) to include during the interpolation of the pom.xml.
      *
-     * @parameter
      * @since 2.0
      */
-    private List filters;
+    @Parameter
+    private List<String> filters;
 
     /**
      * Expression preceded with the String won't be interpolated \${foo} will be replaced with ${foo}
      *
-     * @parameter expression="${maven.rpm.escapeString}"
      * @since 2.0
      */
+    @Parameter( property = "maven.rpm.escapeString" )
     private String escapeString;
 
     /**
-     * @parameter expression="${session}"
-     * @readonly
-     * @required
      * @since 2.0
      */
+    @Component
     private MavenSession session;
 
     /**
-     * @parameter expression="${project.build.sourceEncoding}"
-     * @readonly
-     * @required
      * @since 2.1-alpha-4
      */
+    @Parameter( required = true, readonly = true, property = "project.build.sourceEncoding" )
     private String sourceEncoding;
 
     /**
-     * @component role="org.apache.maven.shared.filtering.MavenFileFilter" roleHint="default"
      * @since 2.0
      */
+    @Component( role = org.apache.maven.shared.filtering.MavenFileFilter.class, hint = "default" )
     private MavenFileFilter mavenFileFilter;
 
     /**
@@ -659,31 +651,21 @@ abstract class AbstractRPMMojo
      * @since 2.0
      * @see #mavenFileFilter
      */
-    private List/* FileUtils.FilterWrapper */defaultFilterWrappers;
+    private List<FileUtils.FilterWrapper> defaultFilterWrappers;
 
     /**
      * The primary project artifact.
-     *
-     * @parameter expression="${project.artifact}"
-     * @required
-     * @readonly
      */
+    @Parameter( required = true, readonly = true, property = "project.artifact" )
     private Artifact artifact;
 
     /**
      * Auxillary project artifacts.
-     *
-     * @parameter expression="${project.attachedArtifacts}
-     * @required
-     * @readonly
      */
+    @Parameter( required = true, readonly = true, property = "project.attachedArtifacts" )
     private List attachedArtifacts;
 
-    /**
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
-     */
+    @Component
     protected MavenProject project;
 
     /**
@@ -693,16 +675,15 @@ abstract class AbstractRPMMojo
      * This will have no effect on RHEL5 or earlier release.
      *
      * @since 2.1-alpha-4
-     * @parameter
      */
-    private String repackJars = "false";
+    @Parameter
+    private boolean repackJars = false;
 
     /**
-     * A list of %define arguments
-     *
-     * @parameter
+     * A list of <code>%define</code> arguments
      */
-    private List defineStatements;
+    @Parameter
+    private List<String> defineStatements;
 
     /**
      * The default file mode (octal string) to assign to files when installed. <br/>
@@ -710,9 +691,9 @@ abstract class AbstractRPMMojo
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
      *
-     * @parameter
      * @since 2.0-beta-2
      */
+    @Parameter
     private String defaultFilemode;
 
     /**
@@ -721,9 +702,9 @@ abstract class AbstractRPMMojo
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
      *
-     * @parameter
      * @since 2.0-beta-2
      */
+    @Parameter
     private String defaultDirmode;
 
     /**
@@ -732,9 +713,9 @@ abstract class AbstractRPMMojo
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
      *
-     * @parameter
      * @since 2.0-beta-2
      */
+    @Parameter
     private String defaultUsername;
 
     /**
@@ -743,17 +724,17 @@ abstract class AbstractRPMMojo
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
      *
-     * @parameter
      * @since 2.0-beta-2
      */
+    @Parameter
     private String defaultGroupname;
 
     /**
      * Indicates if the execution should be disabled. If <code>true</code>, nothing will occur during execution.
      *
-     * @parameter
      * @since 2.0
      */
+    @Parameter
     private boolean disabled;
 
     /** The root of the build area prior to calling rpmbuild. */
@@ -768,9 +749,9 @@ abstract class AbstractRPMMojo
     /**
      * The changelog file. If the file does not exist, it is ignored.
      *
-     * @parameter
      * @since 2.0-beta-3
      */
+    @Parameter
     private File changelogFile;
 
     /**
@@ -783,19 +764,17 @@ abstract class AbstractRPMMojo
     /**
      * The system property to read the calculated version from, normally set by the version mojo.
      *
-     * @parameter default-value="rpm.version"
-     * @required
      * @since 2.1-alpha-2
      */
+    @Parameter( required = true, defaultValue = "rpm.version" )
     private String versionProperty;
 
     /**
      * The system property to read the calculated release from, normally set by the version mojo.
      *
-     * @parameter default-value="rpm.release"
-     * @required
      * @since 2.1-alpha-2
      */
+    @Parameter( required = true, defaultValue = "rpm.release" )
     private String releaseProperty;
 
     // // // Mojo methods
@@ -924,28 +903,28 @@ abstract class AbstractRPMMojo
         validateWorkarea();
 
         // Build each directory in the top directory
-        for ( int i = 0; i < topdirs.length; i++ )
+        for ( String topdir : topdirs )
         {
-            File d = new File( workarea, topdirs[i] );
-            if ( d.exists() )
+            File dir = new File( workarea, topdir );
+            if ( dir.exists() )
             {
-                getLog().info( "Directory " + d.getAbsolutePath() + " already exists. Deleting all contents." );
+                getLog().info( "Directory " + dir.getAbsolutePath() + " already exists. Deleting all contents." );
 
                 try
                 {
-                    FileUtils.cleanDirectory( d );
+                    FileUtils.cleanDirectory( dir );
                 }
                 catch ( IOException e )
                 {
-                    throw new MojoExecutionException( "Unable to clear directory: " + d.getName(), e );
+                    throw new MojoExecutionException( "Unable to clear directory: " + dir.getName(), e );
                 }
             }
             else
             {
-                getLog().info( "Creating directory " + d.getAbsolutePath() );
-                if ( !d.mkdir() )
+                getLog().info("Creating directory " + dir.getAbsolutePath());
+                if ( !dir.mkdir() )
                 {
-                    throw new MojoFailureException( "Unable to create directory " + d.getAbsolutePath() );
+                    throw new MojoFailureException( "Unable to create directory " + dir.getAbsolutePath() );
                 }
             }
         }
@@ -1018,18 +997,16 @@ abstract class AbstractRPMMojo
         log.debug( "targetVendor = " + targetVendor );
 
         // Various checks in the mappings
-        for ( Iterator it = mappings.iterator(); it.hasNext(); )
+        for ( Mapping map : mappings )
         {
-            Mapping map = (Mapping) it.next();
             if ( map.getDirectory() == null )
             {
                 throw new MojoFailureException( "<mapping> element must contain the destination directory" );
             }
             if ( map.getSources() != null )
             {
-                for ( Iterator sit = map.getSources().iterator(); sit.hasNext(); )
+                for ( Source src : map.getSources() )
                 {
-                    Source src = (Source) sit.next();
                     if ( src.getLocation() == null )
                     {
                         throw new MojoFailureException( "<mapping><source> tag must contain the source directory" );
@@ -1057,7 +1034,7 @@ abstract class AbstractRPMMojo
             {
                 try
                 {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     BufferedReader br = new BufferedReader( new FileReader( changelogFile ) );
                     while ( br.ready() )
                     {
@@ -1099,11 +1076,11 @@ abstract class AbstractRPMMojo
             }
         }
 
-        if ( "false".equalsIgnoreCase( repackJars ) )
+        if ( !repackJars )
         {
             if (defineStatements == null)
             {
-                defineStatements = new ArrayList();
+                defineStatements = new ArrayList<String>();
             }
 
             defineStatements.add( "__jar_repack 0" );
@@ -1123,9 +1100,8 @@ abstract class AbstractRPMMojo
         {
             return;
         }
-        for ( Iterator i = defineStatements.iterator(); i.hasNext(); )
+        for ( String define : defineStatements )
         {
-            final String define = (String) i.next();
             String[] parts = define.split( " " );
             if ( parts.length == 2 )
             {
@@ -1187,7 +1163,7 @@ abstract class AbstractRPMMojo
     {
         if ( macroKeyToValue.containsKey( macro ) )
         {
-            return (String) macroKeyToValue.get( macro );
+            return macroKeyToValue.get( macro );
         }
 
         final String value = helper.evaluateMacro( macro );
@@ -1251,7 +1227,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #linkTargetToSources}.
      */
-    final Map/* <String, List<Source>> */getLinkTargetToSources()
+    final Map<String, List<SoftlinkSource>> getLinkTargetToSources()
     {
         return this.linkTargetToSources;
     }
@@ -1368,7 +1344,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #provides}.
      */
-    final LinkedHashSet getProvides()
+    final LinkedHashSet<String> getProvides()
     {
         return this.provides;
     }
@@ -1376,7 +1352,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #requires}.
      */
-    final LinkedHashSet getRequires()
+    final LinkedHashSet<String> getRequires()
     {
         return this.requires;
     }
@@ -1384,7 +1360,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #prereqs}.
      */
-    final LinkedHashSet getPrereqs()
+    final LinkedHashSet<String> getPrereqs()
     {
         return this.prereqs;
     }
@@ -1392,7 +1368,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #obsoletes}.
      */
-    final LinkedHashSet getObsoletes()
+    final LinkedHashSet<String> getObsoletes()
     {
         return this.obsoletes;
     }
@@ -1400,7 +1376,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #conflicts}.
      */
-    final LinkedHashSet getConflicts()
+    final LinkedHashSet<String> getConflicts()
     {
         return this.conflicts;
     }
@@ -1421,7 +1397,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #mappings}.
      */
-    final List getMappings()
+    final List<Mapping> getMappings()
     {
         return this.mappings;
     }
@@ -1509,7 +1485,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #triggers}.
      */
-    final List getTriggers()
+    final List<BaseTrigger> getTriggers()
     {
         return this.triggers;
     }
@@ -1517,7 +1493,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #defineStatements}.
      */
-    final List getDefineStatements()
+    final List<String> getDefineStatements()
     {
         return this.defineStatements;
     }
@@ -1645,7 +1621,7 @@ abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #attachedArtifacts}.
      */
-    final List getAttachedArtifacts()
+    final List<Artifact> getAttachedArtifacts()
     {
         return this.attachedArtifacts;
     }
@@ -1655,7 +1631,7 @@ abstract class AbstractRPMMojo
      *
      * @return Returns the {@code FilterWrapper}s to use for filtering resources.
      */
-    final List/* FileUtils.FilterWrapper */getFilterWrappers()
+    final List<FileUtils.FilterWrapper> getFilterWrappers()
     {
         return this.defaultFilterWrappers;
     }

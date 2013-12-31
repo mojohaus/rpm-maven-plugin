@@ -1,5 +1,3 @@
-// $Id$
-
 def attachedRpm5 = new File(basedir, "target/rpm/rpm-disable-attached-jre5/RPMS/noarch/rpm-disable-1.0-1.noarch.rpm")
 if (!attachedRpm5.exists())
 {

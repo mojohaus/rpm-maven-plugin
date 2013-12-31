@@ -23,8 +23,6 @@ import java.util.List;
 
 /**
  * A description of which project artifacts to package.
- * 
- * @version $Id$
  */
 public class ArtifactMap
 {
@@ -32,7 +30,7 @@ public class ArtifactMap
     // // // Properties
 
     /** The list of classifiers to package. */
-    private List classifiers;
+    private List<String> classifiers;
 
     // // // Bean methods
 
@@ -41,7 +39,7 @@ public class ArtifactMap
      * 
      * @return The list of classifiers to package.
      */
-    public List getClassifiers()
+    public List<String> getClassifiers()
     {
         return classifiers;
     }
@@ -51,7 +49,7 @@ public class ArtifactMap
      * 
      * @param clist The new list of classifiers to package.
      */
-    public void setClassifiers( List clist )
+    public void setClassifiers( List<String> clist )
     {
         classifiers = clist;
     }
@@ -61,7 +59,7 @@ public class ArtifactMap
     /** {@inheritDoc} */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( "[artifacts" );
 
         if ( classifiers != null )

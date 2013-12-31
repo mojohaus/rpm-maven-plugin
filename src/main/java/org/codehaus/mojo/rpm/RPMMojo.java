@@ -20,16 +20,14 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.File;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * Construct the RPM file.
- * 
- * @version $Id$
- * @requiresDependencyResolution runtime
- * @goal rpm
- * @phase package
- * @threadSafe true
  */
+@Mojo( name = "rpm", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
 public class RPMMojo
     extends AbstractRPMMojo
 {

@@ -39,7 +39,6 @@ import org.apache.maven.plugin.Mojo;
  * </p>
  * 
  * @author Brett Okken
- * @version $Id$
  * @since 2.0
  */
 final class VersionHelper

@@ -1,4 +1,3 @@
-// $Id$
 import org.codehaus.mojo.unix.rpm.RpmUtil
 import org.codehaus.mojo.unix.rpm.RpmUtil.FileInfo
 import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile

@@ -21,14 +21,7 @@ package org.codehaus.mojo.rpm;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +37,6 @@ import org.codehaus.plexus.util.StringUtils;
  * Utility to interact with files (source, dependencies, artifacts, etc.).
  * 
  * @author Brett Okken
- * @version $Id$
  * @since 2.0
  */
 final class FileHelper
@@ -105,9 +97,8 @@ final class FileHelper
         final Log log = mojo.getLog();
 
         // Process each mapping
-        for ( Iterator it = mojo.getMappings().iterator(); it.hasNext(); )
+        for ( Mapping map : mojo.getMappings() )
         {
-            Mapping map = (Mapping) it.next();
             final String destinationString = map.getDestination();
             final String macroEvaluatedDestination = evaluateMacros( destinationString );
 
@@ -133,10 +124,9 @@ final class FileHelper
                 ArtifactMap art = map.getArtifact();
                 if ( art != null )
                 {
-                    List artlist = selectArtifacts( art );
-                    for ( Iterator ait = artlist.iterator(); ait.hasNext(); )
+                    List<Artifact> artlist = selectArtifacts( art );
+                    for ( Artifact artifactInstance : artlist )
                     {
-                        Artifact artifactInstance = (Artifact) ait.next();
                         copyArtifact( artifactInstance, dest, false );
                         map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
                     }
@@ -145,10 +135,9 @@ final class FileHelper
                 Dependency dep = map.getDependency();
                 if ( dep != null )
                 {
-                    List deplist = selectDependencies( dep );
-                    for ( Iterator dit = deplist.iterator(); dit.hasNext(); )
+                    List<Artifact> deplist = selectDependencies( dep );
+                    for ( Artifact artifactInstance : deplist )
                     {
-                        Artifact artifactInstance = (Artifact) dit.next();
                         // pass in dependency stripVersion parameter
                         String outputFileName = copyArtifact( artifactInstance, dest, dep.getStripVersion() );
                         map.addCopiedFileNameRelativeToDestination( outputFileName );
@@ -184,7 +173,7 @@ final class FileHelper
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List copySource( File src, String srcName, File dest, List incl, List excl, boolean filter )
+    private List copySource( File src, String srcName, File dest, List<String> incl, List<String> excl, boolean filter )
         throws MojoExecutionException
     {
         try
@@ -198,13 +187,13 @@ final class FileHelper
                 String[] ia = null;
                 if ( incl != null )
                 {
-                    ia = (String[]) incl.toArray( new String[0] );
+                    ia = incl.toArray( new String[0] );
                 }
 
                 String[] ea = null;
                 if ( excl != null )
                 {
-                    ea = (String[]) excl.toArray( new String[0] );
+                    ea = excl.toArray( new String[0] );
                 }
 
                 copier.addDirectory( src, "", ia, ea );
@@ -219,15 +208,14 @@ final class FileHelper
             copier.setFilter( filter );
             copier.setFilterWrappers( mojo.getFilterWrappers() );
 
-            Map copiedFilesMap = copier.getFiles();
+            Map<String, Object> copiedFilesMap = copier.getFiles();
 
             // Perform the copy
             copier.createArchive();
 
-            List copiedFiles = new ArrayList( copiedFilesMap.size() );
-            for ( Iterator i = copiedFilesMap.keySet().iterator(); i.hasNext(); )
+            List<String> copiedFiles = new ArrayList<String>( copiedFilesMap.size() );
+            for ( String key : copiedFilesMap.keySet() )
             {
-                String key = (String) i.next();
                 if ( key != null && key.length() > 0 )
                 {
                     copiedFiles.add( key );
@@ -294,13 +282,13 @@ final class FileHelper
      * @param am The artifact mapping information
      * @return The list of artifacts to package
      */
-    private List selectArtifacts( ArtifactMap am )
+    private List<Artifact> selectArtifacts( ArtifactMap am )
     {
-        final List retval = new ArrayList();
-        final List clist = am.getClassifiers();
+        final List<Artifact> retval = new ArrayList();
+        final List<String> clist = am.getClassifiers();
 
         final Artifact artifact = mojo.getArtifact();
-        final List attachedArtifacts = mojo.getAttachedArtifacts();
+        final List<Artifact> attachedArtifacts = mojo.getAttachedArtifacts();
 
         if ( clist == null )
         {
@@ -313,9 +301,8 @@ final class FileHelper
             {
                 retval.add( artifact );
             }
-            for ( Iterator ait = attachedArtifacts.iterator(); ait.hasNext(); )
+            for ( Artifact aa : attachedArtifacts )
             {
-                Artifact aa = (Artifact) ait.next();
                 if ( ( aa.hasClassifier() ) && ( clist.contains( aa.getClassifier() ) ) )
                 {
                     retval.add( aa );
@@ -332,13 +319,13 @@ final class FileHelper
      * @param d The artifact mapping information
      * @return The list of artifacts to package
      */
-    private List selectDependencies( Dependency d )
+    private List<Artifact> selectDependencies( Dependency d )
     {
-        List retval = new ArrayList();
-        List inc = d.getIncludes();
-        List exc = d.getExcludes();
+        List<Artifact> retval = new ArrayList<Artifact>();
+        List<Artifact> inc = d.getIncludes();
+        List<Artifact> exc = d.getExcludes();
 
-        Collection deps = mojo.project.getArtifacts();
+        Set<Artifact> deps = mojo.project.getArtifacts();
         if ( deps == null || deps.isEmpty() )
         {
             return retval;
@@ -346,9 +333,8 @@ final class FileHelper
 
         final Log log = mojo.getLog();
 
-        for ( Iterator it = deps.iterator(); it.hasNext(); )
+        for ( Artifact pdep : deps )
         {
-            Artifact pdep = (Artifact) it.next();
             log.debug( "Dependency is " + pdep + " at " + pdep.getFile() );
             if ( !depMatcher( pdep, exc ) )
             {
@@ -389,7 +375,7 @@ final class FileHelper
             relativeDestination += File.separatorChar;
         }
 
-        List srcs = map.getSources();
+        List<Source> srcs = map.getSources();
         if ( srcs != null )
         {
             // for passivity, we will always use lowercase representation of architecture
@@ -398,13 +384,11 @@ final class FileHelper
 
             final String targetOS = mojo.getTargetOS();
 
-            final Map/* <String, List<Source>> */linkTargetToSources = mojo.getLinkTargetToSources();
+            final Map<String, List<SoftlinkSource>> linkTargetToSources = mojo.getLinkTargetToSources();
 
             // it is important that for each Source we set the files that are "installed".
-            for ( Iterator sit = srcs.iterator(); sit.hasNext(); )
+            for ( Source src : srcs )
             {
-                Source src = (Source) sit.next();
-
                 if ( !src.matchesArchitecture( targetArchComparison ) )
                 {
                     mojo.getLog().debug( "Source does not match target architecture: " + src.toString() );
@@ -513,7 +497,7 @@ final class FileHelper
      * @param list The list to check against
      * @return <code>true</code> if the dependency was found on the list
      */
-    private boolean depMatcher( Artifact dep, List list )
+    private boolean depMatcher( Artifact dep, List<Artifact> list )
     {
         if ( list == null )
         {
@@ -523,9 +507,8 @@ final class FileHelper
 
         final Log log = mojo.getLog();
 
-        for ( Iterator it = list.iterator(); it.hasNext(); )
+        for ( Artifact item : list )
         {
-            final Artifact item = (Artifact) it.next();
             log.debug( "Compare " + dep + " to " + item );
             final String groupId = item.getGroupId();
             if ( StringUtils.isEmpty( groupId ) || "*".equals( groupId ) || groupId.equals( dep.getGroupId() ) )
