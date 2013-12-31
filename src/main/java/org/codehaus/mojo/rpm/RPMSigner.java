@@ -133,6 +133,7 @@ final class RPMSigner
         final PrintWriter writer = new PrintWriter( new OutputStreamWriter( baos ) );
         try
         {
+            writer.println("set timeout -1");
             writer.print( "spawn rpm --define \"_gpg_name " );
             writer.print( gpgName );
             writer.print( "\" --addsign " );
