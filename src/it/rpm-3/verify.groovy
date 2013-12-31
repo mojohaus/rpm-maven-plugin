@@ -22,7 +22,7 @@ if (!spec.version.equals("1.0"))
     throw new java.lang.AssertionError("spec version");
 if (spec.release != 1)
     throw new java.lang.AssertionError("spec release");
-if (!spec.license.equals("2009 my org"))
+if (!spec.license.equals("(c) me and myself 1945"))
     throw new java.lang.AssertionError("spec license");
 
 List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)

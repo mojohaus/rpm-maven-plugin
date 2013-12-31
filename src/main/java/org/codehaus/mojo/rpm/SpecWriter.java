@@ -76,7 +76,7 @@ final class SpecWriter
         spec.println( "Release: " + mojo.getRelease() );
 
         writeNonNullDirective( "Summary", mojo.getSummary() );
-        writeNonNullDirective( "License", mojo.getCopyright() );
+        writeNonNullDirective( "License", mojo.getLicense() );
         writeNonNullDirective( "Distribution", mojo.getDistribution() );
 
         if ( mojo.getIcon() != null )

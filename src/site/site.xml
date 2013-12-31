@@ -34,7 +34,7 @@ under the License.
       <item name="Parameters" href="params.html" collapse="true">
           <item name="Identification Parameters" href="ident-params.html">
               <item name="name" href="ident-params.html#name"/>
-              <item name="copyright" href="ident-params.html#copyright"/>
+              <item name="license" href="ident-params.html#license"/>
               <item name="distribution" href="ident-params.html#distribution"/>
               <item name="group" href="ident-params.html#group"/>
               <item name="icon" href="ident-params.html#icon"/>

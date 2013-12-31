@@ -58,7 +58,7 @@ Sample Configuration
                     </execution>
                 </executions>
                 <configuration>
-                    <copyright>2005, SWWDC</copyright>
+                    <license>GPL (c) 2005, SWWDC</license>
                     <distribution>Trash 2005</distribution>
                     <group>Application/Collectors</group>
                     <icon>src/main/resources/icon.gif</icon>

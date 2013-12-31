@@ -43,7 +43,7 @@ import org.codehaus.plexus.util.Os;
 
 /**
  * Abstract base class for building RPMs.
- * 
+ *
  * @author Carlos
  * @author Brett Okken, Cerner Corp.
  * @version $Id$
@@ -55,7 +55,7 @@ abstract class AbstractRPMMojo
     /**
      * Maintains a mapping of macro keys to their values (either {@link RPMHelper#evaluateMacro(String) evaluated} or
      * set via {@link #defineStatements}.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private final Map/* <String,String> */macroKeyToValue = new HashMap();
@@ -63,14 +63,14 @@ abstract class AbstractRPMMojo
     /**
      * The key of the map is the directory where the files should be linked to. The value is the {@code List} of
      * {@link SoftlinkSource}s to be linked to.
-     * 
+     *
      * @since 2.0-beta-3
      */
     private final Map/* <String, List<Source>> */linkTargetToSources = new LinkedHashMap();
 
     /**
      * The name portion of the output file name.
-     * 
+     *
      * @parameter expression="${project.artifactId}"
      * @required
      */
@@ -78,7 +78,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The version portion of the RPM file name.
-     * 
+     *
      * @parameter alias="version" expression="${project.version}"
      * @required
      */
@@ -96,7 +96,7 @@ abstract class AbstractRPMMojo
      * <li>If a modifier exists and does not end with <i>SNAPSHOT</i>, <code>"_1"</code> will be appended to end.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @parameter
      */
     private String release;
@@ -113,7 +113,7 @@ abstract class AbstractRPMMojo
      * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
      * targetArchitecture</a> to flex the contents of the rpm based on the architecture.
      * </p>
-     * 
+     *
      * @parameter
      */
     private String needarch;
@@ -130,7 +130,7 @@ abstract class AbstractRPMMojo
      * This can be used in conjunction with <a href="source-params.html#targetOSName">Source targetOSName</a> to flex
      * the contents of the rpm based on operating system.
      * </p>
-     * 
+     *
      * @parameter
      * @since 2.0-beta-3
      */
@@ -139,7 +139,7 @@ abstract class AbstractRPMMojo
     /**
      * The target vendor for building the RPM. By default, this will be populated to the result of <i>rpm -E
      * %{_host_vendor}</i>.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-3
      */
@@ -148,7 +148,7 @@ abstract class AbstractRPMMojo
     /**
      * Set to a key name to sign the package using GPG. If <i>keyPassphrase</i> is not also provided, this will require
      * the input of the passphrase at the terminal.
-     * 
+     *
      * @parameter expression="${gpg.keyname}"
      */
     private String keyname;
@@ -158,7 +158,7 @@ abstract class AbstractRPMMojo
      * and requires that {@code expect} be on the PATH.
      * <p>
      * Note that the data type used is <b>NOT</b> {@code String}.
-     * 
+     *
      * <pre>
      * &lt;configuration&gt;
      *     ...
@@ -166,9 +166,9 @@ abstract class AbstractRPMMojo
      *         &lt;passphrase&gt;<i>password</i>&lt;/passphrase&gt;
      *     &lt;/keyPassphrase&gt;
      * </pre>
-     * 
+     *
      * </p>
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -176,56 +176,66 @@ abstract class AbstractRPMMojo
 
     /**
      * The long description of the package.
-     * 
+     *
      * @parameter expression="${project.description}"
      */
     private String description;
 
     /**
      * The one-line description of the package.
-     * 
+     *
      * @parameter expression="${project.name}"
      */
     private String summary;
 
     /**
+     * The one-line license information.
+     *
+     * @parameter
+     * @since 2.1-alpha-4
+     */
+    private String license;
+
+    /**
+     * @deprecated use license instead!
+
      * The one-line copyright information.
-     * 
+     *
      * @parameter
      */
     private String copyright;
 
     /**
      * The distribution containing this package.
-     * 
+     *
      * @parameter
      */
     private String distribution;
 
     /**
      * An icon for the package.
-     * 
+     *
      * @parameter
      */
     private File icon;
 
     /**
      * The vendor supplying the package.
-     * 
+     *
      * @parameter expression="${project.organization.name}"
      */
     private String vendor;
 
     /**
      * A URL for the vendor.
-     * 
+     *
      * @parameter expression="${project.organization.url}"
      */
     private String url;
 
     /**
      * The package group for the package.
-     * 
+     *
      * @parameter
      * @required
      */
@@ -233,14 +243,14 @@ abstract class AbstractRPMMojo
 
     /**
      * The name of the person or group creating the package.
-     * 
+     *
      * @parameter expression="${project.organization.name}"
      */
     private String packager;
 
     /**
      * Automatically add provided shared libraries.
-     * 
+     *
      * @parameter default-value="true"
      * @since 2.0-beta-4
      */
@@ -248,7 +258,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Automatically add requirements deduced from included shared libraries.
-     * 
+     *
      * @parameter default-value="true"
      * @since 2.0-beta-4
      */
@@ -256,21 +266,21 @@ abstract class AbstractRPMMojo
 
     /**
      * The list of virtual packages provided by this package.
-     * 
+     *
      * @parameter
      */
     private LinkedHashSet provides;
 
     /**
      * The list of requirements for this package.
-     * 
+     *
      * @parameter
      */
     private LinkedHashSet requires;
 
     /**
      * The list of prerequisites for this package.
-     * 
+     *
      * @since 2.0-beta-3
      * @parameter
      */
@@ -278,7 +288,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The list of obsoletes for this package.
-     * 
+     *
      * @since 2.0-beta-3
      * @parameter
      */
@@ -286,14 +296,14 @@ abstract class AbstractRPMMojo
 
     /**
      * The list of conflicts for this package.
-     * 
+     *
      * @parameter
      */
     private LinkedHashSet conflicts;
 
     /**
      * The relocation prefix for this package.
-     * 
+     *
      * @parameter
      * @deprecated use prefixes instead.
      */
@@ -316,21 +326,21 @@ abstract class AbstractRPMMojo
      * The pattern will be <code>workarea/<i>name[-classifier]</i></code>.<br/>
      * The classifier portion is only applicable for the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.
      * </p>
-     * 
+     *
      * @parameter expression="${project.build.directory}/rpm"
      */
     private File workarea;
 
     /**
      * The list of file <a href="map-params.html">mappings</a>.
-     * 
+     *
      * @parameter
      */
     private List mappings = Collections.EMPTY_LIST;
 
     /**
      * The prepare script.
-     * 
+     *
      * @parameter
      * @deprecated Use prepareScriplet
      */
@@ -338,7 +348,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The location of the prepare script. A File which does not exist is ignored.
-     * 
+     *
      * @parameter
      * @deprecated Use prepareScriplet
      */
@@ -346,7 +356,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The prepare scriptlet;
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -354,7 +364,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The pre-installation script.
-     * 
+     *
      * @parameter
      * @deprecated Use preinstallScriplet
      */
@@ -365,7 +375,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use preinstallScriplet
      */
@@ -373,7 +383,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The pre-installation scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -381,7 +391,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The post-installation script.
-     * 
+     *
      * @parameter
      * @deprecated Use postinstallScriplet
      */
@@ -392,7 +402,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use postinstallScriplet
      */
@@ -400,7 +410,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The post install scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -411,7 +421,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use installScriplet
      */
@@ -422,7 +432,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use installScriplet
      */
@@ -430,7 +440,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The installation scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -438,7 +448,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The pre-removal script.
-     * 
+     *
      * @parameter
      * @deprecated Use preremoveScriplet
      */
@@ -449,7 +459,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use preremoveScriplet
      */
@@ -457,7 +467,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The pre-removal scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -465,7 +475,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The post-removal script.
-     * 
+     *
      * @parameter
      * @deprecated Use postremoveScriplet
      */
@@ -476,7 +486,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use postremoveScriplet
      */
@@ -484,7 +494,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The post-removal scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -492,7 +502,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The verification script.
-     * 
+     *
      * @parameter
      * @deprecated Use verifyScriplet
      */
@@ -503,7 +513,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use verifyScriplet
      */
@@ -511,7 +521,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The verify scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -519,7 +529,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The clean script.
-     * 
+     *
      * @parameter
      * @deprecated Use cleanScriplet
      */
@@ -530,7 +540,7 @@ abstract class AbstractRPMMojo
      * <p>
      * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
      * </p>
-     * 
+     *
      * @parameter
      * @deprecated Use cleanScriplet
      */
@@ -538,7 +548,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The clean scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -546,7 +556,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The pretrans scriptlet.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -554,7 +564,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The posttrans script.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      */
@@ -562,7 +572,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The list of triggers to take place on installation of other packages.
-     * 
+     *
      * <pre>
      *  &lt;triggers>
      *      &lt;installTrigger>
@@ -585,7 +595,7 @@ abstract class AbstractRPMMojo
      *      ...
      *  &lt;/triggers>
      * </pre>
-     * 
+     *
      * @parameter
      * @since 2.0-beta-4
      * @see BaseTrigger
@@ -594,7 +604,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Filters (property files) to include during the interpolation of the pom.xml.
-     * 
+     *
      * @parameter
      * @since 2.0
      */
@@ -602,7 +612,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Expression preceded with the String won't be interpolated \${foo} will be replaced with ${foo}
-     * 
+     *
      * @parameter expression="${maven.rpm.escapeString}"
      * @since 2.0
      */
@@ -624,7 +634,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The {@link FileUtils.FilterWrapper filter wrappers} to use for file filtering.
-     * 
+     *
      * @since 2.0
      * @see #mavenFileFilter
      */
@@ -632,7 +642,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The primary project artifact.
-     * 
+     *
      * @parameter expression="${project.artifact}"
      * @required
      * @readonly
@@ -641,7 +651,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Auxillary project artifacts.
-     * 
+     *
      * @parameter expression="${project.attachedArtifacts}
      * @required
      * @readonly
@@ -657,7 +667,7 @@ abstract class AbstractRPMMojo
 
     /**
      * A list of %define arguments
-     * 
+     *
      * @parameter
      */
     private List defineStatements;
@@ -667,7 +677,7 @@ abstract class AbstractRPMMojo
      * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-2
      */
@@ -678,7 +688,7 @@ abstract class AbstractRPMMojo
      * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-2
      */
@@ -689,7 +699,7 @@ abstract class AbstractRPMMojo
      * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-2
      */
@@ -700,7 +710,7 @@ abstract class AbstractRPMMojo
      * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
      * <b>NOT</b> populated.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-2
      */
@@ -708,7 +718,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Indicates if the execution should be disabled. If <code>true</code>, nothing will occur during execution.
-     * 
+     *
      * @parameter
      * @since 2.0
      */
@@ -725,7 +735,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The changelog file. If the file does not exist, it is ignored.
-     * 
+     *
      * @parameter
      * @since 2.0-beta-3
      */
@@ -733,14 +743,14 @@ abstract class AbstractRPMMojo
 
     /**
      * This is not set until {@link #execute() is called}.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private RPMHelper helper;
 
     /**
      * The system property to read the calculated version from, normally set by the version mojo.
-     * 
+     *
      * @parameter default-value="rpm.version"
      * @required
      * @since 2.1-alpha-2
@@ -749,7 +759,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The system property to read the calculated release from, normally set by the version mojo.
-     * 
+     *
      * @parameter default-value="rpm.release"
      * @required
      * @since 2.1-alpha-2
@@ -800,7 +810,7 @@ abstract class AbstractRPMMojo
     /**
      * Will be called on completion of {@link #execute()}. Provides subclasses an opportunity to perform any post
      * execution logic (such as attaching an artifact).
-     * 
+     *
      * @throws MojoExecutionException If an error occurs.
      * @throws MojoFailureException If failure occurs.
      */
@@ -814,7 +824,7 @@ abstract class AbstractRPMMojo
      * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br/>
      * By default this implementation returns {@code null}, which indicates that no additional classifier should be
      * used.
-     * 
+     *
      * @return An additional classifier to use for the rpm workarea or {@code null} if no additional classifier should
      *         be used.
      */
@@ -825,7 +835,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Returns the generated rpm {@link File}.
-     * 
+     *
      * @return The generated rpm <tt>File</tt>.
      */
     protected File getRPMFile()
@@ -860,7 +870,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Build the structure of the work area.
-     * 
+     *
      * @throws MojoFailureException if a directory cannot be built
      * @throws MojoExecutionException if buildroot cannot be cleared (if exists)
      */
@@ -915,7 +925,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Check the parameters for validity.
-     * 
+     *
      * @throws MojoFailureException if an invalid parameter is found
      * @throws MojoExecutionException if an error occurs reading a script
      */
@@ -1033,10 +1043,15 @@ abstract class AbstractRPMMojo
             }
         }
 
-        // generate copyright text if not set
-        if ( copyright == null )
+        // If license is not set use the legacy copyright instead.
+        if ( license == null ) {
+            license = copyright;
+        }
+
+        // generate license text if not set
+        if ( license == null )
         {
-            copyright = generateCopyrightText();
+            license = generateDefaultCopyrightText();
         }
 
         // if this package obsoletes any packages, make sure those packages are added to the provides list
@@ -1057,7 +1072,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Put all name/value pairs in {@link #defineStatements} in {@link #macroKeyToValue}.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private void processDefineStatements()
@@ -1080,7 +1095,7 @@ abstract class AbstractRPMMojo
     /**
      * Validate that {@link #workarea} is a {@link File#isDirectory() directory} and that the
      * {@link File#getAbsolutePath()} does not contain any spaces.
-     * 
+     *
      * @throws MojoExecutionException
      */
     private void validateWorkarea()
@@ -1118,7 +1133,7 @@ abstract class AbstractRPMMojo
     /**
      * Determines the actual value for the <i>macro</i>. Will check both {@link #defineStatements} and
      * {@link RPMHelper#evaluateMacro(String)}.
-     * 
+     *
      * @param macro The macro to evaluate.
      * @return The literal value or name of macro if it has no value.
      * @throws MojoExecutionException
@@ -1140,7 +1155,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Write the SPEC file.
-     * 
+     *
      * @throws MojoExecutionException if an error occurs writing the file
      */
     private void writeSpecFile()
@@ -1169,12 +1184,12 @@ abstract class AbstractRPMMojo
     }
 
     /**
-     * Generates the copyright text from {@link MavenProject#getOrganization()} and
+     * Generates a default copyright text from {@link MavenProject#getOrganization()} and
      * {@link MavenProject#getInceptionYear()}.
-     * 
+     *
      * @return Generated copyright text from the organization name and inception year.
      */
-    private String generateCopyrightText()
+    private String generateDefaultCopyrightText()
     {
         String copyrightText;
         String year = project.getInceptionYear();
@@ -1187,7 +1202,7 @@ abstract class AbstractRPMMojo
         {
             copyrightText = year == null ? organization : year;
         }
-        return copyrightText;
+        return "(c) " + copyrightText;
     }
 
     /**
@@ -1236,11 +1251,11 @@ abstract class AbstractRPMMojo
     }
 
     /**
-     * @return Returns the {@link #copyright}.
+     * @return Returns the {@link #license}.
      */
-    final String getCopyright()
+    final String getLicense()
     {
-        return this.copyright;
+        return this.license;
     }
 
     /**
@@ -1594,7 +1609,7 @@ abstract class AbstractRPMMojo
 
     /**
      * Returns the {@link FileUtils.FilterWrapper wrappers} to use for filtering resources.
-     * 
+     *
      * @return Returns the {@code FilterWrapper}s to use for filtering resources.
      */
     final List/* FileUtils.FilterWrapper */getFilterWrappers()

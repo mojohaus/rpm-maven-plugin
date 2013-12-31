@@ -66,6 +66,7 @@
         <configuration>
           <distribution>My App</distribution>
           <group>Application/Collectors</group>
+          <license>(c) My self - 2013</license>
           <defineStatements>
             <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
           </defineStatements>
