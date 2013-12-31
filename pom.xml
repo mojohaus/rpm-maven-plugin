@@ -274,14 +274,6 @@
                 </goals>
               </execution>
             </executions>
-            <dependencies>
-              <dependency>
-                <!-- Used by verification scripts -->
-                <groupId>org.codehaus.mojo.unix</groupId>
-                <artifactId>unix-rpm</artifactId>
-                <version>1.0-alpha-1</version>
-              </dependency>
-            </dependencies>
           </plugin>
         </plugins>
       </build>

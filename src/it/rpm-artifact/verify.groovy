@@ -1,64 +1,32 @@
-import org.codehaus.mojo.unix.rpm.RpmUtil
-import org.codehaus.mojo.unix.rpm.RpmUtil.FileInfo
-import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile
-
-import java.util.List
-import java.util.Iterator
-
-
-File rpm = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-artifact/1.0/rpm-artifact-1.0-rpm.rpm")
+File rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-artifact/1.0/rpm-artifact-1.0-rpm.rpm")
 
 if (!rpm.exists())
-{
-    throw new java.lang.AssertionError(rpm.getAbsolutePath() + " does not exist");
+    throw new java.lang.AssertionError("${rpm.getAbsolutePath()} does not exist");
+
+def lines = new File(basedir, "target/rpm/rpm-artifact/SPECS/rpm-artifact.spec").readLines()
+[
+        "Name: rpm-artifact",
+        "Version: 1.0",
+        "Release: 1"
+].each {
+    if (!lines.contains(it))
+        throw new AssertionError("Spec file missing \"${it}\"")
 }
 
-SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
+def proc = ["rpm", "-qvlp", rpm.getAbsolutePath()].execute()
+proc.waitFor()
+lines = proc.in.text.readLines()
 
-if (!spec.name.equals("rpm-artifact"))
-    throw new java.lang.AssertionError("spec name ('rpm-artifact' != '" + spec.name + "')");
-if (!spec.version.equals("1.0"))
-    throw new java.lang.AssertionError("spec version ('1.0' != '" + spec.version + "')");
-if (spec.release != 1)
-    throw new java.lang.AssertionError("spec release ('1' != '" + spec.release +  "')");
-
-List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
-
-int fileCnt = fileInfos.size()
-System.out.println("File Count: " + fileCnt);
-System.out.println(fileInfos);
-if (fileCnt != 3)
-    throw new java.lang.AssertionError("number of files in rpm: " + fileCnt + "does not match expected: 3");
-
-boolean foundLibJar = false;
-boolean foundLibSource = false;
-boolean foundSource = false;
-
-for (Iterator i = fileInfos.iterator(); i.hasNext();)
-{
-    FileInfo fileInfo = (FileInfo) i.next()
-    
-    if ("/usr/myusr/app/lib/rpm-artifact-1.0.jar".equals(fileInfo.path))
-    {
-        foundLibJar = true;
-    }
-    else if ("/usr/myusr/app/lib/rpm-artifact-1.0-sources.jar".equals(fileInfo.path))
-    {
-        foundLibSource = true;
-    }
-    else if ("/usr/myusr/app/sources/rpm-artifact-1.0-sources.jar".equals(fileInfo.path))
-    {
-        foundSource = true;
-    }
+[
+        /-.*\/usr\/myusr\/app\/lib\/rpm-artifact-1.0.jar/,
+        /-.*\/usr\/myusr\/app\/lib\/rpm-artifact-1.0-sources.jar/,
+        /-.*\/usr\/myusr\/app\/sources\/rpm-artifact-1.0-sources.jar/
+].each {
+    if (!lines*.matches(it).contains(true))
+        throw new AssertionError("File/dir/link matching ${it.toString()} missing from RPM!")
 }
 
-if (!foundLibJar)
-    throw new java.lang.AssertionError("jar artifact '/usr/myusr/app/lib/rpm-artifact-1.0.jar' not present in lib folder '" + fileInfo.path + "'");
-
-if (!foundLibSource)
-    throw new java.lang.AssertionError("sources jar secondary artifact '/usr/myusr/app/lib/rpm-artifact-1.0-sources.jar' not present in lib folder '" + fileInfo.path + "'");
-
-if (!foundSource)
-    throw new java.lang.AssertionError("sources jar secondary artifact '/usr/myusr/app/sources/rpm-artifact-1.0-sources.jar' not present in sources folder '" + fileInfo.path + "'");
+if (lines.size() != 3)
+    throw new AssertionError("Expected: 3 file/dir/links but only got: ${lines.size()}")
 
 return true

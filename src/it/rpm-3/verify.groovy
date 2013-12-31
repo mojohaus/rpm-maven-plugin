@@ -1,135 +1,45 @@
-import org.codehaus.mojo.unix.rpm.RpmUtil
-import org.codehaus.mojo.unix.rpm.RpmUtil.FileInfo
-import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile
-
-import java.util.List
-import java.util.Iterator
-
-repackJarsDisabled = false
-
-def builtFromSpec = new File(basedir, "target/rpm/rpm-3/SPECS/rpm-3.spec")
-builtFromSpec.eachLine{ line ->
-    if (line.equals("%define __jar_repack 0"))
-        repackJarsDisabled = true
-}
-
-if (!repackJarsDisabled)
-    throw new AssertionError("spec file missing \"%define __jar_repack 0\"")
-
-File rpm = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-3/1.0/rpm-3-1.0.rpm")
+File rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-3/1.0/rpm-3-1.0.rpm")
 
 if (!rpm.exists())
-{
-    throw new java.lang.AssertionError(rpm.getAbsolutePath() + " does not exist");
+    throw new AssertionError("${rpm.getAbsolutePath()} does not exist");
+
+lines = new File(basedir, "target/rpm/rpm-3/SPECS/rpm-3.spec").readLines()
+[
+        "Name: rpm-3",
+        "Version: 1.0",
+        "Release: 1",
+        "License: (c) me and myself 1945"
+].each {
+    if (!lines.contains(it))
+        throw new AssertionError("Spec file missing \"${it}\"")
 }
 
-SpecFile spec = RpmUtil.getSpecFileFromRpm(rpm)
+proc = ["rpm", "-qvlp", rpm.getAbsolutePath()].execute()
+proc.waitFor()
+lines = proc.in.text.readLines()
 
-if (!spec.name.equals("rpm-3"))
-    throw new java.lang.AssertionError("spec name");
-if (!spec.version.equals("1.0"))
-    throw new java.lang.AssertionError("spec version");
-if (spec.release != 1)
-    throw new java.lang.AssertionError("spec release");
-if (!spec.license.equals("(c) me and myself 1945"))
-    throw new java.lang.AssertionError("spec license");
-
-List fileInfos = RpmUtil.queryPackageForFileInfo(rpm)
-
-int fileCnt = fileInfos.size()
-System.out.println("File Count: " + fileCnt);
-System.out.println(fileInfos);
-if (fileCnt != 17)
-    throw new java.lang.AssertionError("file count");
-
-boolean x86NameScript = false;
-boolean linuxNameScript = false;
-boolean nameScript = false;
-boolean osNameScript = false;
-boolean archNameScript = false;
-boolean oldNameLink = false;
-boolean serviceLink = false;
-boolean subdir = false;
-
-for (Iterator i = fileInfos.iterator(); i.hasNext();)
-{
-    FileInfo fileInfo = (FileInfo) i.next()
-        
-    if (fileInfo.path.equals("/etc/init.d/myapp"))
-    {   
-        if (!fileInfo.user.equals("root"))
-            throw new java.lang.AssertionError("file user for: " + fileInfo);
-        if (!fileInfo.group.equals("root"))
-            throw new java.lang.AssertionError("file group for: " + fileInfo);
-        serviceLink = true;
-    }
-    else
-    {
-        if (!fileInfo.user.equals("myuser"))
-            throw new java.lang.AssertionError("file user for: " + fileInfo);
-        if (!fileInfo.group.equals("mygroup"))
-            throw new java.lang.AssertionError("file group for: " + fileInfo);
-        
-        //check for executable mode
-        if (fileInfo.path.startsWith("/usr/myusr/app/bin/"))
-        {
-            if (!fileInfo.mode.endsWith("rwxr-xr-x"))
-                throw new java.lang.AssertionError("file mode for: " + fileInfo);
-
-            if (fileInfo.path.endsWith("/name.sh"))
-            {
-                nameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-someOS.sh"))
-            {
-                osNameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-somearch.sh"))
-            {
-                archNameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-linux.sh"))
-            {
-                linuxNameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/name-x86.sh"))
-            {
-                x86NameScript = true;
-            }
-            else if (fileInfo.path.endsWith("/oldname.sh"))
-            {
-                oldNameLink = true;
-            }
-            else if (fileInfo.path.endsWith("/subdir"))
-            {
-                subdir = true;
-            }
-        }
-    }
+[
+        /l.*\sroot\s+root\s.*\s\/etc\/init.d\/myapp -> \/usr\/myusr\/app\/bin\/start.sh/,
+        /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name-someOS.sh/,
+        /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name-somearch.sh/,
+        /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name.sh/,
+        /lrwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/oldname.sh -> \/usr\/myusr\/app\/bin\/name.sh/,
+        /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/start.sh/,
+        /drwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/subdir/
+].each {
+    if (!lines*.matches(it).contains(true))
+        throw new AssertionError("File/dir/link matching ${it.toString()} missing from RPM!")
 }
 
-if (!nameScript)
-    throw new java.lang.AssertionError("name script not found")
+[
+        /.*\s\/usr\/myusr\/app\/bin\/name-linux.sh/,
+        /.*\s\/usr\/myusr\/app\/bin\/name-x86.sh/
+].each {
+    if (lines*.matches(it).contains(true))
+        throw new AssertionError("File matching ${it.toString()} should NOT be in the RPM!")
+}
 
-if (!osNameScript)
-    throw new java.lang.AssertionError("os name script not found")
-    
-if (!archNameScript)
-    throw new java.lang.AssertionError("arch name script not found")
-    
-if (!oldNameLink)
-    throw new java.lang.AssertionError("old name link not found")
-    
-if (linuxNameScript)
-    throw new java.lang.AssertionError("linux name script found")
-
-if (x86NameScript)
-    throw new java.lang.AssertionError("x86 name script found")
-    
-if (!serviceLink)
-    throw new java.lang.AssertionError("service link not found")
-    
-if (!subdir)
-    throw new java.lang.AssertionError("subdir directory not found")
+if (lines.size() != 17)
+    throw new AssertionError("Expected: 17 file/dir/links but only got: ${lines.size()}")
 
 return true

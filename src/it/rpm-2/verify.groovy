@@ -1,61 +1,36 @@
-import org.codehaus.mojo.unix.rpm.RpmUtil
-import org.codehaus.mojo.unix.rpm.RpmUtil.FileInfo
-import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile
+def checkRpm(rpm, files, excludedFiles) {
 
-def checkForActivationAndMailArtifact(fileInfos) {
-    def result = ['activation':false, 'mail':false]
-    fileInfos.each { fileInfo ->
-        //check for executable mode
-        //Why should we check a jar file for executable mode?
-        if (fileInfo.path.endsWith ("activation-1.1.jar")) {
-            result['activation'] = true
-        } else if (fileInfo.path.endsWith ("mail-1.4.1.jar")) {
-            result['mail'] = true
-        }
+    proc = ["rpm", "-qvlp", rpm.getAbsolutePath()].execute()
+    proc.waitFor()
+    lines = proc.in.text.readLines()
+
+    files.each {
+        if (!lines*.matches(it).contains(true))
+            throw new AssertionError("File/dir/link matching ${it.toString()} missing from RPM!")
     }
-    return result;
-}
 
+    excludedFiles.each {
+        if (lines*.matches(it).contains(true))
+            throw new AssertionError("File/dir/link matching ${it.toString()} should NOT be in RPM!")
+    }
+}
 
 File attachedRpm5 = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-2/1.0/rpm-2-1.0-attached-jre5.rpm")
 assert attachedRpm5.exists()
-
-def fileInfos = RpmUtil.queryPackageForFileInfo(attachedRpm5)
-
-def result = checkForActivationAndMailArtifact (fileInfos );
-assert result['activation'] : "Activation artifact missing in attached JRE5 RPM"
-assert result['mail']  : "Mail artifact missing in attached JRE5 RPM"
-
+checkRpm(attachedRpm5, [/-.*\/usr\/myusr\/app\/lib\/activation-1.1.jar/, /-.*\/usr\/myusr\/app\/lib\/mail-1.4.1.jar/], [])
 
 File attachedRpm6 = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-2/1.0/rpm-2-1.0-attached-jre6.rpm")
 assert attachedRpm6.exists()
+checkRpm(attachedRpm6, [/-.*\/usr\/myusr\/app\/lib\/mail-1.4.1.jar/], [/-.*\/usr\/myusr\/app\/lib\/activation-1.1.jar/])
+File primary = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-2/1.0/rpm-2-1.0.rpm")
+assert !primary.exists(): "RPM incorrectly added as primary artifact: ${primary.getAbsolutePath()}"
 
-fileInfos = RpmUtil.queryPackageForFileInfo(attachedRpm6)
-
-result = checkForActivationAndMailArtifact (fileInfos );
-assert !result['activation'] : "Activation artifact shouldn't exist in attached JRE6 RPM"
-assert result['mail']  : "Mail artifact missing in attached JRE6 RPM"
-
-
-File primary = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-2/1.0/rpm-2-1.0.rpm")
-assert !primary.exists() : "RPM incorrectly added as primary artifact: " + primary.getAbsolutePath()
-
-
-File rpm5 = new File((File) basedir, "target/rpm/jre5/RPMS/noarch/jre5-1.0-1.noarch.rpm")
+File rpm5 = new File(basedir, "target/rpm/jre5/RPMS/noarch/jre5-1.0-1.noarch.rpm")
 assert rpm5.exists()
+checkRpm(rpm5, [/-.*\/usr\/myusr\/app\/lib\/activation-1.1.jar/, /-.*\/usr\/myusr\/app\/lib\/mail-1.4.1.jar/], [])
 
-fileInfos = RpmUtil.queryPackageForFileInfo(rpm5)
-
-result = checkForActivationAndMailArtifact (fileInfos );
-assert result['activation'] : "Activation artifact missing in built JRE5 RPM"
-assert result['mail']  : "Mail artifact missing in built JRE5 RPM"
-
-
-File rpm6 = new File((File) basedir, "target/rpm/jre6/RPMS/noarch/jre6-1.0-1.noarch.rpm")
+File rpm6 = new File(basedir, "target/rpm/jre6/RPMS/noarch/jre6-1.0-1.noarch.rpm")
 assert rpm6.exists()
+checkRpm(rpm6, [/-.*\/usr\/myusr\/app\/lib\/mail-1.4.1.jar/], [/-.*\/usr\/myusr\/app\/lib\/activation-1.1.jar/])
 
-fileInfos = RpmUtil.queryPackageForFileInfo(rpm6)
-
-result = checkForActivationAndMailArtifact (fileInfos );
-assert !result['activation'] : "Activation artifact shouldn't exist in built JRE6 RPM"
-assert result['mail']  : "Mail artifact missing in built JRE6 RPM"
+return true
