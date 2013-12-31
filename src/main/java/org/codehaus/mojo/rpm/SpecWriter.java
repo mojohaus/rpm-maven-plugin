@@ -568,8 +568,12 @@ final class SpecWriter
         {
             for ( Iterator it = strings.iterator(); it.hasNext(); )
             {
-                spec.print( prefix );
-                spec.println( it.next() );
+                String str = (String) it.next();
+                if (str != null && !str.equals(""))
+                {
+                    spec.print( prefix );
+                    spec.println( str );
+                }
             }
         }
     }
