@@ -37,6 +37,10 @@ How to Use the Plugin
   For information on how to get the RPM file generated, please refer to the
   {{{./usage.html}Usage Scenarios}} and {{{./params.html}Parameters}} documents.
 
+Contributing
+
+  Contributions is welcomed. See {{{./contributing.html}contributing}}.
+
 Resources
 
   * {{{http://www.rpm.org/}The RPM home page}}
