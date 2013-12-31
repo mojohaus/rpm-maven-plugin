@@ -88,6 +88,9 @@
     </contributor>
     <contributor>
       <name>Rickard von Essen</name>
+      <email>rickard.von.essen@gmail.com</email>
+      <organization>Diabol AB</organization>
+      <organizationUrl>http://www.diabol.se</organizationUrl>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -135,6 +138,11 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interpolation</artifactId>
+      <version>1.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
       <version>2.1.2</version>
     </dependency>
@@ -146,7 +154,8 @@
   </dependencies>
 
   <properties>
-    <mavenVersion>2.0.6</mavenVersion>
+    <mavenVersion>2.2.1</mavenVersion>
+    <mojo.java.target>1.6</mojo.java.target>
   </properties>
 
   <reporting>
