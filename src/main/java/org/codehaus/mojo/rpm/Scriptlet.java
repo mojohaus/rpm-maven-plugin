@@ -74,6 +74,13 @@ public class Scriptlet
     private String fileEncoding;
 
     /**
+     * The default encoding of the project, used if {@link fileEncoding} is not set.
+     *
+     * @see #getFileEncoding().
+     */
+    private String sourceEncoding;
+
+    /**
      * The optional subpackage. This is passed as a <i>-n</i> argument to the scriptlet directive.
      * 
      * @return Returns the {@link #subpackage}.
@@ -153,7 +160,11 @@ public class Scriptlet
      */
     public String getFileEncoding()
     {
-        return this.fileEncoding;
+        if ( fileEncoding != null && !"".equals( fileEncoding ) )
+        {
+            return this.fileEncoding;
+        }
+        return this.sourceEncoding;
     }
 
     /**
@@ -162,6 +173,16 @@ public class Scriptlet
     public void setFileEncoding( String fileEncoding )
     {
         this.fileEncoding = fileEncoding;
+    }
+
+    /**
+     * This is the maven property: project.build.sourceEncoding
+     *
+     * @param soruceEncoding The {@link #sourceEncoding} to set.
+     */
+    public void setSourceEncoding( String sourceEncoding )
+    {
+        this.sourceEncoding = sourceEncoding;
     }
 
     /**

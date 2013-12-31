@@ -640,6 +640,14 @@ abstract class AbstractRPMMojo
     private MavenSession session;
 
     /**
+     * @parameter expression="${project.build.sourceEncoding}"
+     * @readonly
+     * @required
+     * @since 2.1-alpha-4
+     */
+    private String sourceEncoding;
+
+    /**
      * @component role="org.apache.maven.shared.filtering.MavenFileFilter" roleHint="default"
      * @since 2.0
      */
@@ -1157,6 +1165,7 @@ abstract class AbstractRPMMojo
             scriptlet = new Scriptlet();
             scriptlet.setScript( script );
             scriptlet.setScriptFile( file );
+            scriptlet.setSourceEncoding( sourceEncoding );
             getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
                                + "Scriptlet>" );
         }
