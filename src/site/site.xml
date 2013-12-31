@@ -43,6 +43,7 @@ under the License.
               <item name="release**" href="ident-params.html#release"/>
               <item name="version" href="ident-params.html#version"/>
               <item name="changelogFile" href="ident-params.html#changelogFile"/>
+              <item name="repackJars" href="ident-params.html#repackJars"/>
               <item name="targetOS" href="ident-params.html#targetOS"/>
               <item name="targetVendor" href="ident-params.html#targetVendor"/>
           </item>

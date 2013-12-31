@@ -110,3 +110,10 @@ Identification Parameters
   The name of the person or group which is creating the package.  By default,
   this will be taken from the name specified in the POM's organization
   information.
+
+* {repackJars}
+
+  If set to <<<false>>> a <<<%define __jar_repack 0>>> statement will be
+  added to the SPEC file to disable repackaging of jar files when creating
+  the RPM. This defaults to <<<false>>>. This will only have effect with
+  version 9.0.0 or later releases of <<<redhat-rpm-config>>> (RHEL 6).

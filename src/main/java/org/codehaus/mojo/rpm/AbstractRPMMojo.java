@@ -27,6 +27,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -666,6 +679,17 @@ abstract class AbstractRPMMojo
     protected MavenProject project;
 
     /**
+     * Should <i>brp-repack-jars</i> be used in the RPM build. Defaults to <code>false</code>.
+     * If it is <code>false</code> <i>brp-repack-jars</i> will be disabled by:<br/>
+     * <code>%define __jar_repack 0</code>
+     * This will have no effect on RHEL5 or earlier release.
+     *
+     * @since 2.1-alpha-4
+     * @parameter
+     */
+    private String repackJars = "false";
+
+    /**
      * A list of %define arguments
      *
      * @parameter
@@ -1065,6 +1089,16 @@ abstract class AbstractRPMMojo
             {
                 provides.addAll( obsoletes );
             }
+        }
+
+        if ( "false".equalsIgnoreCase( repackJars ) )
+        {
+            if (defineStatements == null)
+            {
+                defineStatements = new ArrayList();
+            }
+
+            defineStatements.add( "__jar_repack 0" );
         }
 
         processDefineStatements();

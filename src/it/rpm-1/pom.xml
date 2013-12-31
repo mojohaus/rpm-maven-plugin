@@ -70,6 +70,7 @@
           <defineStatements>
             <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
           </defineStatements>
+          <repackJars>true</repackJars>
           <needarch>false</needarch>
           <defaultUsername>myuser</defaultUsername>
           <defaultGroupname>mygroup</defaultGroupname>

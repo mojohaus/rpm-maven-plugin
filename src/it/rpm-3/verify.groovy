@@ -6,6 +6,16 @@ import org.codehaus.mojo.unix.rpm.RpmUtil.SpecFile
 import java.util.List
 import java.util.Iterator
 
+repackJarsDisabled = false
+
+def builtFromSpec = new File(basedir, "target/rpm/rpm-3/SPECS/rpm-3.spec")
+builtFromSpec.eachLine{ line ->
+    if (line.equals("%define __jar_repack 0"))
+        repackJarsDisabled = true
+}
+
+if (!repackJarsDisabled)
+    throw new AssertionError("spec file missing \"%define __jar_repack 0\"")
 
 File rpm = new File((File) localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-3/1.0/rpm-3-1.0.rpm")
 

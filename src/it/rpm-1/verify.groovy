@@ -13,6 +13,12 @@ boolean success = true
 return true
 // end of (hopefully) temporary disable of this IT check
 
+def builtFromSpec = new File(basedir, "target/rpm/rpm-1/SPECS/rpm-1.spec")
+builtFromSpec.eachLine{ line ->
+    if (line.equals("%define __jar_repack 0"))
+        throw new AssertionError("spec file contains \"${line}\", but shouldn't!")
+}
+
 def rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-1/1.0/rpm-1-1.0.rpm")
 if (!rpm.exists())
 {
