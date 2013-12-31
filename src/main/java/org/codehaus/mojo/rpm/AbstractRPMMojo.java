@@ -25,12 +25,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
@@ -321,9 +316,8 @@ abstract class AbstractRPMMojo
      * The list of file <a href="map-params.html">mappings</a>.
      * 
      * @parameter
-     * @required
      */
-    private List mappings;
+    private List mappings = Collections.EMPTY_LIST;
 
     /**
      * The prepare script.

@@ -110,7 +110,10 @@ final class SpecWriter
             spec.println( mojo.getDescription() );
         }
 
-        writeMove();
+        if ( !mojo.getMappings().isEmpty() )
+        {
+            writeMove();
+        }
 
         writeLinks();
 
