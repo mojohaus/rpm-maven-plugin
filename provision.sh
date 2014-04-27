@@ -14,15 +14,15 @@ function install_mvn {
   if [ $? -ne 0 ]; then
     echo "Installing Apache Maven $1"
     cd /tmp &&
-    wget -q http://apache.mirrors.spacedump.net/maven/maven-2/$1/binaries/apache-maven-$1-bin.tar.gz &&
+    wget -q http://archive.apache.org/dist/maven/binaries/apache-maven-$1-bin.tar.gz &&
     cd /opt &&
-    tar -xzf /tmp/apache-maven-$1-bin.tar.gz
+    sudo tar -xzf /tmp/apache-maven-$1-bin.tar.gz
 
     echo "export PATH=/opt/apache-maven-$1/bin:$PATH" >> ~vagrant/.bashrc
   fi
 }
 
-install java-1.6.0-openjdk
+install java-1.6.0-openjdk-devel
 install rpm-build
 install_mvn 2.2.1
 
