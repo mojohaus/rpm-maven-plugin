@@ -36,14 +36,14 @@ public class Mapping
 
     /** Destination directory name. */
     private String directory;
-    
+
     /**
      * Indicates the configuration value for the files.
      * <p>
      * For passivity purposes, a value of <i>true</i> or <i>false</i> will indicate whether the <code>%config</code>
-     * descriptor will be written in the spec file.<br/> However, any other value (such as <i>noreplace</i>) can be
-     * passed and will be written into the spec file after <code>%config</code>. In the case of <i>noreplace</i>, it
-     * would look like <code>%config(noreplace)</code>.
+     * descriptor will be written in the spec file.<br/>
+     * However, any other value (such as <i>noreplace</i>) can be passed and will be written into the spec file after
+     * <code>%config</code>. In the case of <i>noreplace</i>, it would look like <code>%config(noreplace)</code>.
      * </p>
      */
     private String configuration;
@@ -68,7 +68,7 @@ public class Mapping
 
     /** Mapping information for dependencies. */
     private Dependency dependency;
-    
+
     /**
      * Indicates if the {@link #directory} should be used for the {@link #getAttrString() attribute string}.
      * 
@@ -77,9 +77,8 @@ public class Mapping
     private boolean directoryIncluded = true;
 
     /**
-     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
-     * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
-     * is {@code true}.
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
+     * . This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()} is {@code true}.
      * 
      * @since 2.1-alpha-1
      */
@@ -88,27 +87,29 @@ public class Mapping
     /**
      * List of files actually copied for the Mapping.
      * <p>
-     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the
-     * {@link #getDestination()}.
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the {@link #getDestination()}
+     * .
      * </p>
      * <p>
      * This is populated by {@link #sources}, {@link #artifact}, and {@link #dependency}.
      * </p>
      */
     private List<String> copiedFileNamesRelativeToDestination;
-    
+
     /**
      * List of files that will be added by soft link for the Mapping.
      * <p>
-     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the
-     * {@link #getDestination()}.
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the {@link #getDestination()}
+     * .
      * </p>
+     * 
      * @since 2.0-beta-3
      */
     private List<String> linkedFileNamesRelativeToDestination;
-    
+
     /**
      * Indicates if the {@link #sources} contain any {@link SoftlinkSource} instances.
+     * 
      * @since 2.0-beta-3
      */
     private boolean hasSoftLinks = false;
@@ -142,12 +143,13 @@ public class Mapping
     }
 
     /**
-     * Returns if the {@link #getDirectory()} should be used for the
-     * {@link #getAttrString(String, String, String) attribute string} (if and only if {@link #getSources() sources}
-     * make up everything that gets copied to the directory).<br/> By default, this returns <code>true</code>.
+     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
+     * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
+     * directory).<br/>
+     * By default, this returns <code>true</code>.
      * 
-     * @return Whether the {@link #getDirectory()} should be used for the
-     *         {@link #getAttrString(String, String, String) attribute string}.
+     * @return Whether the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
+     *         attribute string}.
      */
     public boolean isDirectoryIncluded()
     {
@@ -155,9 +157,10 @@ public class Mapping
     }
 
     /**
-     * Sets if the {@link #getDirectory()} should be used for the
-     * {@link #getAttrString(String, String, String) attribute string} (if and only if {@link #getSources() sources}
-     * make up everything that gets copied to the directory).<br/> By default, this is <code>true</code>.
+     * Sets if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
+     * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
+     * directory).<br/>
+     * By default, this is <code>true</code>.
      * 
      * @param directoryIncluded The {@link #directoryIncluded} to set.
      */
@@ -177,7 +180,7 @@ public class Mapping
     {
         return configuration == null || !"FALSE".equalsIgnoreCase( configuration );
     }
-    
+
     /**
      * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}.
      * However, modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
@@ -188,7 +191,7 @@ public class Mapping
     {
         return configuration;
     }
-    
+
     /**
      * Set the configuration status. This value is <code>true</code> if the file(s) in this mapping are configuration
      * files. Any value other than <code>true</code> or <code>false</code> will be considered a modifier of the
@@ -277,8 +280,9 @@ public class Mapping
 
     /**
      * Set the UNIX group name to own the installed files. Note that this must be a name, not a numeric group ID.
-     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
-     * {@code %files}.
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
+     * .
+     * 
      * @param grpname The new UNIX group name to own the installed files.
      */
     public void setGroupname( String grpname )
@@ -347,9 +351,8 @@ public class Mapping
     }
 
     /**
-     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
-     * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
-     * is {@code true}.
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
+     * . This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()} is {@code true}.
      * 
      * @return Returns the {@link #recurseDirectories}.
      * @since 2.1-alpha-1
@@ -360,9 +363,8 @@ public class Mapping
     }
 
     /**
-     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in 
-     * {@code %files}. This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()}
-     * is {@code true}.
+     * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
+     * . This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()} is {@code true}.
      * 
      * @param recurseDirectories The {@link #recurseDirectories} to set.
      * @since 2.1-alpha-1
@@ -375,10 +377,9 @@ public class Mapping
     /**
      * Assemble the RPM SPEC file attributes for a mapping.
      * 
-     * @param defaultFileMode Default file mode to use if not set for this mapping. 
+     * @param defaultFileMode Default file mode to use if not set for this mapping.
      * @param defaultGrp Default group to use if not set for this mapping.
      * @param defaultUsr Default user to use if not set for this mapping.
-     * 
      * @return The attribute string for the SPEC file.
      */
     public String getAttrString( String defaultFileMode, String defaultGrp, String defaultUsr )
@@ -386,10 +387,10 @@ public class Mapping
         defaultFileMode = defaultFileMode == null ? "-" : defaultFileMode;
         defaultGrp = defaultGrp == null ? "-" : defaultGrp;
         defaultUsr = defaultUsr == null ? "-" : defaultUsr;
-        
+
         StringBuilder sb = new StringBuilder();
 
-        if ( configuration != null  && !"FALSE".equalsIgnoreCase( configuration ) )
+        if ( configuration != null && !"FALSE".equalsIgnoreCase( configuration ) )
         {
             sb.append( "%config" );
             if ( configuration.length() > 0 && !"TRUE".equalsIgnoreCase( configuration ) )
@@ -410,7 +411,7 @@ public class Mapping
         {
             sb.append( "%dir " );
         }
-        
+
         /* do not include %attr if no attributes are specified */
         if ( !( filemode == null && username == null && groupname == null ) )
         {
@@ -425,7 +426,7 @@ public class Mapping
             sb.append( groupname != null ? groupname : defaultGrp );
             sb.append( ')' );
         }
-        
+
         return sb.toString();
     }
 
@@ -440,7 +441,7 @@ public class Mapping
         {
             return "nowhere";
         }
-        
+
         return directory;
     }
 
@@ -471,11 +472,10 @@ public class Mapping
 
     /**
      * Returns the names of files copied to the {@link #getDestination() destination}.<br/>
-     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the 
-     * <tt>destination</tt>. 
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the <tt>destination</tt>.
      * 
      * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
-     * <code>null</code>, but may be immutable.
+     *         <code>null</code>, but may be immutable.
      */
     List<String> getCopiedFileNamesRelativeToDestination()
     {
@@ -517,9 +517,9 @@ public class Mapping
     }
 
     /**
-     * Returns the names of files linked to in the {@link #getDestination() destination}.<br/> This is a <tt>List</tt>
-     * of <tt>String</tt> objects which identify files which will be created by link relative to the
-     * <tt>destination</tt>.
+     * Returns the names of files linked to in the {@link #getDestination() destination}.<br/>
+     * This is a <tt>List</tt> of <tt>String</tt> objects which identify files which will be created by link relative to
+     * the <tt>destination</tt>.
      * 
      * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
      *         <code>null</code>, but may be immutable.
@@ -530,7 +530,7 @@ public class Mapping
         return this.linkedFileNamesRelativeToDestination != null ? this.linkedFileNamesRelativeToDestination
                         : Collections.EMPTY_LIST;
     }
-    
+
     /**
      * Adds a relative file name that will be linked to the {@link #getDestination() destination}.
      * 
@@ -544,7 +544,7 @@ public class Mapping
         {
             this.linkedFileNamesRelativeToDestination = new LinkedList<String>();
         }
-        
+
         linkedFileNamesRelativeToDestination.add( linkedFileNameRelativeToDestination );
     }
 

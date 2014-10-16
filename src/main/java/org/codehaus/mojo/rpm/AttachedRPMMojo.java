@@ -21,8 +21,11 @@ package org.codehaus.mojo.rpm;
 
 import java.io.File;
 
-import org.apache.maven.plugins.annotations.*;
-
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProjectHelper;
 
 /**
@@ -44,9 +47,10 @@ public class AttachedRPMMojo
 
     @Component
     private MavenProjectHelper mavenProjectHelper;
-    
+
     /**
      * Attach the rpm as a secondary artifact.
+     * 
      * @see MavenProjectHelper#attachArtifact(org.apache.maven.project.MavenProject, String, String, java.io.File)
      */
     protected void afterExecution()
@@ -56,7 +60,7 @@ public class AttachedRPMMojo
         if ( getLog().isDebugEnabled() )
         {
             getLog().debug( "Adding RPM as attached artifact with '" + classifier + "' classifier: "
-                            + attachedArtifact.getAbsolutePath() );
+                                + attachedArtifact.getAbsolutePath() );
         }
         mavenProjectHelper.attachArtifact( project, "rpm", classifier, attachedArtifact );
     }

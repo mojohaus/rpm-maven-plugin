@@ -94,15 +94,15 @@ final class VersionHelper
 
         final String version = mojo.getVersion();
         final String release = mojo.getRelease();
-        
-        //this will get overwritten if we calculate a "release" value
+
+        // this will get overwritten if we calculate a "release" value
         response.release = release;
 
         int modifierIndex = version.indexOf( '-' );
         if ( modifierIndex == -1 )
         {
             response.version = version;
-            
+
             if ( release == null || release.length() == 0 )
             {
                 response.release = "1";

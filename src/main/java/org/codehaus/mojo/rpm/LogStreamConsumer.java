@@ -63,6 +63,7 @@ final class LogStreamConsumer
 
     /**
      * Constructor takes the <i>level</i> and <i>log</i> to log all {@link #consumeLine(String) lines} to.
+     * 
      * @param level The level to log at. Must be valid value (see constants).
      * @param log The log to send messages to. Must not be {@code null}.
      */

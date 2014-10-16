@@ -32,10 +32,9 @@ import org.apache.maven.plugin.MojoExecutionException;
  * A description of the set of project dependencies to include in the mapping. If no includes or excludes are specified,
  * all dependencies will be included in the mapping.
  * <p>
- * Each include or exclude should be specified in the form: 
- * "<i>groupID</i><code>:</code><i>artifactID</i>[<code>:</code><i>version</i>]" Any field can be specified as 
- * "<code>*</code>" which means any value is a match. If version is omitted (it usually is), it is the same as 
- * specifying "<code>*</code>".
+ * Each include or exclude should be specified in the form: "<i>groupID</i><code>:</code><i>artifactID</i>[
+ * <code>:</code><i>version</i>]" Any field can be specified as "<code>*</code>" which means any value is a match. If
+ * version is omitted (it usually is), it is the same as specifying "<code>*</code>".
  * </p>
  */
 public class Dependency
@@ -48,13 +47,14 @@ public class Dependency
 
     /** List of dependencies to exclude. */
     private List<Artifact> excludes;
-    
+
     /**
-     *  Strip version is false by default.
+     * Strip version is false by default.
+     * 
      * @since 2.0-beta-4
      */
     private boolean stripVersion = false;
-    
+
     // // // Bean methods
 
     /**
@@ -106,7 +106,7 @@ public class Dependency
      * 
      * @return The stripVersion property
      */
-    public boolean getStripVersion() 
+    public boolean getStripVersion()
     {
         return stripVersion;
     }
@@ -122,7 +122,7 @@ public class Dependency
     {
         this.stripVersion = stripVersion;
     }
-    
+
     // // // Public methods
 
     /** {@inheritDoc} */
@@ -140,9 +140,9 @@ public class Dependency
         {
             sb.append( " exclude [" + excludes + "]" );
         }
-        
+
         sb.append( " stripVersion (" + stripVersion + ")" );
-        
+
         sb.append( "]" );
         return sb.toString();
     }
@@ -196,8 +196,7 @@ public class Dependency
                     throw new MojoExecutionException( "Version string " + s.substring( p2 + 1 ) + " is invalid." );
                 }
             }
-            retval.add( 
-                new DefaultArtifact( s.substring( 0, p1 ), s.substring( p1 + 1, p2 ), vr, null, "", "", null ) );
+            retval.add( new DefaultArtifact( s.substring( 0, p1 ), s.substring( p1 + 1, p2 ), vr, null, "", "", null ) );
         }
 
         return retval;

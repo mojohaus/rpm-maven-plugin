@@ -98,14 +98,16 @@ final class SpecWriter
             spec.println( "Prefix: " + mojo.getPrefix() );
         }
 
-        if (mojo.getPrefixes() != null) {
-            for ( int i = 0; i < mojo.getPrefixes().length; i++ ) {
+        if ( mojo.getPrefixes() != null )
+        {
+            for ( int i = 0; i < mojo.getPrefixes().length; i++ )
+            {
                 String s = mojo.getPrefixes()[i];
                 spec.println( "Prefix: " + s );
             }
         }
 
-        if ("noarch".equals(mojo.getTargetArch()))
+        if ( "noarch".equals( mojo.getTargetArch() ) )
         {
             spec.println( "BuildArch: " + mojo.getTargetArch() );
         }
@@ -174,9 +176,7 @@ final class SpecWriter
                 log.debug( "writing attribute string for directory created by soft link: " + destination );
 
                 final String attributes =
-                    map.getAttrString( mojo.getDefaultFilemode(),
-                                       mojo.getDefaultGroupname(),
-                                       mojo.getDefaultUsername() );
+                    map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
                 spec.println( attributes + " \"" + destination + "\"" );
 
                 continue;
@@ -282,7 +282,7 @@ final class SpecWriter
         {
             spec.println();
 
-            for (Map.Entry<String, List<SoftlinkSource>> directoryToSourcesEntry : mojo.getLinkTargetToSources().entrySet() )
+            for ( Map.Entry<String, List<SoftlinkSource>> directoryToSourcesEntry : mojo.getLinkTargetToSources().entrySet() )
             {
                 String directory = directoryToSourcesEntry.getKey();
                 if ( directory.startsWith( "/" ) )
@@ -568,7 +568,7 @@ final class SpecWriter
             for ( String str : strings )
             {
 
-                if (!str.equals(""))
+                if ( !str.equals( "" ) )
                 {
                     spec.print( prefix );
                     spec.println( str );

@@ -18,70 +18,72 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
     <menu name="Overview">
-      <item name="Introduction" href="index.html"/>
-      <item name="Goals" href="plugin-info.html"/>
-      <item name="Usage" href="usage.html"/>
-      <item name="FAQ" href="faq.html"/>
+      <item name="Introduction" href="index.html" />
+      <item name="Goals" href="plugin-info.html" />
+      <item name="Usage" href="usage.html" />
+      <item name="FAQ" href="faq.html" />
       <item name="Project Settings" href="pom.html" collapse="true">
-          <item name="artifactId" href="pom.html#artifactId"/>
-          <item name="description" href="pom.html#description"/>
-          <item name="name" href="pom.html#name"/>
-          <item name="organization" href="pom.html#organization"/>
+        <item name="artifactId" href="pom.html#artifactId" />
+        <item name="description" href="pom.html#description" />
+        <item name="name" href="pom.html#name" />
+        <item name="organization" href="pom.html#organization" />
       </item>
       <item name="Parameters" href="params.html" collapse="true">
-          <item name="Identification Parameters" href="ident-params.html">
-              <item name="name" href="ident-params.html#name"/>
-              <item name="license" href="ident-params.html#license"/>
-              <item name="distribution" href="ident-params.html#distribution"/>
-              <item name="group" href="ident-params.html#group"/>
-              <item name="icon" href="ident-params.html#icon"/>
-              <item name="needarch" href="ident-params.html#needarch"/>
-              <item name="packager" href="ident-params.html#packager"/>
-              <item name="release**" href="ident-params.html#release"/>
-              <item name="version" href="ident-params.html#version"/>
-              <item name="changelogFile" href="ident-params.html#changelogFile"/>
-              <item name="repackJars" href="ident-params.html#repackJars"/>
-              <item name="targetOS" href="ident-params.html#targetOS"/>
-              <item name="targetVendor" href="ident-params.html#targetVendor"/>
-          </item>
-          <item name="Operation Parameters" href="op-params.html">
-              <item name="workarea" href="op-params.html#workarea"/>
-              <item name="defineStatements" href="op-params.html#defineStatements"/>
-          </item>
-          <item name="Mapping Parameters" href="map-params.html">
-              <item name="artifact" href="map-params.html#artifact"/>
-              <item name="configuration" href="map-params.html#configuration"/>
-              <item name="dependency" href="map-params.html#dependency"/>
-              <item name="directory**" href="map-params.html#directory"/>
-              <item name="documentation" href="map-params.html#documentation"/>
-              <item name="filemode*" href="map-params.html#filemode"/>
-              <item name="groupname*" href="map-params.html#groupname"/>
-              <item name="directoryIncluded" href="map-params.html#directoryIncluded"/>
-              <item name="recurseDirectories" href="map-params.html#recurseDirectories"/>
-              <item name="sources" href="map-params.html#sources"/>
-              <item name="username*" href="map-params.html#username"/>
-          </item>
-          <item name="Source Parameters" href="source-params.html">
-              <item name="location**" href="source-params.html#location"/>
-              <item name="noDefaultExcludes" href="source-params.html#noDefaultExcludes"/>
-              <item name="includes" href="source-params.html#includes"/>
-              <item name="excludes" href="source-params.html#excludes"/>
-              <item name="softlinkSource" href="source-params.html#softlinkSource"/>
-          </item>
-          <item name="Advanced Parameters" href="adv-params.html">
-              <item name="RPM Dependencies" href="adv-params.html#Dependency"/>
-              <item name="Relocation" href="adv-params.html#Relocation"/>
-              <item name="Scripts" href="adv-params.html#Scripts"/>
-              <item name="Triggers" href="adv-params.html#Triggers"/>
-              <item name="Signatures" href="adv-params.html#Signatures"/>
-          </item>
+        <item name="Identification Parameters" href="ident-params.html">
+          <item name="name" href="ident-params.html#name" />
+          <item name="license" href="ident-params.html#license" />
+          <item name="distribution" href="ident-params.html#distribution" />
+          <item name="group" href="ident-params.html#group" />
+          <item name="icon" href="ident-params.html#icon" />
+          <item name="needarch" href="ident-params.html#needarch" />
+          <item name="packager" href="ident-params.html#packager" />
+          <item name="release**" href="ident-params.html#release" />
+          <item name="version" href="ident-params.html#version" />
+          <item name="changelogFile" href="ident-params.html#changelogFile" />
+          <item name="repackJars" href="ident-params.html#repackJars" />
+          <item name="targetOS" href="ident-params.html#targetOS" />
+          <item name="targetVendor" href="ident-params.html#targetVendor" />
+        </item>
+        <item name="Operation Parameters" href="op-params.html">
+          <item name="workarea" href="op-params.html#workarea" />
+          <item name="defineStatements" href="op-params.html#defineStatements" />
+        </item>
+        <item name="Mapping Parameters" href="map-params.html">
+          <item name="artifact" href="map-params.html#artifact" />
+          <item name="configuration" href="map-params.html#configuration" />
+          <item name="dependency" href="map-params.html#dependency" />
+          <item name="directory**" href="map-params.html#directory" />
+          <item name="documentation" href="map-params.html#documentation" />
+          <item name="filemode*" href="map-params.html#filemode" />
+          <item name="groupname*" href="map-params.html#groupname" />
+          <item name="directoryIncluded" href="map-params.html#directoryIncluded" />
+          <item name="recurseDirectories" href="map-params.html#recurseDirectories" />
+          <item name="sources" href="map-params.html#sources" />
+          <item name="username*" href="map-params.html#username" />
+        </item>
+        <item name="Source Parameters" href="source-params.html">
+          <item name="location**" href="source-params.html#location" />
+          <item name="noDefaultExcludes" href="source-params.html#noDefaultExcludes" />
+          <item name="includes" href="source-params.html#includes" />
+          <item name="excludes" href="source-params.html#excludes" />
+          <item name="softlinkSource" href="source-params.html#softlinkSource" />
+        </item>
+        <item name="Advanced Parameters" href="adv-params.html">
+          <item name="RPM Dependencies" href="adv-params.html#Dependency" />
+          <item name="Relocation" href="adv-params.html#Relocation" />
+          <item name="Scripts" href="adv-params.html#Scripts" />
+          <item name="Triggers" href="adv-params.html#Triggers" />
+          <item name="Signatures" href="adv-params.html#Signatures" />
+        </item>
       </item>
     </menu>
     <menu name="Examples">
-      <item name="Sample" href="example1.html"/>
+      <item name="Sample" href="example1.html" />
     </menu>
   </body>
 </project>

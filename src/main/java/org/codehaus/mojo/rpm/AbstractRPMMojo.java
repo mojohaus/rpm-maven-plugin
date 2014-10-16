@@ -25,14 +25,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -79,12 +74,13 @@ abstract class AbstractRPMMojo
      *
      * @since 2.0-beta-3
      */
-    private final Map<String, List<SoftlinkSource>> linkTargetToSources = new LinkedHashMap<String, List<SoftlinkSource>>();
+    private final Map<String, List<SoftlinkSource>> linkTargetToSources =
+        new LinkedHashMap<String, List<SoftlinkSource>>();
 
     /**
      * The name portion of the output file name.
      */
-    @Parameter( required = true, property = "project.artifactId")
+    @Parameter( required = true, property = "project.artifactId" )
     private String name;
 
     /**
@@ -669,10 +665,9 @@ abstract class AbstractRPMMojo
     protected MavenProject project;
 
     /**
-     * Should <i>brp-repack-jars</i> be used in the RPM build. Defaults to <code>false</code>.
-     * If it is <code>false</code> <i>brp-repack-jars</i> will be disabled by:<br/>
-     * <code>%define __jar_repack 0</code>
-     * This will have no effect on RHEL5 or earlier release.
+     * Should <i>brp-repack-jars</i> be used in the RPM build. Defaults to <code>false</code>. If it is
+     * <code>false</code> <i>brp-repack-jars</i> will be disabled by:<br/>
+     * <code>%define __jar_repack 0</code> This will have no effect on RHEL5 or earlier release.
      *
      * @since 2.1-alpha-4
      */
@@ -921,7 +916,7 @@ abstract class AbstractRPMMojo
             }
             else
             {
-                getLog().info("Creating directory " + dir.getAbsolutePath());
+                getLog().info( "Creating directory " + dir.getAbsolutePath() );
                 if ( !dir.mkdir() )
                 {
                     throw new MojoFailureException( "Unable to create directory " + dir.getAbsolutePath() );
@@ -1053,7 +1048,8 @@ abstract class AbstractRPMMojo
         }
 
         // If license is not set use the legacy copyright instead.
-        if ( license == null ) {
+        if ( license == null )
+        {
             license = copyright;
         }
 
@@ -1078,7 +1074,7 @@ abstract class AbstractRPMMojo
 
         if ( !repackJars )
         {
-            if (defineStatements == null)
+            if ( defineStatements == null )
             {
                 defineStatements = new ArrayList<String>();
             }
@@ -1390,7 +1386,8 @@ abstract class AbstractRPMMojo
         return this.prefix;
     }
 
-    final String[] getPrefixes() {
+    final String[] getPrefixes()
+    {
         return prefixes;
     }
 

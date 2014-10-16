@@ -179,7 +179,8 @@ final class RPMHelper
      * @throws MojoExecutionException
      * @since 2.1-alpha-1
      */
-    public String evaluateMacro( String macro ) throws MojoExecutionException
+    public String evaluateMacro( String macro )
+        throws MojoExecutionException
     {
         final Commandline cl = new Commandline();
         cl.setExecutable( "rpm" );
@@ -187,7 +188,7 @@ final class RPMHelper
         cl.createArg().setValue( '%' + macro );
 
         final Log log = mojo.getLog();
-        
+
         final StringStreamConsumer stdout = new StringStreamConsumer();
         final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, log );
         try
@@ -208,14 +209,15 @@ final class RPMHelper
         {
             throw new MojoExecutionException( "Unable to evaluate macro: " + macro, e );
         }
-        
+
         return stdout.getOutput().trim();
     }
 
     /**
      * Gets the architecure for system by executing <i>rpm -E %{_arch}</i>.
      */
-    public String getArch() throws MojoExecutionException
+    public String getArch()
+        throws MojoExecutionException
     {
         final Commandline cl = new Commandline();
         cl.setExecutable( "rpm" );
@@ -230,8 +232,9 @@ final class RPMHelper
             final int result = CommandLineUtils.executeCommandLine( cl, stdConsumer, errConsumer );
             if ( result != 0 )
                 throw new MojoExecutionException( "rpm -E %{_arch} returned: \'" + result + "\' executing \'"
-                        + cl.toString() + "\'" );
-        } catch ( CommandLineException e )
+                    + cl.toString() + "\'" );
+        }
+        catch ( CommandLineException e )
         {
             throw new MojoExecutionException( "Unable get system architecture", e );
         }

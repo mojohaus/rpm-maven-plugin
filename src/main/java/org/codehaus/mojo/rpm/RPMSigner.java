@@ -73,6 +73,7 @@ final class RPMSigner
 
     /**
      * Signs the rpm using the gpgName and passphrase given. All output from the signing will be written to <i>log</i>.
+     * 
      * @param rpm RPM file to sign. Must exist and be readable.
      * @throws IOException
      */
@@ -82,8 +83,8 @@ final class RPMSigner
         if ( !rpm.exists() || !rpm.canRead() )
         {
             throw new IllegalStateException( rpm.getAbsolutePath() + " is not a valid rpm file or cannot be read" );
-        }       
-        
+        }
+
         // use option to provide "script" via stdin
         final Commandline cl = new Commandline();
         cl.setExecutable( "expect" );
@@ -99,7 +100,7 @@ final class RPMSigner
             {
                 log.debug( "About to execute \'" + cl.toString() + "\'" );
             }
-            
+
             final InputStream is = new ByteArrayInputStream( writeExpectScriptFile( rpm ) );
 
             int result = CommandLineUtils.executeCommandLine( cl, is, stdout, stderr );
@@ -132,7 +133,7 @@ final class RPMSigner
         final PrintWriter writer = new PrintWriter( new OutputStreamWriter( baos ) );
         try
         {
-            writer.println("set timeout -1");
+            writer.println( "set timeout -1" );
             writer.print( "spawn rpm --define \"_gpg_name " );
             writer.print( gpgName );
             writer.print( "\" --addsign " );

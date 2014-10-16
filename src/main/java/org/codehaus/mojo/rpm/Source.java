@@ -19,6 +19,7 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
