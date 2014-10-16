@@ -196,14 +196,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private String license;
 
-    /**
-     * The one-line copyright information.
-     *
-     * @deprecated use license instead!
-     */
-    @Parameter
-    @Deprecated
-    private String copyright;
 
     /**
      * The distribution containing this package.
@@ -291,14 +283,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private LinkedHashSet conflicts;
 
-    /**
-     * The relocation prefix for this package.
-     *
-     * @deprecated use prefixes instead.
-     */
-    @Parameter
-    @Deprecated
-    private String prefix;
 
     /**
      * The relocation prefixes for this package.
@@ -327,23 +311,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private List<Mapping> mappings = Collections.EMPTY_LIST;
 
-    /**
-     * The prepare script.
-     *
-     * @deprecated Use prepareScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String prepare;
-
-    /**
-     * The location of the prepare script. A File which does not exist is ignored.
-     *
-     * @deprecated Use prepareScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File prepareScript;
 
     /**
      * The prepare scriptlet;
@@ -353,26 +320,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet prepareScriptlet;
 
-    /**
-     * The pre-installation script.
-     *
-     * @deprecated Use preinstallScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String preinstall;
-
-    /**
-     * The location of the pre-installation script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use preinstallScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File preinstallScript;
 
     /**
      * The pre-installation scriptlet.
@@ -382,26 +329,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet preinstallScriptlet;
 
-    /**
-     * The post-installation script.
-     *
-     * @deprecated Use postinstallScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String postinstall;
-
-    /**
-     * The location of the post-installation script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use postinstallScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File postinstallScript;
 
     /**
      * The post install scriptlet.
@@ -411,29 +338,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet postinstallScriptlet;
 
-    /**
-     * The installation script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use installScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String install;
-
-    /**
-     * The location of the installation script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use installScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File installScript;
 
     /**
      * The installation scriptlet.
@@ -443,26 +347,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet installScriptlet;
 
-    /**
-     * The pre-removal script.
-     *
-     * @deprecated Use preremoveScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String preremove;
-
-    /**
-     * The location of the pre-removal script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use preremoveScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File preremoveScript;
 
     /**
      * The pre-removal scriptlet.
@@ -472,26 +356,7 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet preremoveScriptlet;
 
-    /**
-     * The post-removal script.
-     *
-     * @deprecated Use postremoveScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String postremove;
 
-    /**
-     * The location of the post-removal script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use postremoveScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File postremoveScript;
 
     /**
      * The post-removal scriptlet.
@@ -501,26 +366,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet postremoveScriptlet;
 
-    /**
-     * The verification script.
-     *
-     * @deprecated Use verifyScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String verify;
-
-    /**
-     * The location of the verification script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use verifyScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File verifyScript;
 
     /**
      * The verify scriptlet.
@@ -530,26 +375,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet verifyScriptlet;
 
-    /**
-     * The clean script.
-     *
-     * @deprecated Use cleanScriplet
-     */
-    @Parameter
-    @Deprecated
-    private String clean;
-
-    /**
-     * The location of the clean script.
-     * <p>
-     * Beginning with release 2.0-beta-3, a File which does not exist is ignored.
-     * </p>
-     *
-     * @deprecated Use cleanScriplet
-     */
-    @Parameter
-    @Deprecated
-    private File cleanScript;
 
     /**
      * The clean scriptlet.
@@ -1010,15 +835,6 @@ abstract class AbstractRPMMojo
             }
         }
 
-        prepareScriptlet = passiveScripts( "prepare", prepareScriptlet, prepare, prepareScript );
-        preinstallScriptlet = passiveScripts( "preinstall", preinstallScriptlet, preinstall, preinstallScript );
-        installScriptlet = passiveScripts( "install", installScriptlet, install, installScript );
-        postinstallScriptlet = passiveScripts( "postinstall", postinstallScriptlet, postinstall, postinstallScript );
-        preremoveScriptlet = passiveScripts( "preremove", preremoveScriptlet, preremove, preremoveScript );
-        postremoveScriptlet = passiveScripts( "postremove", postremoveScriptlet, postremove, postremoveScript );
-        verifyScriptlet = passiveScripts( "verify", verifyScriptlet, verify, verifyScript );
-        cleanScriptlet = passiveScripts( "clean", cleanScriptlet, clean, cleanScript );
-
         if ( ( changelog == null ) && ( changelogFile != null ) )
         {
             if ( !changelogFile.exists() )
@@ -1047,11 +863,6 @@ abstract class AbstractRPMMojo
             }
         }
 
-        // If license is not set use the legacy copyright instead.
-        if ( license == null )
-        {
-            license = copyright;
-        }
 
         // generate license text if not set
         if ( license == null )
@@ -1377,14 +1188,6 @@ abstract class AbstractRPMMojo
         return this.conflicts;
     }
 
-    /**
-     * @return Returns the {@link #prefix}.
-     * @deprecated
-     */
-    final String getPrefix()
-    {
-        return this.prefix;
-    }
 
     final String[] getPrefixes()
     {

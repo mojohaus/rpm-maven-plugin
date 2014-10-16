@@ -32,7 +32,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * Utility to write spec file based on {@link AbstractRPMMojo} instance.
- * 
+ *
  * @author Brett Okken
  * @since 2.0
  */
@@ -44,7 +44,7 @@ final class SpecWriter
 
     /**
      * Creates instance with the <i>mojo</i> to use and the <i>spec</i> to write to.
-     * 
+     *
      * @param mojo The mojo with the attributes to generate a spec file for.
      * @param spec The target to write the spec file to.
      */
@@ -93,10 +93,6 @@ final class SpecWriter
         spec.println( "autoprov: " + ( mojo.isAutoProvides() ? "yes" : "no" ) );
         spec.println( "autoreq: " + ( mojo.isAutoRequires() ? "yes" : "no" ) );
 
-        if ( mojo.getPrefix() != null )
-        {
-            spec.println( "Prefix: " + mojo.getPrefix() );
-        }
 
         if ( mojo.getPrefixes() != null )
         {
@@ -380,7 +376,7 @@ final class SpecWriter
 
     /**
      * Writes soft link from <i>linkSource</i> to <i>directory</i> for all files in the <i>scanner</i>.
-     * 
+     *
      * @param directory Directory to link to.
      * @param linkSource Source to link from. {@link SoftlinkSource#getLocation()} must be a {@link File#isDirectory()
      *            directory}.
@@ -409,7 +405,7 @@ final class SpecWriter
      * {@link DirectoryScanner#scan() Scans} the <i>buildSourceLocation</i> using the
      * {@link SoftlinkSource#getIncludes()} and {@link SoftlinkSource#getExcludes()} from <i>linkSource</i>. Returns the
      * {@link DirectoryScanner} used for scanning.
-     * 
+     *
      * @param linkSource Source
      * @param buildSourceLocation Build location where content exists.
      * @return {@link DirectoryScanner} used for scanning.
@@ -430,7 +426,7 @@ final class SpecWriter
 
     /**
      * Assemble the RPM SPEC default file attributes.
-     * 
+     *
      * @return The attribute string for the SPEC file.
      */
     private String getDefAttrString()
@@ -491,7 +487,7 @@ final class SpecWriter
     /**
      * Writes soft link from <i>linkSource</i> to <i>directory</i> using optional
      * {@link SoftlinkSource#getDestination()} as the name of the link in <i>directory</i> if present.
-     * 
+     *
      * @param directory Directory to link to.
      * @param linkSource Source to link from.
      */
@@ -541,7 +537,7 @@ final class SpecWriter
      * <p>
      * Writes in format: <code><i>directive</i>: <i>value</i></code>
      * </p>
-     * 
+     *
      * @param directive
      * @param value
      */
@@ -557,7 +553,7 @@ final class SpecWriter
 
     /**
      * Writes a new line for each element in <i>strings</i> to the <i>writer</i> with the <i>prefix</i>.
-     * 
+     *
      * @param strings <tt>List</tt> of <tt>String</tt>s to write.
      * @param prefix Prefix to write on each line before the string.
      */
