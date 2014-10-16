@@ -196,7 +196,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private String license;
 
-
     /**
      * The distribution containing this package.
      */
@@ -283,7 +282,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private LinkedHashSet conflicts;
 
-
     /**
      * The relocation prefixes for this package.
      *
@@ -311,7 +309,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private List<Mapping> mappings = Collections.EMPTY_LIST;
 
-
     /**
      * The prepare scriptlet;
      *
@@ -319,7 +316,6 @@ abstract class AbstractRPMMojo
      */
     @Parameter
     private Scriptlet prepareScriptlet;
-
 
     /**
      * The pre-installation scriptlet.
@@ -329,7 +325,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet preinstallScriptlet;
 
-
     /**
      * The post install scriptlet.
      *
@@ -337,7 +332,6 @@ abstract class AbstractRPMMojo
      */
     @Parameter
     private Scriptlet postinstallScriptlet;
-
 
     /**
      * The installation scriptlet.
@@ -347,7 +341,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet installScriptlet;
 
-
     /**
      * The pre-removal scriptlet.
      *
@@ -355,8 +348,6 @@ abstract class AbstractRPMMojo
      */
     @Parameter
     private Scriptlet preremoveScriptlet;
-
-
 
     /**
      * The post-removal scriptlet.
@@ -366,7 +357,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private Scriptlet postremoveScriptlet;
 
-
     /**
      * The verify scriptlet.
      *
@@ -374,7 +364,6 @@ abstract class AbstractRPMMojo
      */
     @Parameter
     private Scriptlet verifyScriptlet;
-
 
     /**
      * The clean scriptlet.
@@ -606,6 +595,10 @@ abstract class AbstractRPMMojo
         if ( disabled )
         {
             getLog().info( "MOJO is disabled. Doing nothing." );
+
+            //FIXME, not sure if this is correctly way to get install/deploy to ignore the orgininal primary 'rpm' artifact
+            this.project.setPackaging( "pom" );
+
             return;
         }
 
@@ -862,7 +855,6 @@ abstract class AbstractRPMMojo
                 }
             }
         }
-
 
         // generate license text if not set
         if ( license == null )
@@ -1187,7 +1179,6 @@ abstract class AbstractRPMMojo
     {
         return this.conflicts;
     }
-
 
     final String[] getPrefixes()
     {
