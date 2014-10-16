@@ -180,7 +180,7 @@ final class FileHelper
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List copySource( File src, String srcName, File dest, List<String> incl, List<String> excl, boolean filter )
+    private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl, boolean filter )
         throws MojoExecutionException
     {
         try
@@ -291,7 +291,7 @@ final class FileHelper
      */
     private List<Artifact> selectArtifacts( ArtifactMap am )
     {
-        final List<Artifact> retval = new ArrayList();
+        final List<Artifact> retval = new ArrayList<Artifact>();
         final List<String> clist = am.getClassifiers();
 
         final Artifact artifact = mojo.getArtifact();
@@ -332,6 +332,7 @@ final class FileHelper
         List<Artifact> inc = d.getIncludes();
         List<Artifact> exc = d.getExcludes();
 
+        @SuppressWarnings( "unchecked" )
         Set<Artifact> deps = mojo.project.getArtifacts();
         if ( deps == null || deps.isEmpty() )
         {

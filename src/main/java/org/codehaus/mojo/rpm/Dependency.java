@@ -50,7 +50,7 @@ public class Dependency
 
     /**
      * Strip version is false by default.
-     * 
+     *
      * @since 2.0-beta-4
      */
     private boolean stripVersion = false;
@@ -59,7 +59,7 @@ public class Dependency
 
     /**
      * Retrieve the list of dependencies to include.
-     * 
+     *
      * @return The list of dependencies to include.
      */
     public List<Artifact> getIncludes()
@@ -69,7 +69,7 @@ public class Dependency
 
     /**
      * Set the list of dependencies to include.
-     * 
+     *
      * @param incls The new list of dependencies to include.
      * @throws MojoExecutionException if the parse fails
      */
@@ -81,7 +81,7 @@ public class Dependency
 
     /**
      * Retrieve the list of dependencies to exclude.
-     * 
+     *
      * @return The list of dependencies to exclude.
      */
     public List<Artifact> getExcludes()
@@ -91,7 +91,7 @@ public class Dependency
 
     /**
      * Set the list of dependencies to exclude.
-     * 
+     *
      * @param excls The new list of dependencies to exclude.
      * @throws MojoExecutionException if the parse fails
      */
@@ -103,7 +103,7 @@ public class Dependency
 
     /**
      * Retrieve the stripVersion property
-     * 
+     *
      * @return The stripVersion property
      */
     public boolean getStripVersion()
@@ -151,12 +151,12 @@ public class Dependency
 
     /**
      * Parse the list of dependencies.
-     * 
+     *
      * @param in The list specified in the configuration
      * @return A list of parsed artifact identifiers
      * @throws MojoExecutionException if the parse fails
      */
-    private List parseList( List<String> in )
+    private List<Artifact> parseList( List<String> in )
         throws MojoExecutionException
     {
         List<Artifact> retval = new ArrayList<Artifact>();

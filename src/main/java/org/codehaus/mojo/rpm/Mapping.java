@@ -71,7 +71,7 @@ public class Mapping
 
     /**
      * Indicates if the {@link #directory} should be used for the {@link #getAttrString() attribute string}.
-     * 
+     *
      * @since 2.0-beta-2
      */
     private boolean directoryIncluded = true;
@@ -79,7 +79,7 @@ public class Mapping
     /**
      * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
      * . This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()} is {@code true}.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private boolean recurseDirectories = false;
@@ -102,14 +102,14 @@ public class Mapping
      * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the {@link #getDestination()}
      * .
      * </p>
-     * 
+     *
      * @since 2.0-beta-3
      */
     private List<String> linkedFileNamesRelativeToDestination;
 
     /**
      * Indicates if the {@link #sources} contain any {@link SoftlinkSource} instances.
-     * 
+     *
      * @since 2.0-beta-3
      */
     private boolean hasSoftLinks = false;
@@ -117,14 +117,14 @@ public class Mapping
     /**
      * The absolute destination in the {@link AbstractRPMMojo#getBuildroot() buildroot}. This includes evaluating
      * any/all macros.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private File absoluteDestination;
 
     /**
      * Retrieve the destination during package installation.
-     * 
+     *
      * @return The destination during package installation.
      */
     public String getDirectory()
@@ -134,7 +134,7 @@ public class Mapping
 
     /**
      * Set the destination during package installation.
-     * 
+     *
      * @param dir The new destination during package installation.
      */
     public void setDirectory( String dir )
@@ -147,7 +147,7 @@ public class Mapping
      * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
      * directory).<br/>
      * By default, this returns <code>true</code>.
-     * 
+     *
      * @return Whether the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
      *         attribute string}.
      */
@@ -161,7 +161,7 @@ public class Mapping
      * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
      * directory).<br/>
      * By default, this is <code>true</code>.
-     * 
+     *
      * @param directoryIncluded The {@link #directoryIncluded} to set.
      */
     public void setDirectoryIncluded( boolean directoryIncluded )
@@ -172,7 +172,7 @@ public class Mapping
     /**
      * Retrieve the configuration status. This value is <code>true</code> if the file(s) in this mapping are
      * configuration files.
-     * 
+     *
      * @return The configuration status.
      * @deprecated use {@link #getConfiguration()}
      */
@@ -184,7 +184,7 @@ public class Mapping
     /**
      * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}.
      * However, modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
-     * 
+     *
      * @return The configuration value.
      */
     public String getConfiguration()
@@ -196,7 +196,7 @@ public class Mapping
      * Set the configuration status. This value is <code>true</code> if the file(s) in this mapping are configuration
      * files. Any value other than <code>true</code> or <code>false</code> will be considered a modifier of the
      * <i>%config</i> declaration in the spec file.
-     * 
+     *
      * @param cfg The new configuration value.
      */
     public void setConfiguration( String cfg )
@@ -207,7 +207,7 @@ public class Mapping
     /**
      * Retrieve the documentation status. This value is <code>true</code> if the file(s) in this mapping are
      * documentation files.
-     * 
+     *
      * @return The documentation status.
      */
     public boolean isDocumentation()
@@ -218,7 +218,7 @@ public class Mapping
     /**
      * Set the documentation status. This value is <code>true</code> if the file(s) in this mapping are documentation
      * files.
-     * 
+     *
      * @param isDoc The new documentation status.
      */
     public void setDocumentation( boolean isDoc )
@@ -229,7 +229,7 @@ public class Mapping
     /**
      * Retrieve the UNIX file permissions. This is a three-digit octal number which specifies the permissions to be
      * applied to each file in the mapping when it is installed.
-     * 
+     *
      * @return The UNIX file permissions.
      */
     public String getFilemode()
@@ -240,7 +240,7 @@ public class Mapping
     /**
      * Set the UNIX file permissions. This is a three-digit octal number which specifies the permissions to be applied
      * to each file in the mapping when it is installed.
-     * 
+     *
      * @param fmode The new UNIX file permissions.
      */
     public void setFilemode( String fmode )
@@ -250,7 +250,7 @@ public class Mapping
 
     /**
      * Retrieve the UNIX user name to own the installed files. Note that this must be a name, not a numeric user ID.
-     * 
+     *
      * @return The UNIX user name to own the installed files.
      */
     public String getUsername()
@@ -260,7 +260,7 @@ public class Mapping
 
     /**
      * Set the UNIX user name to own the installed files. Note that this must be a name, not a numeric user ID.
-     * 
+     *
      * @param uname The new UNIX user name to own the installed files.
      */
     public void setUsername( String uname )
@@ -270,7 +270,7 @@ public class Mapping
 
     /**
      * Retrieve the UNIX group name to own the installed files. Note that this must be a name, not a numeric group ID.
-     * 
+     *
      * @return The UNIX group name to own the installed files.
      */
     public String getGroupname()
@@ -282,7 +282,7 @@ public class Mapping
      * Set the UNIX group name to own the installed files. Note that this must be a name, not a numeric group ID.
      * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
      * .
-     * 
+     *
      * @param grpname The new UNIX group name to own the installed files.
      */
     public void setGroupname( String grpname )
@@ -292,7 +292,7 @@ public class Mapping
 
     /**
      * Retrieve the list of source file specifications.
-     * 
+     *
      * @return The list of source file specifications.
      */
     public List<Source> getSources()
@@ -302,7 +302,7 @@ public class Mapping
 
     /**
      * Set the list of source file specifications.
-     * 
+     *
      * @param srclist The new list of source file specifications.
      */
     public void setSources( List<Source> srclist )
@@ -312,7 +312,7 @@ public class Mapping
 
     /**
      * Retrieve the artifact specification.
-     * 
+     *
      * @return The artifact specification.
      */
     public ArtifactMap getArtifact()
@@ -322,7 +322,7 @@ public class Mapping
 
     /**
      * Set the artifact specification.
-     * 
+     *
      * @param am The new artifact specification.
      */
     public void setArtifact( ArtifactMap am )
@@ -332,7 +332,7 @@ public class Mapping
 
     /**
      * Retrieve the dependency specification.
-     * 
+     *
      * @return The dependency specification.
      */
     public Dependency getDependency()
@@ -342,7 +342,7 @@ public class Mapping
 
     /**
      * Set the dependency specification.
-     * 
+     *
      * @param am The new dependency specification.
      */
     public void setDependency( Dependency am )
@@ -353,7 +353,7 @@ public class Mapping
     /**
      * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
      * . This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()} is {@code true}.
-     * 
+     *
      * @return Returns the {@link #recurseDirectories}.
      * @since 2.1-alpha-1
      */
@@ -365,7 +365,7 @@ public class Mapping
     /**
      * Indicates if sub-directories contained in the {@link #getSources()} should be explicitly listed in {@code %files}
      * . This includes listing the {@link #getDestination()}, if {@link #isDirectoryIncluded()} is {@code true}.
-     * 
+     *
      * @param recurseDirectories The {@link #recurseDirectories} to set.
      * @since 2.1-alpha-1
      */
@@ -376,7 +376,7 @@ public class Mapping
 
     /**
      * Assemble the RPM SPEC file attributes for a mapping.
-     * 
+     *
      * @param defaultFileMode Default file mode to use if not set for this mapping.
      * @param defaultGrp Default group to use if not set for this mapping.
      * @param defaultUsr Default user to use if not set for this mapping.
@@ -432,7 +432,7 @@ public class Mapping
 
     /**
      * Return the destination directory name.
-     * 
+     *
      * @return The name of the destination directory.
      */
     public String getDestination()
@@ -447,7 +447,7 @@ public class Mapping
 
     /**
      * Return directory-only status.
-     * 
+     *
      * @return <code>true</code> if no sources were specified in the mapping
      */
     public boolean isDirOnly()
@@ -473,7 +473,7 @@ public class Mapping
     /**
      * Returns the names of files copied to the {@link #getDestination() destination}.<br/>
      * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the <tt>destination</tt>.
-     * 
+     *
      * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
      *         <code>null</code>, but may be immutable.
      */
@@ -485,7 +485,7 @@ public class Mapping
 
     /**
      * Add a <tt>List</tt> of relative file names which have been copied to the {@link #getDestination() destination}.
-     * 
+     *
      * @param copiedFileNamesRelativeToDestination relative names of files to add
      * @see #getCopiedFileNamesRelativeToDestination()
      */
@@ -503,7 +503,7 @@ public class Mapping
 
     /**
      * Adds a relative file name that has been copied to the {@link #getDestination() destination}.
-     * 
+     *
      * @param copiedFileNameRelativeToDestination relative name of file to add to list
      * @see #getCopiedFileNamesRelativeToDestination()
      */
@@ -520,7 +520,7 @@ public class Mapping
      * Returns the names of files linked to in the {@link #getDestination() destination}.<br/>
      * This is a <tt>List</tt> of <tt>String</tt> objects which identify files which will be created by link relative to
      * the <tt>destination</tt>.
-     * 
+     *
      * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
      *         <code>null</code>, but may be immutable.
      * @since 2.0-beta-3
@@ -533,7 +533,7 @@ public class Mapping
 
     /**
      * Adds a relative file name that will be linked to the {@link #getDestination() destination}.
-     * 
+     *
      * @param linkedFileNameRelativeToDestination
      * @see #getLinkedFileNamesRelativeToDestination()
      * @since 2.0-beta-3

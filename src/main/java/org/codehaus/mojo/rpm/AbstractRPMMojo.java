@@ -252,13 +252,13 @@ abstract class AbstractRPMMojo
      * The list of virtual packages provided by this package.
      */
     @Parameter
-    private LinkedHashSet provides;
+    private LinkedHashSet<String> provides;
 
     /**
      * The list of requirements for this package.
      */
     @Parameter
-    private LinkedHashSet requires;
+    private LinkedHashSet<String> requires;
 
     /**
      * The list of prerequisites for this package.
@@ -266,7 +266,7 @@ abstract class AbstractRPMMojo
      * @since 2.0-beta-3
      */
     @Parameter
-    private LinkedHashSet prereqs;
+    private LinkedHashSet<String> prereqs;
 
     /**
      * The list of obsoletes for this package.
@@ -274,13 +274,13 @@ abstract class AbstractRPMMojo
      * @since 2.0-beta-3
      */
     @Parameter
-    private LinkedHashSet obsoletes;
+    private LinkedHashSet<String> obsoletes;
 
     /**
      * The list of conflicts for this package.
      */
     @Parameter
-    private LinkedHashSet conflicts;
+    private LinkedHashSet<String> conflicts;
 
     /**
      * The relocation prefixes for this package.
@@ -307,7 +307,7 @@ abstract class AbstractRPMMojo
      * The list of file <a href="map-params.html">mappings</a>.
      */
     @Parameter
-    private List<Mapping> mappings = Collections.EMPTY_LIST;
+    private List<Mapping> mappings = Collections.emptyList();
 
     /**
      * The prepare scriptlet;
@@ -473,7 +473,7 @@ abstract class AbstractRPMMojo
      * Auxillary project artifacts.
      */
     @Parameter( required = true, readonly = true, property = "project.attachedArtifacts" )
-    private List attachedArtifacts;
+    private List<Artifact> attachedArtifacts;
 
     @Parameter( defaultValue = "${project}", readonly = true, required = true )
     protected MavenProject project;
@@ -929,24 +929,6 @@ abstract class AbstractRPMMojo
         }
     }
 
-    /**
-     * Handles the <i>scriptlet</i> and corresponding deprecated <i>script</i> and <i>file</i>. Will return a
-     * {@link Scriptlet} representing the coalesced stated.
-     */
-    private Scriptlet passiveScripts( final String name, Scriptlet scriptlet, final String script, final File file )
-    {
-        if ( scriptlet == null && ( script != null || file != null ) )
-        {
-            scriptlet = new Scriptlet();
-            scriptlet.setScript( script );
-            scriptlet.setScriptFile( file );
-            scriptlet.setSourceEncoding( sourceEncoding );
-            getLog().warn( "Deprecated <" + name + "> and/or <" + name + "Script> used - should use <" + name
-                               + "Scriptlet>" );
-        }
-
-        return scriptlet;
-    }
 
     /**
      * Determines the actual value for the <i>macro</i>. Will check both {@link #defineStatements} and
