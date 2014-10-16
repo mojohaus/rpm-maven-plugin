@@ -596,8 +596,11 @@ abstract class AbstractRPMMojo
         {
             getLog().info( "MOJO is disabled. Doing nothing." );
 
-            //FIXME, not sure if this is correctly way to get install/deploy to ignore the orgininal primary 'rpm' artifact
-            this.project.setPackaging( "pom" );
+            // FIXME, is it a correct way getting install/deploy to ignore the orgininal primary 'rpm' artifact?
+            if ( "rpm".equals( this.project.getPackaging() ) )
+            {
+                this.project.setPackaging( "pom" );
+            }
 
             return;
         }
@@ -928,7 +931,6 @@ abstract class AbstractRPMMojo
             throw new MojoExecutionException( workarea + " contains a space in path" );
         }
     }
-
 
     /**
      * Determines the actual value for the <i>macro</i>. Will check both {@link #defineStatements} and
