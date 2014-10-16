@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 /**
  * A description of a location where files to be packaged can be found.
- * 
+ *
  * @author Bob Allison
  * @author Carlos
  * @author Brett Okken
@@ -62,7 +62,7 @@ public class Source
 
     /**
      * {@link Pattern} compiled from {@link #targetArchitecture}.
-     * 
+     *
      * @since 2.0-beta-3
      */
     private Pattern targetArchitecturePattern;
@@ -70,35 +70,35 @@ public class Source
     /**
      * A {@link Pattern regular expression} that, if populated, indicates that the files defined are only applicable if
      * the expression {@link Pattern#matches(String, CharSequence) matches } the <code>RPMMojo.needOS</code> value.
-     * 
+     *
      * @since 2.0-beta-3
      */
     private String targetOSName;
 
     /**
      * {@link Pattern} compiled from {@link #targetOSName}.
-     * 
+     *
      * @since 2.0-beta-3
      */
     private Pattern targetOSNamePattern;
 
     /**
      * Indicates if the source should be filtered.
-     * 
+     *
      * @since 2.0
      */
     private boolean filter;
 
     /**
      * The {@link #location} with any/all macros {@link AbstractRPMMojo#evaluateMacro(String) evaluated}.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private String macroEvaluatedLocation;
 
     /**
      * Retrieve the location holding the file(s) to install.
-     * 
+     *
      * @return The location holding the file(s) to install.
      */
     public String getLocation()
@@ -108,7 +108,7 @@ public class Source
 
     /**
      * Set the location holding the file(s) to install.
-     * 
+     *
      * @param loc The new location holding the file(s) to install.
      */
     public void setLocation( String loc )
@@ -118,7 +118,7 @@ public class Source
 
     /**
      * Retrieve the list of files to include in the package.
-     * 
+     *
      * @return The list of files to include in the package.
      */
     public List<String> getIncludes()
@@ -128,7 +128,7 @@ public class Source
 
     /**
      * Set the list of files to include in the package.
-     * 
+     *
      * @param incl The new list of files to include in the package.
      */
     public void setIncludes( List<String> incl )
@@ -138,7 +138,7 @@ public class Source
 
     /**
      * Retrieve the list of files to exclude from the package.
-     * 
+     *
      * @return The list of files to exclude from the package.
      */
     public List<String> getExcludes()
@@ -148,7 +148,7 @@ public class Source
 
     /**
      * Set the list of files to exclude from the package.
-     * 
+     *
      * @param excl The new list of files to exclude from the package.
      */
     public void setExcludes( List<String> excl )
@@ -158,7 +158,7 @@ public class Source
 
     /**
      * Retrieve the default exclude status.
-     * 
+     *
      * @return <code>true</code> if the default excludes should be omitted.
      */
     public boolean getNoDefaultExcludes()
@@ -168,7 +168,7 @@ public class Source
 
     /**
      * Set the default exclude status.
-     * 
+     *
      * @param noDefExcl <code>true</code> if the default excludes should be omitted.
      */
     public void setNoDefaultExcludes( boolean noDefExcl )
@@ -193,7 +193,7 @@ public class Source
      * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link File#isFile() file}, not
      * a {@link File#isDirectory() directory}.
      * </p>
-     * 
+     *
      * @param destination The destination that the {@link #getLocation() location} should be in the final rpm.
      */
     public void setDestination( String destination )
@@ -216,7 +216,7 @@ public class Source
      * In order to be backwards compatible, the <i>targetArch</i> will be converted to {@link String#toLowerCase() lower
      * case} for the purpose of comparison.
      * </p>
-     * 
+     *
      * @param targetArch The target architecture to set.
      */
     public void setTargetArchitecture( String targetArch )
@@ -228,7 +228,7 @@ public class Source
 
     /**
      * Indicates if the {@link #getTargetArchitecture()} matches the <i>archicture</i>.
-     * 
+     *
      * @param architecture The target architecture for the rpm.
      * @return if the {@link #getTargetArchitecture()} {@link java.util.regex.Matcher#matches() matches} the
      *         <i>archicture</i>.
@@ -250,7 +250,7 @@ public class Source
     /**
      * Sets a {@link Pattern regular expression} that indicates that the files defined are only applicable if the
      * expression {@link Pattern#matches(String, CharSequence) matches } the operating system name.
-     * 
+     *
      * @param targetOSName The {@link #targetOSName} to set.
      * @since 2.0-beta-3
      */
@@ -280,7 +280,7 @@ public class Source
 
     /**
      * Indicates if the target OS name matches <i>osName</i>.
-     * 
+     *
      * @param osName The name of the os to match against the {@link #getTargetOSName()}.
      * @return if {@link #getTargetOSName()} {@link java.util.regex.Matcher#matches() matches} <i>osName</i>.
      * @since 2.0-beta-3

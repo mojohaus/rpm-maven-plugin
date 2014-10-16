@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * A base class to support <a href="http://rpm.org/api/4.4.2.2/triggers.html">triggers</a>.
- * 
+ *
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
@@ -43,7 +43,7 @@ public abstract class BaseTrigger
      * This is syntactically equivalent to a "Requires" specification (version numbers may be used). If multiple items
      * are given, the trigger is run when *any* of those conditions becomes true.
      * </p>
-     * 
+     *
      * @return Returns the {@link #triggers}.
      */
     public List<String> getTriggers()
@@ -53,7 +53,7 @@ public abstract class BaseTrigger
 
     /**
      * Sets the packages/versions to trigger on.
-     * 
+     *
      * @param triggers The {@link #triggers} to set.
      * @see #getTriggers()
      */
@@ -89,7 +89,7 @@ public abstract class BaseTrigger
 
     /**
      * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String)}.
-     * 
+     *
      * @param writer {@code PrintWriter} to write the trigger directive to.
      * @throws IOException
      */
@@ -101,7 +101,7 @@ public abstract class BaseTrigger
 
     /**
      * Provides the trigger specific directive.
-     * 
+     *
      * @return The implementation specific directive.
      */
     protected abstract String getDirective();

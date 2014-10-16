@@ -31,7 +31,7 @@ import java.io.Reader;
 /**
  * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional) contents
  * can be provided by either {@link #getScript()} or {@link #getScriptFile()}.
- * 
+ *
  * @author Brett Okken, Cerner Corp.
  * @since 2.0-beta-4
  */
@@ -39,35 +39,35 @@ public class Scriptlet
 {
     /**
      * Optional subpackage.
-     * 
+     *
      * @see #getSubpackage()
      */
     private String subpackage;
 
     /**
      * Program to execute script.
-     * 
+     *
      * @see #getProgram()
      */
     private String program;
 
     /**
      * Contents of the script. Mutually exclusive with {@link #scriptFile}.
-     * 
+     *
      * @see #getScript()
      */
     private String script;
 
     /**
      * Script to execute. Mutually exclusive with {@link #script}.
-     * 
+     *
      * @see #getScriptFile()
      */
     private File scriptFile;
 
     /**
      * Encoding of {@link #scriptFile}.
-     * 
+     *
      * @see #getFileEncoding().
      */
     private String fileEncoding;
@@ -81,7 +81,7 @@ public class Scriptlet
 
     /**
      * The optional subpackage. This is passed as a <i>-n</i> argument to the scriptlet directive.
-     * 
+     *
      * @return Returns the {@link #subpackage}.
      */
     public String getSubpackage()
@@ -99,7 +99,7 @@ public class Scriptlet
 
     /**
      * The program to use to execute the script. This is passed as a <i>-p</i> argument to the scriptlet directive.
-     * 
+     *
      * @return Returns the {@link #program}.
      */
     public String getProgram()
@@ -117,7 +117,7 @@ public class Scriptlet
 
     /**
      * The contents of the script as a {@code String}. This value will override anything at {@link #getScriptFile()}.
-     * 
+     *
      * @return Returns the {@link #script}.
      */
     public String getScript()
@@ -135,7 +135,7 @@ public class Scriptlet
 
     /**
      * The contents of the script as a {@code File}. This will be ignored if {@link #getScript()} is populated.
-     * 
+     *
      * @return Returns the {@link #scriptFile}.
      */
     public File getScriptFile()
@@ -154,7 +154,7 @@ public class Scriptlet
     /**
      * The encoding to use to read {@link #getScriptFile()}. If {@code null}, the default character encoding for th
      * platform will be used.
-     * 
+     *
      * @return Returns the {@link #fileEncoding}.
      */
     public String getFileEncoding()
@@ -186,7 +186,7 @@ public class Scriptlet
 
     /**
      * Writes the scriptlet.
-     * 
+     *
      * @param writer {@code PrintWriter} to write content to.
      * @param directive The directive for the scriptlet.
      * @throws IOException
@@ -211,7 +211,7 @@ public class Scriptlet
 
     /**
      * Builds the scriptlet line including any optional args.
-     * 
+     *
      * @param directive The directive for the scriptlet.
      * @return The scriptlet line - this does not include the script.
      */
@@ -237,7 +237,7 @@ public class Scriptlet
 
     /**
      * Writes the content (either {@link #getScript()} or {@link #getScriptFile()}) to <i>writer</i>.
-     * 
+     *
      * @param writer {@code PrintWriter} to write content to.
      * @throws IOException
      */

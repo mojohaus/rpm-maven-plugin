@@ -35,7 +35,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
  * Utility that uses <a href="http://expect.nist.gov/">expect</a> to sign rpms automatically (no user interaction).
- * 
+ *
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
@@ -58,7 +58,7 @@ final class RPMSigner
 
     /**
      * Constructor takes all necessary attributes to sign an rpm.
-     * 
+     *
      * @param gpgName The name of the gpg key in the rpm database.
      * @param passphrase The passphrase for the gpg key.
      * @param log Used for logging information in the signing process.
@@ -73,7 +73,7 @@ final class RPMSigner
 
     /**
      * Signs the rpm using the gpgName and passphrase given. All output from the signing will be written to <i>log</i>.
-     * 
+     *
      * @param rpm RPM file to sign. Must exist and be readable.
      * @throws IOException
      */
@@ -120,7 +120,7 @@ final class RPMSigner
 
     /**
      * Writes the expect "script".
-     * 
+     *
      * @param rpm The rpm to sign.
      * @return The expect script as a {@code byte[]}.
      * @throws IOException

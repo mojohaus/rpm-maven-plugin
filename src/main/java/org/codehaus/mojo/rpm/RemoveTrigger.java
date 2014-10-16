@@ -21,7 +21,7 @@ package org.codehaus.mojo.rpm;
 
 /**
  * Trigger at removal of a package (%triggerun).
- * 
+ *
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */

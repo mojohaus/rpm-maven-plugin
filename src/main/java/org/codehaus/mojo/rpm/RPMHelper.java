@@ -31,7 +31,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 
 /**
  * Utility to interact with rpm and rpmbuild commands.
- * 
+ *
  * @author Brett Okken
  * @since 2.0
  */
@@ -100,7 +100,7 @@ final class RPMHelper
      * <li>{@link AbstractRPMMojo#getWorkarea() workarea}</li>
      * </ul>
      * </p>
-     * 
+     *
      * @throws MojoExecutionException if an error occurs
      */
     public void buildPackage()
@@ -173,7 +173,7 @@ final class RPMHelper
 
     /**
      * Evaluates the <i>macro</i> by executing <code>rpm --eval %<i>macro</i></code>.
-     * 
+     *
      * @param macro The macro to evaluate.
      * @return The result of rpm --eval.
      * @throws MojoExecutionException

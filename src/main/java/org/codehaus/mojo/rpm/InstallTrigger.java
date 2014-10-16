@@ -21,7 +21,7 @@ package org.codehaus.mojo.rpm;
 
 /**
  * Trigger at install of a package (%triggerin).
- * 
+ *
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */

@@ -37,7 +37,7 @@ import org.apache.maven.plugin.Mojo;
  * <li>If a modifier exists and does not end with <i>SNAPSHOT</i>, <code>"_1"</code> will be appended to end.</li>
  * </ul>
  * </p>
- * 
+ *
  * @author Brett Okken
  * @since 2.0
  */
@@ -85,7 +85,7 @@ final class VersionHelper
 
     /**
      * Calculates and formats the version and release attributes based on the documented rules.
-     * 
+     *
      * @return The calculated/formatted version attributes.
      */
     Version calculateVersion()

@@ -30,7 +30,7 @@ import org.apache.maven.project.MavenProjectHelper;
 
 /**
  * Construct the RPM file and attaches it as a secondary artifact.
- * 
+ *
  * @author Brett Okken, Cerner Corp.
  * @since 2.0-beta-2
  */
@@ -50,7 +50,7 @@ public class AttachedRPMMojo
 
     /**
      * Attach the rpm as a secondary artifact.
-     * 
+     *
      * @see MavenProjectHelper#attachArtifact(org.apache.maven.project.MavenProject, String, String, java.io.File)
      */
     protected void afterExecution()
@@ -67,7 +67,7 @@ public class AttachedRPMMojo
 
     /**
      * Returns the <a href="../../../../../attached-rpm-mojo.html#classifier">classifier</a> for the secondary artifact.
-     * 
+     *
      * @return The classifier.
      */
     protected String getClassifier()

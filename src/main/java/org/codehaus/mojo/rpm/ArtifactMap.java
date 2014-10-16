@@ -36,7 +36,7 @@ public class ArtifactMap
 
     /**
      * Retrieve the list of classifiers to package.
-     * 
+     *
      * @return The list of classifiers to package.
      */
     public List<String> getClassifiers()
@@ -46,7 +46,7 @@ public class ArtifactMap
 
     /**
      * Set the list of classifiers to package.
-     * 
+     *
      * @param clist The new list of classifiers to package.
      */
     public void setClassifiers( List<String> clist )
