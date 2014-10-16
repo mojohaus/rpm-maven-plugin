@@ -36,12 +36,13 @@ import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.archiver.ArchiveEntry;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Utility to interact with files (source, dependencies, artifacts, etc.).
- * 
+ *
  * @author Brett Okken
  * @since 2.0
  */
@@ -56,7 +57,7 @@ final class FileHelper
 
     /**
      * {@code Pattern} to identify macros.
-     * 
+     *
      * @since 2.1-alpha-1
      */
     private static final Pattern MACRO_PATTERN = Pattern.compile( "%\\{([^}]*)\\}" );
@@ -82,7 +83,7 @@ final class FileHelper
 
     /**
      * Copy the files from the various mapping sources into the build root.
-     * 
+     *
      * @throws MojoExecutionException if a problem occurs
      * @throws MojoFailureException
      */
@@ -169,7 +170,7 @@ final class FileHelper
 
     /**
      * Copy a set of files.
-     * 
+     *
      * @param src The file or directory to start copying from
      * @param srcName The src file name to be used in the copy, only used if the src is not a directory.
      * @param dest The destination directory
@@ -214,7 +215,7 @@ final class FileHelper
             copier.setFilter( filter );
             copier.setFilterWrappers( mojo.getFilterWrappers() );
 
-            Map<String, Object> copiedFilesMap = copier.getFiles();
+            Map<String, ArchiveEntry> copiedFilesMap = copier.getFiles();
 
             // Perform the copy
             copier.createArchive();
@@ -241,7 +242,7 @@ final class FileHelper
 
     /**
      * Copy an artifact.
-     * 
+     *
      * @param art The artifact to copy
      * @param dest The destination directory
      * @param stripVersion Whether or not to strip the artifact version from the filename
@@ -284,7 +285,7 @@ final class FileHelper
 
     /**
      * Make a list of the artifacts to package in this mapping.
-     * 
+     *
      * @param am The artifact mapping information
      * @return The list of artifacts to package
      */
@@ -321,7 +322,7 @@ final class FileHelper
 
     /**
      * Make a list of the dependencies to package in this mapping.
-     * 
+     *
      * @param d The artifact mapping information
      * @return The list of artifacts to package
      */
@@ -358,7 +359,7 @@ final class FileHelper
 
     /**
      * Installs the {@link Mapping#getSources() sources} to <i>dest</i>
-     * 
+     *
      * @param map The <tt>Mapping</tt> to process the {@link Source sources} for.
      * @param dest The destination directory for the sources.
      * @throws MojoExecutionException
@@ -473,7 +474,7 @@ final class FileHelper
     /**
      * Determine if there are any macros in the <i>value</i> and replace any/all occurrences with the
      * {@link AbstractRPMMojo#evaluateMacro(String) evaluated} value.
-     * 
+     *
      * @param value String to replace macros in.
      * @return Result of evaluating all macros in <i>value</i>.
      * @throws MojoExecutionException
@@ -498,7 +499,7 @@ final class FileHelper
 
     /**
      * Determine if the dependency matches an include or exclude list.
-     * 
+     *
      * @param dep The dependency to check
      * @param list The list to check against
      * @return <code>true</code> if the dependency was found on the list
