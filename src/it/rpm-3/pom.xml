@@ -46,7 +46,7 @@
         <configuration>
           <distribution>My App</distribution>
           <group>Application/Collectors</group>
-          <copyright>(c) me and myself 1945</copyright>
+          <license>(c) me and myself 1945</license>
           <defineStatements>
             <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
           </defineStatements>
