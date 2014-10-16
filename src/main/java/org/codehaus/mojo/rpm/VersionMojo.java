@@ -26,7 +26,6 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -35,7 +34,7 @@ import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 
 /**
  * Makes the rpm version and release attributes available as properties.
- * 
+ *
  * @author Brett Okken
  * @since 2.0
  */
@@ -47,13 +46,13 @@ public class VersionMojo
     /**
      * The maven project.
      */
-    @Parameter( required = true, readonly = true, property = "project" )
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     private MavenProject project;
 
     /**
      * The maven session.
      */
-    @Component
+    @Parameter( defaultValue = "${session}", readonly = true, required = true )
     private MavenSession session;
 
     /**

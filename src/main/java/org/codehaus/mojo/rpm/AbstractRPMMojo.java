@@ -440,7 +440,7 @@ abstract class AbstractRPMMojo
     /**
      * @since 2.0
      */
-    @Component
+    @Parameter( defaultValue = "${session}", readonly = true, required = true )
     private MavenSession session;
 
     /**
@@ -475,7 +475,7 @@ abstract class AbstractRPMMojo
     @Parameter( required = true, readonly = true, property = "project.attachedArtifacts" )
     private List attachedArtifacts;
 
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     protected MavenProject project;
 
     /**
