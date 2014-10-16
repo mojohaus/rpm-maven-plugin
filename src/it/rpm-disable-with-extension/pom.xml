@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>MRPM-117</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>rpm</packaging>
+
+  <description>Verification for MRPM-117</description>
+
+  <inceptionYear>2013</inceptionYear>
+  <organization>
+    <name>my org</name>
+    <url>www.my.org</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.grizzly.samples</groupId>
+      <artifactId>grizzly-comet-counter</artifactId>
+      <version>2.2.5</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <extensions>true</extensions>
+        <configuration>
+          <disabled>true</disabled>
+          <distribution>My App</distribution>
+          <group>Application/Collectors</group>
+          <defineStatements>
+            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+          </defineStatements>
+          <needarch>false</needarch>
+          <defaultUsername>myuser</defaultUsername>
+          <defaultGroupname>mygroup</defaultGroupname>
+          <mappings>
+            <mapping>
+              <directory>/usr/myusr/app</directory>
+            </mapping>
+          </mappings>
+          <preinstallScriptlet/>
+          <postinstallScriptlet>
+            <scriptFile>src/main/bin/doesnotexist.sh</scriptFile>
+          </postinstallScriptlet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
