@@ -170,18 +170,6 @@ public class Mapping
     }
 
     /**
-     * Retrieve the configuration status. This value is <code>true</code> if the file(s) in this mapping are
-     * configuration files.
-     *
-     * @return The configuration status.
-     * @deprecated use {@link #getConfiguration()}
-     */
-    public boolean isConfiguration()
-    {
-        return configuration == null || !"FALSE".equalsIgnoreCase( configuration );
-    }
-
-    /**
      * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}.
      * However, modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
      *
@@ -480,7 +468,7 @@ public class Mapping
     List<String> getCopiedFileNamesRelativeToDestination()
     {
         return this.copiedFileNamesRelativeToDestination != null ? this.copiedFileNamesRelativeToDestination
-                        : Collections.EMPTY_LIST;
+                        : EMPTY_STRING_LIST;
     }
 
     /**
@@ -525,10 +513,13 @@ public class Mapping
      *         <code>null</code>, but may be immutable.
      * @since 2.0-beta-3
      */
+
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
+
     List<String> getLinkedFileNamesRelativeToDestination()
     {
         return this.linkedFileNamesRelativeToDestination != null ? this.linkedFileNamesRelativeToDestination
-                        : Collections.EMPTY_LIST;
+                        : EMPTY_STRING_LIST;
     }
 
     /**
