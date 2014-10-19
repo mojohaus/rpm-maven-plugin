@@ -28,6 +28,7 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.plexus.archiver.ArchiveEntry;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
+import org.codehaus.plexus.components.io.resources.PlexusIoFileResource;
 
 /**
  * Extends the DirectoryArchiver and adds the ability to filter each file that is
@@ -125,7 +126,7 @@ final class FilteringDirectoryArchiver
                 return;
             }
 
-            File inFile = entry.getFile();
+            File inFile = ((PlexusIoFileResource)entry.getResource()).getFile();
             File outFile = new File( vPath );
 
             if ( !inFile.isDirectory() )
