@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
+import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.plexus.archiver.ArchiveEntry;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
 import org.codehaus.plexus.util.FileUtils;
@@ -41,7 +42,7 @@ final class FilteringDirectoryArchiver
 {
     private MavenFileFilter mavenFileFilter;
 
-    private List<FileUtils.FilterWrapper> filterWrappers;
+    private List<FilterWrapper> filterWrappers;
 
     private boolean filter;
 
@@ -64,7 +65,7 @@ final class FilteringDirectoryArchiver
     /**
      * @return Returns the {@link #filterWrappers}.
      */
-    public List<FileUtils.FilterWrapper> getFilterWrappers()
+    public List<FilterWrapper> getFilterWrappers()
     {
         return this.filterWrappers;
     }
@@ -72,7 +73,7 @@ final class FilteringDirectoryArchiver
     /**
      * @param filterWrappers The {@link #filterWrappers} to set.
      */
-    public void setFilterWrappers( List<FileUtils.FilterWrapper> filterWrappers )
+    public void setFilterWrappers( List<FilterWrapper> filterWrappers )
     {
         this.filterWrappers = filterWrappers;
     }
@@ -95,8 +96,11 @@ final class FilteringDirectoryArchiver
 
     /**
      * {@inheritDoc}
+     *
+     * @throws IOException
      */
     public void resetArchiver()
+        throws IOException
     {
         filterWrappers = null;
         filter = false;
