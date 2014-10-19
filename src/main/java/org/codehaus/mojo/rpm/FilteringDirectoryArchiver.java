@@ -28,7 +28,6 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.plexus.archiver.ArchiveEntry;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Extends the DirectoryArchiver and adds the ability to filter each file that is

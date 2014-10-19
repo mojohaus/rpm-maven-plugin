@@ -22,7 +22,6 @@ package org.codehaus.mojo.rpm;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +47,8 @@ import org.codehaus.plexus.util.StringUtils;
  */
 final class FileHelper
 {
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
+
     /**
      * Message for exception indicating that a {@link Source} has a {@link Source#getDestination() destination}, but
      * refers to a {@link File#isDirectory() directory}.
@@ -180,7 +181,8 @@ final class FileHelper
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl, boolean filter )
+    private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl,
+                                     boolean filter )
         throws MojoExecutionException
     {
         try
@@ -419,16 +421,17 @@ final class FileHelper
                 // exist in the filesystem of the build machine
                 if ( src instanceof SoftlinkSource )
                 {
-                    List sources = (List) linkTargetToSources.get( relativeDestination );
+                    SoftlinkSource softlinkSource = (SoftlinkSource) src;
+                    List<SoftlinkSource> sources = linkTargetToSources.get( relativeDestination );
                     if ( sources == null )
                     {
-                        sources = new LinkedList();
+                        sources = new LinkedList<SoftlinkSource>();
                         linkTargetToSources.put( relativeDestination, sources );
                     }
 
-                    sources.add( src );
+                    sources.add( softlinkSource );
 
-                    ( (SoftlinkSource) src ).setSourceMapping( map );
+                    softlinkSource.setSourceMapping( map );
                     map.setHasSoftLinks( true );
                 }
                 else if ( locationFile.exists() )
@@ -436,12 +439,12 @@ final class FileHelper
                     final String destination = src.getDestination();
                     if ( destination == null )
                     {
-                        List elist = src.getExcludes();
+                        List<String> elist = src.getExcludes();
                         if ( !src.getNoDefaultExcludes() )
                         {
                             if ( elist == null )
                             {
-                                elist = new ArrayList();
+                                elist = new ArrayList<String>();
                             }
                             elist.addAll( FileUtils.getDefaultExcludesAsList() );
                         }
@@ -458,7 +461,7 @@ final class FileHelper
                                                                                         macroEvaluatedLocation } ) );
                         }
 
-                        copySource( locationFile, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+                        copySource( locationFile, destination, dest, EMPTY_STRING_LIST, EMPTY_STRING_LIST,
                                     src.isFilter() );
 
                         map.addCopiedFileNameRelativeToDestination( destination );
