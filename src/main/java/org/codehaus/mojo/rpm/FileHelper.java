@@ -411,12 +411,14 @@ final class FileHelper
                     continue;
                 }
 
-                final String macroEvaluatedLocation = evaluateMacros( src.getLocation() );
-                src.setMacroEvaluatedLocation( macroEvaluatedLocation );
+                final File macroEvaluatedLocation = new File( evaluateMacros( src.getLocation() ) );
+                src.setMacroEvaluatedLocation( macroEvaluatedLocation.getPath() );
 
                 final File locationFile =
-                    macroEvaluatedLocation.startsWith( "/" ) ? new File( macroEvaluatedLocation )
-                                    : new File( mojo.project.getBasedir(), macroEvaluatedLocation );
+                                macroEvaluatedLocation.isAbsolute() ? macroEvaluatedLocation
+                                    : new File( mojo.project.getBasedir(), macroEvaluatedLocation.getPath() );
+                //better with just macroEvaluatedLocation.getAbsoluteFile(), but not tested yet
+
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
                 if ( src instanceof SoftlinkSource )
