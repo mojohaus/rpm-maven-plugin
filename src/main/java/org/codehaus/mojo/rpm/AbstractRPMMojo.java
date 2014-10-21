@@ -970,7 +970,7 @@ abstract class AbstractRPMMojo
         try
         {
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
-            PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
+            PrintWriter spec = new UnixPrintWriter( new FileWriter( specf ) );
             try
             {
                 new SpecWriter( this, spec ).writeSpecFile();
