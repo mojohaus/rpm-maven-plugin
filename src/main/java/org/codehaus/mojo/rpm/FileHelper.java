@@ -552,4 +552,31 @@ final class FileHelper
         // Not found
         return false;
     }
+
+    //
+    // Convenient utils to convert to cygwin if needed
+    //
+
+    public static final String UNIX_FILE_SEPARATOR = "/";
+
+    public static String toUnixPath( File path )
+    {
+        return toUnixPath( path.getAbsolutePath() );
+    }
+
+    public static String toUnixPath( String path )
+    {
+        path = StringUtils.replace( path,  "\\", "/" );
+
+        String [] tokens = StringUtils.split( path, ":" );
+
+        if ( tokens.length == 2 && tokens[0].length() == 1 )
+        {
+            StringBuilder buffer = new StringBuilder();
+            buffer.append( "/cygdrive/" ).append( tokens[0] ).append( tokens[1] );
+            path = buffer.toString();
+        }
+
+        return path;
+    }
 }

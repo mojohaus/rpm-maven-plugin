@@ -116,9 +116,9 @@ final class RPMHelper
         cl.createArg().setValue( "--target" );
         cl.createArg().setValue( mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS() );
         cl.createArg().setValue( "--buildroot" );
-        cl.createArg().setValue( mojo.getRPMBuildroot().getAbsolutePath() );
+        cl.createArg().setValue( FileHelper.toUnixPath( mojo.getRPMBuildroot() ) );
         cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_topdir " + workarea.getAbsolutePath() );
+        cl.createArg().setValue( "_topdir " + FileHelper.toUnixPath( workarea ) );
 
         // maintain passive behavior for keyPassphrase not being present
         final String keyname = mojo.getKeyname();

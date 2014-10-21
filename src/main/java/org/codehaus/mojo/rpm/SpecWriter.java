@@ -107,7 +107,7 @@ final class SpecWriter
         {
             spec.println( "BuildArch: " + mojo.getTargetArch() );
         }
-        spec.println( "BuildRoot: " + mojo.getRPMBuildroot().getAbsolutePath() );
+        spec.println( "BuildRoot: " + FileHelper.toUnixPath( mojo.getRPMBuildroot() ) );
         spec.println();
         spec.println( "%description" );
         if ( mojo.getDescription() != null )
@@ -202,7 +202,7 @@ final class SpecWriter
             {
                 log.debug( "writing attribute string for identified files in directory: " + destination );
 
-                final String baseFileString = attrString + "  \"" + destination + File.separatorChar;
+                final String baseFileString = attrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
 
                 // only list files if requested (directoryIncluded == false) or we have to
                 if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() ) )
@@ -253,10 +253,10 @@ final class SpecWriter
      */
     private void writeMove()
     {
-        final String tmpBuildRoot = mojo.getBuildroot().getAbsolutePath();
-
+        final String tmpBuildRoot = FileHelper.toUnixPath( mojo.getBuildroot() );
         spec.println();
         spec.println( "%install" );
+        spec.println();
         spec.println( "if [ -d $RPM_BUILD_ROOT ];" );
         spec.println( "then" );
         spec.print( "  mv " );
@@ -387,8 +387,8 @@ final class SpecWriter
         final String[] files = scanner.getIncludedFiles();
         final String sourceLocation = linkSource.getLocation();
 
-        final String targetPrefix = sourceLocation + File.separatorChar;
-        final String sourcePrefix = directory + File.separatorChar;
+        final String targetPrefix = sourceLocation + FileHelper.UNIX_FILE_SEPARATOR;
+        final String sourcePrefix = directory + FileHelper.UNIX_FILE_SEPARATOR;
 
         for ( String file : files )
         {
