@@ -1,0 +1,119 @@
+ ------
+ Maven RPM Plugin - Identification Parameters
+ ------
+ Bob Allison
+ ------
+ 25 July 2006
+ -----
+
+Identification Parameters
+
+  The parameters described in this page provide the identification of the
+  RPM package.  This information will be present in the package file and can be
+  viewed with the "<<<rpm -i>>>" command.
+
+* {name}
+
+  Can be used to set the Name of the RPM package. Defaults to the artifactId of 
+  the Maven project.
+
+* {version}
+
+  The version number to use for the RPM package.  By default, this is the
+  project version.  This value cannot contain a dash (<<<->>>) due to
+  contraints in the RPM file naming convention.  Any specified value will
+  be truncated at the first dash.
+
+* {changelogFile}
+
+  The file whose content will be put after %changelog in SPEC file.
+  The content will not be validated and must follow the syntax for RPM:
+
+--------------------------
+     * [dow mon dd yyyy] [packager [email address]] [RPM version]
+     -list of changes
+--------------------------
+
+  The list of changes can be as long as is necessary, but this is intended to be
+  a list of changes for the RPM itself and not for the package.
+
+* {release}
+
+  The release number of the RPM.
+
+  Beginning with release 2.0-beta-2,  this is an optional parameter. By default, the release will be generated from the
+  modifier portion of the {{{version}project version}} using the following rules:
+
+     * If no modifier exists, the release will be <<<1>>>.
+
+     * If the modifier ends with <<<SNAPSHOT>>>, the timestamp (in UTC) of the build will be appended to end.
+
+     * All instances of <<<'-'>>> in the modifier will be replaced with <<<'_'>>>.
+
+     * If a modifier exists and does not end with <<<SNAPSHOT>>>, <<<"_1">>> will be appended to end.
+
+* {license}
+
+  A one line license information string for the RPM, like <<<GPLv3>>>. Defaults to
+  <<<(c) ${project.inceptionYear} ${project.organization}>>>.
+
+* {copyright} <(deprecated)>
+
+  Deprecated: use {{{./source-params.html#license}license}} instead.
+
+* {distribution}
+
+  A one-line string identifying the distribution of which this RPM is a part.
+
+* {group}
+
+  A string which identifies the software group for this package.  This can be
+  used by GUI tools to group packages for display.  Check the RPM documentation
+  (installed in <<</usr/share/doc/rpm->>><version><<</GROUPS>>> on most Linuxes)
+  for a list of current groups.
+
+* {icon}
+
+  The file (GIF or XPM) with an icon for the package.  This can be used by GUI
+  tools to display an icon for the package.
+
+* {needarch}
+
+  The target architecture for the rpm. The default value is <<<noarch>>>.
+
+  For passivity purposes, a value of <<<true>>> or <<<false>>> will indicate whether the
+  architecture of the build machine will be used. Any other value will set the target
+  architecture of the rpm.
+
+  In general, this should only be necessary in the case of compiled code from languages
+  such as C or C++, and should not be specified if the executable content of the package
+  consists only of scripts (such as shell, perl, or python) and/or Java code.
+
+  This can be used in conjunction with {{{./source-params.html#targetArchitecture}Source targetArchitecture}}
+  to flex the contents of the rpm based on the architecture.
+
+* {targetOS}
+
+  The target os for building the RPM. By default, this will be populated to
+  the System property <<<os.name>>>.
+
+  This can be used in conjunction with {{{./source-params.html#targetOSName}Source targetOSName}}
+  to flex the contents of the rpm based on operating system.
+
+* {targetVendor}
+
+  The target vendor for building the RPM. By default, this will be populated to the result
+  of <<<rpm -E %\{_host_vendor\}>>>.
+
+* {packager}
+
+  The name of the person or group which is creating the package.  By default,
+  this will be taken from the name specified in the POM's organization
+  information.
+
+* {repackJars}
+
+  If set to <<<false>>> a <<<%define __jar_repack 0>>> statement will be
+  added to the SPEC file to disable repackaging of jar files when creating
+  the RPM. This defaults to <<<false>>>. This will only have effect with
+  version 9.0.0 or later releases of <<<redhat-rpm-config>>> (RHEL 6).
