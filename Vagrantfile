@@ -8,8 +8,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box"
 
   config.vm.provider "virtualbox" do |vb|
-      vb.memory = 1024
-      vb.customize ["modifyvm", :id, "--cpus", 2]
+      vb.memory = 2048
+      vb.customize ["modifyvm", :id, "--ioapic", "on", "--cpus", 2]
   end
   config.vm.provider "parallels" do |prl|
       prl.customize ["set", :id, "--memsize", 1024]

@@ -46,6 +46,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
+import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
@@ -461,7 +462,7 @@ abstract class AbstractRPMMojo
      * @since 2.0
      * @see #mavenFileFilter
      */
-    private List<FileUtils.FilterWrapper> defaultFilterWrappers;
+    private List<FilterWrapper> defaultFilterWrappers;
 
     /**
      * The primary project artifact.
@@ -969,7 +970,7 @@ abstract class AbstractRPMMojo
         try
         {
             getLog().info( "Creating spec file " + specf.getAbsolutePath() );
-            PrintWriter spec = new PrintWriter( new FileWriter( specf ) );
+            PrintWriter spec = new UnixPrintWriter( new FileWriter( specf ) );
             try
             {
                 new SpecWriter( this, spec ).writeSpecFile();
@@ -1406,7 +1407,7 @@ abstract class AbstractRPMMojo
      *
      * @return Returns the {@code FilterWrapper}s to use for filtering resources.
      */
-    final List<FileUtils.FilterWrapper> getFilterWrappers()
+    final List<FilterWrapper> getFilterWrappers()
     {
         return this.defaultFilterWrappers;
     }

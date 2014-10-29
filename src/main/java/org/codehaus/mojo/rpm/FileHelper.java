@@ -22,7 +22,6 @@ package org.codehaus.mojo.rpm;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +47,8 @@ import org.codehaus.plexus.util.StringUtils;
  */
 final class FileHelper
 {
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
+
     /**
      * Message for exception indicating that a {@link Source} has a {@link Source#getDestination() destination}, but
      * refers to a {@link File#isDirectory() directory}.
@@ -180,7 +181,8 @@ final class FileHelper
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl, boolean filter )
+    private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl,
+                                     boolean filter )
         throws MojoExecutionException
     {
         try
@@ -409,26 +411,29 @@ final class FileHelper
                     continue;
                 }
 
-                final String macroEvaluatedLocation = evaluateMacros( src.getLocation() );
-                src.setMacroEvaluatedLocation( macroEvaluatedLocation );
+                final File macroEvaluatedLocation = new File( evaluateMacros( src.getLocation() ) );
+                src.setMacroEvaluatedLocation( macroEvaluatedLocation.getPath() );
 
                 final File locationFile =
-                    macroEvaluatedLocation.startsWith( "/" ) ? new File( macroEvaluatedLocation )
-                                    : new File( mojo.project.getBasedir(), macroEvaluatedLocation );
+                                macroEvaluatedLocation.isAbsolute() ? macroEvaluatedLocation
+                                    : new File( mojo.project.getBasedir(), macroEvaluatedLocation.getPath() );
+                //better with just macroEvaluatedLocation.getAbsoluteFile(), but not tested yet
+
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
                 if ( src instanceof SoftlinkSource )
                 {
-                    List sources = (List) linkTargetToSources.get( relativeDestination );
+                    SoftlinkSource softlinkSource = (SoftlinkSource) src;
+                    List<SoftlinkSource> sources = linkTargetToSources.get( relativeDestination );
                     if ( sources == null )
                     {
-                        sources = new LinkedList();
+                        sources = new LinkedList<SoftlinkSource>();
                         linkTargetToSources.put( relativeDestination, sources );
                     }
 
-                    sources.add( src );
+                    sources.add( softlinkSource );
 
-                    ( (SoftlinkSource) src ).setSourceMapping( map );
+                    softlinkSource.setSourceMapping( map );
                     map.setHasSoftLinks( true );
                 }
                 else if ( locationFile.exists() )
@@ -436,12 +441,12 @@ final class FileHelper
                     final String destination = src.getDestination();
                     if ( destination == null )
                     {
-                        List elist = src.getExcludes();
+                        List<String> elist = src.getExcludes();
                         if ( !src.getNoDefaultExcludes() )
                         {
                             if ( elist == null )
                             {
-                                elist = new ArrayList();
+                                elist = new ArrayList<String>();
                             }
                             elist.addAll( FileUtils.getDefaultExcludesAsList() );
                         }
@@ -458,7 +463,7 @@ final class FileHelper
                                                                                         macroEvaluatedLocation } ) );
                         }
 
-                        copySource( locationFile, destination, dest, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+                        copySource( locationFile, destination, dest, EMPTY_STRING_LIST, EMPTY_STRING_LIST,
                                     src.isFilter() );
 
                         map.addCopiedFileNameRelativeToDestination( destination );
@@ -546,5 +551,32 @@ final class FileHelper
 
         // Not found
         return false;
+    }
+
+    //
+    // Convenient utils to convert to cygwin if needed
+    //
+
+    public static final String UNIX_FILE_SEPARATOR = "/";
+
+    public static String toUnixPath( File path )
+    {
+        return toUnixPath( path.getAbsolutePath() );
+    }
+
+    public static String toUnixPath( String path )
+    {
+        path = StringUtils.replace( path,  "\\", "/" );
+
+        String [] tokens = StringUtils.split( path, ":" );
+
+        if ( tokens.length == 2 && tokens[0].length() == 1 )
+        {
+            StringBuilder buffer = new StringBuilder();
+            buffer.append( "/cygdrive/" ).append( tokens[0] ).append( tokens[1] );
+            path = buffer.toString();
+        }
+
+        return path;
     }
 }
