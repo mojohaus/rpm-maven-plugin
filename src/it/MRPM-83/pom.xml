@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>MRPM-83</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>rpm</packaging>
+
+  <inceptionYear>2009</inceptionYear>
+  <organization>
+    <name>my org</name>
+    <url>www.my.org</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <extensions>true</extensions>
+        <configuration>
+          <distribution>My App</distribution>
+          <group>Application/Collectors</group>
+          <license>(c) me and myself 1945</license>
+          <defineStatements>
+            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+          </defineStatements>
+          <needarch>somearch</needarch>
+          <targetOS>someOS</targetOS>
+          <defaultUsername>myuser</defaultUsername>
+          <defaultGroupname>mygroup</defaultGroupname>
+          <mappings>
+            <mapping>
+              <directory>/usr/my_package_root</directory>
+              <sources>
+                <softlinkSource>
+                  <location>/var/log</location>
+                  <destination>logs</destination>
+                </softlinkSource>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/usr/my_package_root/bin</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <filemode>600</filemode>
+              <sources>
+                <source>
+                  <location>src/main/bin/start.sh</location>
+                </source>
+                <source>
+                  <location>src/main/bin2/rename.sh</location>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
