@@ -50,9 +50,9 @@ if (lines.size() != 15)
     /-rwxr-xr-x\s.*\smyuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/filter.txt/,
     /-rwxr-xr-x\s.*\smyuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name-${System.getProperty("os.name")}.sh/,
     /-rwxr-xr-x\s.*\smyuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name.sh/,
-    /lrwxr.*\s.*\smyuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/oldname.sh -> name.sh/,
+    /lrwxr.*\s.*\smyuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/oldname.sh -> (\/usr\/myusr\/app\/bin\/name.sh|name.sh)/,
     /-rwxr-xr-x\s.*\smyuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/start.sh/,
-    /l.*\s\/tmp\/myapp\/somefile2 -> \/tmp\/myapp\/somefile/,
+    /l.*\s\/tmp\/myapp\/somefile2 -> (\/tmp\/myapp\/somefile|somefile)/,
     /-.*\s\/usr\/myusr\/app\/lib\/grizzly-comet-counter.war/
 ].each {
     if (!lines*.matches(it).contains(true))

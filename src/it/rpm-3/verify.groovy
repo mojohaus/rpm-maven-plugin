@@ -23,7 +23,7 @@ lines = proc.in.text.readLines()
         /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name-someOS.sh/,
         /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name-somearch.sh/,
         /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/name.sh/,
-        /lrwx.*\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/oldname.sh -> \/usr\/myusr\/app\/bin\/name.sh/,
+        /lrwx.*\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/oldname.sh -> (\/usr\/myusr\/app\/bin\/name.sh|name.sh)/,
         /-rwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/start.sh/,
         /drwxr-xr-x\s.*myuser\s+mygroup\s.*\s\/usr\/myusr\/app\/bin\/subdir/
 ].each {

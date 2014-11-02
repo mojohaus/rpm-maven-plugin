@@ -22,7 +22,7 @@ proc.waitFor()
 lines = proc.in.text.readLines()
 
 [
-        /l.*${datadirpath}\/app2 -> \/usr\/mygrp\/app/,
+        /l.*${datadirpath}\/app2 -> (\/usr\/mygrp\/app|\.\.\/mygrp\/app)/,
         /d.*\/usr\/mygrp/,
         /d.*\/usr\/mygrp\/app\/lib/,
         /-.*\/usr\/mygrp\/app\/lib\/grizzly-comet-counter.war/,
