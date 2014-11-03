@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.codehaus.mojo.rpm.its</groupId>
-  <artifactId>MRPM-83</artifactId>
+  <artifactId>MRPM-150</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>rpm</packaging>
 
@@ -39,24 +39,16 @@
           <defaultFilemode>755</defaultFilemode>
           <mappings>
             <mapping>
-              <directory>/usr/my_package_root</directory>
+              <directory>/usr/myapp</directory>
               <sources>
                 <softlinkSource>
-                  <location>/var/log</location>
-                  <destination>logs</destination>
+                  <location>/etc/hosts</location>
+                  <destination>hosts</destination>
                 </softlinkSource>
-              </sources>
-            </mapping>
-            <mapping>
-              <directory>/usr/my_package_root/bin</directory>
-              <directoryIncluded>false</directoryIncluded>
-              <sources>
-                <source>
-                  <location>src/main/bin/start.sh</location>
-                </source>
-                <source>
-                  <location>src/main/bin2/rename.sh</location>
-                </source>
+                <softlinkSource>
+                  <location>/etc/password</location>
+                  <destination>passwd</destination>
+                </softlinkSource>
               </sources>
             </mapping>
           </mappings>
