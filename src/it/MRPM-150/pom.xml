@@ -42,12 +42,10 @@
               <directory>/usr/myapp</directory>
               <sources>
                 <softlinkSource>
-                  <location>/etc/hosts</location>
-                  <destination>hosts</destination>
+                  <location>/etc/hosts</location> <!-- file -->
                 </softlinkSource>
                 <softlinkSource>
-                  <location>/etc/password</location>
-                  <destination>passwd</destination>
+                  <location>/etc</location> <!-- dir -->
                 </softlinkSource>
               </sources>
             </mapping>
