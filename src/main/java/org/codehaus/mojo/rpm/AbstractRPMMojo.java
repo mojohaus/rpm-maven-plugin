@@ -81,13 +81,13 @@ abstract class AbstractRPMMojo
     /**
      * The name portion of the output file name.
      */
-    @Parameter( required = true, property = "project.artifactId" )
+    @Parameter( required = true, property = "rpm.name", defaultValue="${project.artifactId}" )
     private String name;
 
     /**
      * The version portion of the RPM file name.
      */
-    @Parameter( required = true, alias = "version", defaultValue = "${project.version}", property="rpm.version" )
+    @Parameter( required = true, alias = "version", property="rpm.version", defaultValue = "${project.version}" )
     private String projversion;
 
     /**
@@ -180,13 +180,13 @@ abstract class AbstractRPMMojo
     /**
      * The long description of the package.
      */
-    @Parameter( property = "project.description" )
+    @Parameter( property = "rpm.description", defaultValue="${project.description}" )
     private String description;
 
     /**
      * The one-line description of the package.
      */
-    @Parameter( property = "project.name" )
+    @Parameter( property = "rpm.summary", defaultValue="${project.name}" )
     private String summary;
 
     /**
@@ -212,13 +212,13 @@ abstract class AbstractRPMMojo
     /**
      * The vendor supplying the package.
      */
-    @Parameter( property = "project.organization.name" )
+    @Parameter( property = "rpm.vendor", defaultValue = "${project.organization.name}" )
     private String vendor;
 
     /**
      * A URL for the vendor.
      */
-    @Parameter( property = "project.organization.url" )
+    @Parameter( property = "rpm.url", defaultValue = "project.organization.url" )
     private String url;
 
     /**
@@ -230,7 +230,7 @@ abstract class AbstractRPMMojo
     /**
      * The name of the person or group creating the package.
      */
-    @Parameter( property = "project.organization.name" )
+    @Parameter( property = "rpm.packager", defaultValue = "project.organization.name" )
     private String packager;
 
     /**
