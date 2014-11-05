@@ -267,6 +267,8 @@ final class SpecWriter
         spec.print( tmpBuildRoot );
         spec.println( " $RPM_BUILD_ROOT" );
         spec.println( "fi" );
+        //MRPM-168
+        spec.println( "chmod -R +w $RPM_BUILD_ROOT" );
     }
 
     /**
