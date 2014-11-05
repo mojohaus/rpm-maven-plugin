@@ -87,7 +87,7 @@ abstract class AbstractRPMMojo
     /**
      * The version portion of the RPM file name.
      */
-    @Parameter( required = true, alias = "version", property = "project.version" )
+    @Parameter( required = true, alias = "version", defaultValue = "${project.version}", property="rpm.version" )
     private String projversion;
 
     /**
@@ -103,7 +103,7 @@ abstract class AbstractRPMMojo
      * </ul>
      * </p>
      */
-    @Parameter
+    @Parameter( property="rpm.release")
     private String release;
 
     /**
