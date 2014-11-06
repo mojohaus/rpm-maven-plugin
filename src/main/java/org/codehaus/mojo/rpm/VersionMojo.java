@@ -58,7 +58,7 @@ public class VersionMojo
     /**
      * The version portion of the RPM file name.
      */
-    @Parameter( required = true, alias = "version", property = "project.version" )
+    @Parameter( required = true, alias = "version", property = "rpm.version", defaultValue = "${project.version}" )
     private String projversion;
 
     /**
@@ -80,7 +80,7 @@ public class VersionMojo
      * </ul>
      * </p>
      */
-    @Parameter
+    @Parameter( property="rpm.release")
     private String release;
 
     /**
