@@ -218,7 +218,7 @@ abstract class AbstractRPMMojo
     /**
      * A URL for the vendor.
      */
-    @Parameter( property = "rpm.url", defaultValue = "project.organization.url" )
+    @Parameter( property = "rpm.url", defaultValue = "${project.organization.url}" )
     private String url;
 
     /**
@@ -230,7 +230,7 @@ abstract class AbstractRPMMojo
     /**
      * The name of the person or group creating the package.
      */
-    @Parameter( property = "rpm.packager", defaultValue = "project.organization.name" )
+    @Parameter( property = "rpm.packager", defaultValue = "${project.organization.name}" )
     private String packager;
 
     /**
