@@ -81,13 +81,13 @@ abstract class AbstractRPMMojo
     /**
      * The name portion of the output file name.
      */
-    @Parameter( required = true, property = "rpm.name", defaultValue="${project.artifactId}" )
+    @Parameter( required = true, property = "rpm.name", defaultValue = "${project.artifactId}" )
     private String name;
 
     /**
      * The version portion of the RPM file name.
      */
-    @Parameter( required = true, alias = "version", property="rpm.version", defaultValue = "${project.version}" )
+    @Parameter( required = true, alias = "version", property = "rpm.version", defaultValue = "${project.version}" )
     private String projversion;
 
     /**
@@ -103,7 +103,7 @@ abstract class AbstractRPMMojo
      * </ul>
      * </p>
      */
-    @Parameter( property="rpm.release")
+    @Parameter( property = "rpm.release" )
     private String release;
 
     /**
@@ -180,13 +180,13 @@ abstract class AbstractRPMMojo
     /**
      * The long description of the package.
      */
-    @Parameter( property = "rpm.description", defaultValue="${project.description}" )
+    @Parameter( property = "rpm.description", defaultValue = "${project.description}" )
     private String description;
 
     /**
      * The one-line description of the package.
      */
-    @Parameter( property = "rpm.summary", defaultValue="${project.name}" )
+    @Parameter( property = "rpm.summary", defaultValue = "${project.name}" )
     private String summary;
 
     /**
@@ -597,7 +597,7 @@ abstract class AbstractRPMMojo
         {
             getLog().info( "MOJO is disabled. Doing nothing." );
 
-            // FIXME, is it a correct way getting install/deploy to ignore the orgininal primary 'rpm' artifact?
+            // FIXME, is it a correct way getting install/deploy to ignore the original primary 'rpm' artifact?
             if ( "rpm".equals( this.project.getPackaging() ) )
             {
                 this.project.setPackaging( "pom" );
@@ -774,9 +774,9 @@ abstract class AbstractRPMMojo
             this.release = release;
         }
 
-        // If not set, calculate versions
-        if ( this.projversion == null || this.release == null )
-        {
+        // calculate versions if neccessary, check for existing maven modifier and split them accordingly
+        if ( this.projversion == null || this.release == null || this.projversion.contains( "-" ) )
+        { // including -SNAPSHOT and 1-34
             final VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
             this.projversion = version.version;
             this.release = version.release;

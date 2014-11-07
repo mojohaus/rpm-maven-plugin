@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>MRPM-169</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <inceptionYear>2009</inceptionYear>
+  <organization>
+    <name>my org</name>
+    <url>www.my.org</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>rpm</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- without the fix, this setting trigger the full version ( ie 1.0-SNAPSHOT passes down to rpmbuild and fail -->
+          <distribution>My App</distribution>
+          <release>1</release>
+          <group>Application/Collectors</group>
+          <license>(c) me and myself 1945</license>
+          <defineStatements>
+            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+          </defineStatements>
+          <needarch>somearch</needarch>
+          <targetOS>someOS</targetOS>
+          <defaultUsername>myuser</defaultUsername>
+          <defaultGroupname>mygroup</defaultGroupname>
+          <defaultFilemode>755</defaultFilemode>
+          <mappings>
+            <mapping>
+              <directory>/usr/myapp</directory>
+              <sources>
+                <softlinkSource>
+                  <location>/etc/hosts</location> <!-- file -->
+                </softlinkSource>
+                <softlinkSource>
+                  <location>/etc</location> <!-- dir -->
+                </softlinkSource>
+              </sources>
+            </mapping>
+          </mappings>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
