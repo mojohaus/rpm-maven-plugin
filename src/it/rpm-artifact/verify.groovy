@@ -1,4 +1,4 @@
-File rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-artifact/1.0/rpm-artifact-1.0-rpm.rpm")
+File rpm = new File(localRepositoryPath, "org/codehaus/mojo/rpm/its/rpm-artifact/1.0/rpm-artifact-1.0.rpm")
 
 if (!rpm.exists())
     throw new java.lang.AssertionError("${rpm.getAbsolutePath()} does not exist");

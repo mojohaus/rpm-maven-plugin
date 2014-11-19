@@ -55,7 +55,7 @@ public class AttachedRPMMojo
      */
     protected void afterExecution()
     {
-        classifier = classifier != null ? classifier : "rpm";
+
         File attachedArtifact = getRPMFile();
         if ( getLog().isDebugEnabled() )
         {
