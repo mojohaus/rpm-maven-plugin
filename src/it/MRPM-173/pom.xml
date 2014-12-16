@@ -31,7 +31,7 @@
               <filemode>664</filemode>
               <username>root</username>
               <groupname>root</groupname>
-              <directoryIncluded>false</directoryIncluded>
+              <directoryIncluded>true</directoryIncluded>
               <sources>
                 <softlinkSource>
                   <location>${rpm.install.basedir}</location>
@@ -45,6 +45,9 @@
               <username>root</username>
               <groupname>root</groupname>
               <sources>
+                <source>
+                  <location>${project.basedir}/src/main/resources/testdir</location>
+                </source>
                 <source>
                   <location>src/main/resources/additional_testdir/test4.txt</location>
                   <destination>additional_testdir/test4.txt</destination>
