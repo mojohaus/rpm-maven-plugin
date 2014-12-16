@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>MRPM-173</artifactId>
+  <packaging>rpm</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>MRPM-173</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <rpm.install.basedir>/opt/testdir</rpm.install.basedir>
+    <targetdir.symlink>targetdir_symlink</targetdir.symlink>
+  </properties>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <extensions>true</extensions>
+        <configuration>
+          <group>Applications/Internet</group>
+          <autoRequires>false</autoRequires>
+          <mappings>
+            <mapping>
+              <directory>/opt</directory>
+              <filemode>664</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <directoryIncluded>false</directoryIncluded>
+              <sources>
+                <softlinkSource>
+                  <location>${rpm.install.basedir}</location>
+                  <destination>${targetdir.symlink}</destination>
+                </softlinkSource>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>${rpm.install.basedir}</directory>
+              <filemode>664</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>src/main/resources/additional_testdir/test4.txt</location>
+                  <destination>additional_testdir/test4.txt</destination>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+
