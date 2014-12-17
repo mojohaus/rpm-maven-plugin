@@ -22,7 +22,7 @@ Advanced Parameters
 
     * <<<provides>>> defines a <virtual package> which is provided
       by the package being built
- 
+
     * <<<requires>>> identifies a package that is required to be installed for
       the package being built to operate correctly
 
@@ -38,13 +38,13 @@ Advanced Parameters
 
 +-----+
 <provides>
-    <provide>dump</provide>
+  <provide>dump</provide>
 </provides>
 <requires>
-    <require>trash-truck &gt; 1.0</require>
+  <require>trash-truck &gt; 1.0</require>
 </requires>
 <conflicts>
-    <conflict>incinerator</conflict>
+  <conflict>incinerator</conflict>
 </conflicts>
 +-----+
 
@@ -60,12 +60,12 @@ Advanced Parameters
 
   There are a number of scripts that can be included in the RPM package which
   are executed as part of the installation, removal, or verification of the
-  package.  
-  
-  Each of the scripts can be configured as a 
+  package.
+
+  Each of the scripts can be configured as a
   {{{./apidocs/org/codehaus/mojo/rpm/Scriptlet.html}Scriptlet}}, which allows
-  the content of the script to be provided either as a String or File. If 
-  both parameters are specified for a script, the external file will be 
+  the content of the script to be provided either as a String or File. If
+  both parameters are specified for a script, the external file will be
   ignored.  Before writing scripts for RPM packages, understand the
   {{{http://www.rpm.org/max-rpm/s1-rpm-inside-scripts.html}script docs}} in
   Maximum RPM since the operation of the scripts must be done correctly or
@@ -73,14 +73,14 @@ Advanced Parameters
 
   Here are examples of passing the content of the script in the pom
   (using <<<<script>>>>) and in a file (using <<<<scriptFile>>>>):
-  
+
 +-----+
 <prepareScriptlet>
-    <script>echo "prepare"</script>
+  <script>echo "prepare"</script>
 </prepareScriptlet>
 <preinstallScriptlet>
-    <scriptFile>/src/main/bin/preinstall.sh</scriptFile>
-    <fileEncoding>utf-8</fileEncoding>
+  <scriptFile>/src/main/bin/preinstall.sh</scriptFile>
+  <fileEncoding>utf-8</fileEncoding>
 </preinstallScriptlet>
 +-----+
 
@@ -88,12 +88,12 @@ Advanced Parameters
 
   This script specifies commands to prepare the build.  It corresponds to the
   <<<%prep>>> tag in the spec file.
-  
+
 ** <<<preinstallScriptlet>>>
 
   This script is run before the package is installed.  It corresponds to the
   <<<%pre>>> tag in the spec file.
-  
+
 ** <<<installScriptlet>>>
 
   This script is run as a part of installing the package.  It corresponds to the
@@ -118,26 +118,26 @@ Advanced Parameters
 
   This script is run when the package is being verified.  It corresponds to
   the <<<%verifyScript>>> tag in the spec file.
-  
+
 ** <<<cleanScriptlet>>>
 
   This script is run after the package is installed to clean up installation files.  It corresponds to the
   <<<%clean>>> tag in the spec file.
-  
+
 ** <<<pretransScriptlet>>>
 
-  This script is run at the beginning of the transaction.  It corresponds to the <<<%pretrans>>> tag in 
+  This script is run at the beginning of the transaction.  It corresponds to the <<<%pretrans>>> tag in
   the spec file.
-  
+
 ** <<<posttransScriptlet>>>
 
   This script is run at the end of the transaction.  It corresponds to the <<<%posttrans>>> tag in the spec
   file.
-  
+
 * {Triggers}
 
   Triggers are scripts which can be included in an RPM package to execute based
-  on the action of other packages in a system. Before writing triggers for RPM 
+  on the action of other packages in a system. Before writing triggers for RPM
   packages, understand the {{{http://rpm.org/api/4.4.2.2/triggers.html}triggers}} in
   the RPM documentation since the operation of the scripts must be done correctly or
   major problems can occur while installing or removing other packages.
@@ -153,7 +153,7 @@ Advanced Parameters
   package, and also turns on the signature.  Setting this parameter is
   equivalent to defining the <<<%_gpg_name>>> macro and adding the
   <<<--sign>>> option to <<<rpmbuild>>>.
-  
+
 ** <<<keyPassphrase>>>
 
   This parameter sets the passphrase for the key to sign the rpm. The use of this

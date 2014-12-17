@@ -53,7 +53,7 @@ RPM as Secondary Artifact
 
   In this scenario, the rpm is not the primary artifact, but will be deployed as
   a secondary artifact.
-  
+
 +-------+
 <executions>
   <execution>
@@ -73,7 +73,7 @@ RPM as Primary Artifact
   on a top-level project (which has the items to build and the RPM project
   as modules) and have Maven package the items to build into jars, wars, ears,
   etc. and them assemble the RPM of those items for distribution.
-  
+
   The packaging value should be set to "<<<rpm>>>".
 
 +-------+
@@ -85,20 +85,20 @@ RPM as Primary Artifact
     ...
 </project>
 +-------+
-  
+
   The extensions tag for this plugin should be marked true.
-  
+
 +-------+
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>rpm-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <extensions>true</extensions>
-                ...
-            </plugin>
-        </plugins>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          <version>${project.version}</version>
+          <extensions>true</extensions>
+           ...
+        </plugin>
+      </plugins>
     </build>
-+-------+ 
-  
++-------+
+

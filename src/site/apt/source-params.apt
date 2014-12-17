@@ -65,56 +65,56 @@ Source Parameters
 
 * {destination} (<<optional>>)
 
-  If the <<location>> is a file (not a directory), this is the name of the file 
-  in the rpm. If this value is not provided, the name of the <<<file>>> will 
+  If the <<location>> is a file (not a directory), this is the name of the file
+  in the rpm. If this value is not provided, the name of the <<<file>>> will
   be used.
-  
+
 * {filter} (<<optional>>)
 
   Will filter the file(s) and replace special values with properties.
-  
+
 * {targetArchitecture} (<<optional>>)
 
   If this is populated, the contents defined by this source will only be included
   if the value for targetArchitecture matches the target architecture of the rpm.
-  
+
   Beginning with 2.0-beta-3, this is a regular expression. In order to provide backward
-  compatibility, both the architecture (defined for MOJO) and this value will be 
+  compatibility, both the architecture (defined for MOJO) and this value will be
   converted to lower case to make comparison case insensitive.
-  
-  This can be used to flex the contents of the rpm based on the 
+
+  This can be used to flex the contents of the rpm based on the
   {{{./rpm-mojo.html#needarch}architecture}}:
-  
+
 +-----+
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>rpm-maven-plugin</artifactId>
-                ...
-                <configuration>
-                    ...
-                    <needarch>true</needarch>
-                    ...
-                    <mapping>
-                        ...
-                        <sources>
-                            <source>
-                                <location>src/main/native/x86_64</location>
-                                <targetArchitecture>x86_64</targetArchitecture>
-                            </source>
-                            <source>
-                                <location>src/main/native/i586</location>
-                                <targetArchitecture>i586</targetArchitecture>
-                            </source>
-                        </sources>
-                        ...
-                    </mapping>
-                    ...
-                </configuration>
-            </plugin>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          ...
+          <configuration>
             ...
-        </plugins>
+            <needarch>true</needarch>
+            ...
+            <mapping>
+              ...
+              <sources>
+                <source>
+                  <location>src/main/native/x86_64</location>
+                  <targetArchitecture>x86_64</targetArchitecture>
+                </source>
+                <source>
+                  <location>src/main/native/i586</location>
+                  <targetArchitecture>i586</targetArchitecture>
+                </source>
+              </sources>
+              ...
+            </mapping>
+            ...
+          </configuration>
+        </plugin>
+        ...
+      </plugins>
         ...
     </build>
 +-----+
@@ -130,13 +130,13 @@ Source Parameters
 +-----+
     ...
     <mapping>
-        <directory>/usr/files</directory>
-        <sources>
-            <softlinkSource>
-                <destination>ccc.txt</destination>
-                <location>aaa.txt</location>
-            </softlinkSource>
-        </sources>
+      <directory>/usr/files</directory>
+      <sources>
+        <softlinkSource>
+          <destination>ccc.txt</destination>
+          <location>aaa.txt</location>
+        </softlinkSource>
+      </sources>
     </mapping>
 +-----+
 
@@ -145,12 +145,12 @@ Source Parameters
 +-----+
     ...
     <mapping>
-        <directory>/usr/bin</directory>
-        <sources>
-            <softlinkSource>
-                <location>/usr/files/script.sh</location>
-            </softlinkSource>
-        </sources>
+      <directory>/usr/bin</directory>
+      <sources>
+        <softlinkSource>
+          <location>/usr/files/script.sh</location>
+        </softlinkSource>
+      </sources>
     </mapping>
 +-----+
 
@@ -159,47 +159,47 @@ Source Parameters
 +-----+
     ...
     <mapping>
-        <directory>/usr/local/something</directory>
-        <sources>
-            <softlinkSource>
-                <location>/usr/local/something-A</location>
-            </softlinkSource>
-        </sources>
+      <directory>/usr/local/something</directory>
+      <sources>
+        <softlinkSource>
+          <location>/usr/local/something-A</location>
+        </softlinkSource>
+      </sources>
     </mapping>
 +-----+
 
 * {targetOSName} (<<optional>>)
 
-  A {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html}regular expression}} that, if populated, indicates 
+  A {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html}regular expression}} that, if populated, indicates
   that the files defined are only applicable if the expression matches the {{{./ident-params.html#targetOS}MOJO.targetOS}} value.
-  
+
 +-----+
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>rpm-maven-plugin</artifactId>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          ...
+          <configuration>
+             <mapping>
+               ...
+                <sources>
+                  <source>
+                    <location>src/main/native/x86_64</location>
+                    <targetArchitecture>x86_64</targetArchitecture>
+                  </source>
+                  <source>
+                    <location>src/main/native/x86</location>
+                    <targetArchitecture>i.86</targetArchitecture>
+                  </source>
+                </sources>
                 ...
-                <configuration>
-                    <mapping>
-                        ...
-                        <sources>
-                            <source>
-                                <location>src/main/native/x86_64</location>
-                                <targetArchitecture>x86_64</targetArchitecture>
-                            </source>
-                            <source>
-                                <location>src/main/native/x86</location>
-                                <targetArchitecture>i.86</targetArchitecture>
-                            </source>
-                        </sources>
-                        ...
-                    </mapping>
-                    ...
-                </configuration>
-            </plugin>
-            ...
-        </plugins>
-        ...
+              </mapping>
+              ...
+            </configuration>
+          </plugin>
+          ...
+      </plugins>
+      ...
     <build>
 +-----+
