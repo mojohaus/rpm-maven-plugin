@@ -31,7 +31,7 @@
               <filemode>664</filemode>
               <username>root</username>
               <groupname>root</groupname>
-              <directoryIncluded>true</directoryIncluded>
+              <directoryIncluded>false</directoryIncluded>
               <sources>
                 <softlinkSource>
                   <location>${rpm.install.basedir}</location>

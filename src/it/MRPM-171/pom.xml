@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>MRPM-171</artifactId>
+
+  <version>0.0.1-SNAPSHOT</version>
+  <name>MRPM-171</name>
+  <packaging>rpm</packaging>
+
+  <properties>
+    <staging.directory>${project.build.directory}/staging</staging.directory>
+  </properties>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir dir="${staging.directory}/.svn"/>
+                <copy file="${project.basedir}/pom.xml" todir="${staging.directory}" />
+                <copy file="${project.basedir}/pom.xml" todir="${staging.directory}/.svn" />
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <extensions>true</extensions>
+        <configuration>
+          <copyright>2014, Nobody</copyright>
+          <distribution>Stuff</distribution>
+          <group>Applications/Stuff</group>
+          <mappings>
+            <mapping>
+              <directory>/tmp/${project.artifactId}</directory>
+              <sources>
+                <source>
+                  <noDefaultExcludes>true</noDefaultExcludes>
+                  <location>${staging.directory}</location>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+          <defaultDirmode>755</defaultDirmode>
+          <defaultFilemode>644</defaultFilemode>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
