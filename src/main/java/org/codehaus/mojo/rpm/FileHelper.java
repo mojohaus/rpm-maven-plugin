@@ -36,7 +36,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.archiver.ArchiveEntry;
-import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.archiver.FileSet;
+import org.codehaus.plexus.archiver.util.DefaultFileSet;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -99,7 +100,7 @@ final class FileHelper
         if ( icon != null )
         {
             File icondest = new File( workarea, "SOURCES" );
-            copySource( icon, null, icondest, null, null, false );
+            copySource( icon, null, icondest, null, null, false, false );
         }
 
         final Log log = mojo.getLog();
@@ -182,7 +183,7 @@ final class FileHelper
      * @throws MojoExecutionException if a problem occurs
      */
     private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl,
-                                     boolean filter )
+                                     boolean filter, boolean dontUseDefaultExcludes )
         throws MojoExecutionException
     {
         try
@@ -205,7 +206,15 @@ final class FileHelper
                     ea = excl.toArray( new String[0] );
                 }
 
-                copier.addDirectory( src, "", ia, ea );
+                //same as copier.addDirectory( src, "", ia, ea ) with dontUseDefaultExcludes
+                DefaultFileSet fileset = new DefaultFileSet( src );
+                fileset.setPrefix( "" );
+                fileset.setIncludes( ia );
+                fileset.setExcludes( ea );
+                fileset.setIncludingEmptyDirectories( copier.getIncludeEmptyDirs() );
+                fileset.setUsingDefaultExcludes( !dontUseDefaultExcludes );
+
+                copier.addFileSet( fileset );
             }
             else
             {
@@ -240,6 +249,12 @@ final class FileHelper
         {
             throw new MojoExecutionException( "Unable to copy files for packaging: " + t.getMessage(), t );
         }
+    }
+
+    public static DefaultFileSet fileSet( File directory )
+    {
+        final DefaultFileSet defaultFileSet = new DefaultFileSet( directory );
+        return defaultFileSet;
     }
 
     /**
@@ -281,7 +296,7 @@ final class FileHelper
             outputFileName = art.getFile().getName();
         }
 
-        copySource( art.getFile(), outputFileName, dest, null, null, false );
+        copySource( art.getFile(), outputFileName, dest, null, null, false, false );
         return outputFileName;
     }
 
@@ -415,9 +430,9 @@ final class FileHelper
                 src.setMacroEvaluatedLocation( macroEvaluatedLocation.getPath() );
 
                 final File locationFile =
-                                macroEvaluatedLocation.isAbsolute() ? macroEvaluatedLocation
+                    macroEvaluatedLocation.isAbsolute() ? macroEvaluatedLocation
                                     : new File( mojo.project.getBasedir(), macroEvaluatedLocation.getPath() );
-                //better with just macroEvaluatedLocation.getAbsoluteFile(), but not tested yet
+                // better with just macroEvaluatedLocation.getAbsoluteFile(), but not tested yet
 
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
@@ -441,18 +456,10 @@ final class FileHelper
                     final String destination = src.getDestination();
                     if ( destination == null )
                     {
-                        List<String> elist = src.getExcludes();
-                        if ( !src.getNoDefaultExcludes() )
-                        {
-                            if ( elist == null )
-                            {
-                                elist = new ArrayList<String>();
-                            }
-                            elist.addAll( FileUtils.getDefaultExcludesAsList() );
-                        }
                         map.addCopiedFileNamesRelativeToDestination( copySource( locationFile, null, dest,
-                                                                                 src.getIncludes(), elist,
-                                                                                 src.isFilter() ) );
+                                                                                 src.getIncludes(), src.getExcludes(),
+                                                                                 src.isFilter(),
+                                                                                 src.getNoDefaultExcludes() ) );
                     }
                     else
                     {
@@ -464,7 +471,7 @@ final class FileHelper
                         }
 
                         copySource( locationFile, destination, dest, EMPTY_STRING_LIST, EMPTY_STRING_LIST,
-                                    src.isFilter() );
+                                    src.isFilter(), src.getNoDefaultExcludes() );
 
                         map.addCopiedFileNameRelativeToDestination( destination );
                     }
@@ -566,9 +573,9 @@ final class FileHelper
 
     public static String toUnixPath( String path )
     {
-        path = StringUtils.replace( path,  "\\", "/" );
+        path = StringUtils.replace( path, "\\", "/" );
 
-        String [] tokens = StringUtils.split( path, ":" );
+        String[] tokens = StringUtils.split( path, ":" );
 
         if ( tokens.length == 2 && tokens[0].length() == 1 )
         {
