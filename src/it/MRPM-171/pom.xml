@@ -11,6 +11,7 @@
 
   <properties>
     <staging.directory>${project.build.directory}/staging</staging.directory>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <build>
