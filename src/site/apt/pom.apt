@@ -10,6 +10,7 @@ Project Settings
 
   The following items should be specified in the project descriptor.  They
   are used in the RPM spec file and influence what is packaged in the RPM.
+  They are overridable at plugin's configuration
 
 * {artifactId}
 
