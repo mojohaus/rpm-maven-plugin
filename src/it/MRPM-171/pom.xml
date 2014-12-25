@@ -31,10 +31,12 @@
               <target>
                 <mkdir dir="${staging.directory}/.svn"/>
                 <mkdir dir="${staging.directory}/sub/.svn"/>
+                <mkdir dir="${staging.directory}/config"/>
                 <copy file="${project.basedir}/pom.xml" todir="${staging.directory}" />
                 <copy file="${project.basedir}/pom.xml" todir="${staging.directory}/.svn" />
                 <copy file="${project.basedir}/pom.xml" todir="${staging.directory}/sub" />
                 <copy file="${project.basedir}/pom.xml" todir="${staging.directory}/sub/.svn" />
+                <copy file="${project.basedir}/pom.xml" tofile="${staging.directory}/config/.pom.xml" />
               </target>
             </configuration>
           </execution>
