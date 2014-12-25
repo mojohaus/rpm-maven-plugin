@@ -167,19 +167,35 @@ final class SpecWriter
             final String destination = map.getDestination();
             final File absoluteDestination = map.getAbsoluteDestination();
 
+            final String attrString =
+                            map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
+            final String baseFileString = attrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
+
             if ( map.hasSoftLinks() && !absoluteDestination.exists() )
             {
+                //@TODO will this ever happen since absoluteDestination.exists() always likely true
                 log.debug( "writing attribute string for directory created by soft link: " + destination );
 
-                final String attributes =
-                    map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
-                spec.println( attributes + " \"" + destination + "\"" );
+                spec.println( attrString + " \"" + destination + "\"" );
 
                 continue;
             }
 
             final List<String> includes = map.getCopiedFileNamesRelativeToDestination();
             final List<String> links = map.getLinkedFileNamesRelativeToDestination();
+
+            if ( map.isSoftLinkOnly() )
+            {
+                //map has only soft links, no need to do the scan (MRPM-173)
+                log.debug( "writing attribute string for softlink only source" );
+                for ( String link : links )
+                {
+                    spec.print( baseFileString );
+                    spec.println( link + "\"" );
+                }
+                continue;
+            }
+
 
             final DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( absoluteDestination );
@@ -190,8 +206,6 @@ final class SpecWriter
             scanner.setExcludes( null );
             scanner.scan();
 
-            final String attrString =
-                map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
             if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded()
                 && !map.isRecurseDirectories() )
             {
@@ -201,8 +215,6 @@ final class SpecWriter
             else
             {
                 log.debug( "writing attribute string for identified files in directory: " + destination );
-
-                final String baseFileString = attrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
 
                 // only list files if requested (directoryIncluded == false) or we have to
                 if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() ) )

@@ -458,6 +458,33 @@ public class Mapping
     }
 
     /**
+     * Return directory-only status.
+     *
+     * @return <code>true</code> if no sources were specified in the mapping
+     */
+    public boolean isSoftLinkOnly()
+    {
+        // map.hasSoftLinks() && map.getSources().size() == links.size()
+
+        if ( artifact != null )
+        {
+            return false;
+        }
+
+        if ( dependency != null )
+        {
+            return false;
+        }
+
+        if ( hasSoftLinks() && getSources().size() == this.getLinkedFileNamesRelativeToDestination().size() )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the names of files copied to the {@link #getDestination() destination}.<br/>
      * This is a <tt>List</tt> of <tt>String</tt> objects which identify files relative to the <tt>destination</tt>.
      *
