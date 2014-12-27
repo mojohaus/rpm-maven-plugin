@@ -43,6 +43,8 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Server;
+import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
@@ -50,6 +52,9 @@ import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
+import org.codehaus.plexus.util.StringUtils;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 
 /**
  * Abstract base class for building RPMs.
@@ -172,10 +177,21 @@ abstract class AbstractRPMMojo
      *
      * </p>
      *
+     * If not given, look up the value under Maven
+     * settings using server id at 'keyPassphaseServerKey' configuration.
+     *
      * @since 2.0-beta-4
      */
     @Parameter
     private Passphrase keyPassphrase;
+
+    /**
+     * Server id to lookup the gpg passphase under Maven settings.
+     * The default value intentionally selected to match with maven-gpg-plugin
+     * @Since 2.1.2
+     */
+    @Parameter( property = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphase" )
+    private String keyPassphaseServerKey;
 
     /**
      * The long description of the package.
@@ -587,6 +603,22 @@ abstract class AbstractRPMMojo
     @Parameter( required = true, defaultValue = "rpm.release" )
     private String releaseProperty;
 
+    /**
+     * Maven Security Dispatcher
+     *
+     * @since 2.1.2
+     */
+    @Component( hint = "mng-4384" )
+    private SecDispatcher securityDispatcher;
+
+    /**
+     * Current user system settings for use in Maven.
+     *
+     * @since 2.1.2
+     */
+    @Parameter( defaultValue = "${settings}", readonly = true )
+    private Settings settings;
+
     // // // Mojo methods
 
     /** {@inheritDoc} */
@@ -630,6 +662,9 @@ abstract class AbstractRPMMojo
         new FileHelper( this, copier ).installFiles();
 
         writeSpecFile();
+
+        this.loadGpgPassphase();
+
         helper.buildPackage();
 
         afterExecution();
@@ -1410,5 +1445,35 @@ abstract class AbstractRPMMojo
     final List<FilterWrapper> getFilterWrappers()
     {
         return this.defaultFilterWrappers;
+    }
+
+    /**
+     * Load and decrypt gpg passphase from maven settings if not given from plugin configuration
+     *
+     * @throws MojoFailureException
+     */
+    private void loadGpgPassphase()
+        throws MojoFailureException
+    {
+        if ( this.keyPassphrase == null )
+        {
+            Server server = this.settings.getServer( keyPassphaseServerKey );
+
+            if ( server != null )
+            {
+                if ( server.getPassphrase() != null )
+                {
+                    try
+                    {
+                        this.keyPassphrase = new Passphrase();
+                        this.keyPassphrase.setPassphrase( securityDispatcher.decrypt( server.getPassphrase() ) );
+                    }
+                    catch ( SecDispatcherException e )
+                    {
+                        throw new MojoFailureException( "Unable to decrypt gpg password", e );
+                    }
+                }
+            }
+        }
     }
 }

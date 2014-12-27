@@ -102,3 +102,20 @@ RPM as Primary Artifact
     </build>
 +-------+
 
+Configure GPG passphase under settings.xml
+
+  GPG passphase can be configured under local settings.xml
+  either in clear or {{{http://maven.apache.org/guides/mini/guide-encryption.html}encrypted}} text.
+
++----------+
+<settings>
+  [...]
+  <servers>
+    [...]
+    <server>
+      <id>gpg.passphase</id>
+      <passphase>clear or encrypted text</passphase>
+    </server>
+  </servers>
+</settings>
++----------+
