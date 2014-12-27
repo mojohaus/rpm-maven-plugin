@@ -188,8 +188,8 @@ abstract class AbstractRPMMojo
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphrase" )
-    private String keyPassphaseServerKey;
+    @Parameter( property = "rpm.keyPassphraseServerKey", defaultValue = "gpg.passphrase" )
+    private String keyPassphraseServerKey;
 
     /**
      * The long description of the package.
@@ -1455,7 +1455,7 @@ abstract class AbstractRPMMojo
     {
         if ( this.keyPassphrase == null )
         {
-            Server server = this.settings.getServer( keyPassphaseServerKey );
+            Server server = this.settings.getServer( keyPassphraseServerKey );
 
             if ( server != null )
             {
