@@ -188,7 +188,7 @@ abstract class AbstractRPMMojo
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphase" )
+    @Parameter( property = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphrase" )
     private String keyPassphaseServerKey;
 
     /**
