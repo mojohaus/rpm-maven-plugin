@@ -153,6 +153,13 @@
                     <include>log4j.xml</include>
                   </includes>
                 </source>
+                <source>
+                  <location>src/main/not-available</location>
+                  <failIfLocationNotExists>false</failIfLocationNotExists>
+                  <includes>
+                    <include>log4j.xml</include>
+                  </includes>
+                </source>
               </sources>
             </mapping>
             <!-- Config file origs -->

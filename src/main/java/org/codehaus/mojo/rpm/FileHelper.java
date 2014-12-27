@@ -36,7 +36,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.archiver.ArchiveEntry;
-import org.codehaus.plexus.archiver.FileSet;
 import org.codehaus.plexus.archiver.util.DefaultFileSet;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -206,7 +205,7 @@ final class FileHelper
                     ea = excl.toArray( new String[0] );
                 }
 
-                //same as copier.addDirectory( src, "", ia, ea ) with dontUseDefaultExcludes
+                // same as copier.addDirectory( src, "", ia, ea ) with dontUseDefaultExcludes
                 DefaultFileSet fileset = new DefaultFileSet( src );
                 fileset.setPrefix( "" );
                 fileset.setIncludes( ia );
@@ -475,6 +474,11 @@ final class FileHelper
 
                         map.addCopiedFileNameRelativeToDestination( destination );
                     }
+                }
+                else if ( !src.getFailIfLocationNotExists() )
+                {
+                    mojo.getLog().warn( "Source location " + macroEvaluatedLocation
+                                            + " does not exist, but failIfLocationNotExist was set to false" );
                 }
                 else
                 {

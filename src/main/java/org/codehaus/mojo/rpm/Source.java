@@ -97,6 +97,11 @@ public class Source
     private String macroEvaluatedLocation;
 
     /**
+     * Fail if the {@link #location} does not exist.
+     */
+    private boolean failIfLocationNotExists = true;
+
+    /**
      * Retrieve the location holding the file(s) to install.
      *
      * @return The location holding the file(s) to install.
@@ -308,6 +313,22 @@ public class Source
         this.macroEvaluatedLocation = macroEvaluatedLocation;
     }
 
+    /**
+     * @return Returns the {@link #failIfLocationNotExists}.
+     */
+    public boolean getFailIfLocationNotExists()
+    {
+        return failIfLocationNotExists;
+    }
+
+    /**
+     * @param failIfLocationNotExists The {@link #failIfLocationNotExists} to set.
+     */
+    public void setFailIfLocationNotExists( boolean failIfLocationNotExists )
+    {
+        this.failIfLocationNotExists = failIfLocationNotExists;
+    }
+
     /** {@inheritDoc} */
     public String toString()
     {
@@ -322,6 +343,7 @@ public class Source
         {
             sb.append( "\"" + location + "\"" );
         }
+        sb.append( " failIfLocationNotExists:" + failIfLocationNotExists );
 
         if ( includes != null )
         {
