@@ -93,7 +93,6 @@ final class SpecWriter
         spec.println( "autoprov: " + ( mojo.isAutoProvides() ? "yes" : "no" ) );
         spec.println( "autoreq: " + ( mojo.isAutoRequires() ? "yes" : "no" ) );
 
-
         if ( mojo.getPrefixes() != null )
         {
             for ( int i = 0; i < mojo.getPrefixes().length; i++ )
@@ -168,12 +167,12 @@ final class SpecWriter
             final File absoluteDestination = map.getAbsoluteDestination();
 
             final String attrString =
-                            map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
+                map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
             final String baseFileString = attrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
 
             if ( map.hasSoftLinks() && !absoluteDestination.exists() )
             {
-                //@TODO will this ever happen since absoluteDestination.exists() always likely true
+                // @TODO will this ever happen since absoluteDestination.exists() always likely true
                 log.debug( "writing attribute string for directory created by soft link: " + destination );
 
                 spec.println( attrString + " \"" + destination + "\"" );
@@ -186,7 +185,7 @@ final class SpecWriter
 
             if ( map.isSoftLinkOnly() )
             {
-                //map has only soft links, no need to do the scan (MRPM-173)
+                // map has only soft links, no need to do the scan (MRPM-173)
                 log.debug( "writing attribute string for softlink only source" );
                 for ( String link : links )
                 {
@@ -195,7 +194,6 @@ final class SpecWriter
                 }
                 continue;
             }
-
 
             final DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( absoluteDestination );
@@ -279,7 +277,7 @@ final class SpecWriter
         spec.print( tmpBuildRoot );
         spec.println( " $RPM_BUILD_ROOT" );
         spec.println( "fi" );
-        //MRPM-168
+        // MRPM-168
         spec.println( "chmod -R +w $RPM_BUILD_ROOT" );
     }
 

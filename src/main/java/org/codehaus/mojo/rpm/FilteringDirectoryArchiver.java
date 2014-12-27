@@ -126,7 +126,7 @@ final class FilteringDirectoryArchiver
                 return;
             }
 
-            File inFile = ((PlexusIoFileResource)entry.getResource()).getFile();
+            File inFile = ( (PlexusIoFileResource) entry.getResource() ).getFile();
             File outFile = new File( vPath );
 
             if ( !inFile.isDirectory() )

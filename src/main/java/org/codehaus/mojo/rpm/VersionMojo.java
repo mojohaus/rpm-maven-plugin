@@ -80,7 +80,7 @@ public class VersionMojo
      * </ul>
      * </p>
      */
-    @Parameter( property="rpm.release")
+    @Parameter( property = "rpm.release" )
     private String release;
 
     /**

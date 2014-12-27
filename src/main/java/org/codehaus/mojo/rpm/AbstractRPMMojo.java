@@ -52,7 +52,6 @@ import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
-import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 
@@ -176,9 +175,7 @@ abstract class AbstractRPMMojo
      * </pre>
      *
      * </p>
-     *
-     * If not given, look up the value under Maven
-     * settings using server id at 'keyPassphaseServerKey' configuration.
+     * If not given, look up the value under Maven settings using server id at 'keyPassphaseServerKey' configuration.
      *
      * @since 2.0-beta-4
      */
@@ -186,8 +183,9 @@ abstract class AbstractRPMMojo
     private Passphrase keyPassphrase;
 
     /**
-     * Server id to lookup the gpg passphase under Maven settings.
-     * The default value intentionally selected to match with maven-gpg-plugin
+     * Server id to lookup the gpg passphase under Maven settings. The default value intentionally selected to match
+     * with maven-gpg-plugin
+     *
      * @Since 2.1.2
      */
     @Parameter( property = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphase" )
