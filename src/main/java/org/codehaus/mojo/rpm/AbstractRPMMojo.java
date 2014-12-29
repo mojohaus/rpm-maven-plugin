@@ -184,11 +184,11 @@ abstract class AbstractRPMMojo
 
     /**
      * Server id to lookup the gpg passphase under Maven settings. The default value intentionally selected to match
-     * with maven-gpg-plugin
+     * with maven-gpg-plugin. Alias is added to be compatible with maven-gpg-plugin
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "gpg.keyPassphraseServerKey", alias = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphrase" )
+    @Parameter( property = "rpm.keyPassphraseServerKey", alias = "gpg.passphaseServerKey", defaultValue = "gpg.passphrase" )
     private String keyPassphraseServerKey;
 
     /**
