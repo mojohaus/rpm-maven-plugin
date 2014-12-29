@@ -157,7 +157,7 @@ abstract class AbstractRPMMojo
      * Set to a key name to sign the package using GPG. If <i>keyPassphrase</i> is not also provided, this will require
      * the input of the passphrase at the terminal.
      */
-    @Parameter( property = "gpg.keyname" )
+    @Parameter( property = "gpg.keyname", alias = "rpm.keyname" )
     private String keyname;
 
     /**
@@ -188,7 +188,7 @@ abstract class AbstractRPMMojo
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "rpm.keyPassphraseServerKey", defaultValue = "gpg.passphrase" )
+    @Parameter( property = "gpg.keyPassphraseServerKey", alias = "rpm.keyPassphaseServerKey", defaultValue = "gpg.passphrase" )
     private String keyPassphraseServerKey;
 
     /**
