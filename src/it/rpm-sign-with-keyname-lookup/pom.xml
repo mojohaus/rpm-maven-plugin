@@ -2,15 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.mojo.rpm.its</groupId>
-  <artifactId>rpm-sign</artifactId>
+  <artifactId>rpm-sign-with-keyname-lookup</artifactId>
   <version>1.0</version>
-  <packaging>rpm</packaging>
+  <packaging>jar</packaging>
 
   <inceptionYear>2009</inceptionYear>
   <organization>
     <name>my org</name>
     <url>www.my.org</url>
   </organization>
+
+  <description>
+    Use this project to verify gpg key configuration by scanning the build.log.
+    Plugin executions are purposely disabled
+  </description>
 
   <dependencies>
     <dependency>
@@ -30,7 +35,6 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
         <version>@pom.version@</version>
-        <extensions>true</extensions>
         <executions>
           <execution>
             <goals>
@@ -60,7 +64,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.5</version> <!--  must use 1.6-SNAPSHOT -->
         <configuration>
           <skip>true</skip>
           <keyname>${gpg.keyname}</keyname>
