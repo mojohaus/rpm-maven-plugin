@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>rpm-sign</artifactId>
+  <version>1.0</version>
+  <packaging>rpm</packaging>
+
+  <inceptionYear>2009</inceptionYear>
+  <organization>
+    <name>my org</name>
+    <url>www.my.org</url>
+  </organization>
+
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>attached-rpm</goal>
+            </goals>
+            <configuration>
+              <disabled>true</disabled>
+              <distribution>My App</distribution>
+              <group>Application/Collectors</group>
+              <needarch>false</needarch>
+              <defaultUsername>myuser</defaultUsername>
+              <defaultGroupname>mygroup</defaultGroupname>
+              <keyname>${gpg.keyname}</keyname>
+              <passphraseServerKey>${gpg.keyname}</passphraseServerKey>
+              <mappings>
+                <mapping>
+                  <directory>/usr/myusr/app/lib</directory>
+                  <directoryIncluded>false</directoryIncluded>
+                  <artifact />
+                </mapping>
+              </mappings>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.6-SNAPSHOT</version>
+        <configuration>
+          <skip>true</skip>
+          <keyname>${gpg.keyname}</keyname>
+          <passphraseServerKey>${gpg.keyname}</passphraseServerKey>
+        </configuration>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>

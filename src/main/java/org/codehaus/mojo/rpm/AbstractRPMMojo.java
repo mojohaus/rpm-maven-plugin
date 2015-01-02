@@ -157,7 +157,7 @@ abstract class AbstractRPMMojo
      * Set to a key name to sign the package using GPG. If <i>keyPassphrase</i> is not also provided, this will require
      * the input of the passphrase at the terminal.
      */
-    @Parameter( property = "gpg.keyname", alias = "rpm.keyname" )
+    @Parameter( property = "gpg.keyname" )
     private String keyname;
 
     /**
@@ -184,12 +184,12 @@ abstract class AbstractRPMMojo
 
     /**
      * Server id to lookup the gpg passphase under Maven settings. The default value intentionally selected to match
-     * with maven-gpg-plugin. Alias is added to be compatible with maven-gpg-plugin
+     * with maven-gpg-plugin.
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "rpm.keyPassphraseServerKey", alias = "gpg.passphraseServerKey", defaultValue = "gpg.passphrase" )
-    private String keyPassphraseServerKey;
+    @Parameter( property = "gpg.passphraseServerKey", defaultValue = "gpg.passphrase" )
+    private String passphraseServerKey;
 
     /**
      * The long description of the package.
@@ -1455,7 +1455,7 @@ abstract class AbstractRPMMojo
     {
         if ( this.keyPassphrase == null )
         {
-            Server server = this.settings.getServer( keyPassphraseServerKey );
+            Server server = this.settings.getServer( passphraseServerKey );
 
             if ( server != null )
             {
