@@ -17,6 +17,18 @@
     Plugin executions are purposely disabled
   </description>
 
+  <!-- until maven-gpg-plugin 1.6 is released -->
+  <repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>http://repository.apache.org/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>log4j</groupId>
@@ -64,9 +76,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6-SNAPSHOT</version> <!--  must use 1.6-SNAPSHOT -->
+        <version>1.6-SNAPSHOT</version> <!-- must use 1.6+ -->
         <configuration>
-          <skip>false</skip>
+          <skip>true</skip>
           <keyname>${gpg.keyname}</keyname>
           <passphraseServerKey>${gpg.keyname}</passphraseServerKey>
         </configuration>
