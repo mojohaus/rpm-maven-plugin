@@ -53,7 +53,7 @@
               <goal>attached-rpm</goal>
             </goals>
             <configuration>
-              <disabled>false</disabled>
+              <disabled>true</disabled><!-- until CI/Bamboo has 'expect' -->
               <distribution>My App</distribution>
               <group>Application/Collectors</group>
               <needarch>false</needarch>
@@ -78,7 +78,7 @@
         <artifactId>maven-gpg-plugin</artifactId>
         <version>1.6-SNAPSHOT</version> <!-- must use 1.6+ -->
         <configuration>
-          <skip>true</skip>
+          <skip>false</skip>
           <keyname>${gpg.keyname}</keyname>
           <passphraseServerKey>${gpg.keyname}</passphraseServerKey>
         </configuration>
