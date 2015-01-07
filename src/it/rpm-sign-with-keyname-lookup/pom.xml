@@ -41,7 +41,7 @@
               <goal>attached-rpm</goal>
             </goals>
             <configuration>
-              <disabled>true</disabled>
+              <disabled>false</disabled>
               <distribution>My App</distribution>
               <group>Application/Collectors</group>
               <needarch>false</needarch>
@@ -64,9 +64,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version> <!--  must use 1.6-SNAPSHOT -->
+        <version>1.6-SNAPSHOT</version> <!--  must use 1.6-SNAPSHOT -->
         <configuration>
-          <skip>true</skip>
+          <skip>false</skip>
           <keyname>${gpg.keyname}</keyname>
           <passphraseServerKey>${gpg.keyname}</passphraseServerKey>
         </configuration>

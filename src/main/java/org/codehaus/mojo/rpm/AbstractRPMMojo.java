@@ -161,6 +161,14 @@ abstract class AbstractRPMMojo
     private String keyname;
 
     /**
+     * The directory from which gpg will load keyrings. If not specified, gpg will use the value configured for its
+     * installation, e.g. <code>~/.gnupg</code> or <code>%APPDATA%/gnupg</code>.
+     * @since 2.1.2
+     */
+    @Parameter( property = "gpg.homedir" )
+    private File keypath;
+
+    /**
      * The passphrase for the <i>keyname</i> to sign the rpm. This utilizes <a href="http://expect.nist.gov/">expect</a>
      * and requires that {@code expect} be on the PATH.
      * <p>
@@ -1395,6 +1403,13 @@ abstract class AbstractRPMMojo
         return this.targetVendor;
     }
 
+    /**
+     * @return Returns the {@link #keypath}.
+     */
+    final File getKeypath()
+    {
+        return this.keypath;
+    }
     /**
      * @return Returns the {@link #keyname}.
      */

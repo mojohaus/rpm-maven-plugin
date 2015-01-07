@@ -122,11 +122,17 @@ final class RPMHelper
 
         // maintain passive behavior for keyPassphrase not being present
         final String keyname = mojo.getKeyname();
+        final File keypath = mojo.getKeypath();
         final Passphrase keyPassphrase = mojo.getKeyPassphrase();
         if ( keyname != null && keyPassphrase == null )
         {
             cl.createArg().setValue( "--define" );
-            cl.createArg().setValue( "_gpg_name " + keyname );
+            cl.createArg().setValue( "\"_gpg_name " + keyname + "\"" );
+            if ( keypath != null )
+            {
+                cl.createArg().setValue( "--define" );
+                cl.createArg().setValue( "\"_gpg_path " + keypath + "\"" );
+            }
             cl.createArg().setValue( "--sign" );
         }
 
@@ -158,7 +164,7 @@ final class RPMHelper
         // now if the passphrase has been provided and we want to try and sign automatically
         if ( keyname != null && keyPassphrase != null )
         {
-            RPMSigner signer = new RPMSigner( keyname, keyPassphrase.getPassphrase(), log );
+            RPMSigner signer = new RPMSigner( keypath, keyname, keyPassphrase.getPassphrase(), log );
 
             try
             {

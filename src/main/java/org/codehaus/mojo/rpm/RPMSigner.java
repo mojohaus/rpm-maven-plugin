@@ -42,6 +42,11 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 final class RPMSigner
 {
     /**
+     * GPG path.
+     */
+    private final File gpgPath;
+
+    /**
      * GPG name as defined in the rpm database.
      */
     private final String gpgName;
@@ -59,13 +64,14 @@ final class RPMSigner
     /**
      * Constructor takes all necessary attributes to sign an rpm.
      *
+     * @param gpgPath Directory containing key data.
      * @param gpgName The name of the gpg key in the rpm database.
      * @param passphrase The passphrase for the gpg key.
      * @param log Used for logging information in the signing process.
      */
-    public RPMSigner( String gpgName, char[] passphrase, Log log )
+    public RPMSigner( File gpgPath, String gpgName, char[] passphrase, Log log )
     {
-        super();
+        this.gpgPath = gpgPath;
         this.gpgName = gpgName;
         this.passphrase = passphrase;
         this.log = log;
@@ -136,7 +142,13 @@ final class RPMSigner
             writer.println( "set timeout -1" );
             writer.print( "spawn rpm --define \"_gpg_name " );
             writer.print( gpgName );
-            writer.print( "\" --addsign " );
+            writer.print( "\"" );
+            if ( gpgPath != null )
+            {
+                writer.print( " --define \"_gpg_path " );
+                writer.print( gpgPath + "\"" );
+            }
+            writer.print( " --addsign " );
             writer.println( rpm.getName() );
             writer.println( "expect -exact \"Enter pass phrase: \"" );
             writer.print( "send -- \"" );

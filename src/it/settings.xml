@@ -57,14 +57,14 @@ under the License.
     <profile>
       <id>testkey</id>
       <properties>
-        <gpg.keyname>KEY-1234</gpg.keyname>
+        <gpg.keyname>Maven GPG Plugin (TESTING KEY) &lt;dev@maven.apache.org&gt;</gpg.keyname>
       </properties>
     </profile>
   </profiles>
 
   <servers>
     <server>
-      <id>KEY-1234</id>
+      <id>Maven GPG Plugin (TESTING KEY) &lt;dev@maven.apache.org&gt;</id>
       <passphrase>TEST</passphrase>
     </server>
   </servers>
