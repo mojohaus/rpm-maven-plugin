@@ -306,12 +306,19 @@ abstract class AbstractRPMMojo
     private LinkedHashSet<String> conflicts;
 
     /**
-     * The relocation prefixes for this package.
+     * The relocation prefix for this package.
+     *
+     */
+    @Parameter
+    private String prefix;
+
+    /**
+     * Additional relocation prefixes if needed.
      *
      * @since 2.1-alpha-4
      */
-    @Parameter( alias = "prefixes" )
-    private String[] prefixes;
+    @Parameter
+    private List<String> prefixes;
 
     /**
      * The area for RPM to use for building the package.<br/>
@@ -642,6 +649,15 @@ abstract class AbstractRPMMojo
             }
 
             return;
+        }
+
+        if ( this.prefix != null )
+        {
+            if ( this.prefixes == null )
+            {
+                this.prefixes = new ArrayList<String>();
+            }
+            this.prefixes.add(prefix);
         }
 
         helper = new RPMHelper( this );
@@ -1206,7 +1222,7 @@ abstract class AbstractRPMMojo
         return this.conflicts;
     }
 
-    final String[] getPrefixes()
+    final List<String> getPrefixes()
     {
         return prefixes;
     }

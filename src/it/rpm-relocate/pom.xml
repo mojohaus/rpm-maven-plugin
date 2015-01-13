@@ -22,6 +22,7 @@
         <extensions>true</extensions>
         <configuration>
           <group>Application/EXAMPLE</group>
+          <prefix>/tmp</prefix>
           <prefixes>
             <prefix>${rpm.prefix}</prefix>
           </prefixes>

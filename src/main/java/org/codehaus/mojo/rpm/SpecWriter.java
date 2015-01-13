@@ -95,10 +95,9 @@ final class SpecWriter
 
         if ( mojo.getPrefixes() != null )
         {
-            for ( int i = 0; i < mojo.getPrefixes().length; i++ )
+            for ( String prefix: mojo.getPrefixes() )
             {
-                String s = mojo.getPrefixes()[i];
-                spec.println( "Prefix: " + s );
+                spec.println( "Prefix: " + prefix );
             }
         }
 
