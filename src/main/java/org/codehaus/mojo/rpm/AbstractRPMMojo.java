@@ -183,7 +183,7 @@ abstract class AbstractRPMMojo
      * </pre>
      *
      * </p>
-     * If not given, look up the value under Maven settings using server id at 'keyPassphaseServerKey' configuration.
+     * If not given, look up the value under Maven settings using server id at 'keyPassphaseServerId' configuration.
      *
      * @since 2.0-beta-4
      */
@@ -196,8 +196,8 @@ abstract class AbstractRPMMojo
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "gpg.passphraseServerKey", defaultValue = "gpg.passphrase" )
-    private String passphraseServerKey;
+    @Parameter( property = "gpg.passphraseServerId", defaultValue = "gpg.passphrase" )
+    private String passphraseServerId;
 
     /**
      * The long description of the package.
@@ -1470,7 +1470,7 @@ abstract class AbstractRPMMojo
     {
         if ( this.keyPassphrase == null )
         {
-            Server server = this.settings.getServer( passphraseServerKey );
+            Server server = this.settings.getServer( passphraseServerId );
 
             if ( server != null )
             {
