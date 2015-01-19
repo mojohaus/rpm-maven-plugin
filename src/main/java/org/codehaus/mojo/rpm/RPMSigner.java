@@ -96,7 +96,8 @@ final class RPMSigner
         cl.setExecutable( "expect" );
         cl.setWorkingDirectory( rpm.getParentFile() );
         cl.createArg().setValue( "-c" );
-        cl.createArg().setValue( "sleep 1" ); //MRPM-176
+        //work around to allow expect execution time to read in the input during heavy system usage
+        cl.createArg().setValue( "sleep 1" ); //MRPM-176 and PLXUTILS-174
         cl.createArg().setValue( "-" );
 
         final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, log );
