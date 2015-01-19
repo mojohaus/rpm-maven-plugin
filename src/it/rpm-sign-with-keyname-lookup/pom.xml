@@ -65,9 +65,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
+        <version>1.6</version>
         <configuration>
-          <skip>true</skip>
+          <skip>${disableSigning}</skip>
           <keyname>${gpg.keyname}</keyname>
           <passphraseServerId>${gpg.keyname}</passphraseServerId>
         </configuration>
