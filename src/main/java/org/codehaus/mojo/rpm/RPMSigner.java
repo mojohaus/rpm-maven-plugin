@@ -95,6 +95,8 @@ final class RPMSigner
         final Commandline cl = new Commandline();
         cl.setExecutable( "expect" );
         cl.setWorkingDirectory( rpm.getParentFile() );
+        cl.createArg().setValue( "-c" );
+        cl.createArg().setValue( "sleep 1" ); //MRPM-176
         cl.createArg().setValue( "-" );
 
         final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, log );

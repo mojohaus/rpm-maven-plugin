@@ -75,6 +75,14 @@
         <role>Java Developer</role>
       </roles>
     </contributor>
+    <contributor>
+      <name>Niels Basjes</name>
+      <email>codehaus@basjes.nl</email>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </contributor>
+
   </contributors>
 
   <prerequisites>
