@@ -183,7 +183,7 @@ abstract class AbstractRPMMojo
      * </pre>
      *
      * </p>
-     * If not given, look up the value under Maven settings using server id at 'keyPassphaseServerId' configuration.
+     * If not given, look up the value under Maven settings using server id at 'keyPassphraseServerId' configuration.
      *
      * @since 2.0-beta-4
      */
@@ -191,7 +191,7 @@ abstract class AbstractRPMMojo
     private Passphrase keyPassphrase;
 
     /**
-     * Server id to lookup the gpg passphase under Maven settings. The default value intentionally selected to match
+     * Server id to lookup the gpg passphrase under Maven settings. The default value intentionally selected to match
      * with maven-gpg-plugin.
      *
      * @Since 2.1.2
@@ -685,7 +685,7 @@ abstract class AbstractRPMMojo
 
         writeSpecFile();
 
-        this.loadGpgPassphase();
+        this.loadGpgPassphrase();
 
         helper.buildPackage();
 
@@ -1477,11 +1477,11 @@ abstract class AbstractRPMMojo
     }
 
     /**
-     * Load and decrypt gpg passphase from maven settings if not given from plugin configuration
+     * Load and decrypt gpg passphrase from maven settings if not given from plugin configuration
      *
      * @throws MojoFailureException
      */
-    private void loadGpgPassphase()
+    private void loadGpgPassphrase()
         throws MojoFailureException
     {
         if ( this.keyPassphrase == null )
