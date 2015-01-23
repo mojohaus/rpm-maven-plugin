@@ -180,6 +180,7 @@ abstract class AbstractRPMMojo
      *     &lt;keyPassphrase&gt;
      *         &lt;passphrase&gt;<i>password</i>&lt;/passphrase&gt;
      *     &lt;/keyPassphrase&gt;
+     * &lt;/configuration&gt;
      * </pre>
      *
      * </p>
