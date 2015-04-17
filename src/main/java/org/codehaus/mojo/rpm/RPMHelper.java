@@ -61,7 +61,7 @@ final class RPMHelper
         cl.addArguments( new String[] { "-E", "%{_host_vendor}" } );
 
         final StringStreamConsumer stdout = new StringStreamConsumer();
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, log );
+        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
         try
         {
             if ( log.isDebugEnabled() )
@@ -141,7 +141,7 @@ final class RPMHelper
         final Log log = mojo.getLog();
 
         final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, log );
+        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
         try
         {
             if ( log.isDebugEnabled() )
@@ -196,7 +196,7 @@ final class RPMHelper
         final Log log = mojo.getLog();
 
         final StringStreamConsumer stdout = new StringStreamConsumer();
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, log );
+        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
         try
         {
             if ( log.isDebugEnabled() )
@@ -230,7 +230,7 @@ final class RPMHelper
         cl.addArguments( new String[] { "-E", "%{_arch}" } );
 
         final StringStreamConsumer stdConsumer = new StringStreamConsumer();
-        final StreamConsumer errConsumer = new LogStreamConsumer( LogStreamConsumer.WARN, mojo.getLog() );
+        final StreamConsumer errConsumer = new LogStreamConsumer( LogStreamConsumer.INFO, mojo.getLog() );
         try
         {
             if ( mojo.getLog().isDebugEnabled() )
