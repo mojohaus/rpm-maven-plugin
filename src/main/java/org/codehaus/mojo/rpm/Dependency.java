@@ -163,40 +163,47 @@ public class Dependency
 
         for ( String s : in )
         {
+            String[] parts = s.split(":");
             // Make sure we have group and artifact
-            int p1 = s.indexOf( ":" );
-            if ( p1 == -1 )
+            if(parts.length == 0)
             {
                 throw new MojoExecutionException( "Include and exclude must include both group and artifact IDs." );
             }
-
-            // Find end of artifact and create version range
-            int p2 = s.indexOf( ":", ( p1 + 1 ) );
+            String groupId = parts[0];
+            String artifactId = parts[1];
+            String versionStr = null;
+            String type = "";
+            String classifier = "";
             VersionRange vr = null;
-            if ( p2 == -1 )
+
+            if(parts.length > 2)
             {
-                p2 = s.length();
-                try
+                versionStr = parts[2];
+                if(parts.length > 3)
                 {
-                    vr = VersionRange.createFromVersionSpec( "[0,]" );
+                    type = parts[3];
                 }
-                catch ( InvalidVersionSpecificationException ex )
+
+                if(parts.length > 4)
                 {
-                    throw new MojoExecutionException( "Default version string is invalid!" );
+                    classifier = parts[4];
                 }
             }
             else
             {
-                try
-                {
-                    vr = VersionRange.createFromVersionSpec( s.substring( p2 + 1 ) );
-                }
-                catch ( InvalidVersionSpecificationException ex )
-                {
-                    throw new MojoExecutionException( "Version string " + s.substring( p2 + 1 ) + " is invalid." );
-                }
+                versionStr = "[0,]";
             }
-            retval.add( new DefaultArtifact( s.substring( 0, p1 ), s.substring( p1 + 1, p2 ), vr, null, "", "", null ) );
+
+            try
+            {
+                vr = VersionRange.createFromVersionSpec( versionStr );
+            }
+            catch ( InvalidVersionSpecificationException ex )
+            {
+                throw new MojoExecutionException( "Default version string is invalid!" );
+            }
+
+            retval.add( new DefaultArtifact( groupId, artifactId, vr, null, type, classifier, null ) );
         }
 
         return retval;
