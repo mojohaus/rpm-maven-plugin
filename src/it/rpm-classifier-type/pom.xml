@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>rpm-classifier</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+  <description>JAR to include in an rpm as part of a reactor build.</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>oauth.signpost</groupId>
+      <artifactId>signpost-commonshttp4</artifactId>
+      <version>1.2.1.2</version>
+      <type>jar</type>
+      <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>oauth.signpost</groupId>
+      <artifactId>signpost-commonshttp4</artifactId>
+      <version>1.2.1.2</version>
+      <type>jar</type>
+      <classifier>javadoc</classifier>
+    </dependency>
+    <dependency>
+      <groupId>oauth.signpost</groupId>
+      <artifactId>signpost-commonshttp4</artifactId>
+      <version>1.2.1.2</version>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>attached-rpm</goal>
+            </goals>
+            <configuration>
+              <distribution>My App</distribution>
+              <group>Application/Collectors</group>
+              <needarch>false</needarch>
+              <defaultUsername>myuser</defaultUsername>
+              <defaultGroupname>mygroup</defaultGroupname>
+              <mappings>
+                <mapping>
+                  <directory>/usr/local/lib</directory>
+                  <filemode>750</filemode>
+                  <username>dumper</username>
+                  <groupname>dumpgroup</groupname>
+                  <dependency>
+                    <includes>
+                      <include>oauth.signpost:signpost-commonshttp4:1.2.1.2:jar:javadoc</include>
+                      <include>oauth.signpost:signpost-commonshttp4:1.2.1.2</include>
+                    </includes>
+                    <excludes>
+                      <exclude>oauth.signpost:signpost-commonshttp4:1.2.1.2:jar:sources</exclude>
+                    </excludes>
+                  </dependency>
+                </mapping>
+              </mappings>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
