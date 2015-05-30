@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Utility to write spec file based on {@link AbstractRPMMojo} instance.
@@ -221,7 +222,7 @@ final class SpecWriter
                     for ( String file : files )
                     {
                         spec.print( baseFileString );
-                        spec.println( file + "\"" );
+                        spec.println( StringUtils.replace(file, "\\", "/") + "\"" );
                     }
                 }
 
