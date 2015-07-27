@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>RPM Maven Plugin - Checkstyle report</title>
-    <link>https://github.com/mojohaus/rpm-maven-plugin</link>
+    <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin</link>
     <description>RPM Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2005 - 2015 MojoHaus</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 17,
              Infos: 0
       </title>
-            <link>https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html</link>
+            <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html</link>
       <description>
-        <p>Click <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.AttachedRPMMojo.java">org/codehaus/mojo/rpm/AttachedRPMMojo.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.AttachedRPMMojo.java">org/codehaus/mojo/rpm/AttachedRPMMojo.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.VersionMojo.java">org/codehaus/mojo/rpm/VersionMojo.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.VersionMojo.java">org/codehaus/mojo/rpm/VersionMojo.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Dependency.java">org/codehaus/mojo/rpm/Dependency.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Dependency.java">org/codehaus/mojo/rpm/Dependency.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMHelper.java">org/codehaus/mojo/rpm/RPMHelper.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMHelper.java">org/codehaus/mojo/rpm/RPMHelper.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.FilteringDirectoryArchiver.java">org/codehaus/mojo/rpm/FilteringDirectoryArchiver.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.FilteringDirectoryArchiver.java">org/codehaus/mojo/rpm/FilteringDirectoryArchiver.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Scriptlet.java">org/codehaus/mojo/rpm/Scriptlet.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Scriptlet.java">org/codehaus/mojo/rpm/Scriptlet.java</a>
                 </td>
                 <td>
                   0
@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.UnixPrintWriter.java">org/codehaus/mojo/rpm/UnixPrintWriter.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.UnixPrintWriter.java">org/codehaus/mojo/rpm/UnixPrintWriter.java</a>
                 </td>
                 <td>
                   0
@@ -144,7 +144,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.SoftlinkSource.java">org/codehaus/mojo/rpm/SoftlinkSource.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.SoftlinkSource.java">org/codehaus/mojo/rpm/SoftlinkSource.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.InstallTrigger.java">org/codehaus/mojo/rpm/InstallTrigger.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.InstallTrigger.java">org/codehaus/mojo/rpm/InstallTrigger.java</a>
                 </td>
                 <td>
                   0
@@ -172,7 +172,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.ArtifactMap.java">org/codehaus/mojo/rpm/ArtifactMap.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.ArtifactMap.java">org/codehaus/mojo/rpm/ArtifactMap.java</a>
                 </td>
                 <td>
                   0
@@ -186,7 +186,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Mapping.java">org/codehaus/mojo/rpm/Mapping.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Mapping.java">org/codehaus/mojo/rpm/Mapping.java</a>
                 </td>
                 <td>
                   0
@@ -200,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.SpecWriter.java">org/codehaus/mojo/rpm/SpecWriter.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.SpecWriter.java">org/codehaus/mojo/rpm/SpecWriter.java</a>
                 </td>
                 <td>
                   0
@@ -214,7 +214,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Source.java">org/codehaus/mojo/rpm/Source.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Source.java">org/codehaus/mojo/rpm/Source.java</a>
                 </td>
                 <td>
                   0
@@ -228,7 +228,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMSigner.java">org/codehaus/mojo/rpm/RPMSigner.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMSigner.java">org/codehaus/mojo/rpm/RPMSigner.java</a>
                 </td>
                 <td>
                   0
@@ -242,7 +242,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.PostRemoveTrigger.java">org/codehaus/mojo/rpm/PostRemoveTrigger.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.PostRemoveTrigger.java">org/codehaus/mojo/rpm/PostRemoveTrigger.java</a>
                 </td>
                 <td>
                   0
@@ -256,7 +256,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.LogStreamConsumer.java">org/codehaus/mojo/rpm/LogStreamConsumer.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.LogStreamConsumer.java">org/codehaus/mojo/rpm/LogStreamConsumer.java</a>
                 </td>
                 <td>
                   0
@@ -270,7 +270,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.AbstractRPMMojo.java">org/codehaus/mojo/rpm/AbstractRPMMojo.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.AbstractRPMMojo.java">org/codehaus/mojo/rpm/AbstractRPMMojo.java</a>
                 </td>
                 <td>
                   0
@@ -284,7 +284,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMMojo.java">org/codehaus/mojo/rpm/RPMMojo.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMMojo.java">org/codehaus/mojo/rpm/RPMMojo.java</a>
                 </td>
                 <td>
                   0
@@ -298,7 +298,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RemoveTrigger.java">org/codehaus/mojo/rpm/RemoveTrigger.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RemoveTrigger.java">org/codehaus/mojo/rpm/RemoveTrigger.java</a>
                 </td>
                 <td>
                   0
@@ -312,7 +312,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.BaseTrigger.java">org/codehaus/mojo/rpm/BaseTrigger.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.BaseTrigger.java">org/codehaus/mojo/rpm/BaseTrigger.java</a>
                 </td>
                 <td>
                   0
@@ -326,7 +326,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.HelpMojo.java">org/codehaus/mojo/rpm/HelpMojo.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.HelpMojo.java">org/codehaus/mojo/rpm/HelpMojo.java</a>
                 </td>
                 <td>
                   0
@@ -340,7 +340,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.VersionHelper.java">org/codehaus/mojo/rpm/VersionHelper.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.VersionHelper.java">org/codehaus/mojo/rpm/VersionHelper.java</a>
                 </td>
                 <td>
                   0
@@ -354,7 +354,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.FileHelper.java">org/codehaus/mojo/rpm/FileHelper.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.FileHelper.java">org/codehaus/mojo/rpm/FileHelper.java</a>
                 </td>
                 <td>
                   0
@@ -368,7 +368,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/mojohaus/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Passphrase.java">org/codehaus/mojo/rpm/Passphrase.java</a>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Passphrase.java">org/codehaus/mojo/rpm/Passphrase.java</a>
                 </td>
                 <td>
                   0
