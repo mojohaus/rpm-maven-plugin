@@ -205,11 +205,6 @@
   <profiles>
     <profile>
       <id>run-its</id>
-      <activation>
-        <os>
-          <name>linux</name>
-        </os>
-      </activation>
       <build>
         <plugins>
           <plugin>
