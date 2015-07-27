@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>34</version>
+    <version>36</version>
   </parent>
 
   <artifactId>rpm-maven-plugin</artifactId>
@@ -23,8 +23,29 @@
   <description>
     Maven plugin which assembles files into an RPM package for installation on various target UNIX systems.
   </description>
-  <url>http://mojo.codehaus.org/rpm-maven-plugin/</url>
+  <url>https://github.com/mojohaus/rpm-maven-plugin</url>
   <inceptionYear>2005</inceptionYear>
+
+  <prerequisites>
+    <maven>${mavenVersion}</maven>
+  </prerequisites>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mojohaus/rpm-maven-plugin/issues/</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Travis-CI</system>
+    <url>https://travis-ci.org/mojohaus/rpm-maven-plugin</url>
+  </ciManagement>
+
+  <distributionManagement>
+    <site>
+      <id>github</id>
+      <url>scm:git:ssh://git@github.com/mojohaus/rpm-maven-plugin.git</url>
+    </site>
+  </distributionManagement>
+
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -51,6 +72,16 @@
       <organization>Cerner</organization>
       <organizationUrl>http://www.cerner.com</organizationUrl>
       <timezone>-6</timezone>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>dantran</id>
+      <name>Dan Tran</name>
+      <email>dantran@gmail.com</email>
+      <organization>None</organization>
+      <timezone>-8</timezone>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -85,23 +116,12 @@
 
   </contributors>
 
-  <prerequisites>
-    <maven>${mavenVersion}</maven>
-  </prerequisites>
-
   <scm>
-    <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/rpm-maven-plugin</url>
-    <connection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/rpm-maven-plugin</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/rpm-maven-plugin</developerConnection>
+    <connection>scm:git:https://github.com:mojohaus/rpm-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:mojohaus/rpm-maven-plugin.git</developerConnection>
+    <url>https://github.com/mojohaus/rpm-maven-plugin</url>
+    <tag>master</tag>
   </scm>
-  <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MRPM</url>
-  </issueManagement>
-  <ciManagement>
-    <system>Bamboo</system>
-    <url>http://bamboo.ci.codehaus.org/browse/MOJO-MRPM</url>
-  </ciManagement>
 
   <properties>
     <mavenVersion>2.2.1</mavenVersion>
@@ -157,7 +177,6 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <version>3.3</version>
       <!-- annotations are not needed for plugin execution so you can remove this dependency for execution with using provided scope -->
       <scope>provided</scope>
     </dependency>
@@ -170,17 +189,7 @@
 
   <build>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.6</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
