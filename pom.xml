@@ -23,7 +23,6 @@
   <description>
     Maven plugin which assembles files into an RPM package for installation on various target UNIX systems.
   </description>
-  <url>https://github.com/mojohaus/rpm-maven-plugin</url>
   <inceptionYear>2005</inceptionYear>
 
   <prerequisites>
@@ -38,13 +37,6 @@
     <system>Travis-CI</system>
     <url>https://travis-ci.org/mojohaus/rpm-maven-plugin</url>
   </ciManagement>
-
-  <distributionManagement>
-    <site>
-      <id>github</id>
-      <url>scm:git:ssh://git@github.com/mojohaus/rpm-maven-plugin.git</url>
-    </site>
-  </distributionManagement>
 
   <licenses>
     <license>
@@ -118,7 +110,7 @@
 
   <scm>
     <connection>scm:git:https://github.com:mojohaus/rpm-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:mojohaus/rpm-maven-plugin.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:mojohaus/rpm-maven-plugin.git</developerConnection>
     <url>https://github.com/mojohaus/rpm-maven-plugin</url>
     <tag>master</tag>
   </scm>
