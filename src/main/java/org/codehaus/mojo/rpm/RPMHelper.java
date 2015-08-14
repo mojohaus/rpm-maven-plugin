@@ -127,11 +127,11 @@ final class RPMHelper
         if ( keyname != null && keyPassphrase == null )
         {
             cl.createArg().setValue( "--define" );
-            cl.createArg().setValue( "\"_gpg_name " + keyname + "\"" );
+            cl.createArg().setValue( "_gpg_name " + keyname );
             if ( keypath != null )
             {
                 cl.createArg().setValue( "--define" );
-                cl.createArg().setValue( "\"_gpg_path " + keypath + "\"" );
+                cl.createArg().setValue( "_gpg_path " + keypath );
             }
             cl.createArg().setValue( "--sign" );
         }
