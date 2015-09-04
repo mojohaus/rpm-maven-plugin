@@ -120,6 +120,20 @@ final class RPMHelper
         cl.createArg().setValue( "--define" );
         cl.createArg().setValue( "_topdir " + FileHelper.toUnixPath( workarea ) );
 
+        // Don't assume default values for rpm path macros
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" );
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_builddir %{_topdir}/BUILD" );
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_rpmdir %{_topdir}/RPMS" );
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_sourcedir %{_topdir}/SOURCES" );
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_specdir %{_topdir}/SPECS" );
+        cl.createArg().setValue( "--define" );
+        cl.createArg().setValue( "_srcrpmdir %{_topdir}/SRPMS" );
+
         // maintain passive behavior for keyPassphrase not being present
         final String keyname = mojo.getKeyname();
         final File keypath = mojo.getKeypath();
