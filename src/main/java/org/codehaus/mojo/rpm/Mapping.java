@@ -169,7 +169,7 @@ public class Mapping
     }
 
     /**
-     * Retrieves the configuration value. This may be just a string representation of {@link #isConfiguration()}.
+     * Retrieves the configuration value. This may be just a string representation of {@link #getConfiguration()}.
      * However, modifications to the <i>%config</i> declaration (such as <i>noreplace</i>) are allowed.
      *
      * @return The configuration value.

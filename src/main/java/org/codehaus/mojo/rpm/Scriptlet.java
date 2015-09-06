@@ -177,7 +177,7 @@ public class Scriptlet
     /**
      * This is the maven property: project.build.sourceEncoding
      *
-     * @param soruceEncoding The {@link #sourceEncoding} to set.
+     * @param sourceEncoding The {@link #sourceEncoding} to set.
      */
     public void setSourceEncoding( String sourceEncoding )
     {
