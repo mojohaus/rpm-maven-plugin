@@ -28,6 +28,7 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.plexus.archiver.ArchiveEntry;
 import org.codehaus.plexus.archiver.dir.DirectoryArchiver;
+import org.codehaus.plexus.archiver.util.ArchiveEntryUtils;
 import org.codehaus.plexus.components.io.resources.PlexusIoFileResource;
 
 /**
@@ -134,6 +135,10 @@ final class FilteringDirectoryArchiver
                 try
                 {
                     mavenFileFilter.copyFile( inFile, outFile, true, filterWrappers, null );
+                    if ( !isIgnorePermissions() )
+                    {
+                        ArchiveEntryUtils.chmod( outFile, entry.getMode(), getLogger(), isUseJvmChmod() );
+                    }
                 }
                 catch ( MavenFilteringException e )
                 {
