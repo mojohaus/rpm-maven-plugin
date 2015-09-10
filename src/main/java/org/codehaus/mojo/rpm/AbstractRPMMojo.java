@@ -65,22 +65,6 @@ abstract class AbstractRPMMojo
     extends AbstractMojo
     implements RPMVersionableMojo
 {
-    /**
-     * Maintains a mapping of macro keys to their values (either {@link RPMHelper#evaluateMacro(String) evaluated} or
-     * set via {@link #defineStatements}.
-     *
-     * @since 2.1-alpha-1
-     */
-    private final Map<String, String> macroKeyToValue = new HashMap<String, String>();
-
-    /**
-     * The key of the map is the directory where the files should be linked to. The value is the {@code List} of
-     * {@link SoftlinkSource}s to be linked to.
-     *
-     * @since 2.0-beta-3
-     */
-    private final Map<String, List<SoftlinkSource>> linkTargetToSources =
-        new LinkedHashMap<String, List<SoftlinkSource>>();
 
     /**
      * The name portion of the output file name.
@@ -480,19 +464,6 @@ abstract class AbstractRPMMojo
     @Parameter( required = true, readonly = true, property = "project.build.sourceEncoding" )
     private String sourceEncoding;
 
-    /**
-     * @since 2.0
-     */
-    @Component( role = org.apache.maven.shared.filtering.MavenFileFilter.class, hint = "default" )
-    private MavenFileFilter mavenFileFilter;
-
-    /**
-     * The {@link FileUtils.FilterWrapper filter wrappers} to use for file filtering.
-     *
-     * @since 2.0
-     * @see #mavenFileFilter
-     */
-    private List<FilterWrapper> defaultFilterWrappers;
 
     /**
      * The primary project artifact.
@@ -577,30 +548,6 @@ abstract class AbstractRPMMojo
     @Parameter
     private boolean disabled;
 
-    /** The root of the build area prior to calling rpmbuild. */
-    private File buildroot;
-
-    /** The root of the build area as used by rpmbuild. */
-    private File rpmBuildroot;
-
-    /** The changelog string. */
-    private String changelog;
-
-    /**
-     * The changelog file. If the file does not exist, it is ignored.
-     *
-     * @since 2.0-beta-3
-     */
-    @Parameter
-    private File changelogFile;
-
-    /**
-     * This is not set until {@link #execute() is called}.
-     *
-     * @since 2.1-alpha-1
-     */
-    private RPMHelper helper;
-
     /**
      * The system property to read the calculated version from, normally set by the version mojo.
      *
@@ -618,6 +565,23 @@ abstract class AbstractRPMMojo
     private String releaseProperty;
 
     /**
+     * The changelog file. If the file does not exist, it is ignored.
+     *
+     * @since 2.0-beta-3
+     */
+    @Parameter
+    private File changelogFile;
+
+    //////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @since 2.0
+     */
+    @Component( role = org.apache.maven.shared.filtering.MavenFileFilter.class, hint = "default" )
+    private MavenFileFilter mavenFileFilter;
+
+
+    /**
      * Maven Security Dispatcher
      *
      * @since 2.1.2
@@ -633,7 +597,51 @@ abstract class AbstractRPMMojo
     @Parameter( defaultValue = "${settings}", readonly = true )
     private Settings settings;
 
-    // // // Mojo methods
+    //////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Maintains a mapping of macro keys to their values (either {@link RPMHelper#evaluateMacro(String) evaluated} or
+     * set via {@link #defineStatements}.
+     *
+     * @since 2.1-alpha-1
+     */
+    private final Map<String, String> macroKeyToValue = new HashMap<String, String>();
+
+    /**
+     * The key of the map is the directory where the files should be linked to. The value is the {@code List} of
+     * {@link SoftlinkSource}s to be linked to.
+     *
+     * @since 2.0-beta-3
+     */
+    private final Map<String, List<SoftlinkSource>> linkTargetToSources =
+        new LinkedHashMap<String, List<SoftlinkSource>>();
+
+    /** The root of the build area prior to calling rpmbuild. */
+    private File buildroot;
+
+    /** The root of the build area as used by rpmbuild. */
+    private File rpmBuildroot;
+
+    /** The changelog string. */
+    private String changelog;
+
+    /**
+     * This is not set until {@link #execute() is called}.
+     *
+     * @since 2.1-alpha-1
+     */
+    private RPMHelper helper;
+
+    /**
+     * The {@link FileUtils.FilterWrapper filter wrappers} to use for file filtering.
+     *
+     * @since 2.0
+     * @see #mavenFileFilter
+     */
+    private List<FilterWrapper> defaultFilterWrappers;
+
+
+    // // // Mojo methods/////////////////////////////////////////////////////
 
     /** {@inheritDoc} */
     public final void execute()
