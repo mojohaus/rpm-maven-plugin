@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2005 - 2015 MojoHaus</copyright>
     <item>
-      <title>File: 24,
-             Errors: 14,
-             Warnings: 17,
+      <title>File: 23,
+             Errors: 48,
+             Warnings: 15,
              Infos: 0
       </title>
             <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html</link>
@@ -83,7 +83,7 @@ under the License.
                   1
                 </td>
                 <td>
-                  1
+                  14
                 </td>
               </tr>
                           <tr>
@@ -122,7 +122,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  2
                 </td>
                 <td>
                   0
@@ -172,20 +172,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.ArtifactMap.java">org/codehaus/mojo/rpm/ArtifactMap.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.Mapping.java">org/codehaus/mojo/rpm/Mapping.java</a>
                 </td>
                 <td>
@@ -193,6 +179,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.ArtifactMap.java">org/codehaus/mojo/rpm/ArtifactMap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -279,7 +279,7 @@ under the License.
                   3
                 </td>
                 <td>
-                  2
+                  18
                 </td>
               </tr>
                           <tr>
@@ -326,20 +326,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.HelpMojo.java">org/codehaus/mojo/rpm/HelpMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.VersionHelper.java">org/codehaus/mojo/rpm/VersionHelper.java</a>
                 </td>
                 <td>
@@ -363,7 +349,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  6
                 </td>
               </tr>
                           <tr>
