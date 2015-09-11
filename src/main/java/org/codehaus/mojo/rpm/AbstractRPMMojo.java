@@ -572,6 +572,13 @@ abstract class AbstractRPMMojo
     @Parameter
     private File changelogFile;
 
+    /**
+     * Option to copy the created RPM to another location
+     * @since 2.1.
+     */
+    @Parameter(property="rpm.copyTo")
+    private File copyTo;
+
     //////////////////////////////////////////////////////////////////////////
 
     /**
@@ -699,6 +706,20 @@ abstract class AbstractRPMMojo
         helper.buildPackage();
 
         afterExecution();
+
+        if ( this.copyTo != null ) {
+        	makeSecondCopy();
+        }
+    }
+
+    private void makeSecondCopy() throws MojoFailureException {
+    	try {
+    		this.getLog().info( "Copy " + this.getRPMFile() + " to " + copyTo );
+    	    FileUtils.copyFile( this.getRPMFile(), copyTo );
+    	}
+    	catch ( IOException e ) {
+    		throw new MojoFailureException( "Unable to copy file" );
+    	}
     }
 
     /**

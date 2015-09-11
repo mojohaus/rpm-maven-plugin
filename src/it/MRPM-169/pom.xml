@@ -58,6 +58,8 @@
               </sources>
             </mapping>
           </mappings>
+          <!-- use this IT to test copyTo feature -->
+          <copyTo>${project.build.directory}/${project.build.finalName}.rpm</copyTo>
         </configuration>
       </plugin>
     </plugins>
