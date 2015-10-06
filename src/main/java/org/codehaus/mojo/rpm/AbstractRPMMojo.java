@@ -850,16 +850,20 @@ abstract class AbstractRPMMojo
         Log log = getLog();
 
         // Retrieve any versions set by the VersionMojo
-        String projversion = this.project.getProperties().getProperty( versionProperty );
-        if ( projversion != null )
-        {
-            this.projversion = projversion;
-        }
-        String release = this.project.getProperties().getProperty( releaseProperty );
-        if ( release != null )
-        {
-            this.release = release;
-        }
+	if ( versionProperty != null ) {
+	    String projversion = this.project.getProperties().getProperty( versionProperty );
+	    if ( projversion != null )
+		{
+		    this.projversion = projversion;
+		}
+	}
+	if ( releaseProperty != null ) {
+	    String release = this.project.getProperties().getProperty( releaseProperty );
+	    if ( release != null )
+		{
+		    this.release = release;
+		}
+	}
 
         // calculate versions if neccessary, check for existing maven modifier and split them accordingly
         if ( this.projversion == null || this.release == null || this.projversion.contains( "-" ) )
@@ -1121,7 +1125,7 @@ abstract class AbstractRPMMojo
 
     public Date getBuildTimestamp()
     {
-        return session.getStartTime();
+        return ( session == null ) ? new Date() : session.getStartTime();
     }
 
     /**
@@ -1514,7 +1518,7 @@ abstract class AbstractRPMMojo
     private void loadGpgPassphrase()
         throws MojoFailureException
     {
-        if ( this.keyPassphrase == null )
+        if ( this.keyPassphrase == null && passphraseServerId != null )
         {
             Server server = this.settings.getServer( passphraseServerId );
 
