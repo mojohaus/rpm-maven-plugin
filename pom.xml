@@ -184,12 +184,16 @@
 
  <distributionManagement>
    <repository>
-     <id>release</id>
+     <id>ossrh-staging</id>
      <uniqueVersion>false</uniqueVersion>
      <name>Released component versions</name>
      <url>http://gomel.got.jeppesensystems.com:8000/nexus/content/repositories/jts-release</url>
    </repository>
- </distributionManagement>
+    <snapshotRepository>
+      <id>ossrh-snapshots</id>
+      <url>http://gomel.got.jeppesensystems.com:8000/nexus/content/repositories/jts-development</url>
+    </snapshotRepository>
+</distributionManagement>
 
   <build>
     <plugins>
