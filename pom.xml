@@ -33,11 +33,11 @@
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/mojohaus/rpm-maven-plugin/issues/</url>
+    <url>https://github.com/snigel/rpm-maven-plugin/issues/</url>
   </issueManagement>
   <ciManagement>
     <system>Travis-CI</system>
-    <url>https://travis-ci.org/mojohaus/rpm-maven-plugin</url>
+    <url>https://travis-ci.org/snigel/rpm-maven-plugin</url>
   </ciManagement>
 
   <licenses>
