@@ -182,8 +182,16 @@
     </dependency>
   </dependencies>
 
-  <build>
+ <distributionManagement>
+   <repository>
+     <id>release</id>
+     <uniqueVersion>false</uniqueVersion>
+     <name>Released component versions</name>
+     <url>http://gomel.got.jeppesensystems.com:8000/nexus/content/repositories/jts-release</url>
+   </repository>
+ </distributionManagement>
 
+  <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
