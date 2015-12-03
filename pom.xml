@@ -15,10 +15,8 @@
     <version>38</version>
   </parent>
 
-<!-- Temporarily changing groupId to separate my patch from the "real" 2.1.5 -->
-  <groupId>com.jeppesen.jcms</groupId>
   <artifactId>rpm-maven-plugin</artifactId>
-  <version>2.1.7-SNAPSHOT</version>
+  <version>2.1.4.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>RPM Maven Plugin</name>
