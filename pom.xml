@@ -18,7 +18,7 @@
 <!-- Temporarily changing groupId to separate my patch from the "real" 2.1.5 -->
   <groupId>com.jeppesen.jcms</groupId>
   <artifactId>rpm-maven-plugin</artifactId>
-  <version>2.1.5</version>
+  <version>2.1.6-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>RPM Maven Plugin</name>
