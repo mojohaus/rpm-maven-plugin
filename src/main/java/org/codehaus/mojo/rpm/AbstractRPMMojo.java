@@ -957,19 +957,6 @@ abstract class AbstractRPMMojo
             license = generateDefaultCopyrightText();
         }
 
-        // if this package obsoletes any packages, make sure those packages are added to the provides list
-        if ( obsoletes != null )
-        {
-            if ( provides == null )
-            {
-                provides = obsoletes;
-            }
-            else
-            {
-                provides.addAll( obsoletes );
-            }
-        }
-
         if ( !repackJars )
         {
             if ( defineStatements == null )
