@@ -1160,6 +1160,15 @@ abstract class AbstractRPMMojo
     }
 
     /**
+     * @return Returns the {@link #epoch}.
+     */
+    final String getEpoch()
+    {
+        return this.epoch;
+    }
+
+
+    /**
      * @return Returns the {@link #distribution}.
      */
     final String getDistribution()
