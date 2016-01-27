@@ -211,6 +211,13 @@ abstract class AbstractRPMMojo
     private String distribution;
 
     /**
+     * The epoch of this package.
+     * As defined here: http://www.rpm.org/max-rpm-snapshot/s1-rpm-inside-tags.html
+     */
+    @Parameter
+    private String epoch;
+
+    /**
      * An icon for the package.
      */
     @Parameter
@@ -1151,6 +1158,15 @@ abstract class AbstractRPMMojo
     {
         return this.license;
     }
+
+    /**
+     * @return Returns the {@link #epoch}.
+     */
+    final String getEpoch()
+    {
+        return this.epoch;
+    }
+
 
     /**
      * @return Returns the {@link #distribution}.
