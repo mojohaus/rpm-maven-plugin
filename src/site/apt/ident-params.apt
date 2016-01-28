@@ -117,3 +117,20 @@ Identification Parameters
   added to the SPEC file to disable repackaging of jar files when creating
   the RPM. This defaults to <<<false>>>. This will only have effect with
   version 9.0.0 or later releases of <<<redhat-rpm-config>>> (RHEL 6).
+
+* {epoch}
+
+  Set to an integer value that is greater than 0 (or whatever your current epoch value is)
+  to make this version of the package greater than that last one no matter WHAT the version
+  tag was set to prior.
+
+  Setting the Epoch is typically used as a way getting out of a situation where your old 
+  version is larger than your new version. This is usually because you've decided to go from a 
+  time/date stamp for a version to a version like 6.0. A time/date stamp will always be larger
+  than something like 6.0 unless you set the epoch to 1. If epoch is 1 you now have a version 
+  like 1:6.0 which will be greater than 0:2016.01.28.
+
+  <<<In general you should not need to set this tag!>>>
+
+  See the epoch tag at http://www.rpm.org/max-rpm-snapshot/s1-rpm-inside-tags.html for a more
+  detailed writeup about when you'd want to set epoch.
