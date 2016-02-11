@@ -74,6 +74,11 @@ final class SpecWriter
         writeNonNullDirective( "Summary", mojo.getSummary() );
         writeNonNullDirective( "License", mojo.getLicense() );
         writeNonNullDirective( "Distribution", mojo.getDistribution() );
+        
+        if ( mojo.getEpoch() != null )
+        {
+            spec.println( "Epoch: " + mojo.getEpoch() );
+        }
 
         if ( mojo.getIcon() != null )
         {
