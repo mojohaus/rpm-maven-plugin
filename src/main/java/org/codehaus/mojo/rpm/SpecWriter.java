@@ -74,7 +74,7 @@ final class SpecWriter
         writeNonNullDirective( "Summary", mojo.getSummary() );
         writeNonNullDirective( "License", mojo.getLicense() );
         writeNonNullDirective( "Distribution", mojo.getDistribution() );
-        
+
         if ( mojo.getEpoch() != null )
         {
             spec.println( "Epoch: " + mojo.getEpoch() );
@@ -201,14 +201,14 @@ final class SpecWriter
             }
 
             //simple map, no need to scan, speedup build for large number of files
-            if ( links.isEmpty() && map.isDirectoryIncluded() && !map.isRecurseDirectories()
-                 && includes.isEmpty() )
+            if ( includes.isEmpty() && links.isEmpty() && map.isDirectoryIncluded() && !map.isRecurseDirectories() )
             {
-                log.debug( "writing attribute string for directory: " + destination );
+                log.debug( "writing attribute string for directory with no filter: " + destination );
                 spec.println( attrString + " \"" + destination + "\"" );
                 continue;
             }
 
+            log.debug( "scanning: " + absoluteDestination );
             final DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( absoluteDestination );
 
