@@ -195,6 +195,15 @@ final class SpecWriter
                 continue;
             }
 
+            //simple map, no need to scan, speedup build for large number of files
+            if ( links.isEmpty() && map.isDirectoryIncluded() && !map.isRecurseDirectories()
+                 && includes.isEmpty() )
+            {
+                log.debug( "writing attribute string for directory: " + destination );
+                spec.println( attrString + " \"" + destination + "\"" );
+                continue;
+            }
+
             final DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( absoluteDestination );
 
