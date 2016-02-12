@@ -458,6 +458,31 @@ public class Mapping
     }
 
     /**
+     * Return source with directories only status.
+     *
+     * @return <code>true</code> if no sources were specified in the mapping
+     */
+    public boolean isSourceDirsOnly()
+    {
+        if ( artifact != null )
+        {
+            return false;
+        }
+
+        if ( dependency != null )
+        {
+            return false;
+        }
+
+        if ( ( sources == null || sources.isEmpty() ) )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Return directory-only status.
      *
      * @return <code>true</code> if no sources were specified in the mapping

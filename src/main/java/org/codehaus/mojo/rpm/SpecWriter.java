@@ -101,7 +101,7 @@ final class SpecWriter
 
         if ( mojo.getPrefixes() != null )
         {
-            for ( String prefix: mojo.getPrefixes() )
+            for ( String prefix : mojo.getPrefixes() )
             {
                 spec.println( "Prefix: " + prefix );
             }
@@ -185,7 +185,6 @@ final class SpecWriter
                 continue;
             }
 
-            final List<String> includes = map.getCopiedFileNamesRelativeToDestination();
             final List<String> links = map.getLinkedFileNamesRelativeToDestination();
 
             if ( map.isSoftLinkOnly() )
@@ -199,6 +198,30 @@ final class SpecWriter
                 }
                 continue;
             }
+
+            // special handling for single map source directory with lots of files such UI/Nodejs
+            // without the need for slow scanner which can be up 10 of minutes for large set
+            if ( map.isSourceDirsOnly() && map.isDirectoryIncluded() && !map.isRecurseDirectories() )
+            {
+                boolean simpleDir = true;
+                for ( Source source : map.getSources() )
+                {
+                    if ( !source.isSingleDir() )
+                    {
+                        simpleDir = false;
+                        break;
+                    }
+                }
+
+                if ( simpleDir )
+                {
+                    log.debug( "writing attribute string for directory: " + destination );
+                    spec.println( attrString + " \"" + destination + "\"" );
+                    continue;
+                }
+            }
+
+            final List<String> includes = map.getCopiedFileNamesRelativeToDestination();
 
             log.debug( "scanning: " + absoluteDestination );
             final DirectoryScanner scanner = new DirectoryScanner();
@@ -228,7 +251,7 @@ final class SpecWriter
                     for ( String file : files )
                     {
                         spec.print( baseFileString );
-                        spec.println( StringUtils.replace(file, "\\", "/") + "\"" );
+                        spec.println( StringUtils.replace( file, "\\", "/" ) + "\"" );
                     }
                 }
 
@@ -535,9 +558,8 @@ final class SpecWriter
                 mojo.getPosttransScriptlet(), mojo.getVerifyScriptlet(), mojo.getCleanScriptlet() };
 
         // all directives, in parallel to scriptlets
-        final String[] directives =
-            new String[] { "%prep", "%pretrans", "%pre", "%post", "%preun", "%postun", "%posttrans", "%verifyscript",
-                "%clean" };
+        final String[] directives = new String[] { "%prep", "%pretrans", "%pre", "%post", "%preun", "%postun",
+            "%posttrans", "%verifyscript", "%clean" };
 
         for ( int i = 0; i < scriptlets.length; ++i )
         {
