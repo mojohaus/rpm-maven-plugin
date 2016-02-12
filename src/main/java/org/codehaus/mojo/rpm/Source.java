@@ -377,4 +377,10 @@ public class Source
         sb.append( "}" );
         return sb.toString();
     }
+
+    public boolean isSingleDir()
+    {
+        return this.location != null && ( this.includes == null || this.includes.isEmpty() )
+            && ( this.excludes == null || this.excludes.isEmpty() ) && this.noDefaultExcludes;
+    }
 }
