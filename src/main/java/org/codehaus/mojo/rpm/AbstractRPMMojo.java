@@ -965,8 +965,10 @@ abstract class AbstractRPMMojo
         }
 
         // if this package obsoletes any packages, make sure those packages are added to the provides list
-        if ( obsoletes != null )
+        if ( obsoletes != null && "true".equals( System.getProperty( "disable.mrpm24" ) ) )
         {
+            //this block is incorrectly implemented, however we want to provide capability
+            // to enable this if needed in the next few releases, after that remove it completely
             if ( provides == null )
             {
                 provides = obsoletes;
