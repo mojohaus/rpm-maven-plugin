@@ -385,9 +385,15 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a>         sb.append( <span class="jxr_string">"}"</span> );
 <a class="jxr_linenumber" name="L378" href="#L378">378</a>         <strong class="jxr_keyword">return</strong> sb.toString();
 <a class="jxr_linenumber" name="L379" href="#L379">379</a>     }
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> }
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSingleDir()
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>     {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.location != <strong class="jxr_keyword">null</strong> &amp;&amp; ( <strong class="jxr_keyword">this</strong>.includes == <strong class="jxr_keyword">null</strong> || <strong class="jxr_keyword">this</strong>.includes.isEmpty() )
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>             &amp;&amp; ( <strong class="jxr_keyword">this</strong>.excludes == <strong class="jxr_keyword">null</strong> || <strong class="jxr_keyword">this</strong>.excludes.isEmpty() ) &amp;&amp; <strong class="jxr_keyword">this</strong>.noDefaultExcludes;
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>     }
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2005&#x2013;2015 <a href="http://www.mojohaus.org">MojoHaus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2005&#x2013;2016 <a href="http://www.mojohaus.org">MojoHaus</a>. All rights reserved.</div>
 </body>
 </html>

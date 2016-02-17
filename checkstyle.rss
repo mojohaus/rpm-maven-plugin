@@ -23,11 +23,11 @@ under the License.
     <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin</link>
     <description>RPM Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2005 - 2015 MojoHaus</copyright>
+    <copyright>&#169;2005 - 2016 MojoHaus</copyright>
     <item>
       <title>File: 23,
-             Errors: 48,
-             Warnings: 15,
+             Errors: 62,
+             Warnings: 16,
              Infos: 0
       </title>
             <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html</link>
@@ -209,7 +209,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  1
                 </td>
               </tr>
                           <tr>
@@ -220,7 +220,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   1
@@ -279,7 +279,7 @@ under the License.
                   3
                 </td>
                 <td>
-                  18
+                  34
                 </td>
               </tr>
                           <tr>
