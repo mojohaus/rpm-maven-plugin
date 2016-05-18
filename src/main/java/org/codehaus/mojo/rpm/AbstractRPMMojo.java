@@ -611,6 +611,14 @@ abstract class AbstractRPMMojo
     @Parameter( defaultValue = "${settings}", readonly = true )
     private Settings settings;
 
+    /**
+     * Indicates if the execution should be disabled for POM projects. If <code>true</code>, nothing will happen during
+     * execution in projects with packaging "pom".
+     * @since 2.1.6
+     */
+    @Parameter(defaultValue = "false")
+    private boolean skipPOMs;
+
     //////////////////////////////////////////////////////////////////////////
 
     /**
@@ -661,6 +669,12 @@ abstract class AbstractRPMMojo
     public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        if ( skipPOMs && isPOM() )
+        {
+            getLog().info("skipping because artifact is a pom (skipPOMs)");
+            return;
+        }
+
         if ( disabled )
         {
             getLog().info( "MOJO is disabled. Doing nothing." );
@@ -717,6 +731,24 @@ abstract class AbstractRPMMojo
         if ( this.copyTo != null ) {
         	makeSecondCopy();
         }
+    }
+
+    /**
+     * @return The Maven project used by this MOJO
+     */
+    private MavenProject getProject() {
+        if (project.getExecutionProject() != null) {
+            return project.getExecutionProject();
+        }
+
+        return project;
+    }
+
+    /**
+     * @return Whether the artifact is a POM or not
+     */
+    private boolean isPOM() {
+        return "pom".equalsIgnoreCase(getProject().getArtifact().getType());
     }
 
     private void makeSecondCopy() throws MojoFailureException {
