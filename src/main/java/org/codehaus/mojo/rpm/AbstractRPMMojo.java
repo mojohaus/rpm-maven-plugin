@@ -67,6 +67,13 @@ abstract class AbstractRPMMojo
 {
 
     /**
+     * the full path to the rpmbuild executable to use
+     * default to the relative/somewhere on the path 'rpmbuild'
+     */
+    @Parameter( alias = "rpmBuildExe", property = "rpm.rpmbuild.exe", defaultValue = "rpmbuild")
+    private String rpmRpmbuildExe;
+    
+    /**
      * The name portion of the output file name.
      */
     @Parameter( required = true, property = "rpm.name", defaultValue = "${project.artifactId}" )
@@ -1560,6 +1567,22 @@ abstract class AbstractRPMMojo
         return this.defaultFilterWrappers;
     }
 
+    /**
+     * @return the rpmRpmbuildExe
+     */
+    final public String getRpmRpmbuildExe()
+    {
+        return rpmRpmbuildExe;
+    }
+
+    /**
+     * @param rpmRpmbuildExe the rpmRpmbuildExe to set
+     */
+    final public void setRpmRpmbuildExe( String rpmRpmbuildExe )
+    {
+        this.rpmRpmbuildExe = rpmRpmbuildExe;
+    }
+    
     /**
      * Load and decrypt gpg passphrase from maven settings if not given from plugin configuration
      *
