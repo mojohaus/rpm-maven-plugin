@@ -111,7 +111,7 @@ final class VersionHelper {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
                     simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                     modifier += simpleDateFormat.format(mojo.getBuildTimestamp());
-                } else {
+                } else if (!modifier.matches("\\d+")) {
                     modifier += "_1";
                 }
 
