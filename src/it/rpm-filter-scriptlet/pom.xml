@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>rpm-filter-scriptlet</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <inceptionYear>2016</inceptionYear>
+  <organization>
+    <name>Example, Inc.</name>
+    <url>www.example.org</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>rpm</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <group>Application/Collectors</group>
+          <preinstallScriptlet>
+            <script>echo "installing ${project.artifactId}"</script>
+          </preinstallScriptlet>
+          <postinstallScriptlet>
+            <scriptFile>src/main/scripts/postinstall.sh</scriptFile>
+            <fileEncoding>utf-8</fileEncoding>
+            <filter>true</filter>
+          </postinstallScriptlet>
+          <triggers>
+            <installTrigger>
+              <script>echo "a filtered install trigger for ${project.artifactId}"</script>
+              <triggers>
+                <trigger>dependency</trigger>
+                <trigger>dependency1</trigger>
+              </triggers>
+            </installTrigger>
+          </triggers>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
