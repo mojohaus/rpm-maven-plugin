@@ -262,27 +262,24 @@ public class Scriptlet
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected final void writeContent( PrintWriter writer, final List<FileUtils.FilterWrapper> filterWrappers)
+    protected final void writeContent( PrintWriter writer, final List<FileUtils.FilterWrapper> filterWrappers )
         throws IOException
     {
-        Reader reader = null;
         if ( script != null )
         {
-            reader = new StringReader(script);
+            writer.println( script );
         }
         else if ( scriptFile.exists() )
         {
-            reader = fileEncoding != null ? new InputStreamReader( new FileInputStream( scriptFile ), fileEncoding )
+            Reader reader =
+                    fileEncoding != null ? new InputStreamReader( new FileInputStream( scriptFile ), fileEncoding )
                             : new FileReader( scriptFile );
-        }
-        if(reader != null) {
-            if(filter) {
-                for ( FileUtils.FilterWrapper wrapper : filterWrappers )
-                {
-                    reader = wrapper.getReader( reader );
+            if(filter)
+            {
+                for ( FileUtils.FilterWrapper filterWrapper : filterWrappers ) {
+                    reader = filterWrapper.getReader( reader );
                 }
             }
-
             BufferedReader bufferedReader = null;
             try
             {
@@ -316,7 +313,6 @@ public class Scriptlet
                 }
             }
         }
-
     }
 
     /**
