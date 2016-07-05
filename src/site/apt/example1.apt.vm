@@ -153,16 +153,17 @@ Sample Configuration
             </mapping>
           </mappings>
           <preinstallScriptlet>
-            <script>echo "installing now"</script>
+            <script>echo "installing \${project.name} now"</script>
           </preinstallScriptlet>
           <postinstallScriptlet>
             <scriptFile>src/main/scripts/postinstall</scriptFile>
             <fileEncoding>utf-8</fileEncoding>
+            <filter>true</filter>
           </postinstallScriptlet>
           <preremoveScriptlet>
             <scriptFile>src/main/scripts/preremove</scriptFile>
             <fileEncoding>utf-8</fileEncoding>
-          </preremoveScript>
+          </preremoveScriptlet>
         </configuration>
       </plugin>
     </plugins>
