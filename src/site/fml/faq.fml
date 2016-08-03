@@ -74,5 +74,21 @@ under the License.
             </p>
         </answer>
     </faq>
+    <faq id="speed up build">
+        <question>My build takes an unexpectedly long time. How can I speed it up?</question>
+        <answer>
+            <p>
+                One possible cause is that your RPM includes mainly JAR files, and RPM by default tries to
+                compress them, which is both slow and inefficient.<br/>
+                If that is the case, adding the following snippet to the configuration of the plugin will
+                solve your problem by disabling compression.
+            </p>
+            <p><pre><![CDATA[
+<defineStatements>
+    <defineStatement>_source_payload w0.gzdio</defineStatement>
+    <defineStatement>_binary_payload w0.gzdio</defineStatement>
+</defineStatements>]]></pre></p>
+        </answer>
+    </faq>
   </part>
 </faqs>
