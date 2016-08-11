@@ -18,7 +18,7 @@ Advanced Parameters
   <<These parameters relate to the dependencies between RPM packages, not to
   the dependencies required to build the RPM package contents.>>
 
-  There are three RPM spec file tags related to dependency management:
+  There are six RPM spec file tags related to dependency management:
 
     * <<<provides>>> defines a <virtual package> which is provided
       by the package being built
@@ -26,10 +26,26 @@ Advanced Parameters
     * <<<requires>>> identifies a package that is required to be installed for
       the package being built to operate correctly
 
+    * <<<requiresPre>>> identifies a package that is required to be installed for
+      the pre-installation scriptlet of the package being built to operate correctly.
+      Packages that are listed here are installed before the pre-installation scriptlet
+      of the package being built is run.
+      Corresponds to the <<<Requires(pre)>>> tag in the spec file.
+
+    * <<<requiresPost>>> identifies a package that is required to be installed for
+      the post-installation scriptlet of the package being built to operate correctly.
+      Packages that are listed here are installed before the post-installation scriptlet
+      of the package being built is run.
+      Corresponds to the <<<Requires(post)>>> tag in the spec file.
+
+    * <<<requiresPreun>>> identifies a package that is required to be installed for
+      the pre-removal scriptlet of the package being built to operate correctly.
+      Corresponds to the <<<Requires(preun)>>> tag in the spec file.
+
     * <<<conflicts>>> identifies a package which must not be installed if the
       package being built is installed
 
-  All three of these tags can appear multiple times in the spec file.  To
+  All of these tags can appear multiple times in the spec file.  To
   configure these tags in the plugin configuration, specify an element for
   each instance of the tag in the spec file; the content of the element is the
   exact text to be placed in the spec file.  Please be careful to ensure that
@@ -43,6 +59,18 @@ Advanced Parameters
 <requires>
   <require>trash-truck &gt; 1.0</require>
 </requires>
+<requires>
+  <require>road</require>
+</requires>
+<requiresPre>
+  <require>excavator</require>
+</requiresPre>
+<requiresPost>
+  <require>bulldozer</require>
+</requiresPost>
+<requiresPreun>
+  <require>environment-util = 2.0</require>
+</requiresPreun>
 <conflicts>
   <conflict>incinerator</conflict>
 </conflicts>
