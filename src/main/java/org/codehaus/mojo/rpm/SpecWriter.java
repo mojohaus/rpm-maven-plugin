@@ -92,6 +92,7 @@ final class SpecWriter
 
         writeList( mojo.getProvides(), "Provides: " );
         writeList( mojo.getRequires(), "Requires: " );
+        writeList( mojo.getBuildRequires(), "BuildRequires: " );
         writeList( mojo.getPrereqs(), "PreReq: " );
         writeList( mojo.getObsoletes(), "Obsoletes: " );
         writeList( mojo.getConflicts(), "Conflicts: " );

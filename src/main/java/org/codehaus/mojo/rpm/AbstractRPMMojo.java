@@ -276,6 +276,12 @@ abstract class AbstractRPMMojo
     private LinkedHashSet<String> requires;
 
     /**
+     * The list of build requirements for this package.
+     */
+    @Parameter
+    private LinkedHashSet<String> buildRequires;
+
+    /**
      * The list of prerequisites for this package.
      *
      * @since 2.0-beta-3
@@ -1280,6 +1286,14 @@ abstract class AbstractRPMMojo
     final LinkedHashSet<String> getRequires()
     {
         return this.requires;
+    }
+
+    /**
+     * @return Returns the {@link #buildRequires}.
+     */
+    final LinkedHashSet<String> getBuildRequires()
+    {
+        return this.buildRequires;
     }
 
     /**
