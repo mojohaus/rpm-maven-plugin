@@ -277,6 +277,7 @@ abstract class AbstractRPMMojo
 
     /**
      * The list of build requirements for this package.
+     * @since 2.1.6
      */
     @Parameter
     private LinkedHashSet<String> buildRequires;
