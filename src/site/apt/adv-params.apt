@@ -48,6 +48,30 @@ Advanced Parameters
 </conflicts>
 +-----+
 
+* RPM Build Dependency Management
+
+  <<These parameters relate to the dependencies required to build the RPM package contents.>>
+
+  There is one RPM spec file tag related to build dependency management:
+
+    * <<<buildRequires>>> identifies a package that is required to be installed for
+      the package being built to build correctly; i.e. it provides some tools needed
+      during the building of the package, or some RPM macros that must be present
+      when adding the scriptlets into the RPM package.
+
+  This tag can appear multiple times in the spec file.  To
+  configure this tag in the plugin configuration, specify an element for
+  each instance of the tag in the spec file; the content of the element is the
+  exact text to be placed in the spec file.  Please be careful to ensure that
+  version comparison specifications such as <<< < >>> and <<< > >>> are
+  properly specified in the XML file.  Here is an example:
+
++-----+
+<buildRequires>
+  <buildRequire>ruby &gt; 1.8</buildRequire>
+</buildRequires>
++-----+
+
 * {Relocation}
 
   If you specify the <<<prefix/prefixes>>> parameter to the RPM plugin, you can create
