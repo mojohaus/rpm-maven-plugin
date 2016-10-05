@@ -95,6 +95,13 @@ abstract class AbstractRPMMojo
     private String release;
 
     /**
+     * The stage to build. Default to '-bb' but let users specify for instance '-ba' if they want source rpms as well.
+     */
+    @Parameter( alias = "rpmBuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
+    private String rpmBuildStage;
+
+
+    /**
      * The target architecture for the rpm. The default value is <i>noarch</i>.
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
@@ -107,6 +114,7 @@ abstract class AbstractRPMMojo
      * targetArchitecture</a> to flex the contents of the rpm based on the architecture.
      * </p>
      */
+
     @Parameter
     private String needarch;
 
@@ -1558,6 +1566,22 @@ abstract class AbstractRPMMojo
     final List<FilterWrapper> getFilterWrappers()
     {
         return this.defaultFilterWrappers;
+    }
+
+    /**
+     * @return the rpmRpmbuildStage
+     */
+    final public String getRpmRpmbuildStage()
+    {
+        return rpmRpmbuildStage;
+    }
+
+    /**
+     * @param rpmRpmbuildStage the rpmRpmbuildStage to set
+     */
+    final public void setRpmRpmbuildStage( String rpmRpmbuildStage )
+    {
+        this.rpmRpmbuildStage = rpmRpmbuildStage;
     }
 
     /**
