@@ -97,8 +97,8 @@ abstract class AbstractRPMMojo
     /**
      * The stage to build. Default to '-bb' but let users specify for instance '-ba' if they want source rpms as well.
      */
-    @Parameter( alias = "rpmBuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
-    private String rpmBuildStage;
+    @Parameter( alias = "rpmbuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
+    private String rpmbuildStage;
 
 
     /**
@@ -1569,19 +1569,19 @@ abstract class AbstractRPMMojo
     }
 
     /**
-     * @return the rpmRpmbuildStage
+     * @return the rpmbuildStage
      */
-    final public String getRpmRpmbuildStage()
+    final public String getRpmbuildStage()
     {
-        return rpmRpmbuildStage;
+        return rpmbuildStage;
     }
 
     /**
      * @param rpmRpmbuildStage the rpmRpmbuildStage to set
      */
-    final public void setRpmRpmbuildStage( String rpmRpmbuildStage )
+    final public void setRpmbuildStage( String rpmbuildStage )
     {
-        this.rpmRpmbuildStage = rpmRpmbuildStage;
+        this.rpmbuildStage = rpmbuildStage;
     }
 
     /**

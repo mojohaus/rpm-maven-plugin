@@ -112,7 +112,7 @@ final class RPMHelper
         final Commandline cl = new Commandline();
         cl.setExecutable( "rpmbuild" );
         cl.setWorkingDirectory( f.getAbsolutePath() );
-        cl.createArg().setValue( mojo.getRpmRpmbuildStage() );
+        cl.createArg().setValue( mojo.getRpmbuildStage() );
         cl.createArg().setValue( "--target" );
         cl.createArg().setValue( mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS() );
         cl.createArg().setValue( "--buildroot" );
