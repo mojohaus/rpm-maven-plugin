@@ -19,6 +19,8 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.io.FileUtils;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -91,12 +93,13 @@ public abstract class BaseTrigger
      * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String)}.
      *
      * @param writer {@code PrintWriter} to write the trigger directive to.
+     * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected void writeTrigger( PrintWriter writer )
+    protected void writeTrigger( PrintWriter writer, final List<FileUtils.FilterWrapper> filterWrappers )
         throws IOException
     {
-        write( writer, getDirective() );
+        write( writer, getDirective(), filterWrappers );
     }
 
     /**

@@ -19,9 +19,7 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +127,8 @@ final class SpecWriter
         if ( mojo.getInstallScriptlet() != null )
         {
             spec.println();
-            mojo.getInstallScriptlet().writeContent( spec );
+            mojo.getInstallScriptlet().writeContent( spec , mojo.getFilterWrappers());
+
         }
 
         writeFiles();
@@ -140,7 +139,7 @@ final class SpecWriter
         {
             for ( BaseTrigger trigger : mojo.getTriggers() )
             {
-                trigger.writeTrigger( spec );
+                trigger.writeTrigger( spec, mojo.getFilterWrappers() );
             }
         }
 
@@ -565,7 +564,7 @@ final class SpecWriter
         {
             if ( scriptlets[i] != null )
             {
-                scriptlets[i].write( spec, directives[i] );
+                scriptlets[i].write( spec, directives[i], mojo.getFilterWrappers() );
             }
         }
     }

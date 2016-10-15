@@ -71,16 +71,21 @@ Advanced Parameters
   Maximum RPM since the operation of the scripts must be done correctly or
   major problems can occur while installing or removing the package.
 
+  Script files can be filtered by setting <<<<filter>>>> to true while inline
+  scripts can be filtered together with the pom.
+
   Here are examples of passing the content of the script in the pom
-  (using <<<<script>>>>) and in a file (using <<<<scriptFile>>>>):
+  (using <<<<script>>>>) and in a file (using <<<<scriptFile>>>>) and enabling
+  filtering for preinstall.sh script:
 
 +-----+
 <prepareScriptlet>
-  <script>echo "prepare"</script>
+  <script>echo "preparing ${project.name}"</script>
 </prepareScriptlet>
 <preinstallScriptlet>
   <scriptFile>/src/main/bin/preinstall.sh</scriptFile>
   <fileEncoding>utf-8</fileEncoding>
+  <filter>true</filter>
 </preinstallScriptlet>
 +-----+
 
