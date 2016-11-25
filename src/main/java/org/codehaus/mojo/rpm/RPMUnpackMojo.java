@@ -16,7 +16,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
 import org.codehaus.plexus.util.cli.shell.Shell;
 
 /**
- * Unpack a RPM file. Experimental only.  Settings may change in next version
+ * Unpack a RPM file. Experimental only. Settings may change in next version
  */
 @Mojo( name = "unpack", requiresProject = false, aggregator = true, defaultPhase = LifecyclePhase.GENERATE_RESOURCES, threadSafe = true )
 public class RPMUnpackMojo
@@ -43,15 +43,22 @@ public class RPMUnpackMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        final Log log = this.getLog();
+
         unpackDirectory.getParentFile().mkdirs();
 
         Commandline cl = new Commandline( new Shell() );
+
         cl.setWorkingDirectory( this.unpackDirectory );
         cl.setExecutable( "sh" );
         cl.createArg().setValue( "-c" );
-        cl.createArg().setLine( "'" + "rpm2cpio " + this.rpmFile + " | cpio -idmv" + "'");
 
-        final Log log = this.getLog();
+        String cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idmv" + "'";
+        if ( this.getLog().isDebugEnabled() )
+        {
+            cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idm" + "'";
+        }
+        cl.createArg().setLine( cmd );
 
         final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, getLog() );
         final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, getLog() );
