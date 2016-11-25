@@ -276,6 +276,27 @@ abstract class AbstractRPMMojo
     private LinkedHashSet<String> requires;
 
     /**
+     * The list of requirements for running the pre-installation scriptlet.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> requiresPre;
+
+    /**
+     * The list of requirements for running the post install scriptlet.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> requiresPost;
+
+    /**
+     * The list of requirements for running the pre-removal scriptlet.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> requiresPreun;
+
+    /**
      * The list of prerequisites for this package.
      *
      * @since 2.0-beta-3
@@ -1280,6 +1301,30 @@ abstract class AbstractRPMMojo
     final LinkedHashSet<String> getRequires()
     {
         return this.requires;
+    }
+
+    /**
+     * @return Returns the {@link #requiresPre}.
+     */
+    final LinkedHashSet<String> getRequiresPre()
+    {
+        return this.requiresPre;
+    }
+
+    /**
+     * @return Returns the {@link #requiresPreun}.
+     */
+    final LinkedHashSet<String> getRequiresPreun()
+    {
+        return this.requiresPreun;
+    }
+
+    /**
+     * @return Returns the {@link #requiresPost}.
+     */
+    final LinkedHashSet<String> getRequiresPost()
+    {
+        return this.requiresPost;
     }
 
     /**
