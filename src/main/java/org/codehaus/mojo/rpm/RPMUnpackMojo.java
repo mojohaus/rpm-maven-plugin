@@ -53,10 +53,10 @@ public class RPMUnpackMojo
         cl.setExecutable( "sh" );
         cl.createArg().setValue( "-c" );
 
-        String cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idmv" + "'";
+        String cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idm" + "'";
         if ( this.getLog().isDebugEnabled() )
         {
-            cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idm" + "'";
+            cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idmv" + "'";
         }
         cl.createArg().setLine( cmd );
 
@@ -64,7 +64,7 @@ public class RPMUnpackMojo
         final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, getLog() );
         try
         {
-            log.info( "Unpacking " + this.rpmFile + "..." );
+            log.info( "Unpacking " + this.rpmFile + "to " + this.unpackDirectory + "..." );
             if ( log.isDebugEnabled() )
             {
                 log.debug( "About to execute \'" + cl.toString() + "\'" );
