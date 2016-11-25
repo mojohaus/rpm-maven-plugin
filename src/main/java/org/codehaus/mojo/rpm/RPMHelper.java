@@ -110,7 +110,7 @@ final class RPMHelper
         final File f = new File( workarea, "SPECS" );
 
         final Commandline cl = new Commandline();
-        cl.setExecutable( "rpmbuild" );
+        cl.setExecutable( mojo.getRpmRpmbuildExe() );
         cl.setWorkingDirectory( f.getAbsolutePath() );
         cl.createArg().setValue( "-bb" );
         cl.createArg().setValue( "--target" );
