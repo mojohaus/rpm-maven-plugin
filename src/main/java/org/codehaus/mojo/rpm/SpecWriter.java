@@ -246,7 +246,7 @@ final class SpecWriter
                 log.debug( "writing attribute string for identified files in directory: " + destination );
 
                 // only list files if requested (directoryIncluded == false) or we have to
-                if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() ) )
+                if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() && !map.isRecurseDirectories()) )
                 {
                     final String[] files = scanner.getIncludedFiles();
 
@@ -264,6 +264,7 @@ final class SpecWriter
                     if ( map.isDirectoryIncluded() )
                     {
                         // write out destination first
+                        spec.print("%dir ");
                         spec.println( baseFileString + "\"" );
                     }
 
@@ -272,8 +273,9 @@ final class SpecWriter
                         // do not write out base file (destination) again
                         if ( dir.length() > 0 )
                         {
-                            spec.print( baseFileString );
-                            spec.println( dir + "\"" );
+                            spec.print("%dir ");
+                        	spec.print( baseFileString );
+                            spec.println( StringUtils.replace(dir, "\\", "/") + "\"" );
                         }
                     }
                 }
