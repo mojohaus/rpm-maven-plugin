@@ -14,16 +14,16 @@ Operation Parameters
 
   The directory to use to build the RPM.  By default, this is a directory
   named <<<rpm>>> in the project's build directory.
-  
+
   <<NOTE:>> The absolute path to the workarea <MUST NOT> have a space in any of the directory names.
-  
-  Beginning with release 2.0-beta-3, sub-directories will be created within the 
+
+  Beginning with release 2.0-beta-3, sub-directories will be created within the
   workarea for each execution of the plugin within a life cycle.
 
 * {defineStatements}
 
   A list of %define statements that should be included in the top of the spec file
- 
+
 +-----+
 <plugin>
   ...
@@ -37,3 +37,10 @@ Operation Parameters
   ...
 </plugin>
 +-----+
+
+* {rpmbuildStage}
+
+    The stage to build, e.g. the parameters passed to rpmbuild.
+    By default this is <<<-bb>>>: Build a binary package (after doing the %prep, %build, and %install stages).
+
+    If you want to build binary and source packages, use <<<-ba>>>.
