@@ -95,6 +95,13 @@ abstract class AbstractRPMMojo
     private String release;
 
     /**
+     * The stage to build. Default to '-bb' but let users specify for instance '-ba' if they want source rpms as well.
+     */
+    @Parameter( alias = "rpmbuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
+    private String rpmbuildStage;
+
+
+    /**
      * The target architecture for the rpm. The default value is <i>noarch</i>.
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
@@ -107,6 +114,7 @@ abstract class AbstractRPMMojo
      * targetArchitecture</a> to flex the contents of the rpm based on the architecture.
      * </p>
      */
+
     @Parameter
     private String needarch;
 
@@ -281,6 +289,27 @@ abstract class AbstractRPMMojo
      */
     @Parameter
     private LinkedHashSet<String> buildRequires;
+
+    /**
+     * The list of requirements for running the pre-installation scriptlet.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> requiresPre;
+
+    /**
+     * The list of requirements for running the post install scriptlet.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> requiresPost;
+
+    /**
+     * The list of requirements for running the pre-removal scriptlet.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> requiresPreun;
 
     /**
      * The list of prerequisites for this package.
@@ -1296,6 +1325,30 @@ abstract class AbstractRPMMojo
     {
         return this.buildRequires;
     }
+    
+    /**
+     * @return Returns the {@link #requiresPre}.
+     */
+    final LinkedHashSet<String> getRequiresPre()
+    {
+        return this.requiresPre;
+    }
+
+    /**
+     * @return Returns the {@link #requiresPreun}.
+     */
+    final LinkedHashSet<String> getRequiresPreun()
+    {
+        return this.requiresPreun;
+    }
+
+    /**
+     * @return Returns the {@link #requiresPost}.
+     */
+    final LinkedHashSet<String> getRequiresPost()
+    {
+        return this.requiresPost;
+    }
 
     /**
      * @return Returns the {@link #prereqs}.
@@ -1573,6 +1626,22 @@ abstract class AbstractRPMMojo
     final List<FilterWrapper> getFilterWrappers()
     {
         return this.defaultFilterWrappers;
+    }
+
+    /**
+     * @return the rpmbuildStage
+     */
+    final public String getRpmbuildStage()
+    {
+        return rpmbuildStage;
+    }
+
+    /**
+     * @param rpmRpmbuildStage the rpmRpmbuildStage to set
+     */
+    final public void setRpmbuildStage( String rpmbuildStage )
+    {
+        this.rpmbuildStage = rpmbuildStage;
     }
 
     /**

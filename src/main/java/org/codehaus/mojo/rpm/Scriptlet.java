@@ -19,14 +19,10 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.Reader;
+import org.apache.maven.shared.utils.io.FileUtils;
+
+import java.io.*;
+import java.util.List;
 
 /**
  * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional) contents
@@ -78,6 +74,13 @@ public class Scriptlet
      * @see #getFileEncoding().
      */
     private String sourceEncoding;
+
+    /**
+     * Switch to filter the scriptlet
+     *
+     * @see #isFilter().
+     */
+    private boolean filter;
 
     /**
      * The optional subpackage. This is passed as a <i>-n</i> argument to the scriptlet directive.
@@ -185,13 +188,30 @@ public class Scriptlet
     }
 
     /**
+     * @return Returns the {@link #filter}.
+     */
+    public boolean isFilter()
+    {
+        return this.filter;
+    }
+
+    /**
+     * @param filter The {@link #filter} to set.
+     */
+    public void setFilter( boolean filter )
+    {
+        this.filter = filter;
+    }
+
+    /**
      * Writes the scriptlet.
      *
      * @param writer {@code PrintWriter} to write content to.
      * @param directive The directive for the scriptlet.
+     * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected final void write( final PrintWriter writer, final String directive )
+    protected final void write( final PrintWriter writer, final String directive, final List<FileUtils.FilterWrapper> filterWrappers)
         throws IOException
     {
         if ( scriptFile != null && !scriptFile.exists() )
@@ -205,7 +225,7 @@ public class Scriptlet
             writer.println();
             writer.println( buildScriptletLine( directive ) );
 
-            writeContent( writer );
+            writeContent( writer, filterWrappers );
         }
     }
 
@@ -239,9 +259,10 @@ public class Scriptlet
      * Writes the content (either {@link #getScript()} or {@link #getScriptFile()}) to <i>writer</i>.
      *
      * @param writer {@code PrintWriter} to write content to.
+     * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected final void writeContent( PrintWriter writer )
+    protected final void writeContent( PrintWriter writer, final List<FileUtils.FilterWrapper> filterWrappers )
         throws IOException
     {
         if ( script != null )
@@ -250,9 +271,15 @@ public class Scriptlet
         }
         else if ( scriptFile.exists() )
         {
-            final Reader reader =
-                fileEncoding != null ? new InputStreamReader( new FileInputStream( scriptFile ), fileEncoding )
-                                : new FileReader( scriptFile );
+            Reader reader =
+                    fileEncoding != null ? new InputStreamReader( new FileInputStream( scriptFile ), fileEncoding )
+                            : new FileReader( scriptFile );
+            if(filter)
+            {
+                for ( FileUtils.FilterWrapper filterWrapper : filterWrappers ) {
+                    reader = filterWrapper.getReader( reader );
+                }
+            }
             BufferedReader bufferedReader = null;
             try
             {
