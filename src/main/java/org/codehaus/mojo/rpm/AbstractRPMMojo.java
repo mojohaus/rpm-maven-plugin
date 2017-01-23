@@ -581,7 +581,7 @@ abstract class AbstractRPMMojo
      *
      * @since 2.0
      */
-    @Parameter
+    @Parameter( property = "rpm.disabled", defaultValue = "false" )
     private boolean disabled;
 
     /**
