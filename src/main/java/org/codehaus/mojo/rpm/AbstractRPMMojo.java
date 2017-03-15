@@ -284,6 +284,13 @@ abstract class AbstractRPMMojo
     private LinkedHashSet<String> requires;
 
     /**
+     * The list of build requirements for this package.
+     * @since 2.1.6
+     */
+    @Parameter
+    private LinkedHashSet<String> buildRequires;
+
+    /**
      * The list of requirements for running the pre-installation scriptlet.
      * @since 2.1.6
      */
@@ -1311,6 +1318,14 @@ abstract class AbstractRPMMojo
         return this.requires;
     }
 
+    /**
+     * @return Returns the {@link #buildRequires}.
+     */
+    final LinkedHashSet<String> getBuildRequires()
+    {
+        return this.buildRequires;
+    }
+    
     /**
      * @return Returns the {@link #requiresPre}.
      */
