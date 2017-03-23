@@ -28,7 +28,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 /**
  * Construct the RPM file.
  */
-@Mojo( name = "rpm", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
+@Mojo( name = "rpm", defaultPhase = LifecyclePhase.PACKAGE,
+        requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
 public class RPMMojo
     extends AbstractRPMMojo
 {

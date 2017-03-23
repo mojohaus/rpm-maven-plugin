@@ -21,7 +21,17 @@ package org.codehaus.mojo.rpm;
 
 import org.apache.maven.shared.utils.io.FileUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -137,7 +147,8 @@ public class Scriptlet
     }
 
     /**
-     * The contents of the script from a file in the project or in the classpath. This will be ignored if {@link #getScript()} is populated.
+     * The contents of the script from a file in the project or in the classpath. This will be ignored if
+     * {@link #getScript()} is populated.
      *
      * @return Returns the {@link #scriptFile}.
      */
@@ -211,8 +222,8 @@ public class Scriptlet
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected final void write( final PrintWriter writer, final String directive, final List<FileUtils.FilterWrapper> filterWrappers)
-        throws IOException
+    protected final void write( final PrintWriter writer, final String directive,
+                                final List<FileUtils.FilterWrapper> filterWrappers ) throws IOException
     {
         if ( script != null || scriptFile != null || program != null )
         {
@@ -249,20 +260,29 @@ public class Scriptlet
         return builder.toString();
     }
 
-    private Reader getScriptReader(String path) throws FileNotFoundException, UnsupportedEncodingException {
+    private Reader getScriptReader( String path ) throws FileNotFoundException, UnsupportedEncodingException
+    {
         String classpathPrefix = "classpath:";
         Reader reader;
-        if (path.startsWith(classpathPrefix)) {
-            String classpathResource = path.substring(classpathPrefix.length());
-            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathResource);
-            if (inputStream == null) {
-                throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+        if ( path.startsWith( classpathPrefix ) )
+        {
+            String classpathResource = path.substring( classpathPrefix.length() );
+            InputStream inputStream = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream( classpathResource );
+            if ( inputStream == null )
+            {
+                throw new RuntimeException( "Invalid scriptlet declaration found - defined scriptFile does not exist: "
+                        + path );
             }
-            reader = new InputStreamReader(inputStream);
-        } else {
-            File file = new File(path);
-            if (!file.exists()) {
-                throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+            reader = new InputStreamReader( inputStream );
+        }
+        else
+        {
+            File file = new File( path );
+            if ( !file.exists() )
+            {
+                throw new RuntimeException( "Invalid scriptlet declaration found - defined scriptFile does not exist: "
+                        + path );
             }
             reader = fileEncoding != null ? new InputStreamReader( new FileInputStream( file ), fileEncoding )
                     : new FileReader( scriptFile );
@@ -286,10 +306,11 @@ public class Scriptlet
         }
         else if ( scriptFile != null )
         {
-            Reader reader = getScriptReader(scriptFile);
-            if(filter)
+            Reader reader = getScriptReader( scriptFile );
+            if ( filter )
             {
-                for ( FileUtils.FilterWrapper filterWrapper : filterWrappers ) {
+                for ( FileUtils.FilterWrapper filterWrapper : filterWrappers )
+                {
                     reader = filterWrapper.getReader( reader );
                 }
             }

@@ -97,7 +97,7 @@ abstract class AbstractRPMMojo
     /**
      * The stage to build. Default to '-bb' but let users specify for instance '-ba' if they want source rpms as well.
      */
-    @Parameter( alias = "rpmbuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
+    @Parameter( alias = "rpmbuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb" )
     private String rpmbuildStage;
 
 
@@ -619,7 +619,7 @@ abstract class AbstractRPMMojo
      * Option to copy the created RPM to another location
      * @since 2.1.
      */
-    @Parameter(property="rpm.copyTo")
+    @Parameter( property = "rpm.copyTo" )
     private File copyTo;
 
     //////////////////////////////////////////////////////////////////////////
@@ -652,7 +652,7 @@ abstract class AbstractRPMMojo
      * execution in projects with packaging "pom".
      * @since 2.1.6
      */
-    @Parameter(defaultValue = "false")
+    @Parameter( defaultValue = "false" )
     private boolean skipPOMs;
 
     //////////////////////////////////////////////////////////////////////////
@@ -707,7 +707,7 @@ abstract class AbstractRPMMojo
     {
         if ( skipPOMs && isPOM() )
         {
-            getLog().info("skipping because artifact is a pom (skipPOMs)");
+            getLog().info( "skipping because artifact is a pom (skipPOMs)" );
             return;
         }
 
@@ -730,7 +730,7 @@ abstract class AbstractRPMMojo
             {
                 this.prefixes = new ArrayList<String>();
             }
-            this.prefixes.add(prefix);
+            this.prefixes.add( prefix );
         }
 
         helper = new RPMHelper( this );
@@ -764,16 +764,19 @@ abstract class AbstractRPMMojo
 
         afterExecution();
 
-        if ( this.copyTo != null ) {
-        	makeSecondCopy();
+        if ( this.copyTo != null )
+        {
+            makeSecondCopy();
         }
     }
 
     /**
      * @return The Maven project used by this MOJO
      */
-    private MavenProject getProject() {
-        if (project.getExecutionProject() != null) {
+    private MavenProject getProject()
+    {
+        if ( project.getExecutionProject() != null )
+        {
             return project.getExecutionProject();
         }
 
@@ -783,18 +786,22 @@ abstract class AbstractRPMMojo
     /**
      * @return Whether the artifact is a POM or not
      */
-    private boolean isPOM() {
-        return "pom".equalsIgnoreCase(getProject().getArtifact().getType());
+    private boolean isPOM()
+    {
+        return "pom".equalsIgnoreCase( getProject().getArtifact().getType() );
     }
 
-    private void makeSecondCopy() throws MojoFailureException {
-    	try {
-    		this.getLog().info( "Copy " + this.getRPMFile() + " to " + copyTo );
-    	    FileUtils.copyFile( this.getRPMFile(), copyTo );
-    	}
-    	catch ( IOException e ) {
-    		throw new MojoFailureException( "Unable to copy file" );
-    	}
+    private void makeSecondCopy() throws MojoFailureException
+    {
+        try
+        {
+            this.getLog().info( "Copy " + this.getRPMFile() + " to " + copyTo );
+            FileUtils.copyFile( this.getRPMFile(), copyTo );
+        }
+        catch ( IOException e )
+        {
+            throw new MojoFailureException( "Unable to copy file" );
+        }
     }
 
     /**
@@ -925,20 +932,22 @@ abstract class AbstractRPMMojo
         Log log = getLog();
 
         // Retrieve any versions set by the VersionMojo
-	if ( versionProperty != null ) {
-	    String projversion = this.project.getProperties().getProperty( versionProperty );
-	    if ( projversion != null )
-		{
-		    this.projversion = projversion;
-		}
-	}
-	if ( releaseProperty != null ) {
-	    String release = this.project.getProperties().getProperty( releaseProperty );
-	    if ( release != null )
-		{
-		    this.release = release;
-		}
-	}
+        if ( versionProperty != null )
+        {
+            String projversion = this.project.getProperties().getProperty( versionProperty );
+            if ( projversion != null )
+            {
+                this.projversion = projversion;
+            }
+        }
+        if ( releaseProperty != null )
+        {
+            String release = this.project.getProperties().getProperty( releaseProperty );
+            if ( release != null )
+            {
+                this.release = release;
+            }
+        }
 
         // calculate versions if neccessary, check for existing maven modifier and split them accordingly
         if ( this.projversion == null || this.release == null || this.projversion.contains( "-" ) )
@@ -1631,15 +1640,15 @@ abstract class AbstractRPMMojo
     /**
      * @return the rpmbuildStage
      */
-    final public String getRpmbuildStage()
+    public final String getRpmbuildStage()
     {
         return rpmbuildStage;
     }
 
     /**
-     * @param rpmRpmbuildStage the rpmRpmbuildStage to set
+     * @param rpmbuildStage the rpmRpmbuildStage to set
      */
-    final public void setRpmbuildStage( String rpmbuildStage )
+    public final void setRpmbuildStage( String rpmbuildStage )
     {
         this.rpmbuildStage = rpmbuildStage;
     }

@@ -248,11 +248,15 @@ final class RPMHelper
         try
         {
             if ( mojo.getLog().isDebugEnabled() )
+            {
                 mojo.getLog().debug( "About to execute \'" + cl.toString() + "\'" );
+            }
             final int result = CommandLineUtils.executeCommandLine( cl, stdConsumer, errConsumer );
             if ( result != 0 )
+            {
                 throw new MojoExecutionException( "rpm -E %{_arch} returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
+                        + cl.toString() + "\'" );
+            }
         }
         catch ( CommandLineException e )
         {

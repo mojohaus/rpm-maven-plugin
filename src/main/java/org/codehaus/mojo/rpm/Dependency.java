@@ -163,9 +163,9 @@ public class Dependency
 
         for ( String s : in )
         {
-            String[] parts = s.split(":");
+            String[] parts = s.split( ":" );
             // Make sure we have group and artifact
-            if(parts.length == 0)
+            if ( parts.length == 0 )
             {
                 throw new MojoExecutionException( "Include and exclude must include both group and artifact IDs." );
             }
@@ -176,15 +176,15 @@ public class Dependency
             String classifier = "";
             VersionRange vr = null;
 
-            if(parts.length > 2)
+            if ( parts.length > 2 )
             {
                 versionStr = parts[2];
-                if(parts.length > 3)
+                if ( parts.length > 3 )
                 {
                     type = parts[3];
                 }
 
-                if(parts.length > 4)
+                if ( parts.length > 4 )
                 {
                     classifier = parts[4];
                 }

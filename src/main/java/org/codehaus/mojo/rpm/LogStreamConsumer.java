@@ -92,15 +92,15 @@ final class LogStreamConsumer
             case DEBUG:
                 log.debug( line );
                 break;
-            case INFO:
-                log.info( line );
-                break;
             case WARN:
                 log.warn( line );
                 break;
             case ERROR:
                 log.error( line );
                 break;
+            case INFO:
+            default:
+                log.info( line );
         }
     }
 }
