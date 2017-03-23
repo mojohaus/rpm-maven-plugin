@@ -137,7 +137,7 @@ public class Scriptlet
     }
 
     /**
-     * The contents of the script as a {@code File}. This will be ignored if {@link #getScript()} is populated.
+     * The contents of the script from a file in the project or in the classpath. This will be ignored if {@link #getScript()} is populated.
      *
      * @return Returns the {@link #scriptFile}.
      */
@@ -214,12 +214,6 @@ public class Scriptlet
     protected final void write( final PrintWriter writer, final String directive, final List<FileUtils.FilterWrapper> filterWrappers)
         throws IOException
     {
-        /*if ( scriptFile != null && !scriptFile.exists() )
-        {
-            throw new RuntimeException( "Invalid scriptlet declaration found - defined scriptFile does not exist: "
-                + scriptFile.getPath() );
-        }*/
-
         if ( script != null || scriptFile != null || program != null )
         {
             writer.println();
