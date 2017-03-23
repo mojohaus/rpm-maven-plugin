@@ -58,7 +58,7 @@ public class Scriptlet {
      *
      * @see #getScriptFile()
      */
-    private File scriptFile;
+    private String scriptFile;
 
     /**
      * Encoding of {@link #scriptFile}.
@@ -134,14 +134,14 @@ public class Scriptlet {
      *
      * @return Returns the {@link #scriptFile}.
      */
-    public File getScriptFile() {
+    public String getScriptFile() {
         return this.scriptFile;
     }
 
     /**
      * @param scriptFile The {@link #scriptFile} to set.
      */
-    public void setScriptFile(File scriptFile) {
+    public void setScriptFile(String scriptFile) {
         this.scriptFile = scriptFile;
     }
 
@@ -199,12 +199,13 @@ public class Scriptlet {
     protected final void write(
             final PrintWriter writer, final String directive, final List<FilterWrapper> filterWrappers)
             throws IOException {
-        if (scriptFile != null && !scriptFile.exists()) {
-            throw new RuntimeException(
-                    "Invalid scriptlet declaration found - defined scriptFile does not exist: " + scriptFile.getPath());
-        }
+        /*if ( scriptFile != null && !scriptFile.exists() )
+        {
+            throw new RuntimeException( "Invalid scriptlet declaration found - defined scriptFile does not exist: "
+                + scriptFile.getPath() );
+        }*/
 
-        if (script != null || (scriptFile != null && scriptFile.exists()) || program != null) {
+        if (script != null || scriptFile != null || program != null) {
             writer.println();
             writer.println(buildScriptletLine(directive));
 
@@ -235,6 +236,27 @@ public class Scriptlet {
         return builder.toString();
     }
 
+    private Reader getScriptReader(String path) throws FileNotFoundException, UnsupportedEncodingException {
+        String classpathPrefix = "classpath:";
+        Reader reader;
+        if (path.startsWith(classpathPrefix)) {
+            String classpathResource = path.substring(classpathPrefix.length());
+            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathResource);
+            if (inputStream == null) {
+                throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+            }
+            reader = new InputStreamReader(inputStream);
+        } else {
+            File file = new File(path);
+            if (!file.exists()) {
+                throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+            }
+            reader = fileEncoding != null ? new InputStreamReader( new FileInputStream( file ), fileEncoding )
+                    : new FileReader( scriptFile );
+        }
+        return reader;
+    }
+
     /**
      * Writes the content (either {@link #getScript()} or {@link #getScriptFile()}) to <i>writer</i>.
      *
@@ -245,10 +267,8 @@ public class Scriptlet {
     protected final void writeContent(PrintWriter writer, final List<FilterWrapper> filterWrappers) throws IOException {
         if (script != null) {
             writer.println(script);
-        } else if (scriptFile.exists()) {
-            Reader reader = fileEncoding != null
-                    ? new InputStreamReader(new FileInputStream(scriptFile), fileEncoding)
-                    : new FileReader(scriptFile);
+        } else if (scriptFile != null) {
+            Reader reader = getScriptReader(scriptFile);
             if (filter) {
                 for (FilterWrapper filterWrapper : filterWrappers) {
                     reader = filterWrapper.getReader(reader);
