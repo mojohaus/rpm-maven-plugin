@@ -269,6 +269,9 @@
                 <maven.unix.debug>true</maven.unix.debug>
                 <gpg.homedir>${project.build.testOutputDirectory}/gnupg</gpg.homedir>
               </properties>
+              <setupIncludes>
+                <setupInclude>sample-lib/pom.xml</setupInclude>
+              </setupIncludes>
               <!-- <pomIncludes> <pomInclude>rpm-sign*/pom.xml</pomInclude> </pomIncludes> -->
               <pomExcludes>
                 <pomExclude>rpm-dirmode/pom.xml</pomExclude>
