@@ -142,7 +142,8 @@ package.
 
 Each of the scripts can be configured as a
 [Scriptlet](./apidocs/org/codehaus/mojo/rpm/Scriptlet.html), which allows
-the content of the script to be provided either as a String or File. If
+the content of the script to be provided either as a String or file located in
+the project or in the classpath (using the prefix classpath:). If
 both parameters are specified for a script, the external file will be
 ignored. Before writing scripts for RPM packages, understand the
 [script docs](https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-inside-scripts.html) in
@@ -154,7 +155,7 @@ scripts can be filtered together with the pom.
 
 Here are examples of passing the content of the script in the pom
 (using `<script>`) and in a file (using `<scriptFile>`) and enabling
-filtering for preinstall.sh script:
+filtering for preinstall.sh and classpath:preremove.sh scripts:
 
 ```xml
 <prepareScriptlet>
@@ -165,6 +166,10 @@ filtering for preinstall.sh script:
   <fileEncoding>utf-8</fileEncoding>
   <filter>true</filter>
 </preinstallScriptlet>
+<preremoveScriptlet>
+  <scriptFile>classpath:preremove.sh</scriptFile>
+  <filter>true</filter>
+</preremoveScriptlet>
 ```
 
 ### `prepareScriptlet`
