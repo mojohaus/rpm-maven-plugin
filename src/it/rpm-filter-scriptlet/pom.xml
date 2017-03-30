@@ -44,6 +44,10 @@
             <scriptFile>classpath:preremove.sh</scriptFile>
             <filter>true</filter>
           </preremoveScriptlet>
+          <postremoveScriptlet>
+            <scriptFile>../sample-lib/src/scripts/postremove.sh</scriptFile>
+            <filter>true</filter>
+          </postremoveScriptlet>
           <triggers>
             <installTrigger>
               <script>echo "a filtered install trigger for ${project.artifactId}"</script>
