@@ -885,7 +885,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * @return The Maven project used by this MOJO
      */
-    private MavenProject getProject() {
+    MavenProject getProject() {
         if (project.getExecutionProject() != null) {
             return project.getExecutionProject();
         }

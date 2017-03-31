@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.apache.maven.shared.filtering.FilterWrapper;
-
 /**
  * A base class to support <a href="http://rpm.org/api/4.4.2.2/triggers.html">triggers</a>.
  *
@@ -86,11 +84,11 @@ public abstract class BaseTrigger extends Scriptlet {
      * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String, List)}.
      *
      * @param writer {@code PrintWriter} to write the trigger directive to.
-     * @param filterWrappers The filter wrappers to be applied when writing the content.
+     * @param mojo the {@code AbstractRPMMojo} which contains any resources needed when writing the trigger.
      * @throws IOException if an I/IO error occurs
      */
-    protected void writeTrigger(PrintWriter writer, final List<FilterWrapper> filterWrappers) throws IOException {
-        write(writer, getDirective(), filterWrappers);
+    protected void writeTrigger(PrintWriter writer, final AbstractRPMMojo mojo) throws IOException {
+        write(writer, getDirective(), mojo);
     }
 
     /**
