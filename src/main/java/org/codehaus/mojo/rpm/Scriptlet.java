@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.List;
 
 import org.apache.maven.shared.filtering.FilterWrapper;
+import org.apache.maven.shared.utils.io.FileUtils;
 
 /**
  * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional) contents
@@ -193,17 +194,17 @@ public class Scriptlet {
      *
      * @param writer {@code PrintWriter} to write content to.
      * @param directive The directive for the scriptlet.
-     * @param filterWrappers The filter wrappers to be applied when writing the content.
+     * @param mojo the {@code AbstractRPMMojo} which contains any resources needed when writing the scriptlet.
      * @throws IOException if an I/IO error occurs
      */
     protected final void write(
-            final PrintWriter writer, final String directive, final List<FilterWrapper> filterWrappers)
+            final PrintWriter writer, final String directive, final AbstractRPMMojo mojo)
             throws IOException {
         if (script != null || scriptFile != null || program != null) {
             writer.println();
             writer.println(buildScriptletLine(directive));
 
-            writeContent(writer, filterWrappers);
+            writeContent(writer, mojo);
         }
     }
 
@@ -230,7 +231,7 @@ public class Scriptlet {
         return builder.toString();
     }
 
-    private Reader getScriptReader(String path) throws FileNotFoundException, UnsupportedEncodingException {
+    private Reader getScriptReader(String path, AbstractRPMMojo mojo) throws FileNotFoundException, UnsupportedEncodingException {
         String classpathPrefix = "classpath:";
         Reader reader;
         if (path.startsWith(classpathPrefix)) {
@@ -241,12 +242,12 @@ public class Scriptlet {
             }
             reader = new InputStreamReader(inputStream);
         } else {
-            File file = new File(path);
+            File file = FileUtils.resolveFile(mojo.getProject().getBasedir(), path);
             if (!file.exists()) {
                 throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
             }
             reader = fileEncoding != null ? new InputStreamReader( new FileInputStream( file ), fileEncoding )
-                    : new FileReader( scriptFile );
+                    : new FileReader( file );
         }
         return reader;
     }
@@ -255,16 +256,16 @@ public class Scriptlet {
      * Writes the content (either {@link #getScript()} or {@link #getScriptFile()}) to <i>writer</i>.
      *
      * @param writer {@code PrintWriter} to write content to.
-     * @param filterWrappers The filter wrappers to be applied when writing the content.
+     * @param mojo the {@code AbstractRPMMojo} which contains any resources needed when writing the scriptlet.
      * @throws IOException if an I/IO error occurs
      */
-    protected final void writeContent(PrintWriter writer, final List<FilterWrapper> filterWrappers) throws IOException {
+    protected final void writeContent(PrintWriter writer, final AbstractRPMMojo mojo) throws IOException {
         if (script != null) {
             writer.println(script);
         } else if (scriptFile != null) {
-            Reader reader = getScriptReader(scriptFile);
+            Reader reader = getScriptReader(scriptFile, mojo);
             if (filter) {
-                for (FilterWrapper filterWrapper : filterWrappers) {
+                for (FilterWrapper filterWrapper : mojo.getFilterWrappers()) {
                     reader = filterWrapper.getReader(reader);
                 }
             }
