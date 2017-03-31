@@ -133,7 +133,7 @@ final class SpecWriter
         if ( mojo.getInstallScriptlet() != null )
         {
             spec.println();
-            mojo.getInstallScriptlet().writeContent( spec , mojo.getFilterWrappers() );
+            mojo.getInstallScriptlet().writeContent( spec , mojo );
 
         }
 
@@ -145,7 +145,7 @@ final class SpecWriter
         {
             for ( BaseTrigger trigger : mojo.getTriggers() )
             {
-                trigger.writeTrigger( spec, mojo.getFilterWrappers() );
+                trigger.writeTrigger( spec, mojo );
             }
         }
 
@@ -574,7 +574,7 @@ final class SpecWriter
         {
             if ( scriptlets[i] != null )
             {
-                scriptlets[i].write( spec, directives[i], mojo.getFilterWrappers() );
+                scriptlets[i].write( spec, directives[i], mojo );
             }
         }
     }

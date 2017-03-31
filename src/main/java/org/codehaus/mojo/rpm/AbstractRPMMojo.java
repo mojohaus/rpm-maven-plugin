@@ -773,7 +773,7 @@ abstract class AbstractRPMMojo
     /**
      * @return The Maven project used by this MOJO
      */
-    private MavenProject getProject()
+    MavenProject getProject()
     {
         if ( project.getExecutionProject() != null )
         {
