@@ -32,6 +32,7 @@
         </executions>
         <configuration>
           <group>Application/Collectors</group>
+          <escapeString>\</escapeString>
           <preinstallScriptlet>
             <script>echo "installing ${project.artifactId}"</script>
           </preinstallScriptlet>

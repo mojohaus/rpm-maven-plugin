@@ -850,13 +850,16 @@ abstract class AbstractRPMMojo
         throws MojoExecutionException
     {
         final MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution();
+        mavenResourcesExecution.setMavenProject( project );
+        mavenResourcesExecution.setFilters( filters );
+        mavenResourcesExecution.setEscapedBackslashesInFilePath( false );
+        mavenResourcesExecution.setMavenSession( session );
         mavenResourcesExecution.setEscapeString( escapeString );
 
         try
         {
             defaultFilterWrappers =
-                mavenFileFilter.getDefaultFilterWrappers( project, filters, false, this.session,
-                                                          mavenResourcesExecution );
+                mavenFileFilter.getDefaultFilterWrappers( mavenResourcesExecution );
         }
         catch ( MavenFilteringException e )
         {
