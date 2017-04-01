@@ -26,6 +26,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+/**
+ * A unix-specific {@code PrintWriter} implementation
+ */
 public class UnixPrintWriter
     extends PrintWriter
 {

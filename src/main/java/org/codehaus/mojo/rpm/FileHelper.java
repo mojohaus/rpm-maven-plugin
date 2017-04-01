@@ -549,20 +549,20 @@ final class FileHelper
                         if ( item.getVersionRange().containsVersion( dep.getSelectedVersion() ) )
                         {
                             log.debug( "... Version matches" );
-                            if( item.getType().isEmpty() )
+                            if ( item.getType().isEmpty() )
                             {
                                 log.debug( "... Type is empty" );
                                 return true;
                             }
-                            else if( item.getType().equals( dep.getType() ))
+                            else if ( item.getType().equals( dep.getType() ) )
                             {
                                 log.debug( "... Type matches" );
-                                if( item.getClassifier().isEmpty() )
+                                if ( item.getClassifier().isEmpty() )
                                 {
                                     log.debug( "... Classifier is empty" );
                                     return true;
                                 }
-                                else if( item.getClassifier().equals( dep.getClassifier() ))
+                                else if ( item.getClassifier().equals( dep.getClassifier() ) )
                                 {
                                     log.debug( "... Classifier matches" );
                                     return true;

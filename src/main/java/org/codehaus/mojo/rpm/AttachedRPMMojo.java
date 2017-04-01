@@ -34,7 +34,8 @@ import org.apache.maven.project.MavenProjectHelper;
  * @author Brett Okken, Cerner Corp.
  * @since 2.0-beta-2
  */
-@Mojo( name = "attached-rpm", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
+@Mojo( name = "attached-rpm", defaultPhase = LifecyclePhase.PACKAGE,
+        requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
 public class AttachedRPMMojo
     extends AbstractRPMMojo
 {

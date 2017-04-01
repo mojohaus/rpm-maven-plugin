@@ -19,7 +19,6 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -46,8 +45,8 @@ public class Source
 
     /**
      * Optional destination name for the file identified by {@link #location}.<br/>
-     * <b>NOTE:</b> This is only applicable if the {@link #location} is a {@link File#isFile() file}, not a
-     * {@link File#isDirectory() directory}.
+     * <b>NOTE:</b> This is only applicable if the {@link #location} is a {@link java.io.File#isFile() file}, not a
+     * {@link java.io.File#isDirectory() directory}.
      */
     private String destination;
 
@@ -195,8 +194,8 @@ public class Source
     /**
      * Sets the destination file name.
      * <p>
-     * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link File#isFile() file}, not
-     * a {@link File#isDirectory() directory}.
+     * <b>NOTE:</b> This is only applicable if the {@link #getLocation() location} is a {@link java.io.File#isFile()
+     * file}, not a {@link java.io.File#isDirectory() directory}.
      * </p>
      *
      * @param destination The destination that the {@link #getLocation() location} should be in the final rpm.

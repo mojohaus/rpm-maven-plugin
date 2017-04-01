@@ -6,6 +6,14 @@ assert specFile.text.contains("echo \"installing rpm-filter-scriptlet\"")
 // Test if the post install <scriptFile> was filtered
 assert specFile.text.contains("PROJECT_NAME=rpm-filter-scriptlet")
 
+// Test if the pre remove <scriptFile> was filtered
+assert specFile.text.contains("echo \"Erasing version 1.0\"")
+assert specFile.text.contains("echo \"Erasing version (escaped) \${project.version}\"")
+
+// Test if the post remove <scriptFile> was found and filtered (located in a relative path)
+assert specFile.text.contains("echo \"Done erasing version 1.0\"")
+assert specFile.text.contains("echo \"Done erasing version (escaped) \${project.version}\"")
+
 // Test if the trigger script was filtered
 assert specFile.text.contains("echo \"a filtered install trigger for rpm-filter-scriptlet\"")
 

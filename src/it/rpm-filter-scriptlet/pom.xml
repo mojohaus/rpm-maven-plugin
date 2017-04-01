@@ -32,6 +32,7 @@
         </executions>
         <configuration>
           <group>Application/Collectors</group>
+          <escapeString>\</escapeString>
           <preinstallScriptlet>
             <script>echo "installing ${project.artifactId}"</script>
           </preinstallScriptlet>
@@ -40,6 +41,14 @@
             <fileEncoding>utf-8</fileEncoding>
             <filter>true</filter>
           </postinstallScriptlet>
+          <preremoveScriptlet>
+            <scriptFile>classpath:preremove.sh</scriptFile>
+            <filter>true</filter>
+          </preremoveScriptlet>
+          <postremoveScriptlet>
+            <scriptFile>../sample-lib/src/scripts/postremove.sh</scriptFile>
+            <filter>true</filter>
+          </postremoveScriptlet>
           <triggers>
             <installTrigger>
               <script>echo "a filtered install trigger for ${project.artifactId}"</script>
@@ -50,6 +59,13 @@
             </installTrigger>
           </triggers>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>test</groupId>
+            <artifactId>sample-lib</artifactId>
+            <version>1.0</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
