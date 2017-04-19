@@ -61,7 +61,8 @@ import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
  * @author Carlos
  * @author Brett Okken, Cerner Corp.
  */
-abstract class AbstractRPMMojo
+// Needs to be public, otherwise setters, even public ones, are inaccessible in terms of reflection rules.
+public abstract class AbstractRPMMojo
     extends AbstractMojo
     implements RPMVersionableMojo
 {
@@ -1637,7 +1638,7 @@ abstract class AbstractRPMMojo
     }
 
     /**
-     * @param rpmRpmbuildStage the rpmRpmbuildStage to set
+     * @param rpmbuildStage the rpmRpmbuildStage to set
      */
     final public void setRpmbuildStage( String rpmbuildStage )
     {
