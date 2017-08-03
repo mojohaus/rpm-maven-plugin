@@ -91,40 +91,85 @@ final class RPMSigner
             throw new IllegalStateException( rpm.getAbsolutePath() + " is not a valid rpm file or cannot be read" );
         }
 
-        // use option to provide "script" via stdin
-        final Commandline cl = new Commandline();
-        cl.setExecutable( "expect" );
-        cl.setWorkingDirectory( rpm.getParentFile() );
-        cl.createArg().setValue( "-c" );
-        //work around to allow expect execution time to read in the input during heavy system usage
-        cl.createArg().setValue( "sleep 1" ); //MRPM-176 and PLXUTILS-174
-        cl.createArg().setValue( "-" );
+		if (this.passphrase != null)
+		{
 
-        final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.WARN, log );
+			// use option to provide "script" via stdin
+			final Commandline cl = new Commandline();
+			cl.setExecutable("expect");
+			cl.setWorkingDirectory(rpm.getParentFile());
+			cl.createArg().setValue("-c");
+			// work around to allow expect execution time to read in the input during heavy
+			// system usage
+			cl.createArg().setValue("sleep 1"); // MRPM-176 and PLXUTILS-174
+			cl.createArg().setValue("-");
 
-        try
-        {
-            if ( log.isDebugEnabled() )
-            {
-                log.debug( "About to execute \'" + cl.toString() + "\'" );
-            }
+			final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+			final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
 
-            final InputStream is = new ByteArrayInputStream( writeExpectScriptFile( rpm ) );
+			try
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("About to execute \'" + cl.toString() + "\'");
+				}
 
-            int result = CommandLineUtils.executeCommandLine( cl, is, stdout, stderr );
-            if ( result != 0 )
-            {
-                throw new IllegalStateException( "RPM sign execution returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
-            }
-        }
-        catch ( CommandLineException e )
-        {
-            final IllegalStateException ise = new IllegalStateException( "Unable to sign the RPM" );
-            ise.initCause( e );
-            throw ise;
-        }
+				final InputStream is = new ByteArrayInputStream(writeExpectScriptFile(rpm));
+
+				int result = CommandLineUtils.executeCommandLine(cl, is, stdout, stderr);
+				if (result != 0)
+				{
+					throw new IllegalStateException(
+							"RPM sign execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
+				}
+			} catch (CommandLineException e)
+			{
+				final IllegalStateException ise = new IllegalStateException("Unable to sign the RPM");
+				ise.initCause(e);
+				throw ise;
+			}
+
+		} else 
+		{
+
+			// run rpmsign
+			final Commandline cl = new Commandline();
+			cl.setExecutable("rpmsign");
+			cl.setWorkingDirectory(rpm.getParentFile());
+            cl.createArg().setValue( "--define" );
+            cl.createArg().setValue( "_gpg_name " + gpgName );
+            if ( gpgPath != null )
+			{
+				cl.createArg().setValue("--define");
+				cl.createArg().setValue("_gpg_path " + gpgPath);
+			}
+			cl.createArg().setValue( "--addsign" );
+	        cl.createArg().setValue( rpm.getName() );
+
+			final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+			final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
+
+			try
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("About to execute \'" + cl.toString() + "\'");
+				}
+
+				int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+				if (result != 0)
+				{
+					throw new IllegalStateException(
+							"RPM sign execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
+				}
+			} catch (CommandLineException e)
+			{
+				final IllegalStateException ise = new IllegalStateException("Unable to sign the RPM");
+				ise.initCause(e);
+				throw ise;
+			}
+
+		}
     }
 
     /**
