@@ -1631,7 +1631,7 @@ abstract class AbstractRPMMojo
     /**
      * @return the rpmbuildStage
      */
-    final public String getRpmbuildStage()
+    final String getRpmbuildStage()
     {
         return rpmbuildStage;
     }
@@ -1639,7 +1639,7 @@ abstract class AbstractRPMMojo
     /**
      * @param rpmRpmbuildStage the rpmRpmbuildStage to set
      */
-    final public void setRpmbuildStage( String rpmbuildStage )
+    final void setRpmbuildStage( String rpmbuildStage )
     {
         this.rpmbuildStage = rpmbuildStage;
     }
