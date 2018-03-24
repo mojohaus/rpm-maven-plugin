@@ -1,7 +1,7 @@
 language: java
+
 jdk:
-  - openjdk6
-  - oraclejdk7
+  - openjdk7 #Travis does not support oraclejdk7 anymore
   - oraclejdk8
 
 # Install the rpmbuild tool we need.

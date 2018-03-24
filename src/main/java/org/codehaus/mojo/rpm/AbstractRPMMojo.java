@@ -654,6 +654,16 @@ abstract class AbstractRPMMojo
      */
     @Parameter(defaultValue = "false")
     private boolean skipPOMs;
+    
+    /**
+     * Indicates if the dependencies should be hard linked instead of copied.
+     * <br />
+     * <b>NOTE:</b> Hard link requires maven repository to be on same partition as project's build dir. 
+     * 
+     * @since TODO
+     */
+    @Parameter(defaultValue = "false")
+    private boolean hardLinkDependencies;
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -1629,6 +1639,13 @@ abstract class AbstractRPMMojo
     }
 
     /**
+     * @return Returns the {@link #hardLinkDependencies}
+     */
+    final boolean isHardLinkDependencies() {
+        return hardLinkDependencies;
+    }
+    
+    /**
      * @return the rpmbuildStage
      */
     final String getRpmbuildStage()
@@ -1644,6 +1661,7 @@ abstract class AbstractRPMMojo
         this.rpmbuildStage = rpmbuildStage;
     }
 
+    
     /**
      * Load and decrypt gpg passphrase from maven settings if not given from plugin configuration
      *
@@ -1673,4 +1691,5 @@ abstract class AbstractRPMMojo
             }
         }
     }
+
 }

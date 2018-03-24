@@ -22,7 +22,7 @@ function install_mvn {
   fi
 }
 
-install java-1.6.0-openjdk-devel
+install java-1.7.0-openjdk-devel
 install rpm-build
 install wget
 install_mvn 2.2.1

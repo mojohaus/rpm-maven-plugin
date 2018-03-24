@@ -20,6 +20,9 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -135,7 +138,7 @@ final class FileHelper
                     List<Artifact> artlist = selectArtifacts( art );
                     for ( Artifact artifactInstance : artlist )
                     {
-                        copyArtifact( artifactInstance, dest, false );
+                        copyArtifact( artifactInstance, dest, false, false);
                         map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
                     }
                 }
@@ -147,7 +150,7 @@ final class FileHelper
                     for ( Artifact artifactInstance : deplist )
                     {
                         // pass in dependency stripVersion parameter
-                        String outputFileName = copyArtifact( artifactInstance, dest, dep.getStripVersion() );
+                        String outputFileName = copyArtifact( artifactInstance, dest, dep.getStripVersion(), mojo.isHardLinkDependencies());
                         map.addCopiedFileNameRelativeToDestination( outputFileName );
                     }
                 }
@@ -168,7 +171,27 @@ final class FileHelper
             }
         }
     }
-
+    
+    /**
+    * 
+    * @param src The source directory/file
+    * @param outputFileName The destination of link
+    * @throws MojoExecutionException
+    */
+    private void hardLinkSource(File src, Path outputFileName) throws MojoExecutionException {
+        try {
+            //Delete existing file always, previous file may be different version with same filename
+            if(Files.exists(outputFileName)) {
+                mojo.getLog().debug("Deleting previous file for ensuring hard link points to right target.");
+                Files.delete(outputFileName);
+            }
+            mojo.getLog().debug("Creating hard link from "+ src.getAbsolutePath() + " to " + outputFileName);
+            Files.createLink(outputFileName, src.toPath());
+        } catch (IOException e) {
+            throw new MojoExecutionException("Unable to hard link source (" + src.getAbsolutePath() +"): " + e.getMessage(), e);
+        }
+    }
+    
     /**
      * Copy a set of files.
      *
@@ -265,7 +288,7 @@ final class FileHelper
      * @return Artifact file name
      * @throws MojoExecutionException if a problem occurs
      */
-    private String copyArtifact( Artifact art, File dest, boolean stripVersion )
+    private String copyArtifact( Artifact art, File dest, boolean stripVersion, boolean hardLinkOnly )
         throws MojoExecutionException
     {
         if ( art.getFile() == null )
@@ -294,10 +317,14 @@ final class FileHelper
         {
             outputFileName = art.getFile().getName();
         }
-
-        copySource( art.getFile(), outputFileName, dest, null, null, false, false );
+        if(hardLinkOnly) {
+            hardLinkSource(art.getFile(), dest.toPath().resolve(outputFileName));
+        } else {
+            copySource( art.getFile(), outputFileName, dest, null, null, false, false );
+        }
         return outputFileName;
     }
+
 
     /**
      * Make a list of the artifacts to package in this mapping.
