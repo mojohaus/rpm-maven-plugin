@@ -134,22 +134,6 @@ final class RPMHelper
         cl.createArg().setValue( "--define" );
         cl.createArg().setValue( "_srcrpmdir %{_topdir}/SRPMS" );
 
-        // maintain passive behavior for keyPassphrase not being present
-        final String keyname = mojo.getKeyname();
-        final File keypath = mojo.getKeypath();
-        final Passphrase keyPassphrase = mojo.getKeyPassphrase();
-        if ( keyname != null && keyPassphrase == null )
-        {
-            cl.createArg().setValue( "--define" );
-            cl.createArg().setValue( "_gpg_name " + keyname );
-            if ( keypath != null )
-            {
-                cl.createArg().setValue( "--define" );
-                cl.createArg().setValue( "_gpg_path " + keypath );
-            }
-            cl.createArg().setValue( "--sign" );
-        }
-
         cl.createArg().setValue( mojo.getName() + ".spec" );
 
         final Log log = mojo.getLog();
@@ -175,10 +159,15 @@ final class RPMHelper
             throw new MojoExecutionException( "Unable to build the RPM", e );
         }
 
-        // now if the passphrase has been provided and we want to try and sign automatically
-        if ( keyname != null && keyPassphrase != null )
+        // if the keyname has been provided, try to sign
+        final String keyname = mojo.getKeyname();
+        final File keypath = mojo.getKeypath();
+        final Passphrase keyPassphrase = mojo.getKeyPassphrase();
+
+        if ( keyname != null)
         {
-            RPMSigner signer = new RPMSigner( keypath, keyname, keyPassphrase.getPassphrase(), log );
+			RPMSigner signer = new RPMSigner(keypath, keyname,
+					keyPassphrase != null ? keyPassphrase.getPassphrase() : null, log);
 
             try
             {
