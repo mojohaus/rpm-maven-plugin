@@ -198,10 +198,9 @@ final class RPMSigner
             }
             writer.print( " --addsign " );
             writer.println( rpm.getName() );
-            writer.println( "expect -exact \"Enter pass phrase: \"" );
-            writer.print( "send -- \"" );
-            writer.print( new String( this.passphrase ) );
-            writer.println( "\r\"" );
+            writer.println( "expect {" );
+            writer.println( " \"Enter pass phrase: \" {");
+            writer.println( "send -- \"" + new String( this.passphrase ) + "\r\"");
             writer.println( "expect {" );
             writer.println( " \"Pass phrase is good.\" {" );
             writer.println( "      expect eof" );
@@ -212,7 +211,13 @@ final class RPMSigner
             writer.println( "      exit 1" );
             writer.println( "  }" );
             writer.println( "}" );
-            writer.println();
+            writer.println( "}" );
+            writer.println( " \"" + gpgName + ": \" {");
+            writer.println( "             expect eof" );
+            writer.println( "             exit 0" );
+            writer.println( "             }" );
+            writer.println( "}" );
+                        writer.println();
             writer.flush();
         }
         finally
