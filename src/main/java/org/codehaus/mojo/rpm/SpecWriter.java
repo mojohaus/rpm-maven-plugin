@@ -175,8 +175,10 @@ final class SpecWriter
             final File absoluteDestination = map.getAbsoluteDestination();
 
             final String attrString =
-                map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
-            final String baseFileString = attrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
+                map.getAttrString( mojo.getDefaultFilemode(), mojo.getDefaultDirmode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
+            final String baseFileString = assembleBaseString( destination, attrString );
+            String dirAttrString = map.getDerivedDirAttrString( mojo.getDefaultDirmode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername() );
+            final String baseDirString = assembleBaseString( destination, dirAttrString );
 
             if ( map.hasSoftLinks() && !absoluteDestination.exists() )
             {
@@ -246,6 +248,29 @@ final class SpecWriter
             {
                 log.debug( "writing attribute string for identified files in directory: " + destination );
 
+                // Emit directories first, then files
+                if ( map.isRecurseDirectories() )
+                {
+                    final String[] dirs = scanner.getIncludedDirectories();
+
+                    if ( map.isDirectoryIncluded() )
+                    {
+                        // write out destination first (%dir already included in baseDirString)
+                        spec.println( baseDirString + "\"" );
+                    }
+
+                    for ( String dir : dirs )
+                    {
+                        // do not write out base file (destination) again
+                        if ( dir.length() > 0 )
+                        {
+                            // %dir already included in baseDirString
+                            spec.print( baseDirString );
+                            spec.println( StringUtils.replace(dir, "\\", FileHelper.UNIX_FILE_SEPARATOR) + "\"" );
+                        }
+                    }
+                }
+
                 // only list files if requested (directoryIncluded == false) or we have to
                 if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() && !map.isRecurseDirectories()) )
                 {
@@ -254,30 +279,7 @@ final class SpecWriter
                     for ( String file : files )
                     {
                         spec.print( baseFileString );
-                        spec.println( StringUtils.replace( file, "\\", "/" ) + "\"" );
-                    }
-                }
-
-                if ( map.isRecurseDirectories() )
-                {
-                    final String[] dirs = scanner.getIncludedDirectories();
-
-                    if ( map.isDirectoryIncluded() )
-                    {
-                        // write out destination first
-                        spec.print("%dir ");
-                        spec.println( baseFileString + "\"" );
-                    }
-
-                    for ( String dir : dirs )
-                    {
-                        // do not write out base file (destination) again
-                        if ( dir.length() > 0 )
-                        {
-                            spec.print("%dir ");
-                        	spec.print( baseFileString );
-                            spec.println( StringUtils.replace(dir, "\\", "/") + "\"" );
-                        }
+                        spec.println( StringUtils.replace( file, "\\", FileHelper.UNIX_FILE_SEPARATOR) + "\"" );
                     }
                 }
 
@@ -289,6 +291,10 @@ final class SpecWriter
                 }
             }
         }
+    }
+
+    private String assembleBaseString(String destination, String dirAttrString) {
+        return dirAttrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
     }
 
     /**

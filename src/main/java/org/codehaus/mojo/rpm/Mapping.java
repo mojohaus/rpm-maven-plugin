@@ -53,6 +53,10 @@ public class Mapping
     /** File mode (octal string) to assign to files when installed. */
     private String filemode;
 
+    /** File mode (octal string) to assign to directories when installed. Defaults to {@link #filemode} if not assigned.
+     * This property is useful for mappings that contain both files and directories. */
+    private String dirmode;
+
     /** User name for files when installed. */
     private String username;
 
@@ -142,12 +146,12 @@ public class Mapping
     }
 
     /**
-     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
+     * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
      * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
      * directory).<br/>
      * By default, this returns <code>true</code>.
      *
-     * @return Whether the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
+     * @return Whether the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
      *         attribute string}.
      */
     public boolean isDirectoryIncluded()
@@ -156,7 +160,7 @@ public class Mapping
     }
 
     /**
-     * Sets if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String)
+     * Sets if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
      * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
      * directory).<br/>
      * By default, this is <code>true</code>.
@@ -233,6 +237,26 @@ public class Mapping
     public void setFilemode( String fmode )
     {
         filemode = fmode;
+    }
+
+    /**
+     * Retrieve the UNIX directory permissions. This is a three-digit octal number which specifies the permission to be applied
+     * to each directory in the mapping when it is installed. Defaults to {@link #getFilemode()} is not defined.
+     *
+     * @return The UNIX directory permissions.
+     */
+    String getDirmode() {
+        return dirmode;
+    }
+
+    /**
+     * Set the UNIX directory permissions. This is a three-digit octal number which specifies the permission to be applied
+     * to each directory in the mapping when it is installed. Defaults to {@link #getFilemode()} is not defined.
+     *
+     * @param dirmode The new UNIX directory permissions.
+     */
+    void setDirmode(String dirmode) {
+        this.dirmode = dirmode;
     }
 
     /**
@@ -368,10 +392,46 @@ public class Mapping
      * @param defaultGrp Default group to use if not set for this mapping.
      * @param defaultUsr Default user to use if not set for this mapping.
      * @return The attribute string for the SPEC file.
+     * @deprecated Use {@link #getAttrString(String, String, String, String)} instead (additionally includes defaultDirMode)
      */
-    public String getAttrString( String defaultFileMode, String defaultGrp, String defaultUsr )
+    @Deprecated
+    public String getAttrString( String defaultFileMode, String defaultGrp, String defaultUsr ){
+        return getAttrString( defaultFileMode, null, defaultGrp, defaultUsr );
+    }
+
+    /**
+     * Assemble the RPM SPEC file attributes for a mapping.
+     *
+     * @param defaultFileMode Default file mode to use if not set for this mapping.
+     * @param defaultDirMode Default directory mode to use if not set for this mapping.
+     * @param defaultGrp Default group to use if not set for this mapping.
+     * @param defaultUsr Default user to use if not set for this mapping.
+     * @return The attribute string for the SPEC file. Includes <code>%dir</code> for directory-only entries.
+     */
+    public String getAttrString( String defaultFileMode, String defaultDirMode, String defaultGrp, String defaultUsr )
     {
-        defaultFileMode = defaultFileMode == null ? "-" : defaultFileMode;
+        boolean directory = ( ( sources == null ) || ( sources.size() == 0 ) ) && ( dependency == null ) && ( artifact == null );
+
+        // For backwards compatibility, use defaultFileMode as a fallback for the directory mode
+        String defaultMode = directory ? ( defaultDirMode != null ? defaultDirMode : defaultFileMode ) : defaultFileMode;
+
+        return computeAttrString(defaultMode, defaultGrp, defaultUsr, directory);
+    }
+
+    /**
+     * Assemble RPM SPEC directory attributes for a mapping. Used if a mapping results in both directory and file SPEC entries.
+     *
+     * @param defaultDirMode Default directory mode if not set for this mapping.
+     * @param defaultGrp Default group to use if not set for this mapping.
+     * @param defaultUsr Default user to use if not set for this mapping.
+     * @return The attribute string for the SPEC file. Includes <code>%dir</code>
+     */
+    public String getDerivedDirAttrString(String defaultDirMode, String defaultGrp, String defaultUsr) {
+        return computeAttrString(defaultDirMode, defaultGrp, defaultUsr, true);
+    }
+
+    private String computeAttrString(String defaultMode, String defaultGrp, String defaultUsr, boolean directory) {
+        defaultMode = defaultMode == null ? "-" : defaultMode;
         defaultGrp = defaultGrp == null ? "-" : defaultGrp;
         defaultUsr = defaultUsr == null ? "-" : defaultUsr;
 
@@ -394,7 +454,7 @@ public class Mapping
             sb.append( "%doc " );
         }
 
-        if ( ( ( sources == null ) || ( sources.size() == 0 ) ) && ( dependency == null ) && ( artifact == null ) )
+        if ( directory )
         {
             sb.append( "%dir " );
         }
@@ -404,7 +464,14 @@ public class Mapping
         {
             sb.append( "%attr(" );
 
-            sb.append( filemode != null ? filemode : defaultFileMode );
+            if ( directory )
+            {
+                sb.append( dirmode != null ? dirmode : ( filemode != null ? filemode : defaultMode ) );
+            }
+            else
+            {
+                sb.append( filemode != null ? filemode : defaultMode );
+            }
             sb.append( ',' );
 
             sb.append( username != null ? username : defaultUsr );
@@ -633,7 +700,7 @@ public class Mapping
         StringBuilder sb = new StringBuilder();
 
         sb.append( "[\"" + getDestination() + "\" " );
-        sb.append( "{" + getAttrString( null, null, null ) + "}" );
+        sb.append( "{" + getAttrString( null, null, null, null ) + "}" );
 
         if ( isDirOnly() )
         {

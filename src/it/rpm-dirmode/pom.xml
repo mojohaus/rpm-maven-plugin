@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.mojo.rpm.its</groupId>
+  <artifactId>rpm-dirmode</artifactId>
+  <packaging>rpm</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>rpm-dirmode</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <rpm.install.basedir>/opt/dirmode</rpm.install.basedir>
+  </properties>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <extensions>true</extensions>
+        <configuration>
+          <group>Applications/Internet</group>
+          <autoRequires>false</autoRequires>
+          <!-- Intentionally weird default modes so that we can tell where they got applied -->
+          <defaultFilemode>333</defaultFilemode>
+          <defaultDirmode>753</defaultDirmode>
+          <defaultUsername>du02</defaultUsername>
+          <defaultGroupname>dg02</defaultGroupname>
+          <mappings>
+            <mapping>
+              <!-- Only create target directory -->
+              <directory>${rpm.install.basedir}</directory>
+              <filemode>664</filemode>
+              <dirmode>775</dirmode>
+              <username>tu01</username>
+              <groupname>tg01</groupname>
+            </mapping>
+            <mapping>
+              <directory>${rpm.install.basedir}/t1</directory>
+              <filemode>770</filemode>
+              <!-- no dirmode specified. Fall back to filemode (backwards compatibility) -->
+              <username>tu01</username>
+              <groupname>tg01</groupname>
+            </mapping>
+            <mapping>
+              <directory>${rpm.install.basedir}/t2</directory>
+              <!-- no mode/ownership specified. Use defaults -->
+            </mapping>
+            <mapping>
+              <!-- Install *contents* of indicated directory to target location -->
+              <directory>${rpm.install.basedir}</directory>
+              <filemode>664</filemode>
+              <dirmode>775</dirmode>
+              <username>tu01</username>
+              <groupname>tg01</groupname>
+              <directoryIncluded>false</directoryIncluded>
+              <recurseDirectories>true</recurseDirectories>
+              <sources>
+                <source>
+                  <location>${project.basedir}/src/main/resources/dirmode</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <!-- Install entire indicated directory to target location -->
+              <directory>/var/opt/dirmode</directory>
+              <filemode>664</filemode>
+              <dirmode>775</dirmode>
+              <username>tu01</username>
+              <groupname>tg01</groupname>
+              <recurseDirectories>true</recurseDirectories>
+              <sources>
+                <source>
+                  <location>${project.basedir}/src/main/resources/dirmode</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/var/tmp/dirmode</directory>
+              <filemode>664</filemode>
+              <dirmode>775</dirmode>
+              <username>tu01</username>
+              <groupname>tg01</groupname>
+              <sources>
+                <source>
+                  <location>${project.basedir}/src/main/resources/dirmode</location>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+

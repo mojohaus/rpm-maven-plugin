@@ -77,6 +77,31 @@ Mapping Parameters
   {{{./rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
   {{{./rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
 
+* {dirmode}
+
+  This is UNIX permissions (file mode) to assign to directories when installed.
+  This value consists of three octal digits representing the access for the
+  owner, the group, and the world.  Each digit represents the access allowed
+  and is the sum of 4 for read, 2 for write, and 1 for execute (in the context of
+  directories, 'execute' allows the user to list the contents of the directory).
+  A common value to use is "755" which provides the owner read/write access and
+  read-only access to everyone else. Everyone is allowed to list the contents
+  of the directory. For more information on this subject,
+  read {{{http://www.tldp.org/LDP/intro-linux/html/sect_03_04.html}File
+  Security}}, section 3.4 of the Introduction to Linux maintained by the
+  Linux Documentation Project. If not specified, filemode, will be used instead.
+
+  This property is useful if you want files and directories included in a single
+  mapping to have different permissions. The canonical example would be files
+  that are readable (644) and directories that have the executable bit set (755).
+  That way, the directories can be listed, but the files remain non-executable.
+
+  If none of the file attributes (dirmode, filemode, username, and groupname) are
+  populated, the defaults ({{{./rpm-mojo.html#defaultFilemode}defaultFileMode}},
+  {{{./rpm-mojo.html#defaultUsername}defaultUsername}},
+  {{{./rpm-mojo.html#defaultGroupname}defaultGroupname}}, and
+  {{{./rpm-mojo.html#defaultDirmode}defaultDirmode}}) will be used.
+
 * {username} (<<recommended>>)
 
   This is the UNIX username to assign to the files when installed.  If the
