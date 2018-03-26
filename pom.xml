@@ -190,7 +190,7 @@
           <configuration>
             <excludes>
               <!-- exclude local repo at jenkins -->
-              <exclude>.repository</exclude>
+              <exclude>.repository/*</exclude>
             </excludes>
           </configuration>
         </plugin>
