@@ -23,12 +23,12 @@ under the License.
     <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin</link>
     <description>RPM Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2005 - 2016 MojoHaus</copyright>
+    <copyright>&#169;2005 - 2018 MojoHaus</copyright>
     <item>
-      <title>File: 23,
-             Errors: 62,
-             Warnings: 16,
-             Infos: 0
+      <title>File: 24,
+             Errors: 300,
+             Warnings: 20,
+             Infos: 1
       </title>
             <link>http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html</link>
       <description>
@@ -97,7 +97,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  7
                 </td>
               </tr>
                           <tr>
@@ -125,7 +125,7 @@ under the License.
                   2
                 </td>
                 <td>
-                  0
+                  7
                 </td>
               </tr>
                           <tr>
@@ -192,10 +192,10 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
                 </td>
                 <td>
-                  0
+                  24
                 </td>
               </tr>
                           <tr>
@@ -209,7 +209,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  13
                 </td>
               </tr>
                           <tr>
@@ -237,7 +237,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  133
                 </td>
               </tr>
                           <tr>
@@ -273,13 +273,13 @@ under the License.
                   <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.AbstractRPMMojo.java">org/codehaus/mojo/rpm/AbstractRPMMojo.java</a>
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
-                  3
+                  5
                 </td>
                 <td>
-                  34
+                  49
                 </td>
               </tr>
                           <tr>
@@ -308,6 +308,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/rpm-maven-plugin/rpm-maven-plugin/checkstyle.html#org.codehaus.mojo.rpm.RPMUnpackMojo.java">org/codehaus/mojo/rpm/RPMUnpackMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                           <tr>
@@ -349,7 +363,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  6
+                  46
                 </td>
               </tr>
                           <tr>
