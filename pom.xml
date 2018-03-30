@@ -116,8 +116,7 @@
   </scm>
 
   <properties>
-    <mavenVersion>2.2.1</mavenVersion>
-    <mojo.java.target>1.6</mojo.java.target>
+    <mavenVersion>3.0</mavenVersion>
     <scmpublish.content>${project.build.directory}/staging/rpm-maven-plugin</scmpublish.content>
   </properties>
 
@@ -135,11 +134,6 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>${mavenVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
       <version>${mavenVersion}</version>
     </dependency>
     <dependency>
