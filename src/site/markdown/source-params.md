@@ -189,12 +189,12 @@ that the files defined are only applicable if the expression matches the [MOJO.t
            ...
             <sources>
               <source>
-                <location>src/main/native/x86_64</location>
-                <targetArchitecture>x86_64</targetArchitecture>
+                <location>src/main/native/linux</location>
+                <targetOSName>Linux</targetOSName>
               </source>
               <source>
-                <location>src/main/native/x86</location>
-                <targetArchitecture>i.86</targetArchitecture>
+                <location>src/main/native/osx</location>
+                <targetOSName>.*OS X</targetOSName>
               </source>
             </sources>
             ...
