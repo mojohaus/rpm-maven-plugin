@@ -1,5 +1,8 @@
 language: java
 
+os: linux
+dist: trusty
+
 jdk:
   - openjdk7 #Travis does not support oraclejdk7 anymore
   - oraclejdk8
