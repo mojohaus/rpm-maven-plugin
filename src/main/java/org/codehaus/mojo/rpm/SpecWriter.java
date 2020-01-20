@@ -18,8 +18,9 @@ package org.codehaus.mojo.rpm;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -238,8 +239,8 @@ final class SpecWriter
             scanner.setExcludes( null );
             scanner.scan();
 
-            if ( scanner.isEverythingIncluded() && links.isEmpty() && map.isDirectoryIncluded()
-                && !map.isRecurseDirectories() )
+            final boolean noFiles = map.getSources().isEmpty() || (scanner.isEverythingIncluded() && links.isEmpty());
+            if ( noFiles && map.isDirectoryIncluded() && !map.isRecurseDirectories() )
             {
                 log.debug( "writing attribute string for directory: " + destination );
                 spec.println( attrString + " \"" + destination + "\"" );
@@ -272,7 +273,7 @@ final class SpecWriter
                 }
 
                 // only list files if requested (directoryIncluded == false) or we have to
-                if ( !( map.isDirectoryIncluded() && scanner.isEverythingIncluded() && links.isEmpty() && !map.isRecurseDirectories()) )
+                if ( !map.isDirectoryIncluded() || !noFiles )
                 {
                     final String[] files = scanner.getIncludedFiles();
 
