@@ -1,8 +1,12 @@
+#
+dist: bionic
+#
 language: java
-
+#
 jdk:
   - openjdk7 #Travis does not support oraclejdk7 anymore
   - oraclejdk8
+  - openjdk11
 
 # Install the rpmbuild tool we need.
 before_install:
