@@ -4,9 +4,8 @@ dist: bionic
 language: java
 #
 jdk:
-  - oraclejdk8
+  - openjdk8
   - openjdk11
-  - openjdk14
 
 # Install the rpmbuild tool we need.
 before_install:
