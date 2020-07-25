@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -609,6 +610,14 @@ public abstract class AbstractRPMMojo
     private String releaseProperty;
 
     /**
+     * When enabled, automatically generates requires for all (transitive) rpm-dependencies.
+     * 
+     * @since 2.2.1
+     */
+    @Parameter
+    private boolean addDependencyBasedRequires;
+
+    /**
      * The changelog file. If the file does not exist, it is ignored.
      *
      * @since 2.0-beta-3
@@ -1069,6 +1078,47 @@ public abstract class AbstractRPMMojo
         }
 
         processDefineStatements();
+	
+        if ( addDependencyBasedRequires )
+        {
+            appendDependencyBasedRequires();
+        }
+    }
+    
+    /**
+     * Extends this.requires with additional require for each immediate rpm-type dependency
+     * of the project, requiring the same or a higher version as the resolved-dependency-version.
+     *
+     * @throws MojoExecutionException if the projects dependency-tree cannot be generated.
+     * @since 2.2.1
+     */
+    private void appendDependencyBasedRequires()
+        throws MojoExecutionException
+    {
+        if ( this.requires == null )
+        {
+            this.requires = new LinkedHashSet();
+        }
+        for ( Object dependency : project.getDependencyArtifacts() )
+        {
+            Artifact dependencyArtifact = (Artifact) dependency;
+            if ( "rpm".equals( dependencyArtifact.getType() ) )
+            {
+                StringBuilder require = new StringBuilder();
+                getLog().debug( "Determining rpm name and version of rpm-dependency " + dependencyArtifact);
+                File rpmFile = dependencyArtifact.getFile();
+                String rpmName = helper.getRpmAttribute( rpmFile, "NAME" );
+                String rpmVersion = helper.getRpmAttribute( rpmFile, "VERSION" );
+                String rpmRelease = helper.getRpmAttribute( rpmFile, "RELEASE" );
+                require.append( rpmName )
+                        .append( " >= " )
+                        .append( rpmVersion )
+                        .append( "-" )
+                        .append( rpmRelease );
+                getLog().info( "Add dependency-based require: " + require.toString() );
+                requires.add( require.toString() );
+            }
+        }
     }
 
     /**
