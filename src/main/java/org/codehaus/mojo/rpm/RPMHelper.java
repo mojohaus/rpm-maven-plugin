@@ -167,7 +167,7 @@ final class RPMHelper
         if ( keyname != null)
         {
 			RPMSigner signer = new RPMSigner(keypath, keyname,
-					keyPassphrase != null ? keyPassphrase.getPassphrase() : null, log);
+					keyPassphrase != null ? keyPassphrase.getPassphrase() : null, log, mojo.getKeyExpectPhrase(), mojo.getKeyExpectTimeout(), mojo.getSignHashAlgorithm());
 
             try
             {
