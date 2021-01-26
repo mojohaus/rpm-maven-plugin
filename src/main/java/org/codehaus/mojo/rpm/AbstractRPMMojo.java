@@ -201,6 +201,13 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private File keypath;
 
     /**
+     * Set the hash algorithm that will be used to sign the package using GPG.
+     * @since 2.2.1
+     */
+    @Parameter( property = "gpg.signHashAlgorithm" )
+    private String signHashAlgorithm;
+
+    /**
      * The passphrase for the <i>keyname</i> to sign the rpm. This utilizes <a href="https://core.tcl-lang.org/expect/">expect</a>
      * and requires that {@code expect} be on the PATH.
      * <p>
@@ -222,6 +229,20 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     @Parameter
     private Passphrase keyPassphrase;
+
+    /**
+     * Set the waiting phrase in the expect installation langage (in English "Enter pass phrase")
+     * @since 2.2.1
+     */
+    @Parameter
+    private String keyExpectPhrase;
+
+    /**
+     * Set the expect timeout value, -1 means no timeout
+     * @since 2.2.1
+     */
+    @Parameter(defaultValue = "-1")
+    private String keyExpectTimeout;
 
     /**
      * Server id to lookup the gpg passphrase under Maven settings. The default value intentionally selected to match
@@ -1754,6 +1775,30 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     final Passphrase getKeyPassphrase() {
         return this.keyPassphrase;
+    }
+
+    /**
+     * @return Returns the {@link #signHashAlgorithm}.
+     */
+    final String getSignHashAlgorithm()
+    {
+        return this.signHashAlgorithm;
+    }
+
+    /**
+     * @return Returns the {@link #keyExpectPhrase}.
+     */
+    final String getKeyExpectPhrase()
+    {
+        return this.keyExpectPhrase;
+    }
+
+    /**
+     * @return Returns the {@link #keyExpectTimeout}.
+     */
+    final String getKeyExpectTimeout()
+    {
+        return this.keyExpectTimeout;
     }
 
     /**
