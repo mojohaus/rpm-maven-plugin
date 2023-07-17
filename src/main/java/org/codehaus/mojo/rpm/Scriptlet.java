@@ -19,6 +19,7 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.utils.io.FileUtils;
 
 import java.io.*;
@@ -69,7 +70,7 @@ public class Scriptlet
     private String fileEncoding;
 
     /**
-     * The default encoding of the project, used if {@link fileEncoding} is not set.
+     * The default encoding of the project, used if {@link #fileEncoding} is not set.
      *
      * @see #getFileEncoding().
      */
@@ -211,7 +212,7 @@ public class Scriptlet
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected final void write( final PrintWriter writer, final String directive, final List<FileUtils.FilterWrapper> filterWrappers)
+    protected final void write( final PrintWriter writer, final String directive, final List<FilterWrapper> filterWrappers)
         throws IOException
     {
         if ( scriptFile != null && !scriptFile.exists() )
@@ -262,7 +263,7 @@ public class Scriptlet
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected final void writeContent( PrintWriter writer, final List<FileUtils.FilterWrapper> filterWrappers )
+    protected final void writeContent( PrintWriter writer, final List<FilterWrapper> filterWrappers )
         throws IOException
     {
         if ( script != null )
@@ -276,7 +277,7 @@ public class Scriptlet
                             : new FileReader( scriptFile );
             if(filter)
             {
-                for ( FileUtils.FilterWrapper filterWrapper : filterWrappers ) {
+                for ( FilterWrapper filterWrapper : filterWrappers ) {
                     reader = filterWrapper.getReader( reader );
                 }
             }

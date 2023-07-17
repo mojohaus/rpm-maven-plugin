@@ -45,10 +45,10 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
@@ -702,7 +702,7 @@ public abstract class AbstractRPMMojo
     private RPMHelper helper;
 
     /**
-     * The {@link FileUtils.FilterWrapper filter wrappers} to use for file filtering.
+     * The {@link FilterWrapper filter wrappers} to use for file filtering.
      *
      * @since 2.0
      * @see #mavenFileFilter

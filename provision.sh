@@ -25,6 +25,6 @@ function install_mvn {
 install java-1.8.0-openjdk-devel
 install rpm-build
 install wget
-install_mvn 3.2.5
+install_mvn 3.6.3
 
 echo "Provisioning completed."

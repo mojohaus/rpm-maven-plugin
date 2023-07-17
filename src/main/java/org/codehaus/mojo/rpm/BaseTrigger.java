@@ -19,6 +19,7 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.utils.io.FileUtils;
 
 import java.io.IOException;
@@ -96,7 +97,7 @@ public abstract class BaseTrigger
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException
      */
-    protected void writeTrigger( PrintWriter writer, final List<FileUtils.FilterWrapper> filterWrappers )
+    protected void writeTrigger( PrintWriter writer, final List<FilterWrapper> filterWrappers )
         throws IOException
     {
         write( writer, getDirective(), filterWrappers );
