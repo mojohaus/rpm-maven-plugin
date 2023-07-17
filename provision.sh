@@ -14,7 +14,7 @@ function install_mvn {
   if [ $? -ne 0 ]; then
     echo "Installing Apache Maven $1"
     cd /tmp &&
-    wget -q http://archive.apache.org/dist/maven/binaries/apache-maven-$1-bin.tar.gz &&
+    wget -q http://archive.apache.org/dist/maven/maven-3/$1/binaries/apache-maven-$1-bin.tar.gz &&
     cd /opt &&
     sudo tar -xzf /tmp/apache-maven-$1-bin.tar.gz
 
@@ -22,9 +22,9 @@ function install_mvn {
   fi
 }
 
-install java-1.7.0-openjdk-devel
+install java-1.8.0-openjdk-devel
 install rpm-build
 install wget
-install_mvn 2.2.1
+install_mvn 3.2.5
 
 echo "Provisioning completed."
