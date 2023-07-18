@@ -148,7 +148,7 @@ public class Mapping
     /**
      * Returns if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
      * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
-     * directory).<br/>
+     * directory).<br>
      * By default, this returns <code>true</code>.
      *
      * @return Whether the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
@@ -162,7 +162,7 @@ public class Mapping
     /**
      * Sets if the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
      * attribute string} (if and only if {@link #getSources() sources} make up everything that gets copied to the
-     * directory).<br/>
+     * directory).<br>
      * By default, this is <code>true</code>.
      *
      * @param directoryIncluded The {@link #directoryIncluded} to set.

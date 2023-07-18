@@ -91,11 +91,11 @@ public abstract class BaseTrigger
     }
 
     /**
-     * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String)}.
+     * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String, List)}.
      *
      * @param writer {@code PrintWriter} to write the trigger directive to.
      * @param filterWrappers The filter wrappers to be applied when writing the content.
-     * @throws IOException
+     * @throws IOException if an I/IO error occurs
      */
     protected void writeTrigger( PrintWriter writer, final List<FilterWrapper> filterWrappers )
         throws IOException

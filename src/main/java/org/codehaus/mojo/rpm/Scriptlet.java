@@ -210,7 +210,7 @@ public class Scriptlet
      * @param writer {@code PrintWriter} to write content to.
      * @param directive The directive for the scriptlet.
      * @param filterWrappers The filter wrappers to be applied when writing the content.
-     * @throws IOException
+     * @throws IOException if an I/IO error occurs
      */
     protected final void write( final PrintWriter writer, final String directive, final List<FilterWrapper> filterWrappers)
         throws IOException
@@ -261,7 +261,7 @@ public class Scriptlet
      *
      * @param writer {@code PrintWriter} to write content to.
      * @param filterWrappers The filter wrappers to be applied when writing the content.
-     * @throws IOException
+     * @throws IOException if an I/IO error occurs
      */
     protected final void writeContent( PrintWriter writer, final List<FilterWrapper> filterWrappers )
         throws IOException

@@ -822,7 +822,7 @@ public abstract class AbstractRPMMojo
     }
 
     /**
-     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br/>
+     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br>
      * By default this implementation returns {@code null}, which indicates that no additional classifier should be
      * used.
      *
@@ -1543,7 +1543,7 @@ public abstract class AbstractRPMMojo
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public final String getVersion()
     {
