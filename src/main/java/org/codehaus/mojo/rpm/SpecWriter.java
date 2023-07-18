@@ -239,7 +239,8 @@ final class SpecWriter
             scanner.setExcludes( null );
             scanner.scan();
 
-            final boolean noFiles = map.getSources().isEmpty() || (scanner.isEverythingIncluded() && links.isEmpty());
+            final boolean noFiles = map.getSources() == null || map.getSources().isEmpty()
+                    || (scanner.isEverythingIncluded() && links.isEmpty());
             if ( noFiles && map.isDirectoryIncluded() && !map.isRecurseDirectories() )
             {
                 log.debug( "writing attribute string for directory: " + destination );
