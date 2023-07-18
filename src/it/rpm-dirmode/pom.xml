@@ -22,6 +22,10 @@
         <version>@pom.version@</version>
         <extensions>true</extensions>
         <configuration>
+          <!-- TODO: Remove this statement when the implementation creates the correct spec file -->
+          <defineStatements>
+            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+          </defineStatements>
           <group>Applications/Internet</group>
           <autoRequires>false</autoRequires>
           <!-- Intentionally weird default modes so that we can tell where they got applied -->
