@@ -2,7 +2,7 @@
 
 This is the [rpm-maven-plugin](http://www.mojohaus.org/rpm-maven-plugin/).
 
-[![GitHub CI](https://github.com/EagleErwin/rpm-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/EagleErwin/rpm-maven-plugin/actions/workflows/maven.yml)
+[![GitHub CI](https://github.com/mojohaus/rpm-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/mojohaus/rpm-maven-plugin/actions/workflows/maven.yml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.codehaus.mojo/rpm-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.codehaus.mojo/rpm-maven-plugin)
 
 ## Releasing
