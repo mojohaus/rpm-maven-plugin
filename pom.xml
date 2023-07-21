@@ -242,6 +242,9 @@
                 <gpg.homedir>${project.build.testOutputDirectory}/gnupg</gpg.homedir>
               </properties>
               <!-- <pomIncludes> <pomInclude>rpm-sign*/pom.xml</pomInclude> </pomIncludes> -->
+              <pomExcludes>
+                <pomExclude>rpm-dirmode/pom.xml</pomExclude>
+              </pomExcludes>
               <goals>
                 <goal>clean</goal>
                 <goal>install</goal>
