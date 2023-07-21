@@ -2,10 +2,10 @@
 set -o nounset
 
 function install {
-  rpm -qa | grep -q $1
+  dpkg -l $1
   if [ $? -ne 0 ]; then
     echo "Installing $1 ..."
-    sudo yum install -y $1
+    sudo apt-get install -y $1
   fi
 }
 
@@ -22,9 +22,11 @@ function install_mvn {
   fi
 }
 
-install java-1.8.0-openjdk-devel
-install rpm-build
+apt-get update
+
+install openjdk-17-jdk
+install rpm
 install wget
-install_mvn 3.6.3
+install_mvn 3.9.3
 
 echo "Provisioning completed."

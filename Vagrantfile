@@ -4,8 +4,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Default provider VirtualBox
-  config.vm.box = "generic/centos6"
-  config.vm.box_url = "https://app.vagrantup.com/generic/boxes/centos6/versions/4.2.16/providers/virtualbox.box"
+  config.vm.box = "ubuntu/jammy64"
 
   config.vm.provider "virtualbox" do |vb|
       vb.memory = 2048
