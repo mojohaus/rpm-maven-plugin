@@ -25,7 +25,4 @@ jobs:
     uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v3
     with:
       os-matrix: '[ "ubuntu-latest" ]'
-      jdk-matrix: '[ "8" ]'
-      maven-matrix: '[ "3.6.3" ]'
-      ff-jdk: '8'
-      ff-maven: '3.6.3'
+      maven-matrix: '[ "3.6.3", "3.9.3" ]'
