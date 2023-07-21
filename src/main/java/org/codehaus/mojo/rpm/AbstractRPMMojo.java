@@ -107,8 +107,8 @@ public abstract class AbstractRPMMojo
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
      * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_ARCH">architecture</a>
-     * of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the architecture of the rpm
-     * to <tt>x86_64</tt>.
+     * of the build machine will be used. Any other value (such as {@code x86_64}) will set the architecture of the rpm
+     * to {@code x86_64}.
      * </p>
      * <p>
      * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
@@ -837,7 +837,7 @@ public abstract class AbstractRPMMojo
     /**
      * Returns the generated rpm {@link File}.
      *
-     * @return The generated rpm <tt>File</tt>.
+     * @return The generated rpm {@link File}.
      */
     protected File getRPMFile()
     {
