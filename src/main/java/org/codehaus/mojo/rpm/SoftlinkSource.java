@@ -20,7 +20,7 @@ package org.codehaus.mojo.rpm;
  */
 
 /**
- * A <tt>Source</tt> that simply indicates that the {@link Source#getLocation()} is to be linked to the
+ * A {@link Source} that simply indicates that the {@link Source#getLocation()} is to be linked to the
  * {@link Mapping#getDirectory()}.
  *
  * @author Brett Okken Cerner Corp.

@@ -45,10 +45,10 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.apache.maven.shared.utils.io.FileUtils.FilterWrapper;
 import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Os;
@@ -107,8 +107,8 @@ public abstract class AbstractRPMMojo
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
      * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_ARCH">architecture</a>
-     * of the build machine will be used. Any other value (such as <tt>x86_64</tt>) will set the architecture of the rpm
-     * to <tt>x86_64</tt>.
+     * of the build machine will be used. Any other value (such as {@code x86_64}) will set the architecture of the rpm
+     * to {@code x86_64}.
      * </p>
      * <p>
      * This can also be used in conjunction with <a href="source-params.html#targetArchitecture">Source
@@ -702,7 +702,7 @@ public abstract class AbstractRPMMojo
     private RPMHelper helper;
 
     /**
-     * The {@link FileUtils.FilterWrapper filter wrappers} to use for file filtering.
+     * The {@link FilterWrapper filter wrappers} to use for file filtering.
      *
      * @since 2.0
      * @see #mavenFileFilter
@@ -822,7 +822,7 @@ public abstract class AbstractRPMMojo
     }
 
     /**
-     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br/>
+     * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br>
      * By default this implementation returns {@code null}, which indicates that no additional classifier should be
      * used.
      *
@@ -837,7 +837,7 @@ public abstract class AbstractRPMMojo
     /**
      * Returns the generated rpm {@link File}.
      *
-     * @return The generated rpm <tt>File</tt>.
+     * @return The generated rpm {@link File}.
      */
     protected File getRPMFile()
     {
@@ -1543,7 +1543,7 @@ public abstract class AbstractRPMMojo
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public final String getVersion()
     {

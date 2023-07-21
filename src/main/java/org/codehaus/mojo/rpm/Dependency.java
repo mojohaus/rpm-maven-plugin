@@ -114,7 +114,7 @@ public class Dependency
     /**
      * Set the stripVersion property
      *
-     * @param stripVersion
+     * @param stripVersion the stripVersion property to set
      * @throws MojoExecutionException if the parse fails
      */
     public void setStripVersion( boolean stripVersion )

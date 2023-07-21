@@ -2,10 +2,10 @@
 set -o nounset
 
 function install {
-  rpm -qa | grep -q $1
+  dpkg -l $1
   if [ $? -ne 0 ]; then
     echo "Installing $1 ..."
-    sudo yum install -y $1
+    sudo apt-get install -y $1
   fi
 }
 
@@ -14,7 +14,7 @@ function install_mvn {
   if [ $? -ne 0 ]; then
     echo "Installing Apache Maven $1"
     cd /tmp &&
-    wget -q http://archive.apache.org/dist/maven/binaries/apache-maven-$1-bin.tar.gz &&
+    wget -q http://archive.apache.org/dist/maven/maven-3/$1/binaries/apache-maven-$1-bin.tar.gz &&
     cd /opt &&
     sudo tar -xzf /tmp/apache-maven-$1-bin.tar.gz
 
@@ -22,9 +22,11 @@ function install_mvn {
   fi
 }
 
-install java-1.7.0-openjdk-devel
-install rpm-build
+apt-get update
+
+install openjdk-17-jdk
+install rpm
 install wget
-install_mvn 2.2.1
+install_mvn 3.9.3
 
 echo "Provisioning completed."
