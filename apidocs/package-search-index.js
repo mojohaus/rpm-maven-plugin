@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.codehaus.mojo.rpm"},{"l":"org.codehaus.mojo.rpm_maven_plugin"}]
