@@ -106,7 +106,7 @@ public abstract class AbstractRPMMojo
      * The target architecture for the rpm. The default value is <i>noarch</i>.
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
-     * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_ARCH">architecture</a>
+     * href="https://codehaus-plexus.github.io/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_ARCH">architecture</a>
      * of the build machine will be used. Any other value (such as {@code x86_64}) will set the architecture of the rpm
      * to {@code x86_64}.
      * </p>
@@ -126,7 +126,7 @@ public abstract class AbstractRPMMojo
 
     /**
      * The target os for building the RPM. By default, this will be populated to <a
-     * href="http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_NAME">Os.OS_NAME</a>.
+     * href="https://codehaus-plexus.github.io/plexus-utils/apidocs/org/codehaus/plexus/util/Os.html#OS_NAME">Os.OS_NAME</a>.
      * <p>
      * This can be used in conjunction with <a href="source-params.html#targetOSName">Source targetOSName</a> to flex
      * the contents of the rpm based on operating system.
