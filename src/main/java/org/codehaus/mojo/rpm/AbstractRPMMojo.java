@@ -335,6 +335,12 @@ public abstract class AbstractRPMMojo
     private LinkedHashSet<String> conflicts;
 
     /**
+     * The list of suggested packages for this package.
+     */
+    @Parameter
+    private LinkedHashSet<String> suggests;
+
+    /**
      * The relocation prefix for this package.
      *
      */
@@ -1383,6 +1389,14 @@ public abstract class AbstractRPMMojo
     final LinkedHashSet<String> getConflicts()
     {
         return this.conflicts;
+    }
+
+    /**
+     * @return Returns the {@link #suggests}.
+     */
+    final LinkedHashSet<String> getSuggests()
+    {
+        return this.suggests;
     }
 
     final List<String> getPrefixes()

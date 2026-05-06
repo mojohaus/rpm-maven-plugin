@@ -98,6 +98,7 @@ final class SpecWriter
         writeList( mojo.getPrereqs(), "PreReq: " );
         writeList( mojo.getObsoletes(), "Obsoletes: " );
         writeList( mojo.getConflicts(), "Conflicts: " );
+        writeList( mojo.getSuggests(), "Suggests: " );
 
         spec.println( "autoprov: " + ( mojo.isAutoProvides() ? "yes" : "no" ) );
         spec.println( "autoreq: " + ( mojo.isAutoRequires() ? "yes" : "no" ) );
@@ -295,7 +296,8 @@ final class SpecWriter
         }
     }
 
-    private String assembleBaseString(String destination, String dirAttrString) {
+    private String assembleBaseString( String destination, String dirAttrString )
+    {
         return dirAttrString + "  \"" + destination + FileHelper.UNIX_FILE_SEPARATOR;
     }
 
