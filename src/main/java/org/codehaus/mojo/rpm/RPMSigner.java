@@ -57,9 +57,25 @@ final class RPMSigner
     private final char[] passphrase;
 
     /**
+     * Hash algorithm for the gpg process
+     */
+    private final String hashAlgorithm;
+
+    /**
      * {@code Log} to log to.
      */
     private final Log log;
+
+    /**
+     * Expect waiting phrase in installation langage
+     * If null or empty, use English phrase
+     */
+    private final String expectPhrase;
+
+    /**
+     * Expect timeout, -1 means no timeout
+     */
+    private final String expectTimeout;
 
     /**
      * Constructor takes all necessary attributes to sign an rpm.
@@ -69,12 +85,15 @@ final class RPMSigner
      * @param passphrase The passphrase for the gpg key.
      * @param log Used for logging information in the signing process.
      */
-    public RPMSigner( File gpgPath, String gpgName, char[] passphrase, Log log )
+    public RPMSigner( File gpgPath, String gpgName, char[] passphrase, Log log, String expectPhrase, String expectTimeout, String hashAlgorithm )
     {
         this.gpgPath = gpgPath;
         this.gpgName = gpgName;
         this.passphrase = passphrase;
         this.log = log;
+        this.expectPhrase = expectPhrase;
+        this.expectTimeout = expectTimeout;
+        this.hashAlgorithm = hashAlgorithm;
     }
 
     /**
@@ -143,6 +162,11 @@ final class RPMSigner
 				cl.createArg().setValue("--define");
 				cl.createArg().setValue("_gpg_path " + gpgPath);
 			}
+            if ( hashAlgorithm != null && !hashAlgorithm.isEmpty() )
+            {
+                cl.createArg().setValue("--define");
+                cl.createArg().setValue("_gpg_digest_algo " + hashAlgorithm);
+            }
 			cl.createArg().setValue( "--addsign" );
 	        cl.createArg().setValue( rpm.getName() );
 
@@ -187,7 +211,7 @@ final class RPMSigner
         final PrintWriter writer = new PrintWriter( new OutputStreamWriter( baos ) );
         try
         {
-            writer.println( "set timeout -1" );
+            writer.println( "set timeout " + this.expectTimeout );
             writer.print( "spawn rpm --define \"_gpg_name " );
             writer.print( gpgName );
             writer.print( "\"" );
@@ -196,10 +220,21 @@ final class RPMSigner
                 writer.print( " --define \"_gpg_path " );
                 writer.print( gpgPath + "\"" );
             }
+            if ( hashAlgorithm != null )
+            {
+                writer.print( " --define \"_gpg_digest_algo " );
+                writer.print( hashAlgorithm + "\"" );
+            }
             writer.print( " --addsign " );
             writer.println( rpm.getName() );
             writer.println( "expect {" );
-            writer.println( " \"Enter pass phrase: \" {");
+            if ( expectPhrase != null && !expectPhrase.isEmpty() )
+            {
+                writer.println( " \"" + this.expectPhrase + "\" {");
+            } else
+            {
+                writer.println( " \"Enter pass phrase: \" {");
+            }
             writer.println( "send -- \"" + new String( this.passphrase ) + "\r\"");
             writer.println( "expect {" );
             writer.println( " \"Pass phrase is good.\" {" );
