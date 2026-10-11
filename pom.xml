@@ -92,7 +92,7 @@
   </contributors>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>3.9.0</maven>
   </prerequisites>
 
   <scm>
@@ -112,7 +112,9 @@
   </ciManagement>
 
   <properties>
-    <mavenVersion>3.6.3</mavenVersion>
+    <mavenVersion>3.9.16</mavenVersion>
+    <!-- the plugin runs on, and builds with, any Maven 3.9.x -->
+    <minimalMavenBuildVersion>3.9.0</minimalMavenBuildVersion>
     <scmpublish.content>${project.build.directory}/staging/rpm-maven-plugin</scmpublish.content>
   </properties>
 
