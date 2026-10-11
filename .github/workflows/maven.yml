@@ -22,6 +22,9 @@ on: [push, pull_request]
 jobs:
   build:
     name: Verify
-    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v4
+    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v5
     with:
+      # the ITs call rpmbuild, which only the Linux runner image provides
       os-matrix: '[ "ubuntu-latest" ]'
+      ff-goal: 'verify'                 # no ITs in the fail-fast build; the matrix runs them
+      verify-goal: '-P run-its verify'

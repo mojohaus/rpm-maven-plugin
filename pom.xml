@@ -107,8 +107,8 @@
     <url>https://github.com/mojohaus/rpm-maven-plugin/issues/</url>
   </issueManagement>
   <ciManagement>
-    <system>Travis-CI</system>
-    <url>https://travis-ci.org/mojohaus/rpm-maven-plugin</url>
+    <system>GitHub</system>
+    <url>https://github.com/mojohaus/rpm-maven-plugin/actions</url>
   </ciManagement>
 
   <properties>
