@@ -62,21 +62,18 @@ import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
  * @author Brett Okken, Cerner Corp.
  */
 // Needs to be public, otherwise setters, even public ones, are inaccessible in terms of reflection rules.
-public abstract class AbstractRPMMojo
-    extends AbstractMojo
-    implements RPMVersionableMojo
-{
+public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMojo {
 
     /**
      * The name portion of the output file name.
      */
-    @Parameter( required = true, property = "rpm.name", defaultValue = "${project.artifactId}" )
+    @Parameter(required = true, property = "rpm.name", defaultValue = "${project.artifactId}")
     private String name;
 
     /**
      * The version portion of the RPM file name.
      */
-    @Parameter( required = true, alias = "version", property = "rpm.version", defaultValue = "${project.version}" )
+    @Parameter(required = true, alias = "version", property = "rpm.version", defaultValue = "${project.version}")
     private String projversion;
 
     /**
@@ -92,15 +89,14 @@ public abstract class AbstractRPMMojo
      * </ul>
      * </p>
      */
-    @Parameter( property = "rpm.release" )
+    @Parameter(property = "rpm.release")
     private String release;
 
     /**
      * The stage to build. Default to '-bb' but let users specify for instance '-ba' if they want source rpms as well.
      */
-    @Parameter( alias = "rpmbuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
+    @Parameter(alias = "rpmbuildStage", property = "rpm.rpmbuild.stage", defaultValue = "-bb")
     private String rpmbuildStage;
-
 
     /**
      * The target architecture for the rpm. The default value is <i>noarch</i>.
@@ -115,7 +111,6 @@ public abstract class AbstractRPMMojo
      * targetArchitecture</a> to flex the contents of the rpm based on the architecture.
      * </p>
      */
-
     @Parameter
     private String needarch;
 
@@ -150,7 +145,7 @@ public abstract class AbstractRPMMojo
      * Set to a key name to sign the package using GPG. If <i>keyPassphrase</i> is not also provided, this will require
      * the input of the passphrase at the terminal.
      */
-    @Parameter( property = "gpg.keyname" )
+    @Parameter(property = "gpg.keyname")
     private String keyname;
 
     /**
@@ -158,7 +153,7 @@ public abstract class AbstractRPMMojo
      * installation, e.g. <code>~/.gnupg</code> or <code>%APPDATA%/gnupg</code>.
      * @since 2.1.2
      */
-    @Parameter( property = "gpg.homedir" )
+    @Parameter(property = "gpg.homedir")
     private File keypath;
 
     /**
@@ -190,19 +185,19 @@ public abstract class AbstractRPMMojo
      *
      * @Since 2.1.2
      */
-    @Parameter( property = "gpg.passphraseServerId", defaultValue = "gpg.passphrase" )
+    @Parameter(property = "gpg.passphraseServerId", defaultValue = "gpg.passphrase")
     private String passphraseServerId;
 
     /**
      * The long description of the package.
      */
-    @Parameter( property = "rpm.description", defaultValue = "${project.description}" )
+    @Parameter(property = "rpm.description", defaultValue = "${project.description}")
     private String description;
 
     /**
      * The one-line description of the package.
      */
-    @Parameter( property = "rpm.summary", defaultValue = "${project.name}" )
+    @Parameter(property = "rpm.summary", defaultValue = "${project.name}")
     private String summary;
 
     /**
@@ -235,25 +230,25 @@ public abstract class AbstractRPMMojo
     /**
      * The vendor supplying the package.
      */
-    @Parameter( property = "rpm.vendor", defaultValue = "${project.organization.name}" )
+    @Parameter(property = "rpm.vendor", defaultValue = "${project.organization.name}")
     private String vendor;
 
     /**
      * A URL for the vendor.
      */
-    @Parameter( property = "rpm.url", defaultValue = "${project.organization.url}" )
+    @Parameter(property = "rpm.url", defaultValue = "${project.organization.url}")
     private String url;
 
     /**
      * The package group for the package.
      */
-    @Parameter( required = true )
+    @Parameter(required = true)
     private String group;
 
     /**
      * The name of the person or group creating the package.
      */
-    @Parameter( property = "rpm.packager", defaultValue = "${project.organization.name}" )
+    @Parameter(property = "rpm.packager", defaultValue = "${project.organization.name}")
     private String packager;
 
     /**
@@ -261,7 +256,7 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.0-beta-4
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     private boolean autoProvides;
 
     /**
@@ -269,7 +264,7 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.0-beta-4
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     private boolean autoRequires;
 
     /**
@@ -359,7 +354,7 @@ public abstract class AbstractRPMMojo
      * The classifier portion is only applicable for the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.
      * </p>
      */
-    @Parameter( defaultValue = "${project.build.directory}/rpm" )
+    @Parameter(defaultValue = "${project.build.directory}/rpm")
     private File workarea;
 
     /**
@@ -493,35 +488,34 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.0
      */
-    @Parameter( property = "maven.rpm.escapeString" )
+    @Parameter(property = "maven.rpm.escapeString")
     private String escapeString;
 
     /**
      * @since 2.0
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
     /**
      * @since 2.1-alpha-4
      */
-    @Parameter( required = true, readonly = true, property = "project.build.sourceEncoding" )
+    @Parameter(required = true, readonly = true, property = "project.build.sourceEncoding")
     private String sourceEncoding;
-
 
     /**
      * The primary project artifact.
      */
-    @Parameter( required = true, readonly = true, property = "project.artifact" )
+    @Parameter(required = true, readonly = true, property = "project.artifact")
     private Artifact artifact;
 
     /**
      * Auxillary project artifacts.
      */
-    @Parameter( required = true, readonly = true, property = "project.attachedArtifacts" )
+    @Parameter(required = true, readonly = true, property = "project.attachedArtifacts")
     private List<Artifact> attachedArtifacts;
 
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
     /**
@@ -589,7 +583,7 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.0
      */
-    @Parameter( property = "rpm.disabled", defaultValue = "false" )
+    @Parameter(property = "rpm.disabled", defaultValue = "false")
     private boolean disabled;
 
     /**
@@ -597,7 +591,7 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.1-alpha-2
      */
-    @Parameter( required = true, defaultValue = "rpm.version" )
+    @Parameter(required = true, defaultValue = "rpm.version")
     private String versionProperty;
 
     /**
@@ -605,7 +599,7 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.1-alpha-2
      */
-    @Parameter( required = true, defaultValue = "rpm.release" )
+    @Parameter(required = true, defaultValue = "rpm.release")
     private String releaseProperty;
 
     /**
@@ -620,7 +614,7 @@ public abstract class AbstractRPMMojo
      * Option to copy the created RPM to another location
      * @since 2.1.
      */
-    @Parameter(property="rpm.copyTo")
+    @Parameter(property = "rpm.copyTo")
     private File copyTo;
 
     //////////////////////////////////////////////////////////////////////////
@@ -628,16 +622,15 @@ public abstract class AbstractRPMMojo
     /**
      * @since 2.0
      */
-    @Component( role = org.apache.maven.shared.filtering.MavenFileFilter.class, hint = "default" )
+    @Component(role = org.apache.maven.shared.filtering.MavenFileFilter.class, hint = "default")
     private MavenFileFilter mavenFileFilter;
-
 
     /**
      * Maven Security Dispatcher
      *
      * @since 2.1.2
      */
-    @Component( hint = "mng-4384" )
+    @Component(hint = "mng-4384")
     private SecDispatcher securityDispatcher;
 
     /**
@@ -645,7 +638,7 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.1.2
      */
-    @Parameter( defaultValue = "${settings}", readonly = true )
+    @Parameter(defaultValue = "${settings}", readonly = true)
     private Settings settings;
 
     /**
@@ -655,12 +648,12 @@ public abstract class AbstractRPMMojo
      */
     @Parameter(defaultValue = "false")
     private boolean skipPOMs;
-    
+
     /**
      * Indicates if the dependencies should be hard linked instead of copied.
      * <br />
-     * <b>NOTE:</b> Hard link requires maven repository to be on same partition as project's build dir. 
-     * 
+     * <b>NOTE:</b> Hard link requires maven repository to be on same partition as project's build dir.
+     *
      * @since TODO
      */
     @Parameter(defaultValue = "false")
@@ -683,7 +676,7 @@ public abstract class AbstractRPMMojo
      * @since 2.0-beta-3
      */
     private final Map<String, List<SoftlinkSource>> linkTargetToSources =
-        new LinkedHashMap<String, List<SoftlinkSource>>();
+            new LinkedHashMap<String, List<SoftlinkSource>>();
 
     /** The root of the build area prior to calling rpmbuild. */
     private File buildroot;
@@ -709,54 +702,43 @@ public abstract class AbstractRPMMojo
      */
     private List<FilterWrapper> defaultFilterWrappers;
 
-
     // // // Mojo methods/////////////////////////////////////////////////////
 
     /** {@inheritDoc} */
-    public final void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        if ( skipPOMs && isPOM() )
-        {
+    public final void execute() throws MojoExecutionException, MojoFailureException {
+        if (skipPOMs && isPOM()) {
             getLog().info("skipping because artifact is a pom (skipPOMs)");
             return;
         }
 
-        if ( disabled )
-        {
-            getLog().info( "MOJO is disabled. Doing nothing." );
+        if (disabled) {
+            getLog().info("MOJO is disabled. Doing nothing.");
 
             // FIXME, is it a correct way getting install/deploy to ignore the original primary 'rpm' artifact?
-            if ( "rpm".equals( this.project.getPackaging() ) )
-            {
-                this.project.setPackaging( "pom" );
+            if ("rpm".equals(this.project.getPackaging())) {
+                this.project.setPackaging("pom");
             }
 
             return;
         }
 
-        if ( this.prefix != null )
-        {
-            if ( this.prefixes == null )
-            {
+        if (this.prefix != null) {
+            if (this.prefixes == null) {
                 this.prefixes = new ArrayList<String>();
             }
             this.prefixes.add(prefix);
         }
 
-        helper = new RPMHelper( this );
+        helper = new RPMHelper(this);
 
-        checkParams( helper );
+        checkParams(helper);
 
         final String classifier = getClassifier();
 
-        if ( classifier != null )
-        {
-            workarea = new File( workarea, name + '-' + classifier );
-        }
-        else
-        {
-            workarea = new File( workarea, name );
+        if (classifier != null) {
+            workarea = new File(workarea, name + '-' + classifier);
+        } else {
+            workarea = new File(workarea, name);
         }
 
         buildWorkArea();
@@ -764,8 +746,8 @@ public abstract class AbstractRPMMojo
         // set up the maven file filter and FilteringDirectoryArchiver
         setDefaultWrappers();
         final FilteringDirectoryArchiver copier = new FilteringDirectoryArchiver();
-        copier.setMavenFileFilter( mavenFileFilter );
-        new FileHelper( this, copier ).installFiles();
+        copier.setMavenFileFilter(mavenFileFilter);
+        new FileHelper(this, copier).installFiles();
 
         writeSpecFile();
 
@@ -775,8 +757,8 @@ public abstract class AbstractRPMMojo
 
         afterExecution();
 
-        if ( this.copyTo != null ) {
-        	makeSecondCopy();
+        if (this.copyTo != null) {
+            makeSecondCopy();
         }
     }
 
@@ -799,13 +781,12 @@ public abstract class AbstractRPMMojo
     }
 
     private void makeSecondCopy() throws MojoFailureException {
-    	try {
-    		this.getLog().info( "Copy " + this.getRPMFile() + " to " + copyTo );
-    	    FileUtils.copyFile( this.getRPMFile(), copyTo );
-    	}
-    	catch ( IOException e ) {
-    		throw new MojoFailureException( "Unable to copy file" );
-    	}
+        try {
+            this.getLog().info("Copy " + this.getRPMFile() + " to " + copyTo);
+            FileUtils.copyFile(this.getRPMFile(), copyTo);
+        } catch (IOException e) {
+            throw new MojoFailureException("Unable to copy file");
+        }
     }
 
     /**
@@ -815,11 +796,7 @@ public abstract class AbstractRPMMojo
      * @throws MojoExecutionException If an error occurs.
      * @throws MojoFailureException If failure occurs.
      */
-    protected void afterExecution()
-        throws MojoExecutionException, MojoFailureException
-    {
-
-    }
+    protected void afterExecution() throws MojoExecutionException, MojoFailureException {}
 
     /**
      * Provides an opportunity for subclasses to provide an additional classifier for the rpm workarea.<br>
@@ -829,8 +806,7 @@ public abstract class AbstractRPMMojo
      * @return An additional classifier to use for the rpm workarea or {@code null} if no additional classifier should
      *         be used.
      */
-    String getClassifier()
-    {
+    String getClassifier() {
         return null;
     }
 
@@ -839,33 +815,26 @@ public abstract class AbstractRPMMojo
      *
      * @return The generated rpm {@link File}.
      */
-    protected File getRPMFile()
-    {
-        File rpms = new File( workarea, "RPMS" );
-        File archDir = new File( rpms, targetArch );
+    protected File getRPMFile() {
+        File rpms = new File(workarea, "RPMS");
+        File archDir = new File(rpms, targetArch);
 
-        return new File( archDir, name + '-' + projversion + '-' + release + '.' + targetArch + ".rpm" );
+        return new File(archDir, name + '-' + projversion + '-' + release + '.' + targetArch + ".rpm");
     }
 
     /**
      * @throws MojoExecutionException
      */
-    private void setDefaultWrappers()
-        throws MojoExecutionException
-    {
+    private void setDefaultWrappers() throws MojoExecutionException {
         final MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution();
-        mavenResourcesExecution.setEscapeString( escapeString );
+        mavenResourcesExecution.setEscapeString(escapeString);
 
-        try
-        {
-            defaultFilterWrappers =
-                mavenFileFilter.getDefaultFilterWrappers( project, filters, false, this.session,
-                                                          mavenResourcesExecution );
-        }
-        catch ( MavenFilteringException e )
-        {
-            getLog().error( "fail to build filering wrappers " + e.getMessage() );
-            throw new MojoExecutionException( e.getMessage(), e );
+        try {
+            defaultFilterWrappers = mavenFileFilter.getDefaultFilterWrappers(
+                    project, filters, false, this.session, mavenResourcesExecution);
+        } catch (MavenFilteringException e) {
+            getLog().error("fail to build filering wrappers " + e.getMessage());
+            throw new MojoExecutionException(e.getMessage(), e);
         }
     }
 
@@ -875,53 +844,41 @@ public abstract class AbstractRPMMojo
      * @throws MojoFailureException if a directory cannot be built
      * @throws MojoExecutionException if buildroot cannot be cleared (if exists)
      */
-    private void buildWorkArea()
-        throws MojoFailureException, MojoExecutionException
-    {
-        final String[] topdirs = { "BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS", "tmp-buildroot", "buildroot" };
+    private void buildWorkArea() throws MojoFailureException, MojoExecutionException {
+        final String[] topdirs = {"BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS", "tmp-buildroot", "buildroot"};
 
         // Build the top directory
-        if ( !workarea.exists() )
-        {
-            getLog().info( "Creating directory " + workarea.getAbsolutePath() );
-            if ( !workarea.mkdirs() )
-            {
-                throw new MojoFailureException( "Unable to create directory " + workarea.getAbsolutePath() );
+        if (!workarea.exists()) {
+            getLog().info("Creating directory " + workarea.getAbsolutePath());
+            if (!workarea.mkdirs()) {
+                throw new MojoFailureException("Unable to create directory " + workarea.getAbsolutePath());
             }
         }
 
         validateWorkarea();
 
         // Build each directory in the top directory
-        for ( String topdir : topdirs )
-        {
-            File dir = new File( workarea, topdir );
-            if ( dir.exists() )
-            {
-                getLog().info( "Directory " + dir.getAbsolutePath() + " already exists. Deleting all contents." );
+        for (String topdir : topdirs) {
+            File dir = new File(workarea, topdir);
+            if (dir.exists()) {
+                getLog().info("Directory " + dir.getAbsolutePath() + " already exists. Deleting all contents.");
 
-                try
-                {
-                    FileUtils.cleanDirectory( dir );
+                try {
+                    FileUtils.cleanDirectory(dir);
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Unable to clear directory: " + dir.getName(), e);
                 }
-                catch ( IOException e )
-                {
-                    throw new MojoExecutionException( "Unable to clear directory: " + dir.getName(), e );
-                }
-            }
-            else
-            {
-                getLog().info( "Creating directory " + dir.getAbsolutePath() );
-                if ( !dir.mkdir() )
-                {
-                    throw new MojoFailureException( "Unable to create directory " + dir.getAbsolutePath() );
+            } else {
+                getLog().info("Creating directory " + dir.getAbsolutePath());
+                if (!dir.mkdir()) {
+                    throw new MojoFailureException("Unable to create directory " + dir.getAbsolutePath());
                 }
             }
         }
 
         // set build root variable
-        buildroot = new File( workarea, "tmp-buildroot" );
-        rpmBuildroot = new File( workarea, "buildroot" );
+        buildroot = new File(workarea, "tmp-buildroot");
+        rpmBuildroot = new File(workarea, "buildroot");
     }
 
     /**
@@ -930,142 +887,112 @@ public abstract class AbstractRPMMojo
      * @throws MojoFailureException if an invalid parameter is found
      * @throws MojoExecutionException if an error occurs reading a script
      */
-    private void checkParams( RPMHelper helper )
-        throws MojoExecutionException, MojoFailureException
-    {
+    private void checkParams(RPMHelper helper) throws MojoExecutionException, MojoFailureException {
         Log log = getLog();
 
         // Retrieve any versions set by the VersionMojo
-	if ( versionProperty != null ) {
-	    String projversion = this.project.getProperties().getProperty( versionProperty );
-	    if ( projversion != null )
-		{
-		    this.projversion = projversion;
-		}
-	}
-	if ( releaseProperty != null ) {
-	    String release = this.project.getProperties().getProperty( releaseProperty );
-	    if ( release != null )
-		{
-		    this.release = release;
-		}
-	}
+        if (versionProperty != null) {
+            String projversion = this.project.getProperties().getProperty(versionProperty);
+            if (projversion != null) {
+                this.projversion = projversion;
+            }
+        }
+        if (releaseProperty != null) {
+            String release = this.project.getProperties().getProperty(releaseProperty);
+            if (release != null) {
+                this.release = release;
+            }
+        }
 
         // calculate versions if neccessary, check for existing maven modifier and split them accordingly
-        if ( this.projversion == null || this.release == null || this.projversion.contains( "-" ) )
-        { // including -SNAPSHOT and 1-34
-            final VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
+        if (this.projversion == null
+                || this.release == null
+                || this.projversion.contains("-")) { // including -SNAPSHOT and 1-34
+            final VersionHelper.Version version = new VersionHelper(this).calculateVersion();
             this.projversion = version.version;
             this.release = version.release;
         }
 
-        log.debug( "project version = " + this.projversion );
-        log.debug( "project release = " + this.release );
+        log.debug("project version = " + this.projversion);
+        log.debug("project release = " + this.release);
 
         // evaluate needarch and populate targetArch
-        if ( needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase( needarch ) )
-        {
+        if (needarch == null || needarch.length() == 0 || "false".equalsIgnoreCase(needarch)) {
             targetArch = "noarch";
-        }
-        else if ( "true".equalsIgnoreCase( needarch ) )
-        {
+        } else if ("true".equalsIgnoreCase(needarch)) {
             targetArch = helper.getArch();
-        }
-        else
-        {
+        } else {
             targetArch = needarch;
         }
-        log.debug( "targetArch = " + targetArch );
+        log.debug("targetArch = " + targetArch);
 
         // provide default targetOS if value not given
-        if ( targetOS == null || targetOS.length() == 0 )
-        {
+        if (targetOS == null || targetOS.length() == 0) {
             targetOS = Os.OS_NAME;
         }
-        log.debug( "targetOS = " + targetOS );
+        log.debug("targetOS = " + targetOS);
 
-        if ( targetVendor == null || targetVendor.length() == 0 )
-        {
+        if (targetVendor == null || targetVendor.length() == 0) {
             targetVendor = helper.getHostVendor();
         }
-        log.debug( "targetVendor = " + targetVendor );
+        log.debug("targetVendor = " + targetVendor);
 
         // Various checks in the mappings
-        for ( Mapping map : mappings )
-        {
-            if ( map.getDirectory() == null )
-            {
-                throw new MojoFailureException( "<mapping> element must contain the destination directory" );
+        for (Mapping map : mappings) {
+            if (map.getDirectory() == null) {
+                throw new MojoFailureException("<mapping> element must contain the destination directory");
             }
-            if ( map.getSources() != null )
-            {
-                for ( Source src : map.getSources() )
-                {
-                    if ( src.getLocation() == null )
-                    {
-                        throw new MojoFailureException( "<mapping><source> tag must contain the source directory" );
+            if (map.getSources() != null) {
+                for (Source src : map.getSources()) {
+                    if (src.getLocation() == null) {
+                        throw new MojoFailureException("<mapping><source> tag must contain the source directory");
                     }
                 }
             }
         }
 
-        if ( ( changelog == null ) && ( changelogFile != null ) )
-        {
-            if ( !changelogFile.exists() )
-            {
-                log.debug( changelogFile.getAbsolutePath() + " does not exist - ignoring" );
-            }
-            else
-            {
-                try
-                {
+        if ((changelog == null) && (changelogFile != null)) {
+            if (!changelogFile.exists()) {
+                log.debug(changelogFile.getAbsolutePath() + " does not exist - ignoring");
+            } else {
+                try {
                     StringBuilder sb = new StringBuilder();
-                    BufferedReader br = new BufferedReader( new FileReader( changelogFile ) );
-                    while ( br.ready() )
-                    {
+                    BufferedReader br = new BufferedReader(new FileReader(changelogFile));
+                    while (br.ready()) {
                         String line = br.readLine();
-                        sb.append( line );
-                        sb.append( '\n' );
+                        sb.append(line);
+                        sb.append('\n');
                     }
                     br.close();
                     changelog = sb.toString();
-                }
-                catch ( Throwable t )
-                {
-                    throw new MojoExecutionException( "Unable to read " + changelogFile.getAbsolutePath(), t );
+                } catch (Throwable t) {
+                    throw new MojoExecutionException("Unable to read " + changelogFile.getAbsolutePath(), t);
                 }
             }
         }
 
         // generate license text if not set
-        if ( license == null )
-        {
+        if (license == null) {
             license = generateDefaultCopyrightText();
         }
 
         // if this package obsoletes any packages, make sure those packages are added to the provides list
-        if ( obsoletes != null && "true".equals( System.getProperty( "disable.mrpm24" ) ) )
-        {
-            //this block is incorrectly implemented, however we want to provide capability
+        if (obsoletes != null && "true".equals(System.getProperty("disable.mrpm24"))) {
+            // this block is incorrectly implemented, however we want to provide capability
             // to enable this if needed in the next few releases, after that remove it completely
-            if ( provides == null )
-            {
+            if (provides == null) {
                 provides = obsoletes;
-            }
-            else
-            {
-                provides.addAll( obsoletes );
+            } else {
+                provides.addAll(obsoletes);
             }
         }
 
-        if ( !repackJars )
-        {
-            if ( defineStatements == null )
-            {
+        if (!repackJars) {
+            if (defineStatements == null) {
                 defineStatements = new ArrayList<String>();
             }
 
-            defineStatements.add( "__jar_repack 0" );
+            defineStatements.add("__jar_repack 0");
         }
 
         processDefineStatements();
@@ -1076,18 +1003,14 @@ public abstract class AbstractRPMMojo
      *
      * @since 2.1-alpha-1
      */
-    private void processDefineStatements()
-    {
-        if ( defineStatements == null )
-        {
+    private void processDefineStatements() {
+        if (defineStatements == null) {
             return;
         }
-        for ( String define : defineStatements )
-        {
-            String[] parts = define.split( " " );
-            if ( parts.length == 2 )
-            {
-                macroKeyToValue.put( parts[0], parts[1] );
+        for (String define : defineStatements) {
+            String[] parts = define.split(" ");
+            if (parts.length == 2) {
+                macroKeyToValue.put(parts[0], parts[1]);
             }
         }
     }
@@ -1098,17 +1021,13 @@ public abstract class AbstractRPMMojo
      *
      * @throws MojoExecutionException
      */
-    private void validateWorkarea()
-        throws MojoExecutionException
-    {
-        if ( !workarea.isDirectory() )
-        {
-            throw new MojoExecutionException( workarea + " is not a directory" );
+    private void validateWorkarea() throws MojoExecutionException {
+        if (!workarea.isDirectory()) {
+            throw new MojoExecutionException(workarea + " is not a directory");
         }
 
-        if ( workarea.getAbsolutePath().trim().indexOf( " " ) != -1 )
-        {
-            throw new MojoExecutionException( workarea + " contains a space in path" );
+        if (workarea.getAbsolutePath().trim().indexOf(" ") != -1) {
+            throw new MojoExecutionException(workarea + " contains a space in path");
         }
     }
 
@@ -1121,16 +1040,13 @@ public abstract class AbstractRPMMojo
      * @throws MojoExecutionException
      * @since 2.1-alpha-1
      */
-    String evaluateMacro( String macro )
-        throws MojoExecutionException
-    {
-        if ( macroKeyToValue.containsKey( macro ) )
-        {
-            return macroKeyToValue.get( macro );
+    String evaluateMacro(String macro) throws MojoExecutionException {
+        if (macroKeyToValue.containsKey(macro)) {
+            return macroKeyToValue.get(macro);
         }
 
-        final String value = helper.evaluateMacro( macro );
-        macroKeyToValue.put( macro, value );
+        final String value = helper.evaluateMacro(macro);
+        macroKeyToValue.put(macro, value);
 
         return value;
     }
@@ -1140,28 +1056,20 @@ public abstract class AbstractRPMMojo
      *
      * @throws MojoExecutionException if an error occurs writing the file
      */
-    private void writeSpecFile()
-        throws MojoExecutionException
-    {
-        File f = new File( workarea, "SPECS" );
-        File specf = new File( f, name + ".spec" );
+    private void writeSpecFile() throws MojoExecutionException {
+        File f = new File(workarea, "SPECS");
+        File specf = new File(f, name + ".spec");
 
-        try
-        {
-            getLog().info( "Creating spec file " + specf.getAbsolutePath() );
-            PrintWriter spec = new UnixPrintWriter( new FileWriter( specf ) );
-            try
-            {
-                new SpecWriter( this, spec ).writeSpecFile();
-            }
-            finally
-            {
+        try {
+            getLog().info("Creating spec file " + specf.getAbsolutePath());
+            PrintWriter spec = new UnixPrintWriter(new FileWriter(specf));
+            try {
+                new SpecWriter(this, spec).writeSpecFile();
+            } finally {
                 spec.close();
             }
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Unable to write " + specf.getAbsolutePath(), e );
+        } catch (IOException e) {
+            throw new MojoExecutionException("Unable to write " + specf.getAbsolutePath(), e);
         }
     }
 
@@ -1171,17 +1079,15 @@ public abstract class AbstractRPMMojo
      *
      * @return Generated copyright text from the organization name and inception year.
      */
-    private String generateDefaultCopyrightText()
-    {
+    private String generateDefaultCopyrightText() {
         String copyrightText;
         String year = project.getInceptionYear();
-        String organization = project.getOrganization() == null ? null : project.getOrganization().getName();
-        if ( ( year != null ) && ( organization != null ) )
-        {
+        String organization = project.getOrganization() == null
+                ? null
+                : project.getOrganization().getName();
+        if ((year != null) && (organization != null)) {
             copyrightText = year + " " + organization;
-        }
-        else
-        {
+        } else {
             copyrightText = year == null ? organization : year;
         }
         return "(c) " + copyrightText;
@@ -1190,442 +1096,385 @@ public abstract class AbstractRPMMojo
     /**
      * @return Returns the {@link #linkTargetToSources}.
      */
-    final Map<String, List<SoftlinkSource>> getLinkTargetToSources()
-    {
+    final Map<String, List<SoftlinkSource>> getLinkTargetToSources() {
         return this.linkTargetToSources;
     }
 
     /**
      * @return Returns the {@link #name}.
      */
-    final String getName()
-    {
+    final String getName() {
         return this.name;
     }
 
     /**
      * @return Returns the {@link #release}.
      */
-    public final String getRelease()
-    {
+    public final String getRelease() {
         return this.release;
     }
 
-    public Date getBuildTimestamp()
-    {
-        return ( session == null ) ? new Date() : session.getStartTime();
+    public Date getBuildTimestamp() {
+        return (session == null) ? new Date() : session.getStartTime();
     }
 
     /**
      * @return Returns the {@link #description}.
      */
-    final String getDescription()
-    {
+    final String getDescription() {
         return this.description;
     }
 
     /**
      * @return Returns the {@link #summary}.
      */
-    final String getSummary()
-    {
+    final String getSummary() {
         return this.summary;
     }
 
     /**
      * @return Returns the {@link #license}.
      */
-    final String getLicense()
-    {
+    final String getLicense() {
         return this.license;
     }
 
     /**
      * @return Returns the {@link #epoch}.
      */
-    final String getEpoch()
-    {
+    final String getEpoch() {
         return this.epoch;
     }
-
 
     /**
      * @return Returns the {@link #distribution}.
      */
-    final String getDistribution()
-    {
+    final String getDistribution() {
         return this.distribution;
     }
 
     /**
      * @return Returns the {@link #icon}.
      */
-    final File getIcon()
-    {
+    final File getIcon() {
         return this.icon;
     }
 
     /**
      * @return Returns the {@link #vendor}.
      */
-    final String getVendor()
-    {
+    final String getVendor() {
         return this.vendor;
     }
 
     /**
      * @return Returns the {@link #url}.
      */
-    final String getUrl()
-    {
+    final String getUrl() {
         return this.url;
     }
 
     /**
      * @return Returns the {@link #group}.
      */
-    final String getGroup()
-    {
+    final String getGroup() {
         return this.group;
     }
 
     /**
      * @return Returns the {@link #packager}.
      */
-    final String getPackager()
-    {
+    final String getPackager() {
         return this.packager;
     }
 
     /**
      * @return Returns the {@link #autoProvides}.
      */
-    final boolean isAutoProvides()
-    {
+    final boolean isAutoProvides() {
         return this.autoProvides;
     }
 
     /**
      * @return Returns the {@link #autoRequires}.
      */
-    final boolean isAutoRequires()
-    {
+    final boolean isAutoRequires() {
         return this.autoRequires;
     }
 
     /**
      * @return Returns the {@link #provides}.
      */
-    final LinkedHashSet<String> getProvides()
-    {
+    final LinkedHashSet<String> getProvides() {
         return this.provides;
     }
 
     /**
      * @return Returns the {@link #requires}.
      */
-    final LinkedHashSet<String> getRequires()
-    {
+    final LinkedHashSet<String> getRequires() {
         return this.requires;
     }
 
     /**
      * @return Returns the {@link #buildRequires}.
      */
-    final LinkedHashSet<String> getBuildRequires()
-    {
+    final LinkedHashSet<String> getBuildRequires() {
         return this.buildRequires;
     }
-    
+
     /**
      * @return Returns the {@link #requiresPre}.
      */
-    final LinkedHashSet<String> getRequiresPre()
-    {
+    final LinkedHashSet<String> getRequiresPre() {
         return this.requiresPre;
     }
 
     /**
      * @return Returns the {@link #requiresPreun}.
      */
-    final LinkedHashSet<String> getRequiresPreun()
-    {
+    final LinkedHashSet<String> getRequiresPreun() {
         return this.requiresPreun;
     }
 
     /**
      * @return Returns the {@link #requiresPost}.
      */
-    final LinkedHashSet<String> getRequiresPost()
-    {
+    final LinkedHashSet<String> getRequiresPost() {
         return this.requiresPost;
     }
 
     /**
      * @return Returns the {@link #prereqs}.
      */
-    final LinkedHashSet<String> getPrereqs()
-    {
+    final LinkedHashSet<String> getPrereqs() {
         return this.prereqs;
     }
 
     /**
      * @return Returns the {@link #obsoletes}.
      */
-    final LinkedHashSet<String> getObsoletes()
-    {
+    final LinkedHashSet<String> getObsoletes() {
         return this.obsoletes;
     }
 
     /**
      * @return Returns the {@link #conflicts}.
      */
-    final LinkedHashSet<String> getConflicts()
-    {
+    final LinkedHashSet<String> getConflicts() {
         return this.conflicts;
     }
 
-    final List<String> getPrefixes()
-    {
+    final List<String> getPrefixes() {
         return prefixes;
     }
 
     /**
      * @return Returns the {@link #mappings}.
      */
-    final List<Mapping> getMappings()
-    {
+    final List<Mapping> getMappings() {
         return this.mappings;
     }
 
     /**
      * @return Returns the {@link #prepareScriptlet}.
      */
-    final Scriptlet getPrepareScriptlet()
-    {
+    final Scriptlet getPrepareScriptlet() {
         return this.prepareScriptlet;
     }
 
     /**
      * @return Returns the {@link #preinstallScriptlet}.
      */
-    final Scriptlet getPreinstallScriptlet()
-    {
+    final Scriptlet getPreinstallScriptlet() {
         return this.preinstallScriptlet;
     }
 
     /**
      * @return Returns the {@link #postinstallScriptlet}.
      */
-    final Scriptlet getPostinstallScriptlet()
-    {
+    final Scriptlet getPostinstallScriptlet() {
         return this.postinstallScriptlet;
     }
 
     /**
      * @return Returns the {@link #installScriptlet}.
      */
-    final Scriptlet getInstallScriptlet()
-    {
+    final Scriptlet getInstallScriptlet() {
         return this.installScriptlet;
     }
 
     /**
      * @return Returns the {@link #preremoveScriptlet}.
      */
-    final Scriptlet getPreremoveScriptlet()
-    {
+    final Scriptlet getPreremoveScriptlet() {
         return this.preremoveScriptlet;
     }
 
     /**
      * @return Returns the {@link #postremoveScriptlet}.
      */
-    final Scriptlet getPostremoveScriptlet()
-    {
+    final Scriptlet getPostremoveScriptlet() {
         return this.postremoveScriptlet;
     }
 
     /**
      * @return Returns the {@link #verifyScriptlet}.
      */
-    final Scriptlet getVerifyScriptlet()
-    {
+    final Scriptlet getVerifyScriptlet() {
         return this.verifyScriptlet;
     }
 
     /**
      * @return Returns the {@link #cleanScriptlet}.
      */
-    final Scriptlet getCleanScriptlet()
-    {
+    final Scriptlet getCleanScriptlet() {
         return this.cleanScriptlet;
     }
 
     /**
      * @return Returns the {@link #pretransScriptlet}.
      */
-    final Scriptlet getPretransScriptlet()
-    {
+    final Scriptlet getPretransScriptlet() {
         return this.pretransScriptlet;
     }
 
     /**
      * @return Returns the {@link #posttransScriptlet}.
      */
-    final Scriptlet getPosttransScriptlet()
-    {
+    final Scriptlet getPosttransScriptlet() {
         return this.posttransScriptlet;
     }
 
     /**
      * @return Returns the {@link #triggers}.
      */
-    final List<BaseTrigger> getTriggers()
-    {
+    final List<BaseTrigger> getTriggers() {
         return this.triggers;
     }
 
     /**
      * @return Returns the {@link #defineStatements}.
      */
-    final List<String> getDefineStatements()
-    {
+    final List<String> getDefineStatements() {
         return this.defineStatements;
     }
 
     /**
      * @return Returns the {@link #defaultFilemode}.
      */
-    final String getDefaultFilemode()
-    {
+    final String getDefaultFilemode() {
         return this.defaultFilemode;
     }
 
     /**
      * @return Returns the {@link #defaultDirmode}.
      */
-    final String getDefaultDirmode()
-    {
+    final String getDefaultDirmode() {
         return this.defaultDirmode;
     }
 
     /**
      * @return Returns the {@link #defaultUsername}.
      */
-    final String getDefaultUsername()
-    {
+    final String getDefaultUsername() {
         return this.defaultUsername;
     }
 
     /**
      * @return Returns the {@link #defaultGroupname}.
      */
-    final String getDefaultGroupname()
-    {
+    final String getDefaultGroupname() {
         return this.defaultGroupname;
     }
 
     /**
      * @return Returns the {@link #buildroot}.
      */
-    final File getBuildroot()
-    {
+    final File getBuildroot() {
         return this.buildroot;
     }
 
     /**
      * @return Returns the {@link #rpmBuildroot}.
      */
-    final File getRPMBuildroot()
-    {
+    final File getRPMBuildroot() {
         return this.rpmBuildroot;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final String getVersion()
-    {
+    public final String getVersion() {
         return this.projversion;
     }
 
     /**
      * @return Returns the {@link #changelog}.
      */
-    final String getChangelog()
-    {
+    final String getChangelog() {
         return this.changelog;
     }
 
     /**
      * @return Returns the {@link #targetArch}.
      */
-    final String getTargetArch()
-    {
+    final String getTargetArch() {
         return this.targetArch;
     }
 
     /**
      * @return Returns the {@link #targetOS}.
      */
-    final String getTargetOS()
-    {
+    final String getTargetOS() {
         return this.targetOS;
     }
 
     /**
      * @return Returns the {@link #targetVendor}.
      */
-    final String getTargetVendor()
-    {
+    final String getTargetVendor() {
         return this.targetVendor;
     }
 
     /**
      * @return Returns the {@link #keypath}.
      */
-    final File getKeypath()
-    {
+    final File getKeypath() {
         return this.keypath;
     }
     /**
      * @return Returns the {@link #keyname}.
      */
-    final String getKeyname()
-    {
+    final String getKeyname() {
         return this.keyname;
     }
 
     /**
      * @return Returns the {@link #keyPassphrase}.
      */
-    final Passphrase getKeyPassphrase()
-    {
+    final Passphrase getKeyPassphrase() {
         return this.keyPassphrase;
     }
 
     /**
      * @return Returns the {@link #workarea}.
      */
-    final File getWorkarea()
-    {
+    final File getWorkarea() {
         return this.workarea;
     }
 
     /**
      * @return Returns the {@link #artifact}.
      */
-    final Artifact getArtifact()
-    {
+    final Artifact getArtifact() {
         return this.artifact;
     }
 
     /**
      * @return Returns the {@link #attachedArtifacts}.
      */
-    final List<Artifact> getAttachedArtifacts()
-    {
+    final List<Artifact> getAttachedArtifacts() {
         return this.attachedArtifacts;
     }
 
@@ -1634,8 +1483,7 @@ public abstract class AbstractRPMMojo
      *
      * @return Returns the {@code FilterWrapper}s to use for filtering resources.
      */
-    final List<FilterWrapper> getFilterWrappers()
-    {
+    final List<FilterWrapper> getFilterWrappers() {
         return this.defaultFilterWrappers;
     }
 
@@ -1645,52 +1493,40 @@ public abstract class AbstractRPMMojo
     final boolean isHardLinkDependencies() {
         return hardLinkDependencies;
     }
-    
+
     /**
      * @return the rpmbuildStage
      */
-    final String getRpmbuildStage()
-    {
+    final String getRpmbuildStage() {
         return rpmbuildStage;
     }
 
     /**
      * @param rpmbuildStage the rpmRpmbuildStage to set
      */
-    final void setRpmbuildStage( String rpmbuildStage )
-    {
+    final void setRpmbuildStage(String rpmbuildStage) {
         this.rpmbuildStage = rpmbuildStage;
     }
 
-    
     /**
      * Load and decrypt gpg passphrase from maven settings if not given from plugin configuration
      *
      * @throws MojoFailureException
      */
-    private void loadGpgPassphrase()
-        throws MojoFailureException
-    {
-        if ( this.keyPassphrase == null && passphraseServerId != null )
-        {
-            Server server = this.settings.getServer( passphraseServerId );
+    private void loadGpgPassphrase() throws MojoFailureException {
+        if (this.keyPassphrase == null && passphraseServerId != null) {
+            Server server = this.settings.getServer(passphraseServerId);
 
-            if ( server != null )
-            {
-                if ( server.getPassphrase() != null )
-                {
-                    try
-                    {
+            if (server != null) {
+                if (server.getPassphrase() != null) {
+                    try {
                         this.keyPassphrase = new Passphrase();
-                        this.keyPassphrase.setPassphrase( securityDispatcher.decrypt( server.getPassphrase() ) );
-                    }
-                    catch ( SecDispatcherException e )
-                    {
-                        throw new MojoFailureException( "Unable to decrypt gpg password", e );
+                        this.keyPassphrase.setPassphrase(securityDispatcher.decrypt(server.getPassphrase()));
+                    } catch (SecDispatcherException e) {
+                        throw new MojoFailureException("Unable to decrypt gpg password", e);
                     }
                 }
             }
         }
     }
-
 }

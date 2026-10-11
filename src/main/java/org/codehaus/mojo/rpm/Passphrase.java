@@ -25,8 +25,7 @@ package org.codehaus.mojo.rpm;
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
-public final class Passphrase
-{
+public final class Passphrase {
     /**
      * The passphrase stored as a {@code char[]} to avoid being written to log in plain text.
      */
@@ -37,16 +36,14 @@ public final class Passphrase
      *
      * @param passphrase The passphrase to set.
      */
-    public void setPassphrase( String passphrase )
-    {
+    public void setPassphrase(String passphrase) {
         this.passphrase = passphrase != null ? passphrase.toCharArray() : null;
     }
 
     /**
      * @return Returns the {@link #passphrase}.
      */
-    public char[] getPassphrase()
-    {
+    public char[] getPassphrase() {
         return this.passphrase;
     }
 }

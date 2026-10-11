@@ -28,28 +28,25 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 /**
  * Construct the RPM file.
  */
-@Mojo( name = "rpm", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
-public class RPMMojo
-    extends AbstractRPMMojo
-{
+@Mojo(
+        name = "rpm",
+        defaultPhase = LifecyclePhase.PACKAGE,
+        requiresDependencyResolution = ResolutionScope.RUNTIME,
+        threadSafe = true)
+public class RPMMojo extends AbstractRPMMojo {
     /**
      * If the {@link org.apache.maven.project.MavenProject#getPackaging() packaging} is <i>rpm</i>, sets the rpm as the
      * primary artifact.
      */
-    protected void afterExecution()
-    {
-        if ( "rpm".equals( project.getPackaging() ) )
-        {
+    protected void afterExecution() {
+        if ("rpm".equals(project.getPackaging())) {
             File primaryArtifact = getRPMFile();
-            if ( getLog().isDebugEnabled() )
-            {
-                getLog().debug( "Adding RPM as primary artifact: " + primaryArtifact.getAbsolutePath() );
+            if (getLog().isDebugEnabled()) {
+                getLog().debug("Adding RPM as primary artifact: " + primaryArtifact.getAbsolutePath());
             }
-            project.getArtifact().setFile( getRPMFile() );
-        }
-        else
-        {
-            getLog().debug( "RPM not added as an artifact because project's packaging type is not 'rpm'" );
+            project.getArtifact().setFile(getRPMFile());
+        } else {
+            getLog().debug("RPM not added as an artifact because project's packaging type is not 'rpm'");
         }
     }
 }

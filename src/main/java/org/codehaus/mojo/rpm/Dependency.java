@@ -37,8 +37,7 @@ import org.apache.maven.plugin.MojoExecutionException;
  * version is omitted (it usually is), it is the same as specifying "<code>*</code>".
  * </p>
  */
-public class Dependency
-{
+public class Dependency {
 
     // // // Properties
 
@@ -62,8 +61,7 @@ public class Dependency
      *
      * @return The list of dependencies to include.
      */
-    public List<Artifact> getIncludes()
-    {
+    public List<Artifact> getIncludes() {
         return includes;
     }
 
@@ -73,10 +71,8 @@ public class Dependency
      * @param incls The new list of dependencies to include.
      * @throws MojoExecutionException if the parse fails
      */
-    public void setIncludes( List<String> incls )
-        throws MojoExecutionException
-    {
-        includes = parseList( incls );
+    public void setIncludes(List<String> incls) throws MojoExecutionException {
+        includes = parseList(incls);
     }
 
     /**
@@ -84,8 +80,7 @@ public class Dependency
      *
      * @return The list of dependencies to exclude.
      */
-    public List<Artifact> getExcludes()
-    {
+    public List<Artifact> getExcludes() {
         return excludes;
     }
 
@@ -95,10 +90,8 @@ public class Dependency
      * @param excls The new list of dependencies to exclude.
      * @throws MojoExecutionException if the parse fails
      */
-    public void setExcludes( List<String> excls )
-        throws MojoExecutionException
-    {
-        excludes = parseList( excls );
+    public void setExcludes(List<String> excls) throws MojoExecutionException {
+        excludes = parseList(excls);
     }
 
     /**
@@ -106,8 +99,7 @@ public class Dependency
      *
      * @return The stripVersion property
      */
-    public boolean getStripVersion()
-    {
+    public boolean getStripVersion() {
         return stripVersion;
     }
 
@@ -117,33 +109,28 @@ public class Dependency
      * @param stripVersion the stripVersion property to set
      * @throws MojoExecutionException if the parse fails
      */
-    public void setStripVersion( boolean stripVersion )
-        throws MojoExecutionException
-    {
+    public void setStripVersion(boolean stripVersion) throws MojoExecutionException {
         this.stripVersion = stripVersion;
     }
 
     // // // Public methods
 
     /** {@inheritDoc} */
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append( "[dependencies" );
+        sb.append("[dependencies");
 
-        if ( includes != null )
-        {
-            sb.append( " include [" + includes + "]" );
+        if (includes != null) {
+            sb.append(" include [" + includes + "]");
         }
 
-        if ( excludes != null )
-        {
-            sb.append( " exclude [" + excludes + "]" );
+        if (excludes != null) {
+            sb.append(" exclude [" + excludes + "]");
         }
 
-        sb.append( " stripVersion (" + stripVersion + ")" );
+        sb.append(" stripVersion (" + stripVersion + ")");
 
-        sb.append( "]" );
+        sb.append("]");
         return sb.toString();
     }
 
@@ -156,18 +143,14 @@ public class Dependency
      * @return A list of parsed artifact identifiers
      * @throws MojoExecutionException if the parse fails
      */
-    private List<Artifact> parseList( List<String> in )
-        throws MojoExecutionException
-    {
+    private List<Artifact> parseList(List<String> in) throws MojoExecutionException {
         List<Artifact> retval = new ArrayList<Artifact>();
 
-        for ( String s : in )
-        {
+        for (String s : in) {
             String[] parts = s.split(":");
             // Make sure we have group and artifact
-            if(parts.length == 0)
-            {
-                throw new MojoExecutionException( "Include and exclude must include both group and artifact IDs." );
+            if (parts.length == 0) {
+                throw new MojoExecutionException("Include and exclude must include both group and artifact IDs.");
             }
             String groupId = parts[0];
             String artifactId = parts[1];
@@ -176,34 +159,26 @@ public class Dependency
             String classifier = "";
             VersionRange vr = null;
 
-            if(parts.length > 2)
-            {
+            if (parts.length > 2) {
                 versionStr = parts[2];
-                if(parts.length > 3)
-                {
+                if (parts.length > 3) {
                     type = parts[3];
                 }
 
-                if(parts.length > 4)
-                {
+                if (parts.length > 4) {
                     classifier = parts[4];
                 }
-            }
-            else
-            {
+            } else {
                 versionStr = "[0,]";
             }
 
-            try
-            {
-                vr = VersionRange.createFromVersionSpec( versionStr );
-            }
-            catch ( InvalidVersionSpecificationException ex )
-            {
-                throw new MojoExecutionException( "Default version string is invalid!" );
+            try {
+                vr = VersionRange.createFromVersionSpec(versionStr);
+            } catch (InvalidVersionSpecificationException ex) {
+                throw new MojoExecutionException("Default version string is invalid!");
             }
 
-            retval.add( new DefaultArtifact( groupId, artifactId, vr, null, type, classifier, null ) );
+            retval.add(new DefaultArtifact(groupId, artifactId, vr, null, type, classifier, null));
         }
 
         return retval;

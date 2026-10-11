@@ -39,8 +39,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
-final class RPMSigner
-{
+final class RPMSigner {
     /**
      * GPG path.
      */
@@ -69,8 +68,7 @@ final class RPMSigner
      * @param passphrase The passphrase for the gpg key.
      * @param log Used for logging information in the signing process.
      */
-    public RPMSigner( File gpgPath, String gpgName, char[] passphrase, Log log )
-    {
+    public RPMSigner(File gpgPath, String gpgName, char[] passphrase, Log log) {
         this.gpgPath = gpgPath;
         this.gpgName = gpgName;
         this.passphrase = passphrase;
@@ -83,93 +81,78 @@ final class RPMSigner
      * @param rpm RPM file to sign. Must exist and be readable.
      * @throws IOException
      */
-    public void sign( final File rpm )
-        throws IOException
-    {
-        if ( !rpm.exists() || !rpm.canRead() )
-        {
-            throw new IllegalStateException( rpm.getAbsolutePath() + " is not a valid rpm file or cannot be read" );
+    public void sign(final File rpm) throws IOException {
+        if (!rpm.exists() || !rpm.canRead()) {
+            throw new IllegalStateException(rpm.getAbsolutePath() + " is not a valid rpm file or cannot be read");
         }
 
-		if (this.passphrase != null)
-		{
+        if (this.passphrase != null) {
 
-			// use option to provide "script" via stdin
-			final Commandline cl = new Commandline();
-			cl.setExecutable("expect");
-			cl.setWorkingDirectory(rpm.getParentFile());
-			cl.createArg().setValue("-c");
-			// work around to allow expect execution time to read in the input during heavy
-			// system usage
-			cl.createArg().setValue("sleep 1"); // MRPM-176 and PLXUTILS-174
-			cl.createArg().setValue("-");
+            // use option to provide "script" via stdin
+            final Commandline cl = new Commandline();
+            cl.setExecutable("expect");
+            cl.setWorkingDirectory(rpm.getParentFile());
+            cl.createArg().setValue("-c");
+            // work around to allow expect execution time to read in the input during heavy
+            // system usage
+            cl.createArg().setValue("sleep 1"); // MRPM-176 and PLXUTILS-174
+            cl.createArg().setValue("-");
 
-			final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
-			final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
+            final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+            final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
 
-			try
-			{
-				if (log.isDebugEnabled())
-				{
-					log.debug("About to execute \'" + cl.toString() + "\'");
-				}
+            try {
+                if (log.isDebugEnabled()) {
+                    log.debug("About to execute \'" + cl.toString() + "\'");
+                }
 
-				final InputStream is = new ByteArrayInputStream(writeExpectScriptFile(rpm));
+                final InputStream is = new ByteArrayInputStream(writeExpectScriptFile(rpm));
 
-				int result = CommandLineUtils.executeCommandLine(cl, is, stdout, stderr);
-				if (result != 0)
-				{
-					throw new IllegalStateException(
-							"RPM sign execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
-				}
-			} catch (CommandLineException e)
-			{
-				final IllegalStateException ise = new IllegalStateException("Unable to sign the RPM");
-				ise.initCause(e);
-				throw ise;
-			}
+                int result = CommandLineUtils.executeCommandLine(cl, is, stdout, stderr);
+                if (result != 0) {
+                    throw new IllegalStateException(
+                            "RPM sign execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
+                }
+            } catch (CommandLineException e) {
+                final IllegalStateException ise = new IllegalStateException("Unable to sign the RPM");
+                ise.initCause(e);
+                throw ise;
+            }
 
-		} else 
-		{
+        } else {
 
-			// run rpmsign
-			final Commandline cl = new Commandline();
-			cl.setExecutable("rpmsign");
-			cl.setWorkingDirectory(rpm.getParentFile());
-            cl.createArg().setValue( "--define" );
-            cl.createArg().setValue( "_gpg_name " + gpgName );
-            if ( gpgPath != null )
-			{
-				cl.createArg().setValue("--define");
-				cl.createArg().setValue("_gpg_path " + gpgPath);
-			}
-			cl.createArg().setValue( "--addsign" );
-	        cl.createArg().setValue( rpm.getName() );
+            // run rpmsign
+            final Commandline cl = new Commandline();
+            cl.setExecutable("rpmsign");
+            cl.setWorkingDirectory(rpm.getParentFile());
+            cl.createArg().setValue("--define");
+            cl.createArg().setValue("_gpg_name " + gpgName);
+            if (gpgPath != null) {
+                cl.createArg().setValue("--define");
+                cl.createArg().setValue("_gpg_path " + gpgPath);
+            }
+            cl.createArg().setValue("--addsign");
+            cl.createArg().setValue(rpm.getName());
 
-			final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
-			final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
+            final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+            final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
 
-			try
-			{
-				if (log.isDebugEnabled())
-				{
-					log.debug("About to execute \'" + cl.toString() + "\'");
-				}
+            try {
+                if (log.isDebugEnabled()) {
+                    log.debug("About to execute \'" + cl.toString() + "\'");
+                }
 
-				int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
-				if (result != 0)
-				{
-					throw new IllegalStateException(
-							"RPM sign execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
-				}
-			} catch (CommandLineException e)
-			{
-				final IllegalStateException ise = new IllegalStateException("Unable to sign the RPM");
-				ise.initCause(e);
-				throw ise;
-			}
-
-		}
+                int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+                if (result != 0) {
+                    throw new IllegalStateException(
+                            "RPM sign execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
+                }
+            } catch (CommandLineException e) {
+                final IllegalStateException ise = new IllegalStateException("Unable to sign the RPM");
+                ise.initCause(e);
+                throw ise;
+            }
+        }
     }
 
     /**
@@ -179,49 +162,43 @@ final class RPMSigner
      * @return The expect script as a {@code byte[]}.
      * @throws IOException
      */
-    private byte[] writeExpectScriptFile( final File rpm )
-        throws IOException
-    {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream( 512 );
+    private byte[] writeExpectScriptFile(final File rpm) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
 
-        final PrintWriter writer = new PrintWriter( new OutputStreamWriter( baos ) );
-        try
-        {
-            writer.println( "set timeout -1" );
-            writer.print( "spawn rpm --define \"_gpg_name " );
-            writer.print( gpgName );
-            writer.print( "\"" );
-            if ( gpgPath != null )
-            {
-                writer.print( " --define \"_gpg_path " );
-                writer.print( gpgPath + "\"" );
+        final PrintWriter writer = new PrintWriter(new OutputStreamWriter(baos));
+        try {
+            writer.println("set timeout -1");
+            writer.print("spawn rpm --define \"_gpg_name ");
+            writer.print(gpgName);
+            writer.print("\"");
+            if (gpgPath != null) {
+                writer.print(" --define \"_gpg_path ");
+                writer.print(gpgPath + "\"");
             }
-            writer.print( " --addsign " );
-            writer.println( rpm.getName() );
-            writer.println( "expect {" );
-            writer.println( " \"Enter pass phrase: \" {");
-            writer.println( "send -- \"" + new String( this.passphrase ) + "\r\"");
-            writer.println( "expect {" );
-            writer.println( " \"Pass phrase is good.\" {" );
-            writer.println( "      expect eof" );
-            writer.println( "      exit 0" );
-            writer.println( "  }" );
-            writer.println( " \"signing failed\" {" );
-            writer.println( "      expect eof" );
-            writer.println( "      exit 1" );
-            writer.println( "  }" );
-            writer.println( "}" );
-            writer.println( "}" );
-            writer.println( " \"" + gpgName + ": \" {");
-            writer.println( "             expect eof" );
-            writer.println( "             exit 0" );
-            writer.println( "             }" );
-            writer.println( "}" );
-                        writer.println();
+            writer.print(" --addsign ");
+            writer.println(rpm.getName());
+            writer.println("expect {");
+            writer.println(" \"Enter pass phrase: \" {");
+            writer.println("send -- \"" + new String(this.passphrase) + "\r\"");
+            writer.println("expect {");
+            writer.println(" \"Pass phrase is good.\" {");
+            writer.println("      expect eof");
+            writer.println("      exit 0");
+            writer.println("  }");
+            writer.println(" \"signing failed\" {");
+            writer.println("      expect eof");
+            writer.println("      exit 1");
+            writer.println("  }");
+            writer.println("}");
+            writer.println("}");
+            writer.println(" \"" + gpgName + ": \" {");
+            writer.println("             expect eof");
+            writer.println("             exit 0");
+            writer.println("             }");
+            writer.println("}");
+            writer.println();
             writer.flush();
-        }
-        finally
-        {
+        } finally {
             writer.close();
         }
 

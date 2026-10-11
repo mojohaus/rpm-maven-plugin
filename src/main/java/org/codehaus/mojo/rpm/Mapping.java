@@ -28,8 +28,7 @@ import java.util.List;
  * A description of a file or directory to be installed. It includes the properties to be assigned and the location(s)
  * where the file(s) can be found for packaging.
  */
-public class Mapping
-{
+public class Mapping {
 
     // // // Properties
 
@@ -130,8 +129,7 @@ public class Mapping
      *
      * @return The destination during package installation.
      */
-    public String getDirectory()
-    {
+    public String getDirectory() {
         return directory;
     }
 
@@ -140,8 +138,7 @@ public class Mapping
      *
      * @param dir The new destination during package installation.
      */
-    public void setDirectory( String dir )
-    {
+    public void setDirectory(String dir) {
         directory = dir;
     }
 
@@ -154,8 +151,7 @@ public class Mapping
      * @return Whether the {@link #getDirectory()} should be used for the {@link #getAttrString(String, String, String, String)
      *         attribute string}.
      */
-    public boolean isDirectoryIncluded()
-    {
+    public boolean isDirectoryIncluded() {
         return this.directoryIncluded;
     }
 
@@ -167,8 +163,7 @@ public class Mapping
      *
      * @param directoryIncluded The {@link #directoryIncluded} to set.
      */
-    public void setDirectoryIncluded( boolean directoryIncluded )
-    {
+    public void setDirectoryIncluded(boolean directoryIncluded) {
         this.directoryIncluded = directoryIncluded;
     }
 
@@ -178,8 +173,7 @@ public class Mapping
      *
      * @return The configuration value.
      */
-    public String getConfiguration()
-    {
+    public String getConfiguration() {
         return configuration;
     }
 
@@ -190,8 +184,7 @@ public class Mapping
      *
      * @param cfg The new configuration value.
      */
-    public void setConfiguration( String cfg )
-    {
+    public void setConfiguration(String cfg) {
         configuration = cfg;
     }
 
@@ -201,8 +194,7 @@ public class Mapping
      *
      * @return The documentation status.
      */
-    public boolean isDocumentation()
-    {
+    public boolean isDocumentation() {
         return documentation;
     }
 
@@ -212,8 +204,7 @@ public class Mapping
      *
      * @param isDoc The new documentation status.
      */
-    public void setDocumentation( boolean isDoc )
-    {
+    public void setDocumentation(boolean isDoc) {
         documentation = isDoc;
     }
 
@@ -223,8 +214,7 @@ public class Mapping
      *
      * @return The UNIX file permissions.
      */
-    public String getFilemode()
-    {
+    public String getFilemode() {
         return filemode;
     }
 
@@ -234,8 +224,7 @@ public class Mapping
      *
      * @param fmode The new UNIX file permissions.
      */
-    public void setFilemode( String fmode )
-    {
+    public void setFilemode(String fmode) {
         filemode = fmode;
     }
 
@@ -264,8 +253,7 @@ public class Mapping
      *
      * @return The UNIX user name to own the installed files.
      */
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
@@ -274,8 +262,7 @@ public class Mapping
      *
      * @param uname The new UNIX user name to own the installed files.
      */
-    public void setUsername( String uname )
-    {
+    public void setUsername(String uname) {
         username = uname;
     }
 
@@ -284,8 +271,7 @@ public class Mapping
      *
      * @return The UNIX group name to own the installed files.
      */
-    public String getGroupname()
-    {
+    public String getGroupname() {
         return groupname;
     }
 
@@ -296,8 +282,7 @@ public class Mapping
      *
      * @param grpname The new UNIX group name to own the installed files.
      */
-    public void setGroupname( String grpname )
-    {
+    public void setGroupname(String grpname) {
         groupname = grpname;
     }
 
@@ -306,8 +291,7 @@ public class Mapping
      *
      * @return The list of source file specifications.
      */
-    public List<Source> getSources()
-    {
+    public List<Source> getSources() {
         return sources;
     }
 
@@ -316,8 +300,7 @@ public class Mapping
      *
      * @param srclist The new list of source file specifications.
      */
-    public void setSources( List<Source> srclist )
-    {
+    public void setSources(List<Source> srclist) {
         sources = srclist;
     }
 
@@ -326,8 +309,7 @@ public class Mapping
      *
      * @return The artifact specification.
      */
-    public ArtifactMap getArtifact()
-    {
+    public ArtifactMap getArtifact() {
         return artifact;
     }
 
@@ -336,8 +318,7 @@ public class Mapping
      *
      * @param am The new artifact specification.
      */
-    public void setArtifact( ArtifactMap am )
-    {
+    public void setArtifact(ArtifactMap am) {
         artifact = am;
     }
 
@@ -346,8 +327,7 @@ public class Mapping
      *
      * @return The dependency specification.
      */
-    public Dependency getDependency()
-    {
+    public Dependency getDependency() {
         return dependency;
     }
 
@@ -356,8 +336,7 @@ public class Mapping
      *
      * @param am The new dependency specification.
      */
-    public void setDependency( Dependency am )
-    {
+    public void setDependency(Dependency am) {
         dependency = am;
     }
 
@@ -368,8 +347,7 @@ public class Mapping
      * @return Returns the {@link #recurseDirectories}.
      * @since 2.1-alpha-1
      */
-    public final boolean isRecurseDirectories()
-    {
+    public final boolean isRecurseDirectories() {
         return this.recurseDirectories;
     }
 
@@ -380,8 +358,7 @@ public class Mapping
      * @param recurseDirectories The {@link #recurseDirectories} to set.
      * @since 2.1-alpha-1
      */
-    public final void setRecurseDirectories( boolean recurseDirectories )
-    {
+    public final void setRecurseDirectories(boolean recurseDirectories) {
         this.recurseDirectories = recurseDirectories;
     }
 
@@ -395,8 +372,8 @@ public class Mapping
      * @deprecated Use {@link #getAttrString(String, String, String, String)} instead (additionally includes defaultDirMode)
      */
     @Deprecated
-    public String getAttrString( String defaultFileMode, String defaultGrp, String defaultUsr ){
-        return getAttrString( defaultFileMode, null, defaultGrp, defaultUsr );
+    public String getAttrString(String defaultFileMode, String defaultGrp, String defaultUsr) {
+        return getAttrString(defaultFileMode, null, defaultGrp, defaultUsr);
     }
 
     /**
@@ -408,12 +385,11 @@ public class Mapping
      * @param defaultUsr Default user to use if not set for this mapping.
      * @return The attribute string for the SPEC file. Includes <code>%dir</code> for directory-only entries.
      */
-    public String getAttrString( String defaultFileMode, String defaultDirMode, String defaultGrp, String defaultUsr )
-    {
-        boolean directory = ( ( sources == null ) || ( sources.size() == 0 ) ) && ( dependency == null ) && ( artifact == null );
+    public String getAttrString(String defaultFileMode, String defaultDirMode, String defaultGrp, String defaultUsr) {
+        boolean directory = ((sources == null) || (sources.size() == 0)) && (dependency == null) && (artifact == null);
 
         // For backwards compatibility, use defaultFileMode as a fallback for the directory mode
-        String defaultMode = directory ? ( defaultDirMode != null ? defaultDirMode : defaultFileMode ) : defaultFileMode;
+        String defaultMode = directory ? (defaultDirMode != null ? defaultDirMode : defaultFileMode) : defaultFileMode;
 
         return computeAttrString(defaultMode, defaultGrp, defaultUsr, directory);
     }
@@ -437,48 +413,40 @@ public class Mapping
 
         StringBuilder sb = new StringBuilder();
 
-        if ( configuration != null && !"FALSE".equalsIgnoreCase( configuration ) )
-        {
-            sb.append( "%config" );
-            if ( configuration.length() > 0 && !"TRUE".equalsIgnoreCase( configuration ) )
-            {
-                sb.append( '(' );
-                sb.append( configuration );
-                sb.append( ')' );
+        if (configuration != null && !"FALSE".equalsIgnoreCase(configuration)) {
+            sb.append("%config");
+            if (configuration.length() > 0 && !"TRUE".equalsIgnoreCase(configuration)) {
+                sb.append('(');
+                sb.append(configuration);
+                sb.append(')');
             }
-            sb.append( ' ' );
+            sb.append(' ');
         }
 
-        if ( documentation )
-        {
-            sb.append( "%doc " );
+        if (documentation) {
+            sb.append("%doc ");
         }
 
-        if ( directory )
-        {
-            sb.append( "%dir " );
+        if (directory) {
+            sb.append("%dir ");
         }
 
         /* do not include %attr if no attributes are specified */
-        if ( !( filemode == null && username == null && groupname == null ) )
-        {
-            sb.append( "%attr(" );
+        if (!(filemode == null && username == null && groupname == null)) {
+            sb.append("%attr(");
 
-            if ( directory )
-            {
-                sb.append( dirmode != null ? dirmode : ( filemode != null ? filemode : defaultMode ) );
+            if (directory) {
+                sb.append(dirmode != null ? dirmode : (filemode != null ? filemode : defaultMode));
+            } else {
+                sb.append(filemode != null ? filemode : defaultMode);
             }
-            else
-            {
-                sb.append( filemode != null ? filemode : defaultMode );
-            }
-            sb.append( ',' );
+            sb.append(',');
 
-            sb.append( username != null ? username : defaultUsr );
-            sb.append( ',' );
+            sb.append(username != null ? username : defaultUsr);
+            sb.append(',');
 
-            sb.append( groupname != null ? groupname : defaultGrp );
-            sb.append( ')' );
+            sb.append(groupname != null ? groupname : defaultGrp);
+            sb.append(')');
         }
 
         return sb.toString();
@@ -489,10 +457,8 @@ public class Mapping
      *
      * @return The name of the destination directory.
      */
-    public String getDestination()
-    {
-        if ( directory == null )
-        {
+    public String getDestination() {
+        if (directory == null) {
             return "nowhere";
         }
 
@@ -504,20 +470,16 @@ public class Mapping
      *
      * @return <code>true</code> if no sources were specified in the mapping
      */
-    public boolean isDirOnly()
-    {
-        if ( ( sources != null ) && ( !sources.isEmpty() ) )
-        {
+    public boolean isDirOnly() {
+        if ((sources != null) && (!sources.isEmpty())) {
             return false;
         }
 
-        if ( artifact != null )
-        {
+        if (artifact != null) {
             return false;
         }
 
-        if ( dependency != null )
-        {
+        if (dependency != null) {
             return false;
         }
 
@@ -529,20 +491,16 @@ public class Mapping
      *
      * @return <code>true</code> if no sources were specified in the mapping
      */
-    public boolean isSourceDirsOnly()
-    {
-        if ( artifact != null )
-        {
+    public boolean isSourceDirsOnly() {
+        if (artifact != null) {
             return false;
         }
 
-        if ( dependency != null )
-        {
+        if (dependency != null) {
             return false;
         }
 
-        if ( ( sources == null || sources.isEmpty() ) )
-        {
+        if ((sources == null || sources.isEmpty())) {
             return false;
         }
 
@@ -554,22 +512,20 @@ public class Mapping
      *
      * @return <code>true</code> if no sources were specified in the mapping
      */
-    public boolean isSoftLinkOnly()
-    {
+    public boolean isSoftLinkOnly() {
         // map.hasSoftLinks() && map.getSources().size() == links.size()
 
-        if ( artifact != null )
-        {
+        if (artifact != null) {
             return false;
         }
 
-        if ( dependency != null )
-        {
+        if (dependency != null) {
             return false;
         }
 
-        if ( hasSoftLinks() && getSources().size() == this.getLinkedFileNamesRelativeToDestination().size() )
-        {
+        if (hasSoftLinks()
+                && getSources().size()
+                        == this.getLinkedFileNamesRelativeToDestination().size()) {
             return true;
         }
 
@@ -583,10 +539,10 @@ public class Mapping
      * @return The names of files copied to the <tt>destination</tt>. The <tt>List</tt> returned will never be
      *         <code>null</code>, but may be immutable.
      */
-    List<String> getCopiedFileNamesRelativeToDestination()
-    {
-        return this.copiedFileNamesRelativeToDestination != null ? this.copiedFileNamesRelativeToDestination
-                        : EMPTY_STRING_LIST;
+    List<String> getCopiedFileNamesRelativeToDestination() {
+        return this.copiedFileNamesRelativeToDestination != null
+                ? this.copiedFileNamesRelativeToDestination
+                : EMPTY_STRING_LIST;
     }
 
     /**
@@ -595,15 +551,11 @@ public class Mapping
      * @param copiedFileNamesRelativeToDestination relative names of files to add
      * @see #getCopiedFileNamesRelativeToDestination()
      */
-    void addCopiedFileNamesRelativeToDestination( List<String> copiedFileNamesRelativeToDestination )
-    {
-        if ( this.copiedFileNamesRelativeToDestination == null )
-        {
-            this.copiedFileNamesRelativeToDestination = new ArrayList<String>( copiedFileNamesRelativeToDestination );
-        }
-        else
-        {
-            this.copiedFileNamesRelativeToDestination.addAll( copiedFileNamesRelativeToDestination );
+    void addCopiedFileNamesRelativeToDestination(List<String> copiedFileNamesRelativeToDestination) {
+        if (this.copiedFileNamesRelativeToDestination == null) {
+            this.copiedFileNamesRelativeToDestination = new ArrayList<String>(copiedFileNamesRelativeToDestination);
+        } else {
+            this.copiedFileNamesRelativeToDestination.addAll(copiedFileNamesRelativeToDestination);
         }
     }
 
@@ -613,13 +565,11 @@ public class Mapping
      * @param copiedFileNameRelativeToDestination relative name of file to add to list
      * @see #getCopiedFileNamesRelativeToDestination()
      */
-    void addCopiedFileNameRelativeToDestination( String copiedFileNameRelativeToDestination )
-    {
-        if ( this.copiedFileNamesRelativeToDestination == null )
-        {
+    void addCopiedFileNameRelativeToDestination(String copiedFileNameRelativeToDestination) {
+        if (this.copiedFileNamesRelativeToDestination == null) {
             this.copiedFileNamesRelativeToDestination = new LinkedList<String>();
         }
-        this.copiedFileNamesRelativeToDestination.add( copiedFileNameRelativeToDestination );
+        this.copiedFileNamesRelativeToDestination.add(copiedFileNameRelativeToDestination);
     }
 
     /**
@@ -631,13 +581,12 @@ public class Mapping
      *         <code>null</code>, but may be immutable.
      * @since 2.0-beta-3
      */
-
     private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
 
-    List<String> getLinkedFileNamesRelativeToDestination()
-    {
-        return this.linkedFileNamesRelativeToDestination != null ? this.linkedFileNamesRelativeToDestination
-                        : EMPTY_STRING_LIST;
+    List<String> getLinkedFileNamesRelativeToDestination() {
+        return this.linkedFileNamesRelativeToDestination != null
+                ? this.linkedFileNamesRelativeToDestination
+                : EMPTY_STRING_LIST;
     }
 
     /**
@@ -647,22 +596,19 @@ public class Mapping
      * @see #getLinkedFileNamesRelativeToDestination()
      * @since 2.0-beta-3
      */
-    void addLinkedFileNameRelativeToDestination( String linkedFileNameRelativeToDestination )
-    {
-        if ( this.linkedFileNamesRelativeToDestination == null )
-        {
+    void addLinkedFileNameRelativeToDestination(String linkedFileNameRelativeToDestination) {
+        if (this.linkedFileNamesRelativeToDestination == null) {
             this.linkedFileNamesRelativeToDestination = new LinkedList<String>();
         }
 
-        linkedFileNamesRelativeToDestination.add( linkedFileNameRelativeToDestination );
+        linkedFileNamesRelativeToDestination.add(linkedFileNameRelativeToDestination);
     }
 
     /**
      * @return Returns the {@link #hasSoftLinks}.
      * @since 2.0-beta-3
      */
-    boolean hasSoftLinks()
-    {
+    boolean hasSoftLinks() {
         return this.hasSoftLinks;
     }
 
@@ -670,8 +616,7 @@ public class Mapping
      * @param hasSoftLinks The {@link #hasSoftLinks} to set.
      * @since 2.0-beta-3
      */
-    void setHasSoftLinks( boolean hasSoftLinks )
-    {
+    void setHasSoftLinks(boolean hasSoftLinks) {
         this.hasSoftLinks = hasSoftLinks;
     }
 
@@ -679,8 +624,7 @@ public class Mapping
      * @return Returns the {@link #absoluteDestination}.
      * @since 2.1-alpha-1
      */
-    final File getAbsoluteDestination()
-    {
+    final File getAbsoluteDestination() {
         return this.absoluteDestination;
     }
 
@@ -688,51 +632,41 @@ public class Mapping
      * @param absoluteDestination The {@link #absoluteDestination} to set.
      * @since 2.1-alpha-1
      */
-    final void setAbsoluteDestination( File absoluteDestination )
-    {
+    final void setAbsoluteDestination(File absoluteDestination) {
         this.absoluteDestination = absoluteDestination;
     }
 
     /** {@inheritDoc} */
-    public String toString()
-    {
+    public String toString() {
         boolean sourceShown = false;
         StringBuilder sb = new StringBuilder();
 
-        sb.append( "[\"" + getDestination() + "\" " );
-        sb.append( "{" + getAttrString( null, null, null, null ) + "}" );
+        sb.append("[\"" + getDestination() + "\" ");
+        sb.append("{" + getAttrString(null, null, null, null) + "}");
 
-        if ( isDirOnly() )
-        {
-            sb.append( " (dir only)]" );
-        }
-        else
-        {
-            sb.append( " from " );
-            if ( sources != null )
-            {
-                sb.append( sources.toString() );
+        if (isDirOnly()) {
+            sb.append(" (dir only)]");
+        } else {
+            sb.append(" from ");
+            if (sources != null) {
+                sb.append(sources.toString());
                 sourceShown = true;
             }
-            if ( artifact != null )
-            {
-                if ( sourceShown )
-                {
-                    sb.append( ", " );
+            if (artifact != null) {
+                if (sourceShown) {
+                    sb.append(", ");
                 }
-                sb.append( artifact.toString() );
+                sb.append(artifact.toString());
                 sourceShown = true;
             }
-            if ( dependency != null )
-            {
-                if ( sourceShown )
-                {
-                    sb.append( ", " );
+            if (dependency != null) {
+                if (sourceShown) {
+                    sb.append(", ");
                 }
-                sb.append( dependency.toString() );
+                sb.append(dependency.toString());
                 sourceShown = true;
             }
-            sb.append( "]" );
+            sb.append("]");
         }
 
         return sb.toString();

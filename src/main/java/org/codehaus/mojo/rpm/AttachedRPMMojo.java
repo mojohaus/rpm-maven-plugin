@@ -34,10 +34,12 @@ import org.apache.maven.project.MavenProjectHelper;
  * @author Brett Okken, Cerner Corp.
  * @since 2.0-beta-2
  */
-@Mojo( name = "attached-rpm", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
-public class AttachedRPMMojo
-    extends AbstractRPMMojo
-{
+@Mojo(
+        name = "attached-rpm",
+        defaultPhase = LifecyclePhase.PACKAGE,
+        requiresDependencyResolution = ResolutionScope.RUNTIME,
+        threadSafe = true)
+public class AttachedRPMMojo extends AbstractRPMMojo {
 
     /**
      * The classifier for the rpm secondary artifact.
@@ -53,16 +55,14 @@ public class AttachedRPMMojo
      *
      * @see MavenProjectHelper#attachArtifact(org.apache.maven.project.MavenProject, String, String, java.io.File)
      */
-    protected void afterExecution()
-    {
+    protected void afterExecution() {
 
         File attachedArtifact = getRPMFile();
-        if ( getLog().isDebugEnabled() )
-        {
-            getLog().debug( "Adding RPM as attached artifact with '" + classifier + "' classifier: "
-                                + attachedArtifact.getAbsolutePath() );
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("Adding RPM as attached artifact with '" + classifier + "' classifier: "
+                    + attachedArtifact.getAbsolutePath());
         }
-        mavenProjectHelper.attachArtifact( project, "rpm", classifier, attachedArtifact );
+        mavenProjectHelper.attachArtifact(project, "rpm", classifier, attachedArtifact);
     }
 
     /**
@@ -70,8 +70,7 @@ public class AttachedRPMMojo
      *
      * @return The classifier.
      */
-    protected String getClassifier()
-    {
+    protected String getClassifier() {
         return classifier;
     }
 }

@@ -31,8 +31,7 @@ import java.util.regex.Pattern;
  * @author Carlos
  * @author Brett Okken
  */
-public class Source
-{
+public class Source {
     // // // Properties
 
     /** The source location. */
@@ -106,8 +105,7 @@ public class Source
      *
      * @return The location holding the file(s) to install.
      */
-    public String getLocation()
-    {
+    public String getLocation() {
         return location;
     }
 
@@ -116,8 +114,7 @@ public class Source
      *
      * @param loc The new location holding the file(s) to install.
      */
-    public void setLocation( String loc )
-    {
+    public void setLocation(String loc) {
         location = loc;
     }
 
@@ -126,8 +123,7 @@ public class Source
      *
      * @return The list of files to include in the package.
      */
-    public List<String> getIncludes()
-    {
+    public List<String> getIncludes() {
         return includes;
     }
 
@@ -136,8 +132,7 @@ public class Source
      *
      * @param incl The new list of files to include in the package.
      */
-    public void setIncludes( List<String> incl )
-    {
+    public void setIncludes(List<String> incl) {
         includes = incl;
     }
 
@@ -146,8 +141,7 @@ public class Source
      *
      * @return The list of files to exclude from the package.
      */
-    public List<String> getExcludes()
-    {
+    public List<String> getExcludes() {
         return excludes;
     }
 
@@ -156,8 +150,7 @@ public class Source
      *
      * @param excl The new list of files to exclude from the package.
      */
-    public void setExcludes( List<String> excl )
-    {
+    public void setExcludes(List<String> excl) {
         excludes = excl;
     }
 
@@ -166,8 +159,7 @@ public class Source
      *
      * @return <code>true</code> if the default excludes should be omitted.
      */
-    public boolean getNoDefaultExcludes()
-    {
+    public boolean getNoDefaultExcludes() {
         return noDefaultExcludes;
     }
 
@@ -176,8 +168,7 @@ public class Source
      *
      * @param noDefExcl <code>true</code> if the default excludes should be omitted.
      */
-    public void setNoDefaultExcludes( boolean noDefExcl )
-    {
+    public void setNoDefaultExcludes(boolean noDefExcl) {
         noDefaultExcludes = noDefExcl;
     }
 
@@ -187,8 +178,7 @@ public class Source
      * @return Returns the {@link #destination}.
      * @see #setDestination(String)
      */
-    public String getDestination()
-    {
+    public String getDestination() {
         return this.destination;
     }
 
@@ -201,16 +191,14 @@ public class Source
      *
      * @param destination The destination that the {@link #getLocation() location} should be in the final rpm.
      */
-    public void setDestination( String destination )
-    {
+    public void setDestination(String destination) {
         this.destination = destination;
     }
 
     /**
      * @return Returns the {@link #targetArchitecture}.
      */
-    public String getTargetArchitecture()
-    {
+    public String getTargetArchitecture() {
         return this.targetArchitecture;
     }
 
@@ -224,11 +212,10 @@ public class Source
      *
      * @param targetArch The target architecture to set.
      */
-    public void setTargetArchitecture( String targetArch )
-    {
+    public void setTargetArchitecture(String targetArch) {
         this.targetArchitecture = targetArch;
         this.targetArchitecturePattern =
-            targetArch == null ? null : Pattern.compile( targetArch.toLowerCase( Locale.ENGLISH ) );
+                targetArch == null ? null : Pattern.compile(targetArch.toLowerCase(Locale.ENGLISH));
     }
 
     /**
@@ -238,17 +225,17 @@ public class Source
      * @return if the {@link #getTargetArchitecture()} {@link java.util.regex.Matcher#matches() matches} the
      *         <i>archicture</i>.
      */
-    boolean matchesArchitecture( String architecture )
-    {
-        return targetArchitecturePattern == null ? true : targetArchitecturePattern.matcher( architecture ).matches();
+    boolean matchesArchitecture(String architecture) {
+        return targetArchitecturePattern == null
+                ? true
+                : targetArchitecturePattern.matcher(architecture).matches();
     }
 
     /**
      * @return Returns the {@link #targetOSName}.
      * @since 2.0-beta-3
      */
-    public String getTargetOSName()
-    {
+    public String getTargetOSName() {
         return this.targetOSName;
     }
 
@@ -259,18 +246,16 @@ public class Source
      * @param targetOSName The {@link #targetOSName} to set.
      * @since 2.0-beta-3
      */
-    public void setTargetOSName( String targetOSName )
-    {
+    public void setTargetOSName(String targetOSName) {
         this.targetOSName = targetOSName;
-        this.targetOSNamePattern = targetOSName != null ? Pattern.compile( targetOSName ) : null;
+        this.targetOSNamePattern = targetOSName != null ? Pattern.compile(targetOSName) : null;
     }
 
     /**
      * @return Returns the {@link #filter}.
      * @since 2.0
      */
-    public boolean isFilter()
-    {
+    public boolean isFilter() {
         return this.filter;
     }
 
@@ -278,8 +263,7 @@ public class Source
      * @param filter The {@link #filter} to set.
      * @since 2.0
      */
-    public void setFilter( boolean filter )
-    {
+    public void setFilter(boolean filter) {
         this.filter = filter;
     }
 
@@ -290,17 +274,17 @@ public class Source
      * @return if {@link #getTargetOSName()} {@link java.util.regex.Matcher#matches() matches} <i>osName</i>.
      * @since 2.0-beta-3
      */
-    boolean matchesOSName( String osName )
-    {
-        return targetOSNamePattern == null ? true : targetOSNamePattern.matcher( osName ).matches();
+    boolean matchesOSName(String osName) {
+        return targetOSNamePattern == null
+                ? true
+                : targetOSNamePattern.matcher(osName).matches();
     }
 
     /**
      * @return Returns the {@link #macroEvaluatedLocation}.
      * @since 2.1-alpha-1
      */
-    final String getMacroEvaluatedLocation()
-    {
+    final String getMacroEvaluatedLocation() {
         return this.macroEvaluatedLocation;
     }
 
@@ -308,79 +292,68 @@ public class Source
      * @param macroEvaluatedLocation The {@link #macroEvaluatedLocation} to set.
      * @since 2.1-alpha-1
      */
-    final void setMacroEvaluatedLocation( String macroEvaluatedLocation )
-    {
+    final void setMacroEvaluatedLocation(String macroEvaluatedLocation) {
         this.macroEvaluatedLocation = macroEvaluatedLocation;
     }
 
     /**
      * @return Returns the {@link #failIfLocationNotExists}.
      */
-    public boolean getFailIfLocationNotExists()
-    {
+    public boolean getFailIfLocationNotExists() {
         return failIfLocationNotExists;
     }
 
     /**
      * @param failIfLocationNotExists The {@link #failIfLocationNotExists} to set.
      */
-    public void setFailIfLocationNotExists( boolean failIfLocationNotExists )
-    {
+    public void setFailIfLocationNotExists(boolean failIfLocationNotExists) {
         this.failIfLocationNotExists = failIfLocationNotExists;
     }
 
     /** {@inheritDoc} */
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append( "{" );
+        sb.append("{");
 
-        if ( location == null )
-        {
-            sb.append( "nowhere" );
+        if (location == null) {
+            sb.append("nowhere");
+        } else {
+            sb.append("\"" + location + "\"");
         }
-        else
-        {
-            sb.append( "\"" + location + "\"" );
-        }
-        sb.append( " failIfLocationNotExists:" + failIfLocationNotExists );
+        sb.append(" failIfLocationNotExists:" + failIfLocationNotExists);
 
-        if ( includes != null )
-        {
-            sb.append( " incl:" + includes );
+        if (includes != null) {
+            sb.append(" incl:" + includes);
         }
 
-        if ( excludes != null )
-        {
-            sb.append( " excl:" + excludes );
+        if (excludes != null) {
+            sb.append(" excl:" + excludes);
         }
 
-        if ( destination != null )
-        {
-            sb.append( " destination: " );
-            sb.append( destination );
+        if (destination != null) {
+            sb.append(" destination: ");
+            sb.append(destination);
         }
 
-        sb.append( " filter: " + Boolean.toString( filter ) );
+        sb.append(" filter: " + Boolean.toString(filter));
 
-        if ( noDefaultExcludes )
-        {
-            sb.append( " [no default excludes]" );
+        if (noDefaultExcludes) {
+            sb.append(" [no default excludes]");
         }
 
-        if ( targetArchitecture != null )
-        {
-            sb.append( " targetArch: " );
-            sb.append( targetArchitecture );
+        if (targetArchitecture != null) {
+            sb.append(" targetArch: ");
+            sb.append(targetArchitecture);
         }
 
-        sb.append( "}" );
+        sb.append("}");
         return sb.toString();
     }
 
-    public boolean isSingleDir()
-    {
-        return this.location != null && ( this.includes == null || this.includes.isEmpty() )
-            && ( this.excludes == null || this.excludes.isEmpty() ) && this.noDefaultExcludes;
+    public boolean isSingleDir() {
+        return this.location != null
+                && (this.includes == null || this.includes.isEmpty())
+                && (this.excludes == null || this.excludes.isEmpty())
+                && this.noDefaultExcludes;
     }
 }

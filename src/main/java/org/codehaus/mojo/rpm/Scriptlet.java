@@ -19,11 +19,10 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import org.apache.maven.shared.filtering.FilterWrapper;
-import org.apache.maven.shared.utils.io.FileUtils;
-
 import java.io.*;
 import java.util.List;
+
+import org.apache.maven.shared.filtering.FilterWrapper;
 
 /**
  * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional) contents
@@ -32,8 +31,7 @@ import java.util.List;
  * @author Brett Okken, Cerner Corp.
  * @since 2.0-beta-4
  */
-public class Scriptlet
-{
+public class Scriptlet {
     /**
      * Optional subpackage.
      *
@@ -88,16 +86,14 @@ public class Scriptlet
      *
      * @return Returns the {@link #subpackage}.
      */
-    public String getSubpackage()
-    {
+    public String getSubpackage() {
         return this.subpackage;
     }
 
     /**
      * @param subpackage The {@link #subpackage} to set.
      */
-    public void setSubpackage( String subpackage )
-    {
+    public void setSubpackage(String subpackage) {
         this.subpackage = subpackage;
     }
 
@@ -106,16 +102,14 @@ public class Scriptlet
      *
      * @return Returns the {@link #program}.
      */
-    public String getProgram()
-    {
+    public String getProgram() {
         return this.program;
     }
 
     /**
      * @param program The {@link #program} to set.
      */
-    public void setProgram( String program )
-    {
+    public void setProgram(String program) {
         this.program = program;
     }
 
@@ -124,16 +118,14 @@ public class Scriptlet
      *
      * @return Returns the {@link #script}.
      */
-    public String getScript()
-    {
+    public String getScript() {
         return this.script;
     }
 
     /**
      * @param script The {@link #script} to set.
      */
-    public void setScript( String script )
-    {
+    public void setScript(String script) {
         this.script = script;
     }
 
@@ -142,16 +134,14 @@ public class Scriptlet
      *
      * @return Returns the {@link #scriptFile}.
      */
-    public File getScriptFile()
-    {
+    public File getScriptFile() {
         return this.scriptFile;
     }
 
     /**
      * @param scriptFile The {@link #scriptFile} to set.
      */
-    public void setScriptFile( File scriptFile )
-    {
+    public void setScriptFile(File scriptFile) {
         this.scriptFile = scriptFile;
     }
 
@@ -161,10 +151,8 @@ public class Scriptlet
      *
      * @return Returns the {@link #fileEncoding}.
      */
-    public String getFileEncoding()
-    {
-        if ( fileEncoding != null && !"".equals( fileEncoding ) )
-        {
+    public String getFileEncoding() {
+        if (fileEncoding != null && !"".equals(fileEncoding)) {
             return this.fileEncoding;
         }
         return this.sourceEncoding;
@@ -173,8 +161,7 @@ public class Scriptlet
     /**
      * @param fileEncoding The {@link #fileEncoding} to set.
      */
-    public void setFileEncoding( String fileEncoding )
-    {
+    public void setFileEncoding(String fileEncoding) {
         this.fileEncoding = fileEncoding;
     }
 
@@ -183,24 +170,21 @@ public class Scriptlet
      *
      * @param sourceEncoding The {@link #sourceEncoding} to set.
      */
-    public void setSourceEncoding( String sourceEncoding )
-    {
+    public void setSourceEncoding(String sourceEncoding) {
         this.sourceEncoding = sourceEncoding;
     }
 
     /**
      * @return Returns the {@link #filter}.
      */
-    public boolean isFilter()
-    {
+    public boolean isFilter() {
         return this.filter;
     }
 
     /**
      * @param filter The {@link #filter} to set.
      */
-    public void setFilter( boolean filter )
-    {
+    public void setFilter(boolean filter) {
         this.filter = filter;
     }
 
@@ -212,21 +196,19 @@ public class Scriptlet
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException if an I/IO error occurs
      */
-    protected final void write( final PrintWriter writer, final String directive, final List<FilterWrapper> filterWrappers)
-        throws IOException
-    {
-        if ( scriptFile != null && !scriptFile.exists() )
-        {
-            throw new RuntimeException( "Invalid scriptlet declaration found - defined scriptFile does not exist: "
-                + scriptFile.getPath() );
+    protected final void write(
+            final PrintWriter writer, final String directive, final List<FilterWrapper> filterWrappers)
+            throws IOException {
+        if (scriptFile != null && !scriptFile.exists()) {
+            throw new RuntimeException(
+                    "Invalid scriptlet declaration found - defined scriptFile does not exist: " + scriptFile.getPath());
         }
 
-        if ( script != null || ( scriptFile != null && scriptFile.exists() ) || program != null )
-        {
+        if (script != null || (scriptFile != null && scriptFile.exists()) || program != null) {
             writer.println();
-            writer.println( buildScriptletLine( directive ) );
+            writer.println(buildScriptletLine(directive));
 
-            writeContent( writer, filterWrappers );
+            writeContent(writer, filterWrappers);
         }
     }
 
@@ -236,21 +218,18 @@ public class Scriptlet
      * @param directive The directive for the scriptlet.
      * @return The scriptlet line - this does not include the script.
      */
-    protected String buildScriptletLine( final String directive )
-    {
+    protected String buildScriptletLine(final String directive) {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append( directive );
-        if ( subpackage != null )
-        {
-            builder.append( " -n " );
-            builder.append( subpackage );
+        builder.append(directive);
+        if (subpackage != null) {
+            builder.append(" -n ");
+            builder.append(subpackage);
         }
 
-        if ( program != null )
-        {
-            builder.append( " -p " );
-            builder.append( program );
+        if (program != null) {
+            builder.append(" -p ");
+            builder.append(program);
         }
 
         return builder.toString();
@@ -263,53 +242,36 @@ public class Scriptlet
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException if an I/IO error occurs
      */
-    protected final void writeContent( PrintWriter writer, final List<FilterWrapper> filterWrappers )
-        throws IOException
-    {
-        if ( script != null )
-        {
-            writer.println( script );
-        }
-        else if ( scriptFile.exists() )
-        {
-            Reader reader =
-                    fileEncoding != null ? new InputStreamReader( new FileInputStream( scriptFile ), fileEncoding )
-                            : new FileReader( scriptFile );
-            if(filter)
-            {
-                for ( FilterWrapper filterWrapper : filterWrappers ) {
-                    reader = filterWrapper.getReader( reader );
+    protected final void writeContent(PrintWriter writer, final List<FilterWrapper> filterWrappers) throws IOException {
+        if (script != null) {
+            writer.println(script);
+        } else if (scriptFile.exists()) {
+            Reader reader = fileEncoding != null
+                    ? new InputStreamReader(new FileInputStream(scriptFile), fileEncoding)
+                    : new FileReader(scriptFile);
+            if (filter) {
+                for (FilterWrapper filterWrapper : filterWrappers) {
+                    reader = filterWrapper.getReader(reader);
                 }
             }
             BufferedReader bufferedReader = null;
-            try
-            {
-                bufferedReader = new BufferedReader( reader );
+            try {
+                bufferedReader = new BufferedReader(reader);
                 String line;
-                while ( ( line = bufferedReader.readLine() ) != null )
-                {
-                    writer.println( line );
+                while ((line = bufferedReader.readLine()) != null) {
+                    writer.println(line);
                 }
-            }
-            finally
-            {
-                if ( bufferedReader != null )
-                {
-                    try
-                    {
+            } finally {
+                if (bufferedReader != null) {
+                    try {
                         bufferedReader.close();
-                    }
-                    catch ( IOException e )
-                    {
+                    } catch (IOException e) {
                         // ignore - it does not matter
                     }
                 }
-                try
-                {
+                try {
                     reader.close();
-                }
-                catch ( IOException e )
-                {
+                } catch (IOException e) {
                     // ignore - it does not matter
                 }
             }
@@ -319,21 +281,20 @@ public class Scriptlet
     /**
      * {@inheritDoc}
      */
-    public String toString()
-    {
-        StringBuilder buffer = new StringBuilder( 64 );
-        buffer.append( "Scriptlet[" );
-        buffer.append( "subpackage=" );
-        buffer.append( subpackage );
-        buffer.append( ",program=" );
-        buffer.append( program );
-        buffer.append( ",script=" );
-        buffer.append( script );
-        buffer.append( ",scriptFile=" );
-        buffer.append( scriptFile );
-        buffer.append( ",fileEncoding=" );
-        buffer.append( fileEncoding );
-        buffer.append( "]" );
+    public String toString() {
+        StringBuilder buffer = new StringBuilder(64);
+        buffer.append("Scriptlet[");
+        buffer.append("subpackage=");
+        buffer.append(subpackage);
+        buffer.append(",program=");
+        buffer.append(program);
+        buffer.append(",script=");
+        buffer.append(script);
+        buffer.append(",scriptFile=");
+        buffer.append(scriptFile);
+        buffer.append(",fileEncoding=");
+        buffer.append(fileEncoding);
+        buffer.append("]");
         return buffer.toString();
     }
 }

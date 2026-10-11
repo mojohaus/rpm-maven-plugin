@@ -25,16 +25,12 @@ package org.codehaus.mojo.rpm;
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
-public class RemoveTrigger
-    extends BaseTrigger
-{
+public class RemoveTrigger extends BaseTrigger {
 
     /**
      * {@inheritDoc}
      */
-    protected String getDirective()
-    {
+    protected String getDirective() {
         return "%triggerun";
     }
-
 }

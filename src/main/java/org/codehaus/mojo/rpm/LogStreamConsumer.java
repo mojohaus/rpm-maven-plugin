@@ -28,9 +28,7 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
-final class LogStreamConsumer
-    implements StreamConsumer
-{
+final class LogStreamConsumer implements StreamConsumer {
     /**
      * @see Log#debug(CharSequence)
      */
@@ -67,16 +65,13 @@ final class LogStreamConsumer
      * @param level The level to log at. Must be valid value (see constants).
      * @param log The log to send messages to. Must not be {@code null}.
      */
-    public LogStreamConsumer( int level, Log log )
-    {
-        if ( level != DEBUG && level != INFO && level != WARN && level != ERROR )
-        {
-            throw new IllegalArgumentException( "invalid level: " + level );
+    public LogStreamConsumer(int level, Log log) {
+        if (level != DEBUG && level != INFO && level != WARN && level != ERROR) {
+            throw new IllegalArgumentException("invalid level: " + level);
         }
 
-        if ( log == null )
-        {
-            throw new NullPointerException( "log is null" );
+        if (log == null) {
+            throw new NullPointerException("log is null");
         }
         this.level = level;
         this.log = log;
@@ -85,21 +80,19 @@ final class LogStreamConsumer
     /**
      * {@inheritDoc}
      */
-    public void consumeLine( String line )
-    {
-        switch ( level )
-        {
+    public void consumeLine(String line) {
+        switch (level) {
             case DEBUG:
-                log.debug( line );
+                log.debug(line);
                 break;
             case INFO:
-                log.info( line );
+                log.info(line);
                 break;
             case WARN:
-                log.warn( line );
+                log.warn(line);
                 break;
             case ERROR:
-                log.error( line );
+                log.error(line);
                 break;
         }
     }
