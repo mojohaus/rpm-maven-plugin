@@ -43,6 +43,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.artifact.ProjectArtifact;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.filtering.FilterWrapper;
@@ -714,9 +715,11 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
         if (disabled) {
             getLog().info("MOJO is disabled. Doing nothing.");
 
-            // FIXME, is it a correct way getting install/deploy to ignore the original primary 'rpm' artifact?
+            // Nothing is packaged, so install and deploy handle the project as a POM project.
+            // maven-install-plugin and maven-deploy-plugin 3.x check the project artifact, not the packaging.
             if ("rpm".equals(this.project.getPackaging())) {
                 this.project.setPackaging("pom");
+                this.project.setArtifact(new ProjectArtifact(this.project));
             }
 
             return;
