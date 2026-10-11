@@ -1,0 +1,20 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  exclude-paths:
+    - "src/it/**"
+    - "src/test/resources/**"
+  schedule:
+    interval: monthly
+  groups:
+    maven:
+      patterns: ["*"]
+      update-types: ["minor", "patch"]
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: monthly
+  groups:
+    github-actions:
+      patterns: ["*"]
