@@ -26,9 +26,7 @@ package org.codehaus.mojo.rpm;
  * @author Brett Okken Cerner Corp.
  * @since 2.0-beta-3
  */
-public class SoftlinkSource
-    extends Source
-{
+public class SoftlinkSource extends Source {
     /**
      * The {@link Mapping} this instance is defined in.
      */
@@ -37,16 +35,14 @@ public class SoftlinkSource
     /**
      * @return Returns the {@link #sourceMapping}.
      */
-    Mapping getSourceMapping()
-    {
+    Mapping getSourceMapping() {
         return this.sourceMapping;
     }
 
     /**
      * @param sourceMapping The {@link #sourceMapping} to set.
      */
-    void setSourceMapping( Mapping sourceMapping )
-    {
+    void setSourceMapping(Mapping sourceMapping) {
         this.sourceMapping = sourceMapping;
     }
 }

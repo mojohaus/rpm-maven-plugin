@@ -19,12 +19,11 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import org.apache.maven.shared.filtering.FilterWrapper;
-import org.apache.maven.shared.utils.io.FileUtils;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+
+import org.apache.maven.shared.filtering.FilterWrapper;
 
 /**
  * A base class to support <a href="http://rpm.org/api/4.4.2.2/triggers.html">triggers</a>.
@@ -32,9 +31,7 @@ import java.util.List;
  * @author Brett Okken, Cerner Corporation
  * @since 2.0-beta-4
  */
-public abstract class BaseTrigger
-    extends Scriptlet
-{
+public abstract class BaseTrigger extends Scriptlet {
     /**
      * List of triggers.
      */
@@ -49,8 +46,7 @@ public abstract class BaseTrigger
      *
      * @return Returns the {@link #triggers}.
      */
-    public List<String> getTriggers()
-    {
+    public List<String> getTriggers() {
         return this.triggers;
     }
 
@@ -60,31 +56,27 @@ public abstract class BaseTrigger
      * @param triggers The {@link #triggers} to set.
      * @see #getTriggers()
      */
-    public void setTriggers( List<String> triggers )
-    {
+    public void setTriggers(List<String> triggers) {
         this.triggers = triggers;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected String buildScriptletLine( String directive )
-    {
-        final StringBuilder builder = new StringBuilder( super.buildScriptletLine( directive ) );
+    protected String buildScriptletLine(String directive) {
+        final StringBuilder builder = new StringBuilder(super.buildScriptletLine(directive));
 
-        builder.append( " -- " );
+        builder.append(" -- ");
 
         final int size = triggers.size();
-        for ( int i = 0; i < size; ++i )
-        {
-            final String trigger = triggers.get( i );
+        for (int i = 0; i < size; ++i) {
+            final String trigger = triggers.get(i);
 
-            if ( i != 0 )
-            {
-                builder.append( ", " );
+            if (i != 0) {
+                builder.append(", ");
             }
 
-            builder.append( trigger );
+            builder.append(trigger);
         }
 
         return builder.toString();
@@ -97,10 +89,8 @@ public abstract class BaseTrigger
      * @param filterWrappers The filter wrappers to be applied when writing the content.
      * @throws IOException if an I/IO error occurs
      */
-    protected void writeTrigger( PrintWriter writer, final List<FilterWrapper> filterWrappers )
-        throws IOException
-    {
-        write( writer, getDirective(), filterWrappers );
+    protected void writeTrigger(PrintWriter writer, final List<FilterWrapper> filterWrappers) throws IOException {
+        write(writer, getDirective(), filterWrappers);
     }
 
     /**
@@ -113,24 +103,23 @@ public abstract class BaseTrigger
     /**
      * {@inheritDoc}
      */
-    public String toString()
-    {
-        StringBuilder buffer = new StringBuilder( 128 );
-        buffer.append( getClass().getName().substring( getClass().getName().lastIndexOf( '.' ) ) );
-        buffer.append( '[' );
-        buffer.append( "subpackage=" );
-        buffer.append( getSubpackage() );
-        buffer.append( ",program=" );
-        buffer.append( getProgram() );
-        buffer.append( ",script=" );
-        buffer.append( getScript() );
-        buffer.append( ",scriptFile=" );
-        buffer.append( getScriptFile() );
-        buffer.append( ",fileEncoding=" );
-        buffer.append( getFileEncoding() );
-        buffer.append( ",triggers=" );
-        buffer.append( triggers );
-        buffer.append( "]" );
+    public String toString() {
+        StringBuilder buffer = new StringBuilder(128);
+        buffer.append(getClass().getName().substring(getClass().getName().lastIndexOf('.')));
+        buffer.append('[');
+        buffer.append("subpackage=");
+        buffer.append(getSubpackage());
+        buffer.append(",program=");
+        buffer.append(getProgram());
+        buffer.append(",script=");
+        buffer.append(getScript());
+        buffer.append(",scriptFile=");
+        buffer.append(getScriptFile());
+        buffer.append(",fileEncoding=");
+        buffer.append(getFileEncoding());
+        buffer.append(",triggers=");
+        buffer.append(triggers);
+        buffer.append("]");
         return buffer.toString();
     }
 }

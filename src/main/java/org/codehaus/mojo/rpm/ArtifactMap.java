@@ -24,8 +24,7 @@ import java.util.List;
 /**
  * A description of which project artifacts to package.
  */
-public class ArtifactMap
-{
+public class ArtifactMap {
 
     // // // Properties
 
@@ -39,8 +38,7 @@ public class ArtifactMap
      *
      * @return The list of classifiers to package.
      */
-    public List<String> getClassifiers()
-    {
+    public List<String> getClassifiers() {
         return classifiers;
     }
 
@@ -49,25 +47,22 @@ public class ArtifactMap
      *
      * @param clist The new list of classifiers to package.
      */
-    public void setClassifiers( List<String> clist )
-    {
+    public void setClassifiers(List<String> clist) {
         classifiers = clist;
     }
 
     // // // Public methods
 
     /** {@inheritDoc} */
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append( "[artifacts" );
+        sb.append("[artifacts");
 
-        if ( classifiers != null )
-        {
-            sb.append( " w/classifiers " + classifiers );
+        if (classifiers != null) {
+            sb.append(" w/classifiers " + classifiers);
         }
 
-        sb.append( "]" );
+        sb.append("]");
         return sb.toString();
     }
 }

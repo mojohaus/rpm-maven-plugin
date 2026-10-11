@@ -26,37 +26,28 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-public class UnixPrintWriter
-    extends PrintWriter
-{
-    public UnixPrintWriter( File file )
-        throws FileNotFoundException
-    {
-        super( new FileOutputStream( file ) );
+public class UnixPrintWriter extends PrintWriter {
+    public UnixPrintWriter(File file) throws FileNotFoundException {
+        super(new FileOutputStream(file));
     }
 
-    public UnixPrintWriter( Writer writer )
-    {
-        super( writer );
+    public UnixPrintWriter(Writer writer) {
+        super(writer);
     }
 
-    public UnixPrintWriter( Writer writer, boolean b )
-    {
-        super( writer, b );
+    public UnixPrintWriter(Writer writer, boolean b) {
+        super(writer, b);
     }
 
-    public UnixPrintWriter( OutputStream outputStream )
-    {
-        super( outputStream );
+    public UnixPrintWriter(OutputStream outputStream) {
+        super(outputStream);
     }
 
-    public UnixPrintWriter( OutputStream outputStream, boolean b )
-    {
-        super( outputStream, b );
+    public UnixPrintWriter(OutputStream outputStream, boolean b) {
+        super(outputStream, b);
     }
 
-    public void println()
-    {
-        print( '\n' );
+    public void println() {
+        print('\n');
     }
 }

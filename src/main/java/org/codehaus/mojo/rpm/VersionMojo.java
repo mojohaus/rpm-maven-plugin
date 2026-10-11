@@ -38,33 +38,30 @@ import org.codehaus.mojo.rpm.VersionHelper.RPMVersionableMojo;
  * @author Brett Okken
  * @since 2.0
  */
-@Mojo( name = "version", defaultPhase = LifecyclePhase.INITIALIZE, threadSafe = true )
-public class VersionMojo
-    extends AbstractMojo
-    implements RPMVersionableMojo
-{
+@Mojo(name = "version", defaultPhase = LifecyclePhase.INITIALIZE, threadSafe = true)
+public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     /**
      * The maven project.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
      * The maven session.
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
     /**
      * The version portion of the RPM file name.
      */
-    @Parameter( required = true, alias = "version", property = "rpm.version", defaultValue = "${project.version}" )
+    @Parameter(required = true, alias = "version", property = "rpm.version", defaultValue = "${project.version}")
     private String projversion;
 
     /**
      * The system property to set the calculated version to.
      */
-    @Parameter( required = true, defaultValue = "rpm.version" )
+    @Parameter(required = true, defaultValue = "rpm.version")
     private String versionProperty;
 
     /**
@@ -80,52 +77,46 @@ public class VersionMojo
      * </ul>
      * </p>
      */
-    @Parameter( property = "rpm.release" )
+    @Parameter(property = "rpm.release")
     private String release;
 
     /**
      * The system property to set the calculated release to.
      */
-    @Parameter( required = true, defaultValue = "rpm.release" )
+    @Parameter(required = true, defaultValue = "rpm.release")
     private String releaseProperty;
 
     /**
      * {@inheritDoc}
      */
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        VersionHelper.Version version = new VersionHelper( this ).calculateVersion();
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        VersionHelper.Version version = new VersionHelper(this).calculateVersion();
 
-        setProperty( versionProperty, version.version );
-        setProperty( releaseProperty, version.release );
+        setProperty(versionProperty, version.version);
+        setProperty(releaseProperty, version.release);
     }
 
-    private void setProperty( String key, String value )
-    {
-        getLog().info( MessageFormat.format( "setting [{0}] property to value [{1}].", new Object[] { key, value } ) );
+    private void setProperty(String key, String value) {
+        getLog().info(MessageFormat.format("setting [{0}] property to value [{1}].", new Object[] {key, value}));
 
-        project.getProperties().put( key, value );
+        project.getProperties().put(key, value);
     }
 
     /**
      * @return Returns the configured version attribute.
      */
-    public final String getVersion()
-    {
+    public final String getVersion() {
         return this.projversion;
     }
 
     /**
      * @return Returns the configured release attribute.
      */
-    public final String getRelease()
-    {
+    public final String getRelease() {
         return this.release;
     }
 
-    public Date getBuildTimestamp()
-    {
+    public Date getBuildTimestamp() {
         return session.getStartTime();
     }
 }

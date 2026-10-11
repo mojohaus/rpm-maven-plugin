@@ -48,8 +48,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @author Brett Okken
  * @since 2.0
  */
-final class FileHelper
-{
+final class FileHelper {
     private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
 
     /**
@@ -57,14 +56,14 @@ final class FileHelper
      * refers to a {@link File#isDirectory() directory}.
      */
     private static final String DESTINATION_DIRECTORY_ERROR_MSG =
-        "Source has a destination [{0}], but the location [{1}] does not refer to a file.";
+            "Source has a destination [{0}], but the location [{1}] does not refer to a file.";
 
     /**
      * {@code Pattern} to identify macros.
      *
      * @since 2.1-alpha-1
      */
-    private static final Pattern MACRO_PATTERN = Pattern.compile( "%\\{([^}]*)\\}" );
+    private static final Pattern MACRO_PATTERN = Pattern.compile("%\\{([^}]*)\\}");
 
     /**
      * A Plexus component to copy files and directories. Using our own custom version of the DirectoryArchiver to allow
@@ -78,8 +77,7 @@ final class FileHelper
      * @param mojo
      * @param copier
      */
-    public FileHelper( AbstractRPMMojo mojo, FilteringDirectoryArchiver copier )
-    {
+    public FileHelper(AbstractRPMMojo mojo, FilteringDirectoryArchiver copier) {
         super();
         this.mojo = mojo;
         this.copier = copier;
@@ -91,107 +89,94 @@ final class FileHelper
      * @throws MojoExecutionException if a problem occurs
      * @throws MojoFailureException
      */
-    public void installFiles()
-        throws MojoExecutionException, MojoFailureException
-    {
+    public void installFiles() throws MojoExecutionException, MojoFailureException {
         final File workarea = mojo.getWorkarea();
         final File buildroot = mojo.getBuildroot();
 
         final File icon = mojo.getIcon();
         // Copy icon, if specified
-        if ( icon != null )
-        {
-            File icondest = new File( workarea, "SOURCES" );
-            copySource( icon, null, icondest, null, null, false, false );
+        if (icon != null) {
+            File icondest = new File(workarea, "SOURCES");
+            copySource(icon, null, icondest, null, null, false, false);
         }
 
         final Log log = mojo.getLog();
 
         // Process each mapping
-        for ( Mapping map : mojo.getMappings() )
-        {
+        for (Mapping map : mojo.getMappings()) {
             final String destinationString = map.getDestination();
-            final String macroEvaluatedDestination = evaluateMacros( destinationString );
+            final String macroEvaluatedDestination = evaluateMacros(destinationString);
 
-            File dest = new File( buildroot, macroEvaluatedDestination );
-            map.setAbsoluteDestination( dest );
+            File dest = new File(buildroot, macroEvaluatedDestination);
+            map.setAbsoluteDestination(dest);
 
-            if ( map.isDirOnly() )
-            {
+            if (map.isDirOnly()) {
                 // Build the output directory if it doesn't exist
-                if ( !dest.exists() )
-                {
-                    log.info( "Creating empty directory " + dest.getAbsolutePath() );
-                    if ( !dest.mkdirs() )
-                    {
-                        throw new MojoExecutionException( "Unable to create " + dest.getAbsolutePath() );
+                if (!dest.exists()) {
+                    log.info("Creating empty directory " + dest.getAbsolutePath());
+                    if (!dest.mkdirs()) {
+                        throw new MojoExecutionException("Unable to create " + dest.getAbsolutePath());
                     }
                 }
-            }
-            else
-            {
-                processSources( map, dest );
+            } else {
+                processSources(map, dest);
 
                 ArtifactMap art = map.getArtifact();
-                if ( art != null )
-                {
-                    List<Artifact> artlist = selectArtifacts( art );
-                    for ( Artifact artifactInstance : artlist )
-                    {
-                        copyArtifact( artifactInstance, dest, false, false);
-                        map.addCopiedFileNameRelativeToDestination( artifactInstance.getFile().getName() );
+                if (art != null) {
+                    List<Artifact> artlist = selectArtifacts(art);
+                    for (Artifact artifactInstance : artlist) {
+                        copyArtifact(artifactInstance, dest, false, false);
+                        map.addCopiedFileNameRelativeToDestination(
+                                artifactInstance.getFile().getName());
                     }
                 }
 
                 Dependency dep = map.getDependency();
-                if ( dep != null )
-                {
-                    List<Artifact> deplist = selectDependencies( dep );
-                    for ( Artifact artifactInstance : deplist )
-                    {
+                if (dep != null) {
+                    List<Artifact> deplist = selectDependencies(dep);
+                    for (Artifact artifactInstance : deplist) {
                         // pass in dependency stripVersion parameter
-                        String outputFileName = copyArtifact( artifactInstance, dest, dep.getStripVersion(), mojo.isHardLinkDependencies());
-                        map.addCopiedFileNameRelativeToDestination( outputFileName );
+                        String outputFileName = copyArtifact(
+                                artifactInstance, dest, dep.getStripVersion(), mojo.isHardLinkDependencies());
+                        map.addCopiedFileNameRelativeToDestination(outputFileName);
                     }
                 }
 
-                if ( map.getCopiedFileNamesRelativeToDestination().isEmpty() )
-                {
-                    log.info( "Mapping empty with destination: " + dest.getName() );
+                if (map.getCopiedFileNamesRelativeToDestination().isEmpty()) {
+                    log.info("Mapping empty with destination: " + dest.getName());
                     // Build the output directory if it doesn't exist
-                    if ( !dest.exists() )
-                    {
-                        log.info( "Creating empty directory " + dest.getAbsolutePath() );
-                        if ( !dest.mkdirs() )
-                        {
-                            throw new MojoExecutionException( "Unable to create " + dest.getAbsolutePath() );
+                    if (!dest.exists()) {
+                        log.info("Creating empty directory " + dest.getAbsolutePath());
+                        if (!dest.mkdirs()) {
+                            throw new MojoExecutionException("Unable to create " + dest.getAbsolutePath());
                         }
                     }
                 }
             }
         }
     }
-    
+
     /**
-    * 
-    * @param src The source directory/file
-    * @param outputFileName The destination of link
-    * @throws MojoExecutionException
-    */
+     *
+     * @param src The source directory/file
+     * @param outputFileName The destination of link
+     * @throws MojoExecutionException
+     */
     private void hardLinkSource(File src, Path outputFileName) throws MojoExecutionException {
         try {
-            //Delete existing file always, previous file may be different version with same filename
-            if(Files.exists(outputFileName)) {
+            // Delete existing file always, previous file may be different version with same filename
+            if (Files.exists(outputFileName)) {
                 mojo.getLog().debug("Deleting previous file for ensuring hard link points to right target.");
                 Files.delete(outputFileName);
             }
-            mojo.getLog().debug("Creating hard link from "+ src.getAbsolutePath() + " to " + outputFileName);
+            mojo.getLog().debug("Creating hard link from " + src.getAbsolutePath() + " to " + outputFileName);
             Files.createLink(outputFileName, src.toPath());
         } catch (IOException e) {
-            throw new MojoExecutionException("Unable to hard link source (" + src.getAbsolutePath() +"): " + e.getMessage(), e);
+            throw new MojoExecutionException(
+                    "Unable to hard link source (" + src.getAbsolutePath() + "): " + e.getMessage(), e);
         }
     }
-    
+
     /**
      * Copy a set of files.
      *
@@ -204,61 +189,58 @@ final class FileHelper
      * @return List of file names, relative to <i>dest</i>, copied to <i>dest</i>.
      * @throws MojoExecutionException if a problem occurs
      */
-    private List<String> copySource( File src, String srcName, File dest, List<String> incl, List<String> excl,
-                                     boolean filter, boolean dontUseDefaultExcludes )
-        throws MojoExecutionException
-    {
-        try
-        {
+    private List<String> copySource(
+            File src,
+            String srcName,
+            File dest,
+            List<String> incl,
+            List<String> excl,
+            boolean filter,
+            boolean dontUseDefaultExcludes)
+            throws MojoExecutionException {
+        try {
             // Set the destination
-            copier.setDestFile( dest );
+            copier.setDestFile(dest);
 
             // Set the source
-            if ( src.isDirectory() )
-            {
+            if (src.isDirectory()) {
                 String[] ia = null;
-                if ( incl != null )
-                {
-                    ia = incl.toArray( new String[0] );
+                if (incl != null) {
+                    ia = incl.toArray(new String[0]);
                 }
 
                 String[] ea = null;
-                if ( excl != null )
-                {
-                    ea = excl.toArray( new String[0] );
+                if (excl != null) {
+                    ea = excl.toArray(new String[0]);
                 }
 
                 // same as copier.addDirectory( src, "", ia, ea ) with dontUseDefaultExcludes
-                DefaultFileSet fileset = new DefaultFileSet( src );
-                fileset.setPrefix( "" );
-                fileset.setIncludes( ia );
-                fileset.setExcludes( ea );
-                fileset.setIncludingEmptyDirectories( copier.getIncludeEmptyDirs() );
-                fileset.setUsingDefaultExcludes( !dontUseDefaultExcludes );
+                DefaultFileSet fileset = new DefaultFileSet(src);
+                fileset.setPrefix("");
+                fileset.setIncludes(ia);
+                fileset.setExcludes(ea);
+                fileset.setIncludingEmptyDirectories(copier.getIncludeEmptyDirs());
+                fileset.setUsingDefaultExcludes(!dontUseDefaultExcludes);
 
-                copier.addFileSet( fileset );
-            }
-            else
-            {
+                copier.addFileSet(fileset);
+            } else {
                 // set srcName to default if null
                 srcName = srcName != null ? srcName : src.getName();
-                copier.addFile( src, srcName );
+                copier.addFile(src, srcName);
             }
 
-            copier.setFilter( filter );
-            copier.setFilterWrappers( mojo.getFilterWrappers() );
+            copier.setFilter(filter);
+            copier.setFilterWrappers(mojo.getFilterWrappers());
 
             Map<String, ArchiveEntry> copiedFilesMap = copier.getFiles();
 
             // Perform the copy
             copier.createArchive();
 
-            List<String> copiedFiles = new ArrayList<String>( copiedFilesMap.size() );
-            for ( String key : copiedFilesMap.keySet() )
-            {
-                if ( key != null && key.length() > 0 )
-                {
-                    copiedFiles.add( key );
+            List<String> copiedFiles = new ArrayList<String>(copiedFilesMap.size());
+            for (String key : copiedFilesMap.keySet()) {
+                if (key != null && key.length() > 0) {
+                    copiedFiles.add(key);
                 }
             }
 
@@ -266,16 +248,13 @@ final class FileHelper
             copier.resetArchiver();
 
             return copiedFiles;
-        }
-        catch ( Throwable t )
-        {
-            throw new MojoExecutionException( "Unable to copy files for packaging: " + t.getMessage(), t );
+        } catch (Throwable t) {
+            throw new MojoExecutionException("Unable to copy files for packaging: " + t.getMessage(), t);
         }
     }
 
-    public static DefaultFileSet fileSet( File directory )
-    {
-        final DefaultFileSet defaultFileSet = new DefaultFileSet( directory );
+    public static DefaultFileSet fileSet(File directory) {
+        final DefaultFileSet defaultFileSet = new DefaultFileSet(directory);
         return defaultFileSet;
     }
 
@@ -288,43 +267,36 @@ final class FileHelper
      * @return Artifact file name
      * @throws MojoExecutionException if a problem occurs
      */
-    private String copyArtifact( Artifact art, File dest, boolean stripVersion, boolean hardLinkOnly )
-        throws MojoExecutionException
-    {
-        if ( art.getFile() == null )
-        {
+    private String copyArtifact(Artifact art, File dest, boolean stripVersion, boolean hardLinkOnly)
+            throws MojoExecutionException {
+        if (art.getFile() == null) {
             final Log log = mojo.getLog();
-            log.warn( "Artifact " + art + " requested in configuration." );
-            log.warn( "Plugin must be run in Maven's build lifecycle for this to work." );
-            throw new MojoExecutionException( "Unable to resolve artifact." );
+            log.warn("Artifact " + art + " requested in configuration.");
+            log.warn("Plugin must be run in Maven's build lifecycle for this to work.");
+            throw new MojoExecutionException("Unable to resolve artifact.");
         }
 
         String outputFileName;
-        if ( stripVersion )
-        {
+        if (stripVersion) {
             final String classifier = art.getClassifier();
             // strip the version from the file name
             outputFileName = art.getArtifactId();
-            if ( classifier != null )
-            {
+            if (classifier != null) {
                 outputFileName += '-';
                 outputFileName += classifier;
             }
             outputFileName += '.';
             outputFileName += art.getType();
-        }
-        else
-        {
+        } else {
             outputFileName = art.getFile().getName();
         }
-        if(hardLinkOnly) {
+        if (hardLinkOnly) {
             hardLinkSource(art.getFile(), dest.toPath().resolve(outputFileName));
         } else {
-            copySource( art.getFile(), outputFileName, dest, null, null, false, false );
+            copySource(art.getFile(), outputFileName, dest, null, null, false, false);
         }
         return outputFileName;
     }
-
 
     /**
      * Make a list of the artifacts to package in this mapping.
@@ -332,30 +304,23 @@ final class FileHelper
      * @param am The artifact mapping information
      * @return The list of artifacts to package
      */
-    private List<Artifact> selectArtifacts( ArtifactMap am )
-    {
+    private List<Artifact> selectArtifacts(ArtifactMap am) {
         final List<Artifact> retval = new ArrayList<Artifact>();
         final List<String> clist = am.getClassifiers();
 
         final Artifact artifact = mojo.getArtifact();
         final List<Artifact> attachedArtifacts = mojo.getAttachedArtifacts();
 
-        if ( clist == null )
-        {
-            retval.add( artifact );
-            retval.addAll( attachedArtifacts );
-        }
-        else
-        {
-            if ( clist.contains( null ) )
-            {
-                retval.add( artifact );
+        if (clist == null) {
+            retval.add(artifact);
+            retval.addAll(attachedArtifacts);
+        } else {
+            if (clist.contains(null)) {
+                retval.add(artifact);
             }
-            for ( Artifact aa : attachedArtifacts )
-            {
-                if ( ( aa.hasClassifier() ) && ( clist.contains( aa.getClassifier() ) ) )
-                {
-                    retval.add( aa );
+            for (Artifact aa : attachedArtifacts) {
+                if ((aa.hasClassifier()) && (clist.contains(aa.getClassifier()))) {
+                    retval.add(aa);
                 }
             }
         }
@@ -369,31 +334,26 @@ final class FileHelper
      * @param d The artifact mapping information
      * @return The list of artifacts to package
      */
-    private List<Artifact> selectDependencies( Dependency d )
-    {
+    private List<Artifact> selectDependencies(Dependency d) {
         List<Artifact> retval = new ArrayList<Artifact>();
         List<Artifact> inc = d.getIncludes();
         List<Artifact> exc = d.getExcludes();
 
-        @SuppressWarnings( "unchecked" )
+        @SuppressWarnings("unchecked")
         Set<Artifact> deps = mojo.project.getArtifacts();
-        if ( deps == null || deps.isEmpty() )
-        {
+        if (deps == null || deps.isEmpty()) {
             return retval;
         }
 
         final Log log = mojo.getLog();
 
-        for ( Artifact pdep : deps )
-        {
-            log.debug( "Dependency is " + pdep + " at " + pdep.getFile() );
-            if ( !depMatcher( pdep, exc ) )
-            {
-                log.debug( "--> not excluded" );
-                if ( ( inc == null ) || ( depMatcher( pdep, inc ) ) )
-                {
-                    log.debug( "--> included" );
-                    retval.add( pdep );
+        for (Artifact pdep : deps) {
+            log.debug("Dependency is " + pdep + " at " + pdep.getFile());
+            if (!depMatcher(pdep, exc)) {
+                log.debug("--> not excluded");
+                if ((inc == null) || (depMatcher(pdep, inc))) {
+                    log.debug("--> included");
+                    retval.add(pdep);
                 }
             }
         }
@@ -409,107 +369,97 @@ final class FileHelper
      * @throws MojoExecutionException
      * @throws MojoFailureException
      */
-    private void processSources( Mapping map, File dest )
-        throws MojoExecutionException, MojoFailureException
-    {
-        if ( !dest.exists() )
-        {
-            if ( !dest.mkdirs() )
-            {
-                throw new MojoExecutionException( "unable to create directory: " + dest.getAbsolutePath() );
+    private void processSources(Mapping map, File dest) throws MojoExecutionException, MojoFailureException {
+        if (!dest.exists()) {
+            if (!dest.mkdirs()) {
+                throw new MojoExecutionException("unable to create directory: " + dest.getAbsolutePath());
             }
         }
 
         String relativeDestination = map.getDestination();
-        if ( !relativeDestination.endsWith( File.separator ) )
-        {
+        if (!relativeDestination.endsWith(File.separator)) {
             relativeDestination += File.separatorChar;
         }
 
         List<Source> srcs = map.getSources();
-        if ( srcs != null )
-        {
+        if (srcs != null) {
             // for passivity, we will always use lowercase representation of architecture
             // for comparison purposes.
-            final String targetArchComparison = mojo.getTargetArch().toLowerCase( Locale.ENGLISH );
+            final String targetArchComparison = mojo.getTargetArch().toLowerCase(Locale.ENGLISH);
 
             final String targetOS = mojo.getTargetOS();
 
             final Map<String, List<SoftlinkSource>> linkTargetToSources = mojo.getLinkTargetToSources();
 
             // it is important that for each Source we set the files that are "installed".
-            for ( Source src : srcs )
-            {
-                if ( !src.matchesArchitecture( targetArchComparison ) )
-                {
-                    mojo.getLog().debug( "Source does not match target architecture: " + src.toString() );
+            for (Source src : srcs) {
+                if (!src.matchesArchitecture(targetArchComparison)) {
+                    mojo.getLog().debug("Source does not match target architecture: " + src.toString());
                     continue;
                 }
 
-                if ( !src.matchesOSName( targetOS ) )
-                {
-                    mojo.getLog().debug( "Source does not match target os name: " + src.toString() );
+                if (!src.matchesOSName(targetOS)) {
+                    mojo.getLog().debug("Source does not match target os name: " + src.toString());
                     continue;
                 }
 
-                final File macroEvaluatedLocation = new File( evaluateMacros( src.getLocation() ) );
-                src.setMacroEvaluatedLocation( macroEvaluatedLocation.getPath() );
+                final File macroEvaluatedLocation = new File(evaluateMacros(src.getLocation()));
+                src.setMacroEvaluatedLocation(macroEvaluatedLocation.getPath());
 
-                final File locationFile =
-                    macroEvaluatedLocation.isAbsolute() ? macroEvaluatedLocation
-                                    : new File( mojo.project.getBasedir(), macroEvaluatedLocation.getPath() );
+                final File locationFile = macroEvaluatedLocation.isAbsolute()
+                        ? macroEvaluatedLocation
+                        : new File(mojo.project.getBasedir(), macroEvaluatedLocation.getPath());
                 // better with just macroEvaluatedLocation.getAbsoluteFile(), but not tested yet
 
                 // it is important that we check if softlink source first as the "location" may
                 // exist in the filesystem of the build machine
-                if ( src instanceof SoftlinkSource )
-                {
+                if (src instanceof SoftlinkSource) {
                     SoftlinkSource softlinkSource = (SoftlinkSource) src;
-                    List<SoftlinkSource> sources = linkTargetToSources.get( relativeDestination );
-                    if ( sources == null )
-                    {
+                    List<SoftlinkSource> sources = linkTargetToSources.get(relativeDestination);
+                    if (sources == null) {
                         sources = new LinkedList<SoftlinkSource>();
-                        linkTargetToSources.put( relativeDestination, sources );
+                        linkTargetToSources.put(relativeDestination, sources);
                     }
 
-                    sources.add( softlinkSource );
+                    sources.add(softlinkSource);
 
-                    softlinkSource.setSourceMapping( map );
-                    map.setHasSoftLinks( true );
-                }
-                else if ( locationFile.exists() )
-                {
+                    softlinkSource.setSourceMapping(map);
+                    map.setHasSoftLinks(true);
+                } else if (locationFile.exists()) {
                     final String destination = src.getDestination();
-                    if ( destination == null )
-                    {
-                        map.addCopiedFileNamesRelativeToDestination( copySource( locationFile, null, dest,
-                                                                                 src.getIncludes(), src.getExcludes(),
-                                                                                 src.isFilter(),
-                                                                                 src.getNoDefaultExcludes() ) );
-                    }
-                    else
-                    {
-                        if ( !locationFile.isFile() )
-                        {
-                            throw new MojoExecutionException( MessageFormat.format( DESTINATION_DIRECTORY_ERROR_MSG,
-                                                                                    new Object[] { destination,
-                                                                                        macroEvaluatedLocation } ) );
+                    if (destination == null) {
+                        map.addCopiedFileNamesRelativeToDestination(copySource(
+                                locationFile,
+                                null,
+                                dest,
+                                src.getIncludes(),
+                                src.getExcludes(),
+                                src.isFilter(),
+                                src.getNoDefaultExcludes()));
+                    } else {
+                        if (!locationFile.isFile()) {
+                            throw new MojoExecutionException(MessageFormat.format(
+                                    DESTINATION_DIRECTORY_ERROR_MSG,
+                                    new Object[] {destination, macroEvaluatedLocation}));
                         }
 
-                        copySource( locationFile, destination, dest, EMPTY_STRING_LIST, EMPTY_STRING_LIST,
-                                    src.isFilter(), src.getNoDefaultExcludes() );
+                        copySource(
+                                locationFile,
+                                destination,
+                                dest,
+                                EMPTY_STRING_LIST,
+                                EMPTY_STRING_LIST,
+                                src.isFilter(),
+                                src.getNoDefaultExcludes());
 
-                        map.addCopiedFileNameRelativeToDestination( destination );
+                        map.addCopiedFileNameRelativeToDestination(destination);
                     }
-                }
-                else if ( !src.getFailIfLocationNotExists() )
-                {
-                    mojo.getLog().warn( "Source location " + macroEvaluatedLocation
-                                            + " does not exist, but failIfLocationNotExist was set to false" );
-                }
-                else
-                {
-                    throw new MojoExecutionException( "Source location " + macroEvaluatedLocation + " does not exist" );
+                } else if (!src.getFailIfLocationNotExists()) {
+                    mojo.getLog()
+                            .warn("Source location " + macroEvaluatedLocation
+                                    + " does not exist, but failIfLocationNotExist was set to false");
+                } else {
+                    throw new MojoExecutionException("Source location " + macroEvaluatedLocation + " does not exist");
                 }
             }
         }
@@ -524,20 +474,17 @@ final class FileHelper
      * @throws MojoExecutionException
      * @since 2.1-alpha-1
      */
-    private String evaluateMacros( String value )
-        throws MojoExecutionException
-    {
-        final Matcher matcher = MACRO_PATTERN.matcher( value );
+    private String evaluateMacros(String value) throws MojoExecutionException {
+        final Matcher matcher = MACRO_PATTERN.matcher(value);
 
-        final StringBuffer newValue = new StringBuffer( value.length() );
-        while ( matcher.find() )
-        {
-            final String macro = matcher.group( 1 );
-            final String evaluatedValue = mojo.evaluateMacro( macro );
-            matcher.appendReplacement( newValue, evaluatedValue.replaceAll( "\\\\", "\\\\\\\\" ) );
+        final StringBuffer newValue = new StringBuffer(value.length());
+        while (matcher.find()) {
+            final String macro = matcher.group(1);
+            final String evaluatedValue = mojo.evaluateMacro(macro);
+            matcher.appendReplacement(newValue, evaluatedValue.replaceAll("\\\\", "\\\\\\\\"));
         }
 
-        matcher.appendTail( newValue );
+        matcher.appendTail(newValue);
         return newValue.toString();
     }
 
@@ -548,58 +495,44 @@ final class FileHelper
      * @param list The list to check against
      * @return <code>true</code> if the dependency was found on the list
      */
-    private boolean depMatcher( Artifact dep, List<Artifact> list )
-    {
-        if ( list == null )
-        {
+    private boolean depMatcher(Artifact dep, List<Artifact> list) {
+        if (list == null) {
             // No list, not possible to match
             return false;
         }
 
         final Log log = mojo.getLog();
 
-        for ( Artifact item : list )
-        {
-            log.debug( "Compare " + dep + " to " + item );
+        for (Artifact item : list) {
+            log.debug("Compare " + dep + " to " + item);
             final String groupId = item.getGroupId();
-            if ( StringUtils.isEmpty( groupId ) || "*".equals( groupId ) || groupId.equals( dep.getGroupId() ) )
-            {
-                log.debug( "... Group matches" );
+            if (StringUtils.isEmpty(groupId) || "*".equals(groupId) || groupId.equals(dep.getGroupId())) {
+                log.debug("... Group matches");
                 final String artifactId = item.getArtifactId();
-                if ( StringUtils.isEmpty( artifactId ) || "*".equals( artifactId )
-                    || artifactId.equals( dep.getArtifactId() ) )
-                {
-                    log.debug( "... Artifact matches" );
+                if (StringUtils.isEmpty(artifactId)
+                        || "*".equals(artifactId)
+                        || artifactId.equals(dep.getArtifactId())) {
+                    log.debug("... Artifact matches");
                     // ArtifactVersion av = item.getVersionRange().matchVersion( dep.getAvailableVersions() );
-                    try
-                    {
-                        if ( item.getVersionRange().containsVersion( dep.getSelectedVersion() ) )
-                        {
-                            log.debug( "... Version matches" );
-                            if( item.getType().isEmpty() )
-                            {
-                                log.debug( "... Type is empty" );
+                    try {
+                        if (item.getVersionRange().containsVersion(dep.getSelectedVersion())) {
+                            log.debug("... Version matches");
+                            if (item.getType().isEmpty()) {
+                                log.debug("... Type is empty");
                                 return true;
-                            }
-                            else if( item.getType().equals( dep.getType() ))
-                            {
-                                log.debug( "... Type matches" );
-                                if( item.getClassifier().isEmpty() )
-                                {
-                                    log.debug( "... Classifier is empty" );
+                            } else if (item.getType().equals(dep.getType())) {
+                                log.debug("... Type matches");
+                                if (item.getClassifier().isEmpty()) {
+                                    log.debug("... Classifier is empty");
                                     return true;
-                                }
-                                else if( item.getClassifier().equals( dep.getClassifier() ))
-                                {
-                                    log.debug( "... Classifier matches" );
+                                } else if (item.getClassifier().equals(dep.getClassifier())) {
+                                    log.debug("... Classifier matches");
                                     return true;
                                 }
                             }
                         }
-                    }
-                    catch ( OverConstrainedVersionException ocve )
-                    {
-                        log.debug( "... caught OverConstrainedVersionException" );
+                    } catch (OverConstrainedVersionException ocve) {
+                        log.debug("... caught OverConstrainedVersionException");
                     }
                 }
             }
@@ -615,21 +548,18 @@ final class FileHelper
 
     public static final String UNIX_FILE_SEPARATOR = "/";
 
-    public static String toUnixPath( File path )
-    {
-        return toUnixPath( path.getAbsolutePath() );
+    public static String toUnixPath(File path) {
+        return toUnixPath(path.getAbsolutePath());
     }
 
-    public static String toUnixPath( String path )
-    {
-        path = StringUtils.replace( path, "\\", "/" );
+    public static String toUnixPath(String path) {
+        path = StringUtils.replace(path, "\\", "/");
 
-        String[] tokens = StringUtils.split( path, ":" );
+        String[] tokens = StringUtils.split(path, ":");
 
-        if ( tokens.length == 2 && tokens[0].length() == 1 )
-        {
+        if (tokens.length == 2 && tokens[0].length() == 1) {
             StringBuilder buffer = new StringBuilder();
-            buffer.append( "/cygdrive/" ).append( tokens[0] ).append( tokens[1] );
+            buffer.append("/cygdrive/").append(tokens[0]).append(tokens[1]);
             path = buffer.toString();
         }
 

@@ -38,9 +38,7 @@ import org.codehaus.plexus.components.io.resources.PlexusIoFileResource;
  * @author Brett Okken
  * @since 2.0
  */
-final class FilteringDirectoryArchiver
-    extends DirectoryArchiver
-{
+final class FilteringDirectoryArchiver extends DirectoryArchiver {
     private MavenFileFilter mavenFileFilter;
 
     private List<FilterWrapper> filterWrappers;
@@ -50,48 +48,42 @@ final class FilteringDirectoryArchiver
     /**
      * @return Returns the {@link #mavenFileFilter}.
      */
-    public MavenFileFilter getMavenFileFilter()
-    {
+    public MavenFileFilter getMavenFileFilter() {
         return this.mavenFileFilter;
     }
 
     /**
      * @param mavenFileFilter The {@link #mavenFileFilter} to set.
      */
-    public void setMavenFileFilter( MavenFileFilter mavenFileFilter )
-    {
+    public void setMavenFileFilter(MavenFileFilter mavenFileFilter) {
         this.mavenFileFilter = mavenFileFilter;
     }
 
     /**
      * @return Returns the {@link #filterWrappers}.
      */
-    public List<FilterWrapper> getFilterWrappers()
-    {
+    public List<FilterWrapper> getFilterWrappers() {
         return this.filterWrappers;
     }
 
     /**
      * @param filterWrappers The {@link #filterWrappers} to set.
      */
-    public void setFilterWrappers( List<FilterWrapper> filterWrappers )
-    {
+    public void setFilterWrappers(List<FilterWrapper> filterWrappers) {
         this.filterWrappers = filterWrappers;
     }
 
     /**
      * @return Returns the {@link #filter}.
      */
-    public boolean isFilter()
-    {
+    public boolean isFilter() {
         return this.filter;
     }
 
     /**
      * @param filter The {@link #filter} to set.
      */
-    public void setFilter( boolean filter )
-    {
+    public void setFilter(boolean filter) {
         this.filter = filter;
     }
 
@@ -100,9 +92,7 @@ final class FilteringDirectoryArchiver
      *
      * @throws IOException
      */
-    public void resetArchiver()
-        throws IOException
-    {
+    public void resetArchiver() throws IOException {
         filterWrappers = null;
         filter = false;
 
@@ -112,45 +102,32 @@ final class FilteringDirectoryArchiver
     /**
      * {@inheritDoc}
      */
-    protected void copyFile( ArchiveEntry entry, String vPath )
-        throws IOException
-    {
-        if ( !filter || mavenFileFilter == null )
-        {
-            super.copyFile( entry, vPath );
-        }
-        else
-        {
+    protected void copyFile(ArchiveEntry entry, String vPath) throws IOException {
+        if (!filter || mavenFileFilter == null) {
+            super.copyFile(entry, vPath);
+        } else {
             // don't add "" to the archive
-            if ( vPath.length() <= 0 )
-            {
+            if (vPath.length() <= 0) {
                 return;
             }
 
-            File inFile = ( (PlexusIoFileResource) entry.getResource() ).getFile();
-            File outFile = new File( vPath );
+            File inFile = ((PlexusIoFileResource) entry.getResource()).getFile();
+            File outFile = new File(vPath);
 
-            if ( !inFile.isDirectory() )
-            {
-                try
-                {
-                    mavenFileFilter.copyFile( inFile, outFile, true, filterWrappers, null );
-                    if ( !isIgnorePermissions() )
-                    {
-                        ArchiveEntryUtils.chmod( outFile, entry.getMode(), getLogger(), isUseJvmChmod() );
+            if (!inFile.isDirectory()) {
+                try {
+                    mavenFileFilter.copyFile(inFile, outFile, true, filterWrappers, null);
+                    if (!isIgnorePermissions()) {
+                        ArchiveEntryUtils.chmod(outFile, entry.getMode(), getLogger(), isUseJvmChmod());
                     }
-                }
-                catch ( MavenFilteringException e )
-                {
+                } catch (MavenFilteringException e) {
                     final IOException ioe = new IOException();
-                    ioe.initCause( e );
+                    ioe.initCause(e);
 
                     throw ioe;
                 }
-            }
-            else
-            {
-                super.copyFile( entry, vPath );
+            } else {
+                super.copyFile(entry, vPath);
             }
         }
     }

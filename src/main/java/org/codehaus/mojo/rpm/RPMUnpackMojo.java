@@ -18,17 +18,20 @@ import org.codehaus.plexus.util.cli.shell.Shell;
 /**
  * Unpack a RPM file. Experimental only. Settings may change in next version
  */
-@Mojo( name = "unpack", requiresProject = false, aggregator = true, defaultPhase = LifecyclePhase.GENERATE_RESOURCES, threadSafe = true )
-public class RPMUnpackMojo
-    extends AbstractMojo
-{
+@Mojo(
+        name = "unpack",
+        requiresProject = false,
+        aggregator = true,
+        defaultPhase = LifecyclePhase.GENERATE_RESOURCES,
+        threadSafe = true)
+public class RPMUnpackMojo extends AbstractMojo {
 
     /**
      * RPM file to unpack
      *
      * @since 2.2.0
      */
-    @Parameter( property = "rpm.file", required = true )
+    @Parameter(property = "rpm.file", required = true)
     private File rpmFile;
 
     /**
@@ -36,52 +39,42 @@ public class RPMUnpackMojo
      *
      * @since 2.2.0
      */
-    @Parameter( property = "rpm.unpackDirectory", defaultValue = "${project.build.directory}/rpm/unpack" )
+    @Parameter(property = "rpm.unpackDirectory", defaultValue = "${project.build.directory}/rpm/unpack")
     private File unpackDirectory;
 
     @Override
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         final Log log = this.getLog();
 
         unpackDirectory.getParentFile().mkdirs();
 
-        Commandline cl = new Commandline( new Shell() );
+        Commandline cl = new Commandline(new Shell());
 
-        cl.setWorkingDirectory( this.unpackDirectory );
-        cl.setExecutable( "sh" );
-        cl.createArg().setValue( "-c" );
+        cl.setWorkingDirectory(this.unpackDirectory);
+        cl.setExecutable("sh");
+        cl.createArg().setValue("-c");
 
         String cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idm" + "'";
-        if ( this.getLog().isDebugEnabled() )
-        {
+        if (this.getLog().isDebugEnabled()) {
             cmd = "'" + "rpm2cpio " + this.rpmFile + " | cpio -idmv" + "'";
         }
-        cl.createArg().setLine( cmd );
+        cl.createArg().setLine(cmd);
 
-        final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, getLog() );
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, getLog() );
-        try
-        {
-            log.info( "Unpacking " + this.rpmFile + "to " + this.unpackDirectory + "..." );
-            if ( log.isDebugEnabled() )
-            {
-                log.debug( "About to execute \'" + cl.toString() + "\'" );
+        final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, getLog());
+        final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.INFO, getLog());
+        try {
+            log.info("Unpacking " + this.rpmFile + "to " + this.unpackDirectory + "...");
+            if (log.isDebugEnabled()) {
+                log.debug("About to execute \'" + cl.toString() + "\'");
             }
 
-            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
-            if ( result != 0 )
-            {
-                throw new MojoExecutionException( "RPM build execution returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
+            int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+            if (result != 0) {
+                throw new MojoExecutionException(
+                        "RPM build execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
             }
+        } catch (CommandLineException e) {
+            throw new MojoExecutionException("Unable to unpack the RPM", e);
         }
-        catch ( CommandLineException e )
-        {
-            throw new MojoExecutionException( "Unable to unpack the RPM", e );
-        }
-
     }
-
 }

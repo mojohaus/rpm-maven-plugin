@@ -41,19 +41,16 @@ import org.apache.maven.plugin.Mojo;
  * @author Brett Okken
  * @since 2.0
  */
-final class VersionHelper
-{
+final class VersionHelper {
     /**
      * Wraps the version and release components that make up the entire version.
      */
-    static final class Version
-    {
+    static final class Version {
         String version;
 
         String release;
 
-        public String toString()
-        {
+        public String toString() {
             return version + '-' + release;
         }
     }
@@ -62,9 +59,7 @@ final class VersionHelper
      * Interface for the rpm related Mojos to implement. Provides access to the configured/default version and release
      * attributes.
      */
-    interface RPMVersionableMojo
-        extends Mojo
-    {
+    interface RPMVersionableMojo extends Mojo {
         String getVersion();
 
         String getRelease();
@@ -77,8 +72,7 @@ final class VersionHelper
     /**
      * @param mojo
      */
-    public VersionHelper( RPMVersionableMojo mojo )
-    {
+    public VersionHelper(RPMVersionableMojo mojo) {
         super();
         this.mojo = mojo;
     }
@@ -88,8 +82,7 @@ final class VersionHelper
      *
      * @return The calculated/formatted version attributes.
      */
-    Version calculateVersion()
-    {
+    Version calculateVersion() {
         final Version response = new Version();
 
         final String version = mojo.getVersion();
@@ -98,35 +91,27 @@ final class VersionHelper
         // this will get overwritten if we calculate a "release" value
         response.release = release;
 
-        int modifierIndex = version.indexOf( '-' );
-        if ( modifierIndex == -1 )
-        {
+        int modifierIndex = version.indexOf('-');
+        if (modifierIndex == -1) {
             response.version = version;
 
-            if ( release == null || release.length() == 0 )
-            {
+            if (release == null || release.length() == 0) {
                 response.release = "1";
             }
-        }
-        else
-        {
-            response.version = version.substring( 0, modifierIndex );
-            mojo.getLog().warn( "rpm version string truncated to " + response.version );
+        } else {
+            response.version = version.substring(0, modifierIndex);
+            mojo.getLog().warn("rpm version string truncated to " + response.version);
 
-            if ( release == null || release.length() == 0 )
-            {
-                String modifier = version.substring( modifierIndex + 1, version.length() );
+            if (release == null || release.length() == 0) {
+                String modifier = version.substring(modifierIndex + 1, version.length());
 
-                modifier = modifier.replace( '-', '_' );
+                modifier = modifier.replace('-', '_');
 
-                if ( modifier.endsWith( "SNAPSHOT" ) )
-                {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMddHHmmss" );
-                    simpleDateFormat.setTimeZone( TimeZone.getTimeZone( "UTC" ) );
-                    modifier += simpleDateFormat.format( mojo.getBuildTimestamp() );
-                }
-                else
-                {
+                if (modifier.endsWith("SNAPSHOT")) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    modifier += simpleDateFormat.format(mojo.getBuildTimestamp());
+                } else {
                     modifier += "_1";
                 }
 

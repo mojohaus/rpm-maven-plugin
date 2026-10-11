@@ -35,15 +35,13 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * @author Brett Okken
  * @since 2.0
  */
-final class RPMHelper
-{
+final class RPMHelper {
     private final AbstractRPMMojo mojo;
 
     /**
      * @param mojo
      */
-    public RPMHelper( AbstractRPMMojo mojo )
-    {
+    public RPMHelper(AbstractRPMMojo mojo) {
         super();
         this.mojo = mojo;
     }
@@ -51,34 +49,27 @@ final class RPMHelper
     /**
      * Gets the default host vendor for system by executing <i>rpm -E %{_host_vendor}</i>.
      */
-    public String getHostVendor()
-        throws MojoExecutionException
-    {
+    public String getHostVendor() throws MojoExecutionException {
         final Log log = mojo.getLog();
 
         final Commandline cl = new Commandline();
-        cl.setExecutable( "rpm" );
-        cl.addArguments( new String[] { "-E", "%{_host_vendor}" } );
+        cl.setExecutable("rpm");
+        cl.addArguments(new String[] {"-E", "%{_host_vendor}"});
 
         final StringStreamConsumer stdout = new StringStreamConsumer();
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        try
-        {
-            if ( log.isDebugEnabled() )
-            {
-                log.debug( "About to execute \'" + cl.toString() + "\'" );
+        final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("About to execute \'" + cl.toString() + "\'");
             }
 
-            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
-            if ( result != 0 )
-            {
-                throw new MojoExecutionException( "RPM query for default vendor returned: \'" + result
-                    + "\' executing \'" + cl.toString() + "\'" );
+            int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+            if (result != 0) {
+                throw new MojoExecutionException("RPM query for default vendor returned: \'" + result
+                        + "\' executing \'" + cl.toString() + "\'");
             }
-        }
-        catch ( CommandLineException e )
-        {
-            throw new MojoExecutionException( "Unable to query for default vendor from RPM", e );
+        } catch (CommandLineException e) {
+            throw new MojoExecutionException("Unable to query for default vendor from RPM", e);
         }
 
         return stdout.getOutput().trim();
@@ -103,60 +94,53 @@ final class RPMHelper
      *
      * @throws MojoExecutionException if an error occurs
      */
-    public void buildPackage()
-        throws MojoExecutionException
-    {
+    public void buildPackage() throws MojoExecutionException {
         final File workarea = mojo.getWorkarea();
-        final File f = new File( workarea, "SPECS" );
+        final File f = new File(workarea, "SPECS");
 
         final Commandline cl = new Commandline();
-        cl.setExecutable( "rpmbuild" );
-        cl.setWorkingDirectory( f.getAbsolutePath() );
-        cl.createArg().setValue( mojo.getRpmbuildStage() );
-        cl.createArg().setValue( "--target" );
-        cl.createArg().setValue( mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS() );
-        cl.createArg().setValue( "--buildroot" );
-        cl.createArg().setValue( FileHelper.toUnixPath( mojo.getRPMBuildroot() ) );
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_topdir " + FileHelper.toUnixPath( workarea ) );
+        cl.setExecutable("rpmbuild");
+        cl.setWorkingDirectory(f.getAbsolutePath());
+        cl.createArg().setValue(mojo.getRpmbuildStage());
+        cl.createArg().setValue("--target");
+        cl.createArg().setValue(mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS());
+        cl.createArg().setValue("--buildroot");
+        cl.createArg().setValue(FileHelper.toUnixPath(mojo.getRPMBuildroot()));
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_topdir " + FileHelper.toUnixPath(workarea));
 
         // Don't assume default values for rpm path macros
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" );
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_builddir %{_topdir}/BUILD" );
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_rpmdir %{_topdir}/RPMS" );
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_sourcedir %{_topdir}/SOURCES" );
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_specdir %{_topdir}/SPECS" );
-        cl.createArg().setValue( "--define" );
-        cl.createArg().setValue( "_srcrpmdir %{_topdir}/SRPMS" );
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_builddir %{_topdir}/BUILD");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_rpmdir %{_topdir}/RPMS");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_sourcedir %{_topdir}/SOURCES");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_specdir %{_topdir}/SPECS");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_srcrpmdir %{_topdir}/SRPMS");
 
-        cl.createArg().setValue( mojo.getName() + ".spec" );
+        cl.createArg().setValue(mojo.getName() + ".spec");
 
         final Log log = mojo.getLog();
 
-        final StreamConsumer stdout = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        try
-        {
-            if ( log.isDebugEnabled() )
-            {
-                log.debug( "About to execute \'" + cl.toString() + "\'" );
+        final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+        final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("About to execute \'" + cl.toString() + "\'");
             }
 
-            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
-            if ( result != 0 )
-            {
-                throw new MojoExecutionException( "RPM build execution returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
+            int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+            if (result != 0) {
+                throw new MojoExecutionException(
+                        "RPM build execution returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
             }
-        }
-        catch ( CommandLineException e )
-        {
-            throw new MojoExecutionException( "Unable to build the RPM", e );
+        } catch (CommandLineException e) {
+            throw new MojoExecutionException("Unable to build the RPM", e);
         }
 
         // if the keyname has been provided, try to sign
@@ -164,18 +148,14 @@ final class RPMHelper
         final File keypath = mojo.getKeypath();
         final Passphrase keyPassphrase = mojo.getKeyPassphrase();
 
-        if ( keyname != null)
-        {
-			RPMSigner signer = new RPMSigner(keypath, keyname,
-					keyPassphrase != null ? keyPassphrase.getPassphrase() : null, log);
+        if (keyname != null) {
+            RPMSigner signer =
+                    new RPMSigner(keypath, keyname, keyPassphrase != null ? keyPassphrase.getPassphrase() : null, log);
 
-            try
-            {
-                signer.sign( mojo.getRPMFile() );
-            }
-            catch ( Exception e )
-            {
-                throw new MojoExecutionException( "Unable to sign RPM", e );
+            try {
+                signer.sign(mojo.getRPMFile());
+            } catch (Exception e) {
+                throw new MojoExecutionException("Unable to sign RPM", e);
             }
         }
     }
@@ -188,35 +168,28 @@ final class RPMHelper
      * @throws MojoExecutionException
      * @since 2.1-alpha-1
      */
-    public String evaluateMacro( String macro )
-        throws MojoExecutionException
-    {
+    public String evaluateMacro(String macro) throws MojoExecutionException {
         final Commandline cl = new Commandline();
-        cl.setExecutable( "rpm" );
-        cl.createArg().setValue( "--eval" );
-        cl.createArg().setValue( '%' + macro );
+        cl.setExecutable("rpm");
+        cl.createArg().setValue("--eval");
+        cl.createArg().setValue('%' + macro);
 
         final Log log = mojo.getLog();
 
         final StringStreamConsumer stdout = new StringStreamConsumer();
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        try
-        {
-            if ( log.isDebugEnabled() )
-            {
-                log.debug( "About to execute \'" + cl.toString() + "\'" );
+        final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("About to execute \'" + cl.toString() + "\'");
             }
 
-            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
-            if ( result != 0 )
-            {
-                throw new MojoExecutionException( "rpm --eval returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
+            int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+            if (result != 0) {
+                throw new MojoExecutionException(
+                        "rpm --eval returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
             }
-        }
-        catch ( CommandLineException e )
-        {
-            throw new MojoExecutionException( "Unable to evaluate macro: " + macro, e );
+        } catch (CommandLineException e) {
+            throw new MojoExecutionException("Unable to evaluate macro: " + macro, e);
         }
 
         return stdout.getOutput().trim();
@@ -225,27 +198,21 @@ final class RPMHelper
     /**
      * Gets the architecure for system by executing <i>rpm -E %{_arch}</i>.
      */
-    public String getArch()
-        throws MojoExecutionException
-    {
+    public String getArch() throws MojoExecutionException {
         final Commandline cl = new Commandline();
-        cl.setExecutable( "rpm" );
-        cl.addArguments( new String[] { "-E", "%{_arch}" } );
+        cl.setExecutable("rpm");
+        cl.addArguments(new String[] {"-E", "%{_arch}"});
 
         final StringStreamConsumer stdConsumer = new StringStreamConsumer();
-        final StreamConsumer errConsumer = new LogStreamConsumer( LogStreamConsumer.INFO, mojo.getLog() );
-        try
-        {
-            if ( mojo.getLog().isDebugEnabled() )
-                mojo.getLog().debug( "About to execute \'" + cl.toString() + "\'" );
-            final int result = CommandLineUtils.executeCommandLine( cl, stdConsumer, errConsumer );
-            if ( result != 0 )
-                throw new MojoExecutionException( "rpm -E %{_arch} returned: \'" + result + "\' executing \'"
-                    + cl.toString() + "\'" );
-        }
-        catch ( CommandLineException e )
-        {
-            throw new MojoExecutionException( "Unable get system architecture", e );
+        final StreamConsumer errConsumer = new LogStreamConsumer(LogStreamConsumer.INFO, mojo.getLog());
+        try {
+            if (mojo.getLog().isDebugEnabled()) mojo.getLog().debug("About to execute \'" + cl.toString() + "\'");
+            final int result = CommandLineUtils.executeCommandLine(cl, stdConsumer, errConsumer);
+            if (result != 0)
+                throw new MojoExecutionException(
+                        "rpm -E %{_arch} returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
+        } catch (CommandLineException e) {
+            throw new MojoExecutionException("Unable get system architecture", e);
         }
 
         return stdConsumer.getOutput().trim();
