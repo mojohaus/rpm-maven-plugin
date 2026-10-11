@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>76</version>
+    <version>97</version>
   </parent>
 
   <artifactId>rpm-maven-plugin</artifactId>
@@ -117,7 +117,6 @@
 
   <properties>
     <mavenVersion>3.6.3</mavenVersion>
-    <mojo.java.target>8</mojo.java.target>
     <scmpublish.content>${project.build.directory}/staging/rpm-maven-plugin</scmpublish.content>
   </properties>
 
@@ -207,20 +206,6 @@
       </plugins>
     </pluginManagement>
 
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>mojo-descriptor</id>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
 
   <profiles>
