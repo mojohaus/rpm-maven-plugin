@@ -102,7 +102,7 @@
                   <directory>/usr/myusr/app/lib</directory>
                   <dependency>
                     <includes>
-                      <include>javax.mail:mail</include>
+                      <include>javax.mail:mail:[0,]::sources</include>
                     </includes>
                   </dependency>
                 </mapping>
