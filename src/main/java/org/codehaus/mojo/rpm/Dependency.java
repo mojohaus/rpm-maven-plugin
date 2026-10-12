@@ -165,7 +165,8 @@ public class Dependency {
             if (parts.length > 2) {
                 versionStr = parts[2];
                 if (parts.length > 3) {
-                    type = parts[3];
+                    // An explicitly empty type segment (g:a:v::classifier) means any type, like an omitted one
+                    type = parts[3].isEmpty() ? ANY_TYPE : parts[3];
                 }
 
                 if (parts.length > 4) {
