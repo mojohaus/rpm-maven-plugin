@@ -24,14 +24,14 @@
       <configuration>
         <phases>
           <initialize>org.codehaus.mojo:rpm-maven-plugin:version</initialize>
-          <process-resources>org.apache.maven.plugins:maven-resources-plugin:3.4.0:resources</process-resources>
-          <compile>org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile</compile>
-          <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:3.4.0:testResources</process-test-resources>
-          <test-compile>org.apache.maven.plugins:maven-compiler-plugin:3.15.0:testCompile</test-compile>
-          <test>org.apache.maven.plugins:maven-surefire-plugin:3.5.4:test</test>          
+          <process-resources>org.apache.maven.plugins:maven-resources-plugin:${maven-resources-plugin.version}:resources</process-resources>
+          <compile>org.apache.maven.plugins:maven-compiler-plugin:${maven-compiler-plugin.version}:compile</compile>
+          <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:${maven-resources-plugin.version}:testResources</process-test-resources>
+          <test-compile>org.apache.maven.plugins:maven-compiler-plugin:${maven-compiler-plugin.version}:testCompile</test-compile>
+          <test>org.apache.maven.plugins:maven-surefire-plugin:${maven-surefire-plugin.version}:test</test>          
           <package>org.codehaus.mojo:rpm-maven-plugin:rpm</package>
-          <install>org.apache.maven.plugins:maven-install-plugin:3.1.4:install</install>
-          <deploy>org.apache.maven.plugins:maven-deploy-plugin:3.1.4:deploy</deploy>
+          <install>org.apache.maven.plugins:maven-install-plugin:${maven-install-plugin.version}:install</install>
+          <deploy>org.apache.maven.plugins:maven-deploy-plugin:${maven-deploy-plugin.version}:deploy</deploy>
         </phases>
       </configuration>
     </component>
