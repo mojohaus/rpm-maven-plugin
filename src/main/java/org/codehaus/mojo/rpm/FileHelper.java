@@ -522,7 +522,7 @@ final class FileHelper {
                     try {
                         if (item.getVersionRange().containsVersion(dep.getSelectedVersion())) {
                             log.debug("... Version matches");
-                            if (item.getType().isEmpty()) {
+                            if (item.getType().isEmpty() || Dependency.ANY_TYPE.equals(item.getType())) {
                                 log.debug("... Type is empty");
                                 return true;
                             } else if (item.getType().equals(dep.getType())) {
