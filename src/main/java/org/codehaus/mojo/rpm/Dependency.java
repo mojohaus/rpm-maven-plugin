@@ -39,13 +39,16 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class Dependency {
 
+    /** Placeholder for an unspecified type; Maven 4 rejects an empty artifact type. */
+    static final String ANY_TYPE = "*";
+
     // // // Properties
 
     /** List of dependencies to include. */
-    private List<Artifact> includes;
+    private List<Artifact> includedArtifacts;
 
     /** List of dependencies to exclude. */
-    private List<Artifact> excludes;
+    private List<Artifact> excludedArtifacts;
 
     /**
      * Strip version is false by default.
@@ -62,7 +65,7 @@ public class Dependency {
      * @return The list of dependencies to include.
      */
     public List<Artifact> getIncludes() {
-        return includes;
+        return includedArtifacts;
     }
 
     /**
@@ -72,7 +75,7 @@ public class Dependency {
      * @throws MojoExecutionException if the parse fails
      */
     public void setIncludes(List<String> incls) throws MojoExecutionException {
-        includes = parseList(incls);
+        includedArtifacts = parseList(incls);
     }
 
     /**
@@ -81,7 +84,7 @@ public class Dependency {
      * @return The list of dependencies to exclude.
      */
     public List<Artifact> getExcludes() {
-        return excludes;
+        return excludedArtifacts;
     }
 
     /**
@@ -91,7 +94,7 @@ public class Dependency {
      * @throws MojoExecutionException if the parse fails
      */
     public void setExcludes(List<String> excls) throws MojoExecutionException {
-        excludes = parseList(excls);
+        excludedArtifacts = parseList(excls);
     }
 
     /**
@@ -120,12 +123,12 @@ public class Dependency {
         StringBuilder sb = new StringBuilder();
         sb.append("[dependencies");
 
-        if (includes != null) {
-            sb.append(" include [" + includes + "]");
+        if (includedArtifacts != null) {
+            sb.append(" include [" + includedArtifacts + "]");
         }
 
-        if (excludes != null) {
-            sb.append(" exclude [" + excludes + "]");
+        if (excludedArtifacts != null) {
+            sb.append(" exclude [" + excludedArtifacts + "]");
         }
 
         sb.append(" stripVersion (" + stripVersion + ")");
@@ -155,7 +158,7 @@ public class Dependency {
             String groupId = parts[0];
             String artifactId = parts[1];
             String versionStr = null;
-            String type = "";
+            String type = ANY_TYPE;
             String classifier = "";
             VersionRange vr = null;
 
