@@ -313,7 +313,12 @@ final class FileHelper {
 
         if (clist == null) {
             retval.add(artifact);
-            retval.addAll(attachedArtifacts);
+            for (Artifact aa : attachedArtifacts) {
+                // Maven 4 attaches its own consumer POM; it is not a project deliverable
+                if (!"consumer".equals(aa.getClassifier())) {
+                    retval.add(aa);
+                }
+            }
         } else {
             if (clist.contains(null)) {
                 retval.add(artifact);
