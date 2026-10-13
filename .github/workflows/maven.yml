@@ -22,15 +22,9 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     name: Verify
-    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v5
+    uses: mojohaus/.github/.github/workflows/maven-verify.yml@master
     with:
-      # only master saves the Maven and JDK caches; other branches and pull requests restore them
-      cache-save-default-branch-only: true
-      # Temurin comes from the runners' tool cache; Zulu is downloaded on every job
-      jdk-distribution-matrix: '[ "temurin" ]'
-      ff-jdk-distribution: 'temurin'
-      maven4-enabled: true
       # the ITs call rpmbuild, which only the Linux runner image provides
       os-matrix: '[ "ubuntu-latest" ]'
       ff-goal: 'verify'                 # no ITs in the fail-fast build; the matrix runs them
-      verify-goal: '-P run-its verify'
+
