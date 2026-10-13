@@ -24,6 +24,9 @@ updates:
       versions: [">= 3.10.0"]
     - dependency-name: "org.apache.maven:maven-settings"
       versions: [">= 3.10.0"]
+    # plexus-sec-dispatcher 3.x requires Java 17; the plugin still runs on Java 8
+    - dependency-name: "org.codehaus.plexus:plexus-sec-dispatcher"
+      versions: [">= 3.0.0"]
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
