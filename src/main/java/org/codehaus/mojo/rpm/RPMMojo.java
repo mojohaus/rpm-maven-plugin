@@ -19,11 +19,16 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import java.io.File;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.filtering.MavenFileFilter;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
 
 /**
  * Construct the RPM file.
@@ -34,6 +39,12 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
         requiresDependencyResolution = ResolutionScope.RUNTIME,
         threadSafe = true)
 public class RPMMojo extends AbstractRPMMojo {
+
+    @Inject
+    public RPMMojo(MavenFileFilter mavenFileFilter, @Named("mng-4384") SecDispatcher securityDispatcher) {
+        super(mavenFileFilter, securityDispatcher);
+    }
+
     /**
      * If the {@link org.apache.maven.project.MavenProject#getPackaging() packaging} is <i>rpm</i>, sets the rpm as the
      * primary artifact.

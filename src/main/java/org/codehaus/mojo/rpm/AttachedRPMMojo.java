@@ -19,14 +19,18 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import java.io.File;
 
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProjectHelper;
+import org.apache.maven.shared.filtering.MavenFileFilter;
+import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
 
 /**
  * Construct the RPM file and attaches it as a secondary artifact.
@@ -47,8 +51,16 @@ public class AttachedRPMMojo extends AbstractRPMMojo {
     @Parameter
     private String classifier;
 
-    @Component
-    private MavenProjectHelper mavenProjectHelper;
+    private final MavenProjectHelper mavenProjectHelper;
+
+    @Inject
+    public AttachedRPMMojo(
+            MavenFileFilter mavenFileFilter,
+            @Named("mng-4384") SecDispatcher securityDispatcher,
+            MavenProjectHelper mavenProjectHelper) {
+        super(mavenFileFilter, securityDispatcher);
+        this.mavenProjectHelper = mavenProjectHelper;
+    }
 
     /**
      * Attach the rpm as a secondary artifact.
