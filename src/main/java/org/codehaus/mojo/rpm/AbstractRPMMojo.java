@@ -40,7 +40,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.artifact.ProjectArtifact;
@@ -64,6 +63,17 @@ import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
  */
 // Needs to be public, otherwise setters, even public ones, are inaccessible in terms of reflection rules.
 public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersionableMojo {
+
+    /**
+     * Creates the mojo with its injected collaborators.
+     *
+     * @param mavenFileFilter the default file filter
+     * @param securityDispatcher the security dispatcher used to decrypt server passphrases
+     */
+    protected AbstractRPMMojo(MavenFileFilter mavenFileFilter, SecDispatcher securityDispatcher) {
+        this.mavenFileFilter = mavenFileFilter;
+        this.securityDispatcher = securityDispatcher;
+    }
 
     /**
      * The name portion of the output file name.
@@ -623,16 +633,14 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * @since 2.0
      */
-    @Component(role = org.apache.maven.shared.filtering.MavenFileFilter.class, hint = "default")
-    private MavenFileFilter mavenFileFilter;
+    private final MavenFileFilter mavenFileFilter;
 
     /**
      * Maven Security Dispatcher
      *
      * @since 2.1.2
      */
-    @Component(hint = "mng-4384")
-    private SecDispatcher securityDispatcher;
+    private final SecDispatcher securityDispatcher;
 
     /**
      * Current user system settings for use in Maven.
