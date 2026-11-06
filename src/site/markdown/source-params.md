@@ -1,22 +1,14 @@
- ------
- Maven RPM Plugin - Source Parameters
- ------
- Bob Allison
- ------
- 25 July 2006
- -----
+# Source Parameters
 
-Source Parameters
+The parameters described in this page specify the set of files to be copied
+into the work area for inclusion in the RPM package. By default, files which
+are related to source control and editor temporary files are excluded.
 
-  The parameters described in this page specify the set of files to be copied
-  into the work area for inclusion in the RPM package.  By default, files which
-  are related to source control and editor temporary files are excluded.
+The set of parameters which define a single file set are contained within a
+`source` tag. The set of all `source` tags are contained within
+a `sources` tag. A minimal source configuration looks like:
 
-  The set of parameters which define a single file set are contained within a
-  <<<source>>> tag.  The set of all <<<source>>> tags are contained within
-  a <<<sources>>> tag.  A minimal source configuration looks like:
-
-+-----+
+```xml
 <plugin>
   ...
   <configuration>
@@ -36,170 +28,189 @@ Source Parameters
   </configuration>
   ...
 </plugin>
-+-----+
+```
 
-* {location} (<<required>>)
+<a id="location"></a>
 
-  The file or directory to include.  If a directory is specified, all files
-  and subdirectories are also included.  If the path does not start with
-  <<</>>>, it is taken to be relative to the project's base directory.
+## location (**required**)
 
-  Note that the entire source specification is optional, but each source
-  specification that is present must have this parameter.
+The file or directory to include. If a directory is specified, all files
+and subdirectories are also included. If the path does not start with
+`/`, it is taken to be relative to the project's base directory.
 
-* {noDefaultExcludes}
+Note that the entire source specification is optional, but each source
+specification that is present must have this parameter.
 
-  If given the value <<<true>>>, the default exclusions are not used.
+<a id="noDefaultExcludes"></a>
 
-* {includes}
+## noDefaultExcludes
 
-  Contains one or more <<<include>>> elements with a wildcard filename
-  expression which identifies the files to be included.
+If given the value `true`, the default exclusions are not used.
 
-* {excludes}
+<a id="includes"></a>
 
-  Contains one or more <<<exclude>>> elements with a wildcard filename
-  expression which identifies the files to be excluded.  If
-  <<<noDefaultExcludes>>> is not specified, the default exclusions are added
-  to this list.
+## includes
 
-* {destination} (<<optional>>)
+Contains one or more `include` elements with a wildcard filename
+expression which identifies the files to be included.
 
-  If the <<location>> is a file (not a directory), this is the name of the file
-  in the rpm. If this value is not provided, the name of the <<<file>>> will
-  be used.
+<a id="excludes"></a>
 
-* {filter} (<<optional>>)
+## excludes
 
-  Will filter the file(s) and replace special values with properties.
+Contains one or more `exclude` elements with a wildcard filename
+expression which identifies the files to be excluded. If
+`noDefaultExcludes` is not specified, the default exclusions are added
+to this list.
 
-* {targetArchitecture} (<<optional>>)
+<a id="destination"></a>
 
-  If this is populated, the contents defined by this source will only be included
-  if the value for targetArchitecture matches the target architecture of the rpm.
+## destination (**optional**)
 
-  Beginning with 2.0-beta-3, this is a regular expression. In order to provide backward
-  compatibility, both the architecture (defined for MOJO) and this value will be
-  converted to lower case to make comparison case insensitive.
+If the **location** is a file (not a directory), this is the name of the file
+in the rpm. If this value is not provided, the name of the `file` will
+be used.
 
-  This can be used to flex the contents of the rpm based on the
-  {{{./rpm-mojo.html#needarch}architecture}}:
+<a id="filter"></a>
 
-+-----+
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>rpm-maven-plugin</artifactId>
-          ...
-          <configuration>
-            ...
-            <needarch>true</needarch>
-            ...
-            <mapping>
-              ...
-              <sources>
-                <source>
-                  <location>src/main/native/x86_64</location>
-                  <targetArchitecture>x86_64</targetArchitecture>
-                </source>
-                <source>
-                  <location>src/main/native/i586</location>
-                  <targetArchitecture>i586</targetArchitecture>
-                </source>
-              </sources>
-              ...
-            </mapping>
-            ...
-          </configuration>
-        </plugin>
-        ...
-      </plugins>
-        ...
-    </build>
-+-----+
+## filter (**optional**)
 
-* {softlinkSource} (<<optional>>)
+Will filter the file(s) and replace special values with properties.
 
-  Provides the opportunity to link to item(s) in the package. The location,
-  therefore, must be a location that exists after all the mappings with
-  traditional sources have been created in the <<<buildroot>>> directory.
+<a id="targetArchitecture"></a>
 
-  Example: Create a link from <<<ccc.txt>>> to <<</usr/files/aaa.txt>>>.
+## targetArchitecture (**optional**)
 
-+-----+
-    ...
-    <mapping>
-      <directory>/usr/files</directory>
-      <sources>
-        <softlinkSource>
-          <destination>ccc.txt</destination>
-          <location>aaa.txt</location>
-        </softlinkSource>
-      </sources>
-    </mapping>
-+-----+
+If this is populated, the contents defined by this source will only be included
+if the value for targetArchitecture matches the target architecture of the rpm.
 
-  Example: Create a link from <<</usr/bin/script.sh>>> to <<</usr/files/script.sh>>>.
+Beginning with 2.0-beta-3, this is a regular expression. In order to provide backward
+compatibility, both the architecture (defined for MOJO) and this value will be
+converted to lower case to make comparison case insensitive.
 
-+-----+
-    ...
-    <mapping>
-      <directory>/usr/bin</directory>
-      <sources>
-        <softlinkSource>
-          <location>/usr/files/script.sh</location>
-        </softlinkSource>
-      </sources>
-    </mapping>
-+-----+
+This can be used to flex the contents of the rpm based on the
+[architecture](./rpm-mojo.html#needarch):
 
-  Example: Create a link from <<</usr/local/something>>> to <<</usr/local/something-A>>>
-
-+-----+
-    ...
-    <mapping>
-      <directory>/usr/local/something</directory>
-      <sources>
-        <softlinkSource>
-          <location>/usr/local/something-A</location>
-        </softlinkSource>
-      </sources>
-    </mapping>
-+-----+
-
-* {targetOSName} (<<optional>>)
-
-  A {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html}regular expression}} that, if populated, indicates
-  that the files defined are only applicable if the expression matches the {{{./ident-params.html#targetOS}MOJO.targetOS}} value.
-
-+-----+
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>rpm-maven-plugin</artifactId>
-          ...
-          <configuration>
-             <mapping>
-               ...
-                <sources>
-                  <source>
-                    <location>src/main/native/x86_64</location>
-                    <targetArchitecture>x86_64</targetArchitecture>
-                  </source>
-                  <source>
-                    <location>src/main/native/x86</location>
-                    <targetArchitecture>i.86</targetArchitecture>
-                  </source>
-                </sources>
-                ...
-              </mapping>
-              ...
-            </configuration>
-          </plugin>
-          ...
-      </plugins>
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>rpm-maven-plugin</artifactId>
       ...
-    <build>
-+-----+
+      <configuration>
+        ...
+        <needarch>true</needarch>
+        ...
+        <mapping>
+          ...
+          <sources>
+            <source>
+              <location>src/main/native/x86_64</location>
+              <targetArchitecture>x86_64</targetArchitecture>
+            </source>
+            <source>
+              <location>src/main/native/i586</location>
+              <targetArchitecture>i586</targetArchitecture>
+            </source>
+          </sources>
+          ...
+        </mapping>
+        ...
+      </configuration>
+    </plugin>
+    ...
+  </plugins>
+    ...
+</build>
+```
+
+<a id="softlinkSource"></a>
+
+## softlinkSource (**optional**)
+
+Provides the opportunity to link to item(s) in the package. The location,
+therefore, must be a location that exists after all the mappings with
+traditional sources have been created in the `buildroot` directory.
+
+Example: Create a link from `ccc.txt` to `/usr/files/aaa.txt`.
+
+```xml
+...
+<mapping>
+  <directory>/usr/files</directory>
+  <sources>
+    <softlinkSource>
+      <destination>ccc.txt</destination>
+      <location>aaa.txt</location>
+    </softlinkSource>
+  </sources>
+</mapping>
+```
+
+Example: Create a link from `/usr/bin/script.sh` to `/usr/files/script.sh`.
+
+```xml
+...
+<mapping>
+  <directory>/usr/bin</directory>
+  <sources>
+    <softlinkSource>
+      <location>/usr/files/script.sh</location>
+    </softlinkSource>
+  </sources>
+</mapping>
+```
+
+Example: Create a link from `/usr/local/something` to `/usr/local/something-A`
+
+```xml
+...
+<mapping>
+  <directory>/usr/local/something</directory>
+  <sources>
+    <softlinkSource>
+      <location>/usr/local/something-A</location>
+    </softlinkSource>
+  </sources>
+</mapping>
+```
+
+<a id="targetOSName"></a>
+
+## targetOSName (**optional**)
+
+A [regular expression](http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html) that, if populated, indicates
+that the files defined are only applicable if the expression matches the [MOJO.targetOS](./ident-params.html#targetOS) value.
+
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>rpm-maven-plugin</artifactId>
+      ...
+      <configuration>
+         <mapping>
+           ...
+            <sources>
+              <source>
+                <location>src/main/native/x86_64</location>
+                <targetArchitecture>x86_64</targetArchitecture>
+              </source>
+              <source>
+                <location>src/main/native/x86</location>
+                <targetArchitecture>i.86</targetArchitecture>
+              </source>
+            </sources>
+            ...
+          </mapping>
+          ...
+        </configuration>
+      </plugin>
+      ...
+  </plugins>
+  ...
+<build>
+```
+

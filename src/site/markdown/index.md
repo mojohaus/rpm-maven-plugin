@@ -1,50 +1,39 @@
- ------
- Introduction
- ------
- Bob Allison
- ------
- 25 July 2006
- -----
+# Introduction
 
-Introduction
+The RPM Maven Plugin allows artifacts from one or more projects
+to be packaged in an RPM for distribution. In addition to project artifacts,
+the RPM can contain other resources to be installed with the artifacts and
+scripts to be run while the package is being installed and removed. This
+plugin does not support the full range of features available to RPMs. In
+particular, source RPMs can not be generated and the spec files which are
+used do not do any build process (the plugin collects the files and
+"installs" them for packaging).
 
-  The RPM Maven Plugin allows artifacts from one or more projects
-  to be packaged in an RPM for distribution.  In addition to project artifacts,
-  the RPM can contain other resources to be installed with the artifacts and
-  scripts to be run while the package is being installed and removed.  This
-  plugin does not support the full range of features available to RPMs.  In
-  particular, source RPMs can not be generated and the spec files which are
-  used do not do any build process (the plugin collects the files and
-  "installs" them for packaging).
+This documentation will not provide a tutorial for building and using RPMs.
+For more information on the subject, please refer to the resources listed
+at the bottom of this page. Reading some of these resources should be
+considered optional but highly recommended for basic use of RPMs and required
+before using advanced features such as scripts and dependencies.
 
-  This documentation will not provide a tutorial for building and using RPMs.
-  For more information on the subject, please refer to the resources listed
-  at the bottom of this page.  Reading some of these resources should be
-  considered optional but highly recommended for basic use of RPMs and required
-  before using advanced features such as scripts and dependencies.
+# Features
 
-Features
+- Files can be collected from anywhere on the system and packaged
+- Packaged files can be assigned any ownership and permissions
+- Scripts for pre- and post-installation and pre- and post-removal are
+  supported, as well as a verification script
 
-  * Files can be collected from anywhere on the system and packaged
+# How to Use the Plugin
 
-  * Packaged files can be assigned any ownership and permissions
+For information on how to get the RPM file generated, please refer to the
+[Usage Scenarios](./usage.html) and [Parameters](./params.html) documents.
 
-  * Scripts for pre- and post-installation and pre- and post-removal are
-    supported, as well as a verification script
+# Contributing
 
-How to Use the Plugin
+Contributions is welcomed. See [contributing](./contributing.html).
 
-  For information on how to get the RPM file generated, please refer to the
-  {{{./usage.html}Usage Scenarios}} and {{{./params.html}Parameters}} documents.
+# Resources
 
-Contributing
+- [The RPM home page](http://www.rpm.org/)
+- [RPM Documentation](http://www.rpm.org/wiki/Docs)
+- [Maximum RPM](http://www.rpm.org/max-rpm/)
 
-  Contributions is welcomed. See {{{./contributing.html}contributing}}.
-
-Resources
-
-  * {{{http://www.rpm.org/}The RPM home page}}
-
-  * {{{http://www.rpm.org/wiki/Docs}RPM Documentation}}
-
-  * {{{http://www.rpm.org/max-rpm/}Maximum RPM}}

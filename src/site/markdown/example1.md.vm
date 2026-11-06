@@ -1,18 +1,13 @@
- ------
- Maven RPM Plugin - Sample Configuration
- ------
- Bob Allison
- ------
- 31 December 2006
- -----
+# Maven RPM Plugin - Sample Configuration
 
 Sample Configuration
+====================
 
-  Below is a sample project descriptor which utilizes all of the basic
-  parameters and a few of the advanced parameters.  Note that the servlet
-  API jar is <<not>> packaged in the RPM because it is not a runtime dependency.
+Below is a sample project descriptor which utilizes all of the basic
+parameters and a few of the advanced parameters. Note that the servlet
+API jar is **not** packaged in the RPM because it is not a runtime dependency.
 
-+----+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -153,7 +148,7 @@ Sample Configuration
             </mapping>
           </mappings>
           <preinstallScriptlet>
-            <script>echo "installing \${project.name} now"</script>
+            <script>echo "installing #[[${project.name}]]# now"</script>
           </preinstallScriptlet>
           <postinstallScriptlet>
             <scriptFile>src/main/scripts/postinstall</scriptFile>
@@ -169,4 +164,4 @@ Sample Configuration
     </plugins>
   </build>
 </project>
-+----+
+```

@@ -1,30 +1,26 @@
- ------
- Maven RPM Plugin - Operation Parameters
- ------
- Bob Allison
- ------
- 25 July 2006
- -----
+# Operation Parameters
 
-Operation Parameters
+The parameters described in this page control the operation of the plugin.
 
-  The parameters described in this page control the operation of the plugin.
+<a id="workarea"></a>
 
-* {workarea}
+## workarea
 
-  The directory to use to build the RPM.  By default, this is a directory
-  named <<<rpm>>> in the project's build directory.
+The directory to use to build the RPM. By default, this is a directory
+named `rpm` in the project's build directory.
 
-  <<NOTE:>> The absolute path to the workarea <MUST NOT> have a space in any of the directory names.
+**NOTE:** The absolute path to the workarea *MUST NOT* have a space in any of the directory names.
 
-  Beginning with release 2.0-beta-3, sub-directories will be created within the
-  workarea for each execution of the plugin within a life cycle.
+Beginning with release 2.0-beta-3, sub-directories will be created within the
+workarea for each execution of the plugin within a life cycle.
 
-* {defineStatements}
+<a id="defineStatements"></a>
 
-  A list of %define statements that should be included in the top of the spec file
+## defineStatements
 
-+-----+
+A list of %define statements that should be included in the top of the spec file
+
+```xml
 <plugin>
   ...
   <configuration>
@@ -36,11 +32,13 @@ Operation Parameters
   </configuration>
   ...
 </plugin>
-+-----+
+```
 
-* {rpmbuildStage}
+<a id="rpmbuildStage"></a>
 
-    The stage to build, e.g. the parameters passed to rpmbuild.
-    By default this is <<<-bb>>>: Build a binary package (after doing the %prep, %build, and %install stages).
+## rpmbuildStage
 
-    If you want to build binary and source packages, use <<<-ba>>>.
+The stage to build, e.g. the parameters passed to rpmbuild.
+By default this is `-bb`: Build a binary package (after doing the %prep, %build, and %install stages).
+
+If you want to build binary and source packages, use `-ba`.
