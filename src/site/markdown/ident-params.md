@@ -1,136 +1,155 @@
- ------
- Maven RPM Plugin - Identification Parameters
- ------
- Bob Allison
- ------
- 25 July 2006
- -----
+# Identification Parameters
 
-Identification Parameters
+The parameters described in this page provide the identification of the
+RPM package. This information will be present in the package file and can be
+viewed with the "`rpm -i`" command.
 
-  The parameters described in this page provide the identification of the
-  RPM package.  This information will be present in the package file and can be
-  viewed with the "<<<rpm -i>>>" command.
+<a id="name"></a>
 
-* {name}
+## name
 
-  Can be used to set the Name of the RPM package. Defaults to the artifactId of 
-  the Maven project.
+Can be used to set the Name of the RPM package. Defaults to the artifactId of
+the Maven project.
 
-* {version}
+<a id="version"></a>
 
-  The version number to use for the RPM package.  By default, this is the
-  project version.  This value cannot contain a dash (<<<->>>) due to
-  contraints in the RPM file naming convention.  Any specified value will
-  be truncated at the first dash.
+## version
 
-* {changelogFile}
+The version number to use for the RPM package. By default, this is the
+project version. This value cannot contain a dash (`-`) due to
+contraints in the RPM file naming convention. Any specified value will
+be truncated at the first dash.
 
-  The file whose content will be put after %changelog in SPEC file.
-  The content will not be validated and must follow the syntax for RPM:
+<a id="changelogFile"></a>
 
---------------------------
-     * [dow mon dd yyyy] [packager [email address]] [RPM version]
-     -list of changes
---------------------------
+## changelogFile
 
-  The list of changes can be as long as is necessary, but this is intended to be
-  a list of changes for the RPM itself and not for the package.
+The file whose content will be put after %changelog in SPEC file.
+The content will not be validated and must follow the syntax for RPM:
 
-* {release}
+```text
+* [dow mon dd yyyy] [packager [email address]] [RPM version]
+-list of changes
+```
 
-  The release number of the RPM.
+The list of changes can be as long as is necessary, but this is intended to be
+a list of changes for the RPM itself and not for the package.
 
-  Beginning with release 2.0-beta-2,  this is an optional parameter. By default, the release will be generated from the
-  modifier portion of the {{{version}project version}} using the following rules:
+<a id="release"></a>
 
-     * If no modifier exists, the release will be <<<1>>>.
+## release
 
-     * If the modifier ends with <<<SNAPSHOT>>>, the timestamp (in UTC) of the build will be appended to end.
+The release number of the RPM.
 
-     * All instances of <<<'-'>>> in the modifier will be replaced with <<<'_'>>>.
+Beginning with release 2.0-beta-2, this is an optional parameter. By default, the release will be generated from the
+modifier portion of the [project version](#version) using the following rules:
 
-     * If a modifier exists and does not end with <<<SNAPSHOT>>>, <<<"_1">>> will be appended to end.
+- If no modifier exists, the release will be `1`.
+- If the modifier ends with `SNAPSHOT`, the timestamp (in UTC) of the build will be appended to end.
+- All instances of `'-'` in the modifier will be replaced with `'_'`.
+- If a modifier exists and does not end with `SNAPSHOT`, `"_1"` will be appended to end.
 
-* {license}
+<a id="license"></a>
 
-  A one line license information string for the RPM, like <<<GPLv3>>>. Defaults to
-  <<<(c) ${project.inceptionYear} ${project.organization}>>>.
+## license
 
-* {copyright} <(deprecated)>
+A one line license information string for the RPM, like `GPLv3`. Defaults to
+`(c) ${project.inceptionYear} ${project.organization}`.
 
-  Deprecated: use {{{./source-params.html#license}license}} instead.
+<a id="copyright"></a>
 
-* {distribution}
+## copyright *(deprecated)*
 
-  A one-line string identifying the distribution of which this RPM is a part.
+Deprecated: use [license](./source-params.html#license) instead.
 
-* {group}
+<a id="distribution"></a>
 
-  A string which identifies the software group for this package.  This can be
-  used by GUI tools to group packages for display.  Check the RPM documentation
-  (installed in <<</usr/share/doc/rpm->>><version><<</GROUPS>>> on most Linuxes)
-  for a list of current groups.
+## distribution
 
-* {icon}
+A one-line string identifying the distribution of which this RPM is a part.
 
-  The file (GIF or XPM) with an icon for the package.  This can be used by GUI
-  tools to display an icon for the package.
+<a id="group"></a>
 
-* {needarch}
+## group
 
-  The target architecture for the rpm. The default value is <<<noarch>>>.
+A string which identifies the software group for this package. This can be
+used by GUI tools to group packages for display. Check the RPM documentation
+(installed in `/usr/share/doc/rpm-`*version*`/GROUPS` on most Linuxes)
+for a list of current groups.
 
-  For passivity purposes, a value of <<<true>>> or <<<false>>> will indicate whether the
-  architecture of the build machine will be used. Any other value will set the target
-  architecture of the rpm.
+<a id="icon"></a>
 
-  In general, this should only be necessary in the case of compiled code from languages
-  such as C or C++, and should not be specified if the executable content of the package
-  consists only of scripts (such as shell, perl, or python) and/or Java code.
+## icon
 
-  This can be used in conjunction with {{{./source-params.html#targetArchitecture}Source targetArchitecture}}
-  to flex the contents of the rpm based on the architecture.
+The file (GIF or XPM) with an icon for the package. This can be used by GUI
+tools to display an icon for the package.
 
-* {targetOS}
+<a id="needarch"></a>
 
-  The target os for building the RPM. By default, this will be populated to
-  the System property <<<os.name>>>.
+## needarch
 
-  This can be used in conjunction with {{{./source-params.html#targetOSName}Source targetOSName}}
-  to flex the contents of the rpm based on operating system.
+The target architecture for the rpm. The default value is `noarch`.
 
-* {targetVendor}
+For passivity purposes, a value of `true` or `false` will indicate whether the
+architecture of the build machine will be used. Any other value will set the target
+architecture of the rpm.
 
-  The target vendor for building the RPM. By default, this will be populated to the result
-  of <<<rpm -E %\{_host_vendor\}>>>.
+In general, this should only be necessary in the case of compiled code from languages
+such as C or C++, and should not be specified if the executable content of the package
+consists only of scripts (such as shell, perl, or python) and/or Java code.
 
-* {packager}
+This can be used in conjunction with [Source targetArchitecture](./source-params.html#targetArchitecture)
+to flex the contents of the rpm based on the architecture.
 
-  The name of the person or group which is creating the package.  By default,
-  this will be taken from the name specified in the POM's organization
-  information.
+<a id="targetOS"></a>
 
-* {repackJars}
+## targetOS
 
-  If set to <<<false>>> a <<<%define __jar_repack 0>>> statement will be
-  added to the SPEC file to disable repackaging of jar files when creating
-  the RPM. This defaults to <<<false>>>. This will only have effect with
-  version 9.0.0 or later releases of <<<redhat-rpm-config>>> (RHEL 6).
+The target os for building the RPM. By default, this will be populated to
+the System property `os.name`.
 
-* {epoch}
+This can be used in conjunction with [Source targetOSName](./source-params.html#targetOSName)
+to flex the contents of the rpm based on operating system.
 
-  Set to an integer value that is greater than 0 (or whatever your current epoch value is)
-  to make this version of the package greater than that last one no matter WHAT the version
-  tag was set to prior.
+<a id="targetVendor"></a>
 
-  Setting the Epoch is typically used as a way getting out of a situation where your old 
-  version is larger than your new version. This is usually because you've decided to go from a 
-  time/date stamp for a version to a version like 6.0. A time/date stamp will always be larger
-  than something like 6.0 unless you set the epoch to 1. If epoch is 1 you now have a version 
-  like 1:6.0 which will be greater than 0:2016.01.28.
+## targetVendor
 
-  <<<In general you should not need to set this tag!>>>
+The target vendor for building the RPM. By default, this will be populated to the result
+of `rpm -E %{_host_vendor}`.
 
-  See the epoch tag at http://www.rpm.org/max-rpm-snapshot/s1-rpm-inside-tags.html for a more
-  detailed writeup about when you'd want to set epoch.
+<a id="packager"></a>
+
+## packager
+
+The name of the person or group which is creating the package. By default,
+this will be taken from the name specified in the POM's organization
+information.
+
+<a id="repackJars"></a>
+
+## repackJars
+
+If set to `false` a `%define __jar_repack 0` statement will be
+added to the SPEC file to disable repackaging of jar files when creating
+the RPM. This defaults to `false`. This will only have effect with
+version 9.0.0 or later releases of `redhat-rpm-config` (RHEL 6).
+
+<a id="epoch"></a>
+
+## epoch
+
+Set to an integer value that is greater than 0 (or whatever your current epoch value is)
+to make this version of the package greater than that last one no matter WHAT the version
+tag was set to prior.
+
+Setting the Epoch is typically used as a way getting out of a situation where your old
+version is larger than your new version. This is usually because you've decided to go from a
+time/date stamp for a version to a version like 6.0. A time/date stamp will always be larger
+than something like 6.0 unless you set the epoch to 1. If epoch is 1 you now have a version
+like 1:6.0 which will be greater than 0:2016.01.28.
+
+`In general you should not need to set this tag!`
+
+See the epoch tag at <http://www.rpm.org/max-rpm-snapshot/s1-rpm-inside-tags.html> for a more
+detailed writeup about when you'd want to set epoch.
