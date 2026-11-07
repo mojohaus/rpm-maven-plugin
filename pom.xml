@@ -259,6 +259,8 @@
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
               <properties>
+                <!-- reuse the prefix file the main build cached instead of fetching it again in every fork -->
+                <aether.remoteRepositoryFilter.prefixes.basedir>${settings.localRepository}/.meta</aether.remoteRepositoryFilter.prefixes.basedir>
                 <maven.unix.debug>true</maven.unix.debug>
                 <gpg.homedir>${project.build.testOutputDirectory}/gnupg</gpg.homedir>
               </properties>
