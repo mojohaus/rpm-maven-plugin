@@ -20,6 +20,7 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -95,35 +96,7 @@ final class RPMHelper {
      * @throws MojoExecutionException if an error occurs
      */
     public void buildPackage() throws MojoExecutionException {
-        final File workarea = mojo.getWorkarea();
-        final File f = new File(workarea, "SPECS");
-
-        final Commandline cl = new Commandline();
-        cl.setExecutable("rpmbuild");
-        cl.setWorkingDirectory(f.getAbsolutePath());
-        cl.createArg().setValue(mojo.getRpmbuildStage());
-        cl.createArg().setValue("--target");
-        cl.createArg().setValue(mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS());
-        cl.createArg().setValue("--buildroot");
-        cl.createArg().setValue(FileHelper.toUnixPath(mojo.getRPMBuildroot()));
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_topdir " + FileHelper.toUnixPath(workarea));
-
-        // Don't assume default values for rpm path macros
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm");
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_builddir %{_topdir}/BUILD");
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_rpmdir %{_topdir}/RPMS");
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_sourcedir %{_topdir}/SOURCES");
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_specdir %{_topdir}/SPECS");
-        cl.createArg().setValue("--define");
-        cl.createArg().setValue("_srcrpmdir %{_topdir}/SRPMS");
-
-        cl.createArg().setValue(mojo.getName() + ".spec");
+        final Commandline cl = buildCommandline();
 
         final Log log = mojo.getLog();
 
@@ -180,7 +153,55 @@ final class RPMHelper {
     }
 
     /**
+     * Creates the <i>rpmbuild</i> command line, with the {@link AbstractRPMMojo#getRpmbuildArgs() additional
+     * arguments} just before the spec file name.
+     */
+    Commandline buildCommandline() {
+        final File workarea = mojo.getWorkarea();
+        final File f = new File(workarea, "SPECS");
+
+        final Commandline cl = new Commandline();
+        cl.setExecutable("rpmbuild");
+        cl.setWorkingDirectory(f.getAbsolutePath());
+        cl.createArg().setValue(mojo.getRpmbuildStage());
+        cl.createArg().setValue("--target");
+        cl.createArg().setValue(mojo.getTargetArch() + '-' + mojo.getTargetVendor() + '-' + mojo.getTargetOS());
+        cl.createArg().setValue("--buildroot");
+        cl.createArg().setValue(FileHelper.toUnixPath(mojo.getRPMBuildroot()));
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_topdir " + FileHelper.toUnixPath(workarea));
+
+        // Don't assume default values for rpm path macros
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_build_name_fmt %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_builddir %{_topdir}/BUILD");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_rpmdir %{_topdir}/RPMS");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_sourcedir %{_topdir}/SOURCES");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_specdir %{_topdir}/SPECS");
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_srcrpmdir %{_topdir}/SRPMS");
+
+        final List<String> extraArgs = mojo.getRpmbuildArgs();
+        if (extraArgs != null) {
+            for (String arg : extraArgs) {
+                cl.createArg().setValue(arg);
+            }
+        }
+
+        cl.createArg().setValue(mojo.getName() + ".spec");
+
+        return cl;
+    }
+
+    /**
      * Evaluates the <i>macro</i> by executing <code>rpm --target <i>arch-vendor-os</i> --eval %<i>macro</i></code>.
+     *
+     * /**
+     * Evaluates the <i>macro</i> by executing <code>rpm --eval %<i>macro</i></code>.
      *
      * @param macro The macro to evaluate.
      * @return The result of rpm --eval.
