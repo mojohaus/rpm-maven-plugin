@@ -33,6 +33,20 @@ There are six RPM spec file tags related to dependency management:
   Corresponds to the `Requires(preun)` tag in the spec file.
 - `conflicts` identifies a package which must not be installed if the
   package being built is installed
+- `recommends` identifies a package that should be installed together with
+  the package being built; the user can decline it. Corresponds to the
+  `Recommends` tag in the spec file.
+- `suggests` identifies a package that may be useful together with the package
+  being built. Corresponds to the `Suggests` tag in the spec file.
+- `supplements` identifies a package for which the package being built is a
+  useful addition, the reverse of `recommends`. Corresponds to the
+  `Supplements` tag in the spec file.
+- `enhances` identifies a package that the package being built enhances, the
+  reverse of `suggests`. Corresponds to the `Enhances` tag in the spec file.
+
+`recommends`, `suggests`, `supplements` and `enhances` are weak dependencies,
+which need RPM 4.12 or later; older versions of rpm ignore the tags. They are
+available from release 2.4.1.
 
 All of these tags can appear multiple times in the spec file. To
 configure these tags in the plugin configuration, specify an element for
@@ -63,6 +77,18 @@ properly specified in the XML file. Here is an example:
 <conflicts>
   <conflict>incinerator</conflict>
 </conflicts>
+<recommends>
+  <recommend>recycling-plant</recommend>
+</recommends>
+<suggests>
+  <suggest>crane</suggest>
+</suggests>
+<supplements>
+  <supplement>landfill</supplement>
+</supplements>
+<enhances>
+  <enhance>garage</enhance>
+</enhances>
 ```
 
 ## RPM Build Dependency Management

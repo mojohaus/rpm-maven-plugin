@@ -92,6 +92,10 @@ final class SpecWriter {
         writeList(mojo.getPrereqs(), "PreReq: ");
         writeList(mojo.getObsoletes(), "Obsoletes: ");
         writeList(mojo.getConflicts(), "Conflicts: ");
+        writeList(mojo.getRecommends(), "Recommends: ");
+        writeList(mojo.getSuggests(), "Suggests: ");
+        writeList(mojo.getSupplements(), "Supplements: ");
+        writeList(mojo.getEnhances(), "Enhances: ");
 
         spec.println("autoprov: " + (mojo.isAutoProvides() ? "yes" : "no"));
         spec.println("autoreq: " + (mojo.isAutoRequires() ? "yes" : "no"));
