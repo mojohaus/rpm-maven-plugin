@@ -358,6 +358,42 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private LinkedHashSet<String> conflicts;
 
     /**
+     * The list of recommends for this package, written as <code>Recommends</code> tags after the conflicts. Older versions of
+     * rpm ignore these tags.
+     *
+     * @since 2.4.1
+     */
+    @Parameter
+    private LinkedHashSet<String> recommends;
+
+    /**
+     * The list of suggests for this package, written as <code>Suggests</code> tags after the conflicts. Older versions of
+     * rpm ignore these tags.
+     *
+     * @since 2.4.1
+     */
+    @Parameter
+    private LinkedHashSet<String> suggests;
+
+    /**
+     * The list of supplements for this package, written as <code>Supplements</code> tags after the conflicts. Older versions of
+     * rpm ignore these tags.
+     *
+     * @since 2.4.1
+     */
+    @Parameter
+    private LinkedHashSet<String> supplements;
+
+    /**
+     * The list of enhances for this package, written as <code>Enhances</code> tags after the conflicts. Older versions of
+     * rpm ignore these tags.
+     *
+     * @since 2.4.1
+     */
+    @Parameter
+    private LinkedHashSet<String> enhances;
+
+    /**
      * The relocation prefix for this package.
      *
      */
@@ -1353,6 +1389,34 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     final LinkedHashSet<String> getConflicts() {
         return this.conflicts;
+    }
+
+    /**
+     * @return Returns the {@link #recommends}.
+     */
+    final LinkedHashSet<String> getRecommends() {
+        return this.recommends;
+    }
+
+    /**
+     * @return Returns the {@link #suggests}.
+     */
+    final LinkedHashSet<String> getSuggests() {
+        return this.suggests;
+    }
+
+    /**
+     * @return Returns the {@link #supplements}.
+     */
+    final LinkedHashSet<String> getSupplements() {
+        return this.supplements;
+    }
+
+    /**
+     * @return Returns the {@link #enhances}.
+     */
+    final LinkedHashSet<String> getEnhances() {
+        return this.enhances;
     }
 
     final List<String> getPrefixes() {
