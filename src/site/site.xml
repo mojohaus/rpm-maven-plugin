@@ -43,6 +43,7 @@ under the License.
           <item name="needarch" href="ident-params.html#needarch" />
           <item name="packager" href="ident-params.html#packager" />
           <item name="release**" href="ident-params.html#release" />
+          <item name="numericModifierAsRelease" href="ident-params.html#numericModifierAsRelease" />
           <item name="version" href="ident-params.html#version" />
           <item name="changelogFile" href="ident-params.html#changelogFile" />
           <item name="repackJars" href="ident-params.html#repackJars" />
