@@ -313,24 +313,26 @@ final class SpecWriter {
     }
 
     /**
-     * Writes the beginning of the <i>%install</i> which includes moving all files from the
-     * {@link AbstractRPMMojo#getBuildroot()} to {@link AbstractRPMMojo#getRPMBuildroot()}.
+     * Writes the beginning of the <i>%install</i> which includes moving all files, dotfiles included, from the
+     * {@link AbstractRPMMojo#getBuildroot()} to {@link AbstractRPMMojo#getRPMBuildroot()}. All paths are quoted.
      */
     private void writeMove() {
         final String tmpBuildRoot = FileHelper.toUnixPath(mojo.getBuildroot());
         spec.println();
         spec.println("%install");
         spec.println();
-        spec.println("if [ -d $RPM_BUILD_ROOT ];");
-        spec.println("then");
-        spec.print("  mv ");
-        spec.print(tmpBuildRoot);
-        spec.println("/* $RPM_BUILD_ROOT");
-        spec.println("else");
-        spec.print("  mv ");
-        spec.print(tmpBuildRoot);
-        spec.println(" $RPM_BUILD_ROOT");
-        spec.println("fi");
+        spec.print("TMP_BUILD_ROOT=\"");
+        spec.print(escapeForDoubleQuotes(tmpBuildRoot));
+        spec.println("\"");
+        spec.println("mkdir -p \"$RPM_BUILD_ROOT\"");
+        spec.println("cp -a \"$TMP_BUILD_ROOT\"/. \"$RPM_BUILD_ROOT\"/ && rm -rf \"$TMP_BUILD_ROOT\"");
+    }
+
+    /**
+     * Escapes the characters that the shell still interprets inside double quotes.
+     */
+    private static String escapeForDoubleQuotes(String value) {
+        return value.replaceAll("([\\\\\"$`])", "\\\\$1");
     }
 
     /**
