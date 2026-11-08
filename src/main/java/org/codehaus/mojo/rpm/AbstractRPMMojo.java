@@ -270,9 +270,10 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private String url;
 
     /**
-     * The package group for the package.
+     * The package group for the package. Optional: the <code>Group</code> tag is optional since RPM 4.6 and
+     * deprecated in some distributions, such as Fedora. Without a value no <code>Group</code> line is written.
      */
-    @Parameter(required = true)
+    @Parameter
     private String group;
 
     /**

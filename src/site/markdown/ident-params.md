@@ -87,6 +87,10 @@ used by GUI tools to group packages for display. Check the RPM documentation
 (installed in `/usr/share/doc/rpm-`*version*`/GROUPS` on most Linuxes)
 for a list of current groups.
 
+The parameter is optional. Since RPM 4.6 the `Group` tag is optional, and some
+distributions, such as Fedora, deprecate it. Without a value the plugin writes
+no `Group` line to the spec file.
+
 <a id="icon"></a>
 
 ## icon
