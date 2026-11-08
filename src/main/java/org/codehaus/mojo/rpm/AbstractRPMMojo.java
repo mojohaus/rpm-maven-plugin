@@ -378,8 +378,9 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * <p>
      * Beginning with release 2.0-beta-3, sub-directories will be created within the workarea for each execution of the
      * plugin within a life cycle.<br/>
-     * The pattern will be <code>workarea/<i>name[-classifier]</i></code>.<br/>
+     * The pattern will be <code>workarea/<i>name[-classifier]</i></code>, not one directory per execution.<br/>
      * The classifier portion is only applicable for the <a href="attached-rpm-mojo.html">attached-rpm</a> goal.
+     * Give each <code>attached-rpm</code> execution that builds a package of the same name a distinct classifier.
      * </p>
      */
     @Parameter(defaultValue = "${project.build.directory}/rpm")

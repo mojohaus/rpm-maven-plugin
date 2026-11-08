@@ -11,8 +11,13 @@ named `rpm` in the project's build directory.
 
 **NOTE:** The absolute path to the workarea *MUST NOT* have a space in any of the directory names.
 
-Beginning with release 2.0-beta-3, sub-directories will be created within the
-workarea for each execution of the plugin within a life cycle.
+Beginning with release 2.0-beta-3, the plugin builds in a sub-directory of the
+workarea, named `workarea/<name>` or, when the execution has a classifier,
+`workarea/<name>-<classifier>`. The directory is not named after the execution,
+so executions with the same `name` and no classifier share one directory and
+overwrite each other's files. Only the `attached-rpm` goal has a classifier.
+Give each `attached-rpm` execution that builds a package of the same `name` a
+distinct `classifier`.
 
 <a id="defineStatements"></a>
 
