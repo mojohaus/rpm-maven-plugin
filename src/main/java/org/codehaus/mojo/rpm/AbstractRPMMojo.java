@@ -35,6 +35,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
@@ -1131,17 +1133,56 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     }
 
     /**
+     * The deepest chain of macros that refer to each other that {@link #evaluateMacro(String)} follows.
+     */
+    private static final int MAX_MACRO_DEPTH = 16;
+
+    /**
+     * Matches a reference to a macro in the value of a {@link #defineStatements define statement}, as
+     * <code>%{name}</code> or <code>%name</code>, but not the escaped <code>%%</code>.
+     */
+    private static final Pattern MACRO_REFERENCE =
+            Pattern.compile("(?<!%)%(?:\\{([^}%]+)\\}|([A-Za-z_][A-Za-z0-9_]*))");
+
+    /**
      * Determines the actual value for the <i>macro</i>. Will check both {@link #defineStatements} and
-     * {@link RPMHelper#evaluateMacro(String)}.
+     * {@link RPMHelper#evaluateMacro(String)}. Macros that the value of a define statement refers to are expanded
+     * too, to a depth of {@value #MAX_MACRO_DEPTH}.
      *
      * @param macro The macro to evaluate.
      * @return The literal value or name of macro if it has no value.
-     * @throws MojoExecutionException
+     * @throws MojoExecutionException if the macros refer to each other in a loop or too deeply
      * @since 2.1-alpha-1
      */
     String evaluateMacro(String macro) throws MojoExecutionException {
+        return evaluateMacro(macro, new ArrayList<String>());
+    }
+
+    private String evaluateMacro(String macro, List<String> chain) throws MojoExecutionException {
+        if (chain.contains(macro)) {
+            chain.add(macro);
+            throw new MojoExecutionException("Macro " + macro + " refers to itself: " + String.join(" -> ", chain));
+        }
+        if (chain.size() >= MAX_MACRO_DEPTH) {
+            throw new MojoExecutionException("Macro " + chain.get(0) + " is nested more than " + MAX_MACRO_DEPTH
+                    + " levels deep: " + String.join(" -> ", chain));
+        }
+
         if (macroKeyToValue.containsKey(macro)) {
-            return macroKeyToValue.get(macro);
+            final String raw = macroKeyToValue.get(macro);
+            if (raw.indexOf('%') < 0) {
+                return raw;
+            }
+            chain.add(macro);
+            final Matcher matcher = MACRO_REFERENCE.matcher(raw);
+            final StringBuffer expanded = new StringBuffer(raw.length());
+            while (matcher.find()) {
+                final String name = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+                matcher.appendReplacement(expanded, Matcher.quoteReplacement(evaluateMacro(name, chain)));
+            }
+            matcher.appendTail(expanded);
+            chain.remove(chain.size() - 1);
+            return expanded.toString();
         }
 
         final String value = helper.evaluateMacro(macro);
