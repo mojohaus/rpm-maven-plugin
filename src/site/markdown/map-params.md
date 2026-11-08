@@ -56,6 +56,15 @@ If given the value `true`, the file(s) are marked as documentation files.
 The RPM command installs documentation files into a directory (usually under
 `/usr/share/doc`) named the same as the RPM package.
 
+<a id="ghost"></a>
+
+## ghost
+
+If given the value `true`, the `directory` is listed as a `%ghost` entry: the
+path belongs to the package, but no file is installed for it, for example a log
+or a PID file that the application creates at run time. A ghost mapping takes
+no `sources`, `artifact` or `dependency`. The default is `false`.
+
 <a id="filemode"></a>
 
 ## filemode (**recommended**)
