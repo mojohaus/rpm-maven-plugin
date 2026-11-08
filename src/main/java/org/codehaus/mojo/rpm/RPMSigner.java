@@ -89,14 +89,7 @@ final class RPMSigner {
         if (this.passphrase != null) {
 
             // use option to provide "script" via stdin
-            final Commandline cl = new Commandline();
-            cl.setExecutable("expect");
-            cl.setWorkingDirectory(rpm.getParentFile());
-            cl.createArg().setValue("-c");
-            // work around to allow expect execution time to read in the input during heavy
-            // system usage
-            cl.createArg().setValue("sleep 1"); // MRPM-176 and PLXUTILS-174
-            cl.createArg().setValue("-");
+            final Commandline cl = expectCommandline(rpm);
 
             final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
             final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
@@ -122,17 +115,7 @@ final class RPMSigner {
         } else {
 
             // run rpmsign
-            final Commandline cl = new Commandline();
-            cl.setExecutable("rpmsign");
-            cl.setWorkingDirectory(rpm.getParentFile());
-            cl.createArg().setValue("--define");
-            cl.createArg().setValue("_gpg_name " + gpgName);
-            if (gpgPath != null) {
-                cl.createArg().setValue("--define");
-                cl.createArg().setValue("_gpg_path " + gpgPath);
-            }
-            cl.createArg().setValue("--addsign");
-            cl.createArg().setValue(rpm.getName());
+            final Commandline cl = rpmsignCommandline(rpm);
 
             final StreamConsumer stdout = new LogStreamConsumer(LogStreamConsumer.INFO, log);
             final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.WARN, log);
@@ -156,17 +139,66 @@ final class RPMSigner {
     }
 
     /**
+     * Creates the command line that runs the expect script from stdin.
+     *
+     * @param rpm The rpm to sign.
+     * @return The command line, with the C locale set in its environment.
+     */
+    Commandline expectCommandline(final File rpm) {
+        final Commandline cl = new Commandline();
+        cl.setExecutable("expect");
+        cl.setWorkingDirectory(rpm.getParentFile());
+        // "-" makes expect read the script from stdin; the pause that used to be "-c 'sleep 1'" (MRPM-176 and
+        // PLXUTILS-174) is the first line of the script, because macOS expect prints nothing when both are given.
+        cl.createArg().setValue("-");
+        setCLocale(cl);
+        return cl;
+    }
+
+    /**
+     * Creates the command line that runs {@code rpmsign}.
+     *
+     * @param rpm The rpm to sign.
+     * @return The command line, with the C locale set in its environment.
+     */
+    Commandline rpmsignCommandline(final File rpm) {
+        final Commandline cl = new Commandline();
+        cl.setExecutable("rpmsign");
+        cl.setWorkingDirectory(rpm.getParentFile());
+        cl.createArg().setValue("--define");
+        cl.createArg().setValue("_gpg_name " + gpgName);
+        if (gpgPath != null) {
+            cl.createArg().setValue("--define");
+            cl.createArg().setValue("_gpg_path " + gpgPath);
+        }
+        cl.createArg().setValue("--addsign");
+        cl.createArg().setValue(rpm.getName());
+        setCLocale(cl);
+        return cl;
+    }
+
+    /**
+     * rpm and gpg print their prompts in the user's language, and the expect script waits for the English ones.
+     */
+    private static void setCLocale(final Commandline cl) {
+        cl.addEnvironment("LC_ALL", "C");
+        cl.addEnvironment("LANG", "C");
+    }
+
+    /**
      * Writes the expect "script".
      *
      * @param rpm The rpm to sign.
      * @return The expect script as a {@code byte[]}.
      * @throws IOException
      */
-    private byte[] writeExpectScriptFile(final File rpm) throws IOException {
+    byte[] writeExpectScriptFile(final File rpm) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
 
         final PrintWriter writer = new PrintWriter(new OutputStreamWriter(baos));
         try {
+            // work around to allow expect execution time to read in the input during heavy system usage
+            writer.println("sleep 1");
             writer.println("set timeout -1");
             writer.print("spawn rpm --define \"_gpg_name ");
             writer.print(gpgName);
