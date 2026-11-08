@@ -546,6 +546,16 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private List<String> defineStatements;
 
     /**
+     * Free-form lines that are written verbatim to the preamble of the spec file, after the tags the plugin
+     * generates and before <code>%description</code>. Use them for tags and macros that have no parameter of their
+     * own, such as <code>%{?systemd_requires}</code>. The plugin does not check the lines. The default is no lines.
+     *
+     * @since 2.4.1
+     */
+    @Parameter
+    private List<String> preambleLines;
+
+    /**
      * The default file mode (octal string) to assign to files when installed. <br/>
      * Only applicable to a <a href="map-params.html">Mapping</a> if <a href="map-params.html#filemode">filemode</a>, <a
      * href="map-params.html#username">username</a>, AND <a href="map-params.html#groupname">groupname</a> are
@@ -1369,6 +1379,13 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     final List<String> getDefineStatements() {
         return this.defineStatements;
+    }
+
+    /**
+     * @return Returns the {@link #preambleLines}.
+     */
+    final List<String> getPreambleLines() {
+        return this.preambleLines;
     }
 
     /**

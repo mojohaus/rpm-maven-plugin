@@ -34,6 +34,30 @@ A list of %define statements that should be included in the top of the spec file
 </plugin>
 ```
 
+<a id="preambleLines"></a>
+
+## preambleLines
+
+A list of free-form lines that are written verbatim to the preamble of the spec
+file, after the tags the plugin generates and before `%description`. Use it for
+tags and macros that have no parameter of their own. The plugin does not check
+the lines. The default is no lines.
+
+```xml
+<plugin>
+  ...
+  <configuration>
+    ...
+    <preambleLines>
+      <preambleLine>%{?systemd_requires}</preambleLine>
+      <preambleLine>BuildRequires: systemd</preambleLine>
+    </preambleLines>
+    ...
+  </configuration>
+  ...
+</plugin>
+```
+
 <a id="rpmbuildStage"></a>
 
 ## rpmbuildStage
