@@ -82,3 +82,29 @@ The stage to build, e.g. the parameters passed to rpmbuild.
 By default this is `-bb`: Build a binary package (after doing the %prep, %build, and %install stages).
 
 If you want to build binary and source packages, use `-ba`.
+
+<a id="rpmbuildArgs"></a>
+
+## rpmbuildArgs
+
+A list of additional arguments for `rpmbuild`, given in order and placed just
+before the spec file name. Use it for options the plugin has no parameter for,
+such as `--rcfile`. An option with a value takes two entries. The plugin does
+not check the arguments. The default is no arguments. The command line property
+is `rpm.rpmbuildArgs`, a comma-separated list.
+
+```xml
+<plugin>
+  ...
+  <configuration>
+    ...
+    <rpmbuildArgs>
+      <rpmbuildArg>--rcfile</rpmbuildArg>
+      <rpmbuildArg>/etc/rpm/custom.rc</rpmbuildArg>
+    </rpmbuildArgs>
+    ...
+  </configuration>
+  ...
+</plugin>
+```
+

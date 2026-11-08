@@ -129,6 +129,16 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private String rpmbuildStage;
 
     /**
+     * Additional arguments for <code>rpmbuild</code>, in the order given and placed just before the spec file name.
+     * Use them for options the plugin has no parameter for, such as <code>--rcfile</code>, whose value is a separate
+     * argument. The plugin does not check them. The default is no arguments.
+     *
+     * @since 2.4.1
+     */
+    @Parameter(property = "rpm.rpmbuildArgs")
+    private List<String> rpmbuildArgs;
+
+    /**
      * The target architecture for the rpm. The default value is <i>noarch</i>.
      * <p>
      * For passivity purposes, a value of <code>true</code> or <code>false</code> will indicate whether the <a
@@ -1703,6 +1713,13 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     final String getRpmbuildStage() {
         return rpmbuildStage;
+    }
+
+    /**
+     * @return the {@link #rpmbuildArgs}
+     */
+    final List<String> getRpmbuildArgs() {
+        return rpmbuildArgs;
     }
 
     /**
