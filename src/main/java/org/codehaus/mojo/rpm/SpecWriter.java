@@ -106,6 +106,14 @@ final class SpecWriter {
             spec.println("BuildArch: " + mojo.getTargetArch());
         }
         spec.println("BuildRoot: " + FileHelper.toUnixPath(mojo.getRPMBuildroot()));
+
+        if (mojo.getPreambleLines() != null) {
+            for (String line : mojo.getPreambleLines()) {
+                if (line != null) {
+                    spec.println(line);
+                }
+            }
+        }
         spec.println();
         spec.println("%description");
         if (mojo.getDescription() != null) {
