@@ -19,6 +19,8 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
+import javax.inject.Inject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -42,6 +44,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.project.artifact.ProjectArtifact;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
@@ -692,6 +695,21 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     @Parameter(defaultValue = "false")
     private boolean hardLinkDependencies;
 
+    /**
+     * Indicates if the generated spec file should be attached to the project as a secondary artifact with type
+     * <code>spec</code> and classifier <code>rpm-spec</code>, so that install and deploy publish it next to the rpm.
+     * <br />
+     * <b>NOTE:</b> Maven allows one attached artifact per type and classifier, so enable this in a single execution of
+     * a project.
+     *
+     * @since 2.4.1
+     */
+    @Parameter(defaultValue = "false", property = "rpm.attachSpec")
+    private boolean attachSpec;
+
+    @Inject
+    private MavenProjectHelper mavenProjectHelper;
+
     //////////////////////////////////////////////////////////////////////////
 
     /**
@@ -791,6 +809,8 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
         helper.buildPackage();
 
         afterExecution();
+
+        attachSpecFile();
 
         if (this.copyTo != null) {
             makeSecondCopy();
@@ -1100,8 +1120,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * @throws MojoExecutionException if an error occurs writing the file
      */
     private void writeSpecFile() throws MojoExecutionException {
-        File f = new File(workarea, "SPECS");
-        File specf = new File(f, name + ".spec");
+        File specf = getSpecFile();
 
         try {
             getLog().info("Creating spec file " + specf.getAbsolutePath());
@@ -1114,6 +1133,27 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to write " + specf.getAbsolutePath(), e);
         }
+    }
+
+    /**
+     * @return The spec file that {@link #writeSpecFile()} writes.
+     */
+    private File getSpecFile() {
+        return new File(new File(workarea, "SPECS"), name + ".spec");
+    }
+
+    /**
+     * Attaches the spec file to the project if {@link #attachSpec} is set.
+     */
+    void attachSpecFile() {
+        if (!attachSpec) {
+            return;
+        }
+
+        final File specFile = getSpecFile();
+        getLog().debug("Adding spec file as attached artifact with 'rpm-spec' classifier: "
+                + specFile.getAbsolutePath());
+        mavenProjectHelper.attachArtifact(project, "spec", "rpm-spec", specFile);
     }
 
     /**

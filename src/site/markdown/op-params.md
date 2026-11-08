@@ -58,6 +58,17 @@ the lines. The default is no lines.
 </plugin>
 ```
 
+<a id="attachSpec"></a>
+
+## attachSpec
+
+If given the value `true`, the generated spec file is attached to the project as
+a secondary artifact with type `spec` and classifier `rpm-spec`, so that
+`install` and `deploy` publish it next to the RPM. The default is `false`.
+
+Maven allows one attached artifact per type and classifier, so enable this in a
+single execution of a project.
+
 <a id="rpmbuildStage"></a>
 
 ## rpmbuildStage
