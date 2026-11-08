@@ -161,7 +161,26 @@ final class RPMHelper {
     }
 
     /**
-     * Evaluates the <i>macro</i> by executing <code>rpm --eval %<i>macro</i></code>.
+     * Creates the <code>rpm --eval</code> command line for the <i>macro</i>. It passes the target of the mojo, because
+     * macros such as <code>%{_libdir}</code> differ between targets. Without a resolved target the option is left out.
+     */
+    Commandline evalCommandline(String macro) {
+        final Commandline cl = new Commandline();
+        cl.setExecutable("rpm");
+        final String arch = mojo.getTargetArch();
+        final String vendor = mojo.getTargetVendor();
+        final String os = mojo.getTargetOS();
+        if (arch != null && vendor != null && os != null) {
+            cl.createArg().setValue("--target");
+            cl.createArg().setValue(arch + '-' + vendor + '-' + os);
+        }
+        cl.createArg().setValue("--eval");
+        cl.createArg().setValue('%' + macro);
+        return cl;
+    }
+
+    /**
+     * Evaluates the <i>macro</i> by executing <code>rpm --target <i>arch-vendor-os</i> --eval %<i>macro</i></code>.
      *
      * @param macro The macro to evaluate.
      * @return The result of rpm --eval.
@@ -169,10 +188,7 @@ final class RPMHelper {
      * @since 2.1-alpha-1
      */
     public String evaluateMacro(String macro) throws MojoExecutionException {
-        final Commandline cl = new Commandline();
-        cl.setExecutable("rpm");
-        cl.createArg().setValue("--eval");
-        cl.createArg().setValue('%' + macro);
+        final Commandline cl = evalCommandline(macro);
 
         final Log log = mojo.getLog();
 
