@@ -32,10 +32,12 @@ import org.apache.maven.plugin.Mojo;
  * {@link RPMVersionableMojo#getVersion() project version} using the following rules:
  * <ul>
  * <li>If no modifier exists, the release will be <code>1</code>.</li>
- * <li>If the modifier is numeric, it will be used as the release.</li>
+ * <li>If the modifier is numeric and {@link RPMVersionableMojo#isNumericModifierAsRelease()} is <code>true</code>, it
+ * will be used as the release.</li>
  * <li>If the modifier ends with <i>SNAPSHOT</i>, the timestamp (in UTC) of the build will be appended to end.</li>
  * <li>All instances of <code>'-'</code> in the modifier will be replaced with <code>'_'</code>.</li>
- * <li>If a modifier exists, is not numeric, and does not end with <i>SNAPSHOT</i>, <code>"_1"</code> will be appended to end.</li>
+ * <li>If a modifier exists, does not end with <i>SNAPSHOT</i>, and is not used as the release, <code>"_1"</code> will be
+ * appended to end.</li>
  * </ul>
  * </p>
  *
@@ -66,6 +68,11 @@ final class VersionHelper {
         String getRelease();
 
         Date getBuildTimestamp();
+
+        /**
+         * @return <code>true</code> if an all-numeric modifier is used as the release.
+         */
+        boolean isNumericModifierAsRelease();
     }
 
     private final RPMVersionableMojo mojo;
@@ -112,7 +119,7 @@ final class VersionHelper {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
                     simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                     modifier += simpleDateFormat.format(mojo.getBuildTimestamp());
-                } else if (!modifier.matches("\\d+")) {
+                } else if (!(mojo.isNumericModifierAsRelease() && modifier.matches("\\d+"))) {
                     modifier += "_1";
                 }
 

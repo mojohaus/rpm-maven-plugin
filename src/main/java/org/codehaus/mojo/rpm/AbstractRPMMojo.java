@@ -96,12 +96,26 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * <li>If no modifier exists, the release will be <code>1</code>.</li>
      * <li>If the modifier ends with <i>SNAPSHOT</i>, the timestamp (in UTC) of the build will be appended to end.</li>
      * <li>All instances of <code>'-'</code> in the modifier will be replaced with <code>'_'</code>.</li>
-     * <li>If a modifier exists and does not end with <i>SNAPSHOT</i>, <code>"_1"</code> will be appended to end.</li>
+     * <li>If the modifier is numeric and <a href="#numericModifierAsRelease">numericModifierAsRelease</a> is
+     * <code>true</code>, it will be used as the release.</li>
+     * <li>If a modifier exists, does not end with <i>SNAPSHOT</i>, and is not used as the release, <code>"_1"</code>
+     * will be appended to end.</li>
      * </ul>
      * </p>
      */
     @Parameter(property = "rpm.release")
     private String release;
+
+    /**
+     * Indicates if an all-numeric modifier of the version, such as the <code>1</code> in <code>1.0.0-1</code>, is
+     * used as the release instead of having <code>_1</code> appended to it. With <code>true</code>, version
+     * <code>1.0.0-1</code> gives version <code>1.0.0</code> and release <code>1</code>; the default gives release
+     * <code>1_1</code>. Only applies if <a href="#release">release</a> is not set.
+     *
+     * @since 2.4.1
+     */
+    @Parameter(property = "rpm.numericModifierAsRelease", defaultValue = "false")
+    private boolean numericModifierAsRelease;
 
     /**
      * The stage to build. Default to '-bb' but let users specify for instance '-ba' if they want source rpms as well.
@@ -1123,6 +1137,13 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     public final String getRelease() {
         return this.release;
+    }
+
+    /**
+     * @return Returns the configured numericModifierAsRelease attribute.
+     */
+    public final boolean isNumericModifierAsRelease() {
+        return this.numericModifierAsRelease;
     }
 
     public Date getBuildTimestamp() {

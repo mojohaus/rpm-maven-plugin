@@ -47,7 +47,17 @@ modifier portion of the [project version](#version) using the following rules:
 - If no modifier exists, the release will be `1`.
 - If the modifier ends with `SNAPSHOT`, the timestamp (in UTC) of the build will be appended to end.
 - All instances of `'-'` in the modifier will be replaced with `'_'`.
-- If a modifier exists and does not end with `SNAPSHOT`, `"_1"` will be appended to end.
+- If the modifier is numeric and [numericModifierAsRelease](#numericModifierAsRelease) is `true`, it will be used as the release.
+- If a modifier exists, does not end with `SNAPSHOT`, and is not used as the release, `"_1"` will be appended to end.
+
+<a id="numericModifierAsRelease"></a>
+
+## numericModifierAsRelease
+
+If given the value `true`, an all-numeric modifier of the project version is used
+as the release instead of having `_1` appended to it. With `true`, version
+`1.0.0-1` gives version `1.0.0` and release `1`; the default gives release
+`1_1`. It only applies if [release](#release) is not set. The default is `false`.
 
 <a id="license"></a>
 
