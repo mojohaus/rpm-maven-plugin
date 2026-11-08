@@ -257,7 +257,8 @@ final class SpecWriter {
                         if (dir.length() > 0) {
                             // %dir already included in baseDirString
                             spec.print(baseDirString);
-                            spec.println(StringUtils.replace(dir, "\\", FileHelper.UNIX_FILE_SEPARATOR) + "\"");
+                            spec.println(
+                                    escapeGlob(StringUtils.replace(dir, "\\", FileHelper.UNIX_FILE_SEPARATOR)) + "\"");
                         }
                     }
                 }
@@ -268,7 +269,8 @@ final class SpecWriter {
 
                     for (String file : files) {
                         spec.print(baseFileString);
-                        spec.println(StringUtils.replace(file, "\\", FileHelper.UNIX_FILE_SEPARATOR) + "\"");
+                        spec.println(
+                                escapeGlob(StringUtils.replace(file, "\\", FileHelper.UNIX_FILE_SEPARATOR)) + "\"");
                     }
                 }
 
@@ -279,6 +281,27 @@ final class SpecWriter {
                 }
             }
         }
+    }
+
+    /**
+     * Escapes what rpm would read as a glob or a macro in the name of a file or directory that was found on disk:
+     * <code>* ? [ ]</code> get a backslash and <code>%</code> is doubled. Names of mappings and links are not
+     * escaped, because they may contain macros on purpose.
+     */
+    static String escapeGlob(String name) {
+        final StringBuilder escaped = new StringBuilder(name.length() + 8);
+        for (int i = 0; i < name.length(); i++) {
+            final char c = name.charAt(i);
+            if (c == '%') {
+                escaped.append("%%");
+            } else {
+                if (c == '*' || c == '?' || c == '[' || c == ']' || c == '\\') {
+                    escaped.append('\\');
+                }
+                escaped.append(c);
+            }
+        }
+        return escaped.toString();
     }
 
     private String assembleBaseString(String destination, String dirAttrString) {
