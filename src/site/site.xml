@@ -54,6 +54,7 @@ under the License.
           <item name="workarea" href="op-params.html#workarea" />
           <item name="defineStatements" href="op-params.html#defineStatements" />
           <item name="preambleLines" href="op-params.html#preambleLines" />
+          <item name="attachSpec" href="op-params.html#attachSpec" />
         </item>
         <item name="Mapping Parameters" href="map-params.html">
           <item name="artifact" href="map-params.html#artifact" />
