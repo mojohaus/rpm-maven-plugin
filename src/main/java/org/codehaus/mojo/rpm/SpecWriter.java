@@ -167,6 +167,14 @@ final class SpecWriter {
                     mojo.getDefaultDirmode(), mojo.getDefaultGroupname(), mojo.getDefaultUsername());
             final String baseDirString = assembleBaseString(destination, dirAttrString);
 
+            if (map.isGhost()) {
+                log.debug("writing %ghost entry: " + destination);
+
+                spec.println(attrString.trim() + " \"" + destination + "\"");
+
+                continue;
+            }
+
             if (map.hasSoftLinks() && !absoluteDestination.exists()) {
                 // @TODO will this ever happen since absoluteDestination.exists() always likely true
                 log.debug("writing attribute string for directory created by soft link: " + destination);

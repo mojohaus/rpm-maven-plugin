@@ -49,6 +49,12 @@ public class Mapping {
     /** <code>true</code> if the files are documentation. */
     private boolean documentation;
 
+    /**
+     * <code>true</code> if the entry is a <code>%ghost</code> file: it is listed in the package but not shipped, and
+     * the mapping needs no sources.
+     */
+    private boolean ghost;
+
     /** File mode (octal string) to assign to files when installed. */
     private String filemode;
 
@@ -186,6 +192,28 @@ public class Mapping {
      */
     public void setConfiguration(String cfg) {
         configuration = cfg;
+    }
+
+    /**
+     * Retrieve the ghost status. This value is <code>true</code> if the mapping lists the destination as a
+     * <code>%ghost</code> entry, which is not shipped in the package.
+     *
+     * @return The ghost status.
+     * @since 2.4.1
+     */
+    public boolean isGhost() {
+        return ghost;
+    }
+
+    /**
+     * Set the ghost status. This value is <code>true</code> if the mapping lists the destination as a
+     * <code>%ghost</code> entry, which is not shipped in the package.
+     *
+     * @param ghost The new ghost status.
+     * @since 2.4.1
+     */
+    public void setGhost(boolean ghost) {
+        this.ghost = ghost;
     }
 
     /**
@@ -386,7 +414,8 @@ public class Mapping {
      * @return The attribute string for the SPEC file. Includes <code>%dir</code> for directory-only entries.
      */
     public String getAttrString(String defaultFileMode, String defaultDirMode, String defaultGrp, String defaultUsr) {
-        boolean directory = ((sources == null) || (sources.size() == 0)) && (dependency == null) && (artifact == null);
+        boolean directory =
+                !ghost && ((sources == null) || (sources.size() == 0)) && (dependency == null) && (artifact == null);
 
         // For backwards compatibility, use defaultFileMode as a fallback for the directory mode
         String defaultMode = directory ? (defaultDirMode != null ? defaultDirMode : defaultFileMode) : defaultFileMode;
@@ -412,6 +441,10 @@ public class Mapping {
         defaultUsr = defaultUsr == null ? "-" : defaultUsr;
 
         StringBuilder sb = new StringBuilder();
+
+        if (ghost) {
+            sb.append("%ghost ");
+        }
 
         if (configuration != null && !"FALSE".equalsIgnoreCase(configuration)) {
             sb.append("%config");

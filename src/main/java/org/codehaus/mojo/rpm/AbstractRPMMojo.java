@@ -953,6 +953,14 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
             if (map.getDirectory() == null) {
                 throw new MojoFailureException("<mapping> element must contain the destination directory");
             }
+            if (map.isGhost()
+                    && ((map.getSources() != null && !map.getSources().isEmpty())
+                            || map.getArtifact() != null
+                            || map.getDependency() != null)) {
+                throw new MojoFailureException(
+                        "<mapping> with <ghost> must not contain sources, an artifact or a dependency: "
+                                + map.getDirectory());
+            }
             if (map.getSources() != null) {
                 for (Source src : map.getSources()) {
                     if (src.getLocation() == null) {

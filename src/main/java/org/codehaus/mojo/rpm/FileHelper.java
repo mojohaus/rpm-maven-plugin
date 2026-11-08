@@ -104,6 +104,11 @@ final class FileHelper {
 
         // Process each mapping
         for (Mapping map : mojo.getMappings()) {
+            if (map.isGhost()) {
+                // a %ghost entry is listed in the spec file but nothing is installed for it
+                continue;
+            }
+
             final String destinationString = map.getDestination();
             final String macroEvaluatedDestination = evaluateMacros(destinationString);
 
