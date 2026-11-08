@@ -9,8 +9,9 @@ what the code and the POMs do not make obvious.
   `attached-rpm` (`AttachedRPMMojo`), `unpack` (`RPMUnpackMojo`) and `version` (`VersionMojo`). The
   `rpm` and `attached-rpm` goals share `AbstractRPMMojo`, write the spec file with `SpecWriter` and
   call `rpmbuild` through `RPMHelper`; `RPMSigner` signs the package.
-- There are no unit tests: `src/test/resources/gnupg` is only the GnuPG home that the signing ITs
-  use. The integration tests are the test suite.
+- Unit tests in `src/test/java` check the spec file and version output and run without `rpmbuild`.
+  `src/test/resources/gnupg` is the GnuPG home that the signing ITs use. The integration tests cover
+  the rest.
 - The site is built from `src/site` (`apt` pages and the FAQ in `fml`).
 
 ## Build gates
