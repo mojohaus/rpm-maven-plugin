@@ -41,9 +41,22 @@ public final class Passphrase {
     }
 
     /**
-     * @return Returns the {@link #passphrase}.
+     * Sets the passphrase from the text of the element, as in {@code <keyPassphrase>secret</keyPassphrase>}, so that
+     * Maven does not have to treat it as a bean with a {@code char[]} property.
+     *
+     * @param passphrase The passphrase to set.
      */
-    public char[] getPassphrase() {
+    public void set(String passphrase) {
+        setPassphrase(passphrase);
+    }
+
+    /**
+     * Not named {@code getPassphrase}, because a {@code char[]} getter next to the {@code String} setter makes the
+     * bean property ambiguous, and configuring it from an empty value fails with a cast error.
+     *
+     * @return The passphrase, or {@code null} if it is not set.
+     */
+    public char[] toCharArray() {
         return this.passphrase;
     }
 }
