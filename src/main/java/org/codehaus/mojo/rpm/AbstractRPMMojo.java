@@ -117,7 +117,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * <code>1.0.0-1</code> gives version <code>1.0.0</code> and release <code>1</code>; the default gives release
      * <code>1_1</code>. Only applies if <a href="#release">release</a> is not set.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter(property = "rpm.numericModifierAsRelease", defaultValue = "false")
     private boolean numericModifierAsRelease;
@@ -133,7 +133,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * Use them for options the plugin has no parameter for, such as <code>--rcfile</code>, whose value is a separate
      * argument. The plugin does not check them. The default is no arguments.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter(property = "rpm.rpmbuildArgs")
     private List<String> rpmbuildArgs;
@@ -374,7 +374,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * The list of recommends for this package, written as <code>Recommends</code> tags after the conflicts. Older versions of
      * rpm ignore these tags.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter
     private LinkedHashSet<String> recommends;
@@ -383,7 +383,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * The list of suggests for this package, written as <code>Suggests</code> tags after the conflicts. Older versions of
      * rpm ignore these tags.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter
     private LinkedHashSet<String> suggests;
@@ -392,7 +392,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * The list of supplements for this package, written as <code>Supplements</code> tags after the conflicts. Older versions of
      * rpm ignore these tags.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter
     private LinkedHashSet<String> supplements;
@@ -401,7 +401,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * The list of enhances for this package, written as <code>Enhances</code> tags after the conflicts. Older versions of
      * rpm ignore these tags.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter
     private LinkedHashSet<String> enhances;
@@ -617,7 +617,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * generates and before <code>%description</code>. Use them for tags and macros that have no parameter of their
      * own, such as <code>%{?systemd_requires}</code>. The plugin does not check the lines. The default is no lines.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter
     private List<String> preambleLines;
@@ -752,7 +752,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * <b>NOTE:</b> Maven allows one attached artifact per type and classifier, so enable this in a single execution of
      * a project.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter(defaultValue = "false", property = "rpm.attachSpec")
     private boolean attachSpec;
