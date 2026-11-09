@@ -233,7 +233,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private Passphrase keyPassphrase;
 
     /**
-     * The number of seconds <a href="http://expect.nist.gov/">expect</a> waits for each prompt while signing the rpm
+     * The number of seconds <a href="https://core.tcl-lang.org/expect/">expect</a> waits for each prompt while signing the rpm
      * with a <i>keyPassphrase</i>. The default {@code -1} means no timeout.
      *
      * @since 2.5.0
