@@ -46,7 +46,7 @@ There are six RPM spec file tags related to dependency management:
 
 `recommends`, `suggests`, `supplements` and `enhances` are weak dependencies,
 which need RPM 4.12 or later; older versions of rpm ignore the tags. They are
-available from release 2.4.1.
+available from release 2.5.0.
 
 All of these tags can appear multiple times in the spec file. To
 configure these tags in the plugin configuration, specify an element for

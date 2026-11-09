@@ -199,7 +199,7 @@ public class Mapping {
      * <code>%ghost</code> entry, which is not shipped in the package.
      *
      * @return The ghost status.
-     * @since 2.4.1
+     * @since 2.5.0
      */
     public boolean isGhost() {
         return ghost;
@@ -210,7 +210,7 @@ public class Mapping {
      * <code>%ghost</code> entry, which is not shipped in the package.
      *
      * @param ghost The new ghost status.
-     * @since 2.4.1
+     * @since 2.5.0
      */
     public void setGhost(boolean ghost) {
         this.ghost = ghost;

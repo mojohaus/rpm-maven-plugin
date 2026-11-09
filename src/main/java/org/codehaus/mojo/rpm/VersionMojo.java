@@ -89,7 +89,7 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
      * <code>1.0.0-1</code> gives version <code>1.0.0</code> and release <code>1</code>; the default gives release
      * <code>1_1</code>. Only applies if <a href="#release">release</a> is not set.
      *
-     * @since 2.4.1
+     * @since 2.5.0
      */
     @Parameter(property = "rpm.numericModifierAsRelease", defaultValue = "false")
     private boolean numericModifierAsRelease;
