@@ -142,13 +142,18 @@ package.
 
 Each of the scripts can be configured as a
 [Scriptlet](./apidocs/org/codehaus/mojo/rpm/Scriptlet.html), which allows
-the content of the script to be provided either as a String or file located in
-the project or in the classpath (using the prefix classpath:). If
+the content of the script to be provided either as a String or as a file. If
 both parameters are specified for a script, the external file will be
 ignored. Before writing scripts for RPM packages, understand the
 [script docs](https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-inside-scripts.html) in
 Maximum RPM since the operation of the scripts must be done correctly or
 major problems can occur while installing or removing the package.
+
+A `<scriptFile>` is an absolute path or a path relative to the project base
+directory. Since 2.5.0, a value that starts with `classpath:` names a resource
+on the plugin's class path instead, which lets you ship scripts in a jar that
+you add to the `<dependencies>` of the plugin. `<fileEncoding>` and
+`<filter>` apply to both forms.
 
 Script files can be filtered by setting `<filter>` to true while inline
 scripts can be filtered together with the pom.

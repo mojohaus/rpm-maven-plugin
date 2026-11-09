@@ -19,10 +19,16 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
 
 import org.apache.maven.shared.filtering.FilterWrapper;
-import org.apache.maven.shared.utils.io.FileUtils;
 
 /**
  * Defines a scriptlet including the optinal {@link #getSubpackage()} and {@link #getProgram()}. The (optional) contents
@@ -32,6 +38,8 @@ import org.apache.maven.shared.utils.io.FileUtils;
  * @since 2.0-beta-4
  */
 public class Scriptlet {
+    private static final String CLASSPATH_PREFIX = "classpath:";
+
     /**
      * Optional subpackage.
      *
@@ -130,9 +138,12 @@ public class Scriptlet {
     }
 
     /**
-     * The contents of the script from a file in the project or in the classpath. This will be ignored if {@link #getScript()} is populated.
+     * The location of the script: a file path (absolute, or relative to the project base directory) or, with the prefix
+     * {@code classpath:}, a resource on the plugin class path, for example a script shipped in a jar that is added to
+     * the plugin's {@code dependencies}. This is ignored if {@link #getScript()} is populated.
      *
      * @return Returns the {@link #scriptFile}.
+     * @since 2.5.0 the {@code classpath:} prefix, and the return type {@code String} instead of {@code File}
      */
     public String getScriptFile() {
         return this.scriptFile;
@@ -229,30 +240,50 @@ public class Scriptlet {
         return builder.toString();
     }
 
-    private Reader getScriptReader(String path, AbstractRPMMojo mojo)
-            throws FileNotFoundException, UnsupportedEncodingException {
-        String classpathPrefix = "classpath:";
-        Reader reader;
-        if (path.startsWith(classpathPrefix)) {
-            String classpathResource = path.substring(classpathPrefix.length());
-            InputStream inputStream =
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathResource);
-            if (inputStream == null) {
-                throw new RuntimeException(
-                        "Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
-            }
-            reader = new InputStreamReader(inputStream);
+    /**
+     * Opens {@link #getScriptFile()}: a {@code classpath:} value is read from the plugin class loader, anything else
+     * is a file path that is resolved against the project base directory, as Maven does for a {@code File} parameter.
+     */
+    private Reader getScriptReader(AbstractRPMMojo mojo) throws IOException {
+        final InputStream in;
+        if (scriptFile.startsWith(CLASSPATH_PREFIX)) {
+            in = openClasspathResource(scriptFile.substring(CLASSPATH_PREFIX.length()));
         } else {
-            File file = FileUtils.resolveFile(mojo.getProject().getBasedir(), path);
-            if (!file.exists()) {
-                throw new RuntimeException(
-                        "Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+            File file = new File(scriptFile);
+            if (!file.isAbsolute()) {
+                // what Maven does for a File parameter: relative paths are based on the project directory
+                file = new File(mojo.getProject().getBasedir(), scriptFile);
             }
-            reader = fileEncoding != null
-                    ? new InputStreamReader(new FileInputStream(file), fileEncoding)
-                    : new FileReader(file);
+            if (!file.isFile()) {
+                throw missingScriptFile();
+            }
+            in = new FileInputStream(file);
         }
-        return reader;
+        try {
+            return fileEncoding != null ? new InputStreamReader(in, fileEncoding) : new InputStreamReader(in);
+        } catch (IOException | RuntimeException e) {
+            in.close();
+            throw e;
+        }
+    }
+
+    private InputStream openClasspathResource(String name) {
+        while (name.startsWith("/")) {
+            name = name.substring(1);
+        }
+        InputStream in = Scriptlet.class.getClassLoader().getResourceAsStream(name);
+        if (in == null && Thread.currentThread().getContextClassLoader() != null) {
+            in = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
+        }
+        if (in == null) {
+            throw missingScriptFile();
+        }
+        return in;
+    }
+
+    private RuntimeException missingScriptFile() {
+        return new RuntimeException(
+                "Invalid scriptlet declaration found - defined scriptFile does not exist: " + scriptFile);
     }
 
     /**
@@ -266,31 +297,16 @@ public class Scriptlet {
         if (script != null) {
             writer.println(script);
         } else if (scriptFile != null) {
-            Reader reader = getScriptReader(scriptFile, mojo);
+            Reader reader = getScriptReader(mojo);
             if (filter) {
                 for (FilterWrapper filterWrapper : mojo.getFilterWrappers()) {
                     reader = filterWrapper.getReader(reader);
                 }
             }
-            BufferedReader bufferedReader = null;
-            try {
-                bufferedReader = new BufferedReader(reader);
+            try (BufferedReader bufferedReader = new BufferedReader(reader)) {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     writer.println(line);
-                }
-            } finally {
-                if (bufferedReader != null) {
-                    try {
-                        bufferedReader.close();
-                    } catch (IOException e) {
-                        // ignore - it does not matter
-                    }
-                }
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // ignore - it does not matter
                 }
             }
         }
