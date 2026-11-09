@@ -19,11 +19,8 @@ package org.codehaus.mojo.rpm;
  * under the License.
  */
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.util.List;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -265,38 +262,31 @@ final class RPMHelper {
      * @return A String containing the value of the requested attribute.
      * @throws MojoExecutionException if the attribute could not be read.
      */
-    public String getRpmAttribute( File rpmFile, String attribute )
-        throws MojoExecutionException
-    {
+    public String getRpmAttribute(File rpmFile, String attribute) throws MojoExecutionException {
         final Commandline cl = new Commandline();
-        cl.setExecutable( "rpm" );
-        cl.createArg().setValue( "--query" );
-        cl.createArg().setValue( "--package" );
-        cl.createArg().setValue( rpmFile.getAbsolutePath() );
-        cl.createArg().setValue( "--queryformat" );
-        cl.createArg().setValue( "%{" + attribute + "}" );
+        cl.setExecutable("rpm");
+        cl.createArg().setValue("--query");
+        cl.createArg().setValue("--package");
+        cl.createArg().setValue(rpmFile.getAbsolutePath());
+        cl.createArg().setValue("--queryformat");
+        cl.createArg().setValue("%{" + attribute + "}");
 
         final Log log = mojo.getLog();
 
         final StringStreamConsumer stdout = new StringStreamConsumer();
-        final StreamConsumer stderr = new LogStreamConsumer( LogStreamConsumer.INFO, log );
-        try
-        {
-            if ( log.isDebugEnabled() )
-            {
-                log.debug( "About to execute \'" + cl.toString() + "\'" );
+        final StreamConsumer stderr = new LogStreamConsumer(LogStreamConsumer.INFO, log);
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("About to execute \'" + cl.toString() + "\'");
             }
 
-            int result = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
-            if ( result != 0 )
-            {
-                throw new MojoExecutionException( "rpm -query returned: \'" + result + "\' executing \'"
-                        + cl.toString() + "\'" );
+            int result = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+            if (result != 0) {
+                throw new MojoExecutionException(
+                        "rpm -query returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
             }
-        }
-        catch ( CommandLineException e )
-        {
-            throw new MojoExecutionException( "Unable to get " + attribute + " from rpm", e );
+        } catch (CommandLineException e) {
+            throw new MojoExecutionException("Unable to get " + attribute + " from rpm", e);
         }
 
         return stdout.getOutput().trim();

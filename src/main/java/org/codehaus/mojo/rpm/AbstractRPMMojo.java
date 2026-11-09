@@ -25,22 +25,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -692,11 +695,14 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private String releaseProperty;
 
     /**
-     * When enabled, automatically generates requires for all (transitive) rpm-dependencies.
-     * 
-     * @since 2.2.1
+     * Indicates if a <code>Requires</code> entry is generated for each direct dependency of the project that has the
+     * type <code>rpm</code>. The entry has the form <code>name &gt;= version-release</code>, with the three values read
+     * from the dependency's rpm file, and is added to the entries of <a href="#requires">requires</a>. Transitive
+     * dependencies are not considered.
+     *
+     * @since 2.5.0
      */
-    @Parameter
+    @Parameter(property = "rpm.addDependencyBasedRequires", defaultValue = "false")
     private boolean addDependencyBasedRequires;
 
     /**
@@ -1118,47 +1124,68 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
         }
 
         processDefineStatements();
-	
-        if ( addDependencyBasedRequires )
-        {
+
+        if (addDependencyBasedRequires) {
             appendDependencyBasedRequires();
         }
     }
-    
+
     /**
-     * Extends this.requires with additional require for each immediate rpm-type dependency
-     * of the project, requiring the same or a higher version as the resolved-dependency-version.
+     * Extends {@link #requires} with a require for each direct rpm-type dependency of the project, requiring the same
+     * or a higher version as the resolved dependency.
      *
-     * @throws MojoExecutionException if the projects dependency-tree cannot be generated.
-     * @since 2.2.1
+     * @throws MojoExecutionException if the rpm file of a dependency cannot be read.
+     * @since 2.5.0
      */
-    private void appendDependencyBasedRequires()
-        throws MojoExecutionException
-    {
-        if ( this.requires == null )
-        {
-            this.requires = new LinkedHashSet();
+    private void appendDependencyBasedRequires() throws MojoExecutionException {
+        if (this.requires == null) {
+            this.requires = new LinkedHashSet<String>();
         }
-        for ( Object dependency : project.getDependencyArtifacts() )
-        {
-            Artifact dependencyArtifact = (Artifact) dependency;
-            if ( "rpm".equals( dependencyArtifact.getType() ) )
-            {
-                StringBuilder require = new StringBuilder();
-                getLog().debug( "Determining rpm name and version of rpm-dependency " + dependencyArtifact);
-                File rpmFile = dependencyArtifact.getFile();
-                String rpmName = helper.getRpmAttribute( rpmFile, "NAME" );
-                String rpmVersion = helper.getRpmAttribute( rpmFile, "VERSION" );
-                String rpmRelease = helper.getRpmAttribute( rpmFile, "RELEASE" );
-                require.append( rpmName )
-                        .append( " >= " )
-                        .append( rpmVersion )
-                        .append( "-" )
-                        .append( rpmRelease );
-                getLog().info( "Add dependency-based require: " + require.toString() );
-                requires.add( require.toString() );
+        for (Artifact dependencyArtifact : selectRpmDependencies(project.getArtifacts(), project.getDependencies())) {
+            getLog().debug("Determining rpm name and version of rpm-dependency " + dependencyArtifact);
+            File rpmFile = dependencyArtifact.getFile();
+            String rpmName = helper.getRpmAttribute(rpmFile, "NAME");
+            String rpmVersion = helper.getRpmAttribute(rpmFile, "VERSION");
+            String rpmRelease = helper.getRpmAttribute(rpmFile, "RELEASE");
+            String require = dependencyRequire(rpmName, rpmVersion, rpmRelease);
+            getLog().info("Add dependency-based require: " + require);
+            requires.add(require);
+        }
+    }
+
+    /**
+     * Selects the resolved artifacts that belong to a direct dependency of type <code>rpm</code>.
+     * {@link MavenProject#getArtifacts()} holds all resolved artifacts, transitive ones included, and
+     * {@link MavenProject#getDependencyArtifacts()} is deprecated, so the direct dependencies are matched by their
+     * conflict ID (<code>groupId:artifactId:type[:classifier]</code>).
+     *
+     * @param resolved The resolved artifacts of the project.
+     * @param dependencies The dependencies declared by the project.
+     * @return The resolved artifacts of the direct rpm dependencies, in the order of <code>resolved</code>.
+     */
+    static List<Artifact> selectRpmDependencies(Collection<Artifact> resolved, List<Dependency> dependencies) {
+        Set<String> direct = new HashSet<String>();
+        for (Dependency dependency : dependencies) {
+            if (RPM_TYPE.equals(dependency.getType())) {
+                direct.add(dependency.getManagementKey());
             }
         }
+        List<Artifact> selected = new ArrayList<Artifact>();
+        for (Artifact artifact : resolved) {
+            if (RPM_TYPE.equals(artifact.getType()) && direct.contains(artifact.getDependencyConflictId())) {
+                selected.add(artifact);
+            }
+        }
+        return selected;
+    }
+
+    /**
+     * Builds the require entry for a dependency.
+     *
+     * @return <code>name &gt;= version-release</code>
+     */
+    static String dependencyRequire(String name, String version, String release) {
+        return name + " >= " + version + "-" + release;
     }
 
     /**
@@ -1197,6 +1224,9 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * The deepest chain of macros that refer to each other that {@link #evaluateMacro(String)} follows.
      */
+    /** The artifact type of rpm dependencies. */
+    private static final String RPM_TYPE = "rpm";
+
     private static final int MAX_MACRO_DEPTH = 16;
 
     /**
