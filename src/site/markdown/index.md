@@ -7,7 +7,7 @@ scripts to be run while the package is being installed and removed. This
 plugin does not support the full range of features available to RPMs. In
 particular, source RPMs can not be generated and the spec files which are
 used do not do any build process (the plugin collects the files and
-"installs" them for packaging).
+&quot;installs&quot; them for packaging).
 
 This documentation will not provide a tutorial for building and using RPMs.
 For more information on the subject, please refer to the resources listed
@@ -33,7 +33,7 @@ Contributions is welcomed. See [contributing](./contributing.html).
 
 # Resources
 
-- [The RPM home page](http://www.rpm.org/)
-- [RPM Documentation](http://www.rpm.org/wiki/Docs)
-- [Maximum RPM](http://www.rpm.org/max-rpm/)
+- [The RPM home page](https://rpm.org/)
+- [RPM Documentation](https://rpm.org/documentation.html)
+- [Maximum RPM](https://ftp.osuosl.org/pub/rpm/max-rpm/)
 

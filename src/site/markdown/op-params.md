@@ -2,12 +2,10 @@
 
 The parameters described in this page control the operation of the plugin.
 
-<a id="workarea"></a>
-
 ## workarea
 
 The directory to use to build the RPM. By default, this is a directory
-named `rpm` in the project's build directory.
+named `rpm` in the project&apos;s build directory.
 
 **NOTE:** The absolute path to the workarea *MUST NOT* have a space in any of the directory names.
 
@@ -15,11 +13,9 @@ Beginning with release 2.0-beta-3, the plugin builds in a sub-directory of the
 workarea, named `workarea/<name>` or, when the execution has a classifier,
 `workarea/<name>-<classifier>`. The directory is not named after the execution,
 so executions with the same `name` and no classifier share one directory and
-overwrite each other's files. Only the `attached-rpm` goal has a classifier.
+overwrite each other&apos;s files. Only the `attached-rpm` goal has a classifier.
 Give each `attached-rpm` execution that builds a package of the same `name` a
 distinct `classifier`.
-
-<a id="defineStatements"></a>
 
 ## defineStatements
 
@@ -38,8 +34,6 @@ A list of %define statements that should be included in the top of the spec file
   ...
 </plugin>
 ```
-
-<a id="preambleLines"></a>
 
 ## preambleLines
 
@@ -63,8 +57,6 @@ the lines. The default is no lines.
 </plugin>
 ```
 
-<a id="attachSpec"></a>
-
 ## attachSpec
 
 If given the value `true`, the generated spec file is attached to the project as
@@ -74,16 +66,12 @@ a secondary artifact with type `spec` and classifier `rpm-spec`, so that
 Maven allows one attached artifact per type and classifier, so enable this in a
 single execution of a project.
 
-<a id="rpmbuildStage"></a>
-
 ## rpmbuildStage
 
 The stage to build, e.g. the parameters passed to rpmbuild.
 By default this is `-bb`: Build a binary package (after doing the %prep, %build, and %install stages).
 
 If you want to build binary and source packages, use `-ba`.
-
-<a id="rpmbuildArgs"></a>
 
 ## rpmbuildArgs
 

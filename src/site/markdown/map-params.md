@@ -35,8 +35,6 @@ a `mappings` tag. A minimal mapping configuration looks like:
 This is the directory where the files in this mapping will be installed
 when the package is installed. This value must start with `/`.
 
-<a id="configuration"></a>
-
 ## configuration
 
 If present or populated with the value `true`, the files in this mapping
@@ -45,18 +43,14 @@ installation to ensure that local changes to the configuration are not lost.
 
 If populated with any value other than `false`, the value will be used
 as a modifier to the `%config` declaration in the spec file. As an example,
-"`<configuration>noreplace</configuration>`", would lead to
+&quot;`<configuration>noreplace</configuration>`&quot;, would lead to
 `%config(noreplace)` being generated in the spec file.
-
-<a id="documentation"></a>
 
 ## documentation
 
 If given the value `true`, the file(s) are marked as documentation files.
 The RPM command installs documentation files into a directory (usually under
 `/usr/share/doc`) named the same as the RPM package.
-
-<a id="ghost"></a>
 
 ## ghost
 
@@ -73,9 +67,9 @@ This is UNIX permissions (file mode) to assign to the files when installed.
 This value consists of three octal digits representing the access for the
 owner, the group, and the world. Each digit represents the access allowed
 and is the sum of 4 for read, 2 for write, and 1 for execute. A common
-value to use is "644" which provides the owner read/write access and
+value to use is &quot;644&quot; which provides the owner read/write access and
 read-only access to everyone else. For more information on this subject,
-read [File Security](http://www.tldp.org/LDP/intro-linux/html/sect_03_04.html),
+read [File Security](https://tldp.org/LDP/intro-linux/html/sect_03_04.html),
 section 3.4 of the Introduction to Linux maintained by the
 Linux Documentation Project. If not specified, the files retain the
 filemode assigned to them when copied to the RPM work area.
@@ -86,19 +80,17 @@ populated, the defaults ([defaultFileMode](./rpm-mojo.html#defaultFilemode),
 [defaultGroupname](./rpm-mojo.html#defaultGroupname), and
 [defaultDirmode](./rpm-mojo.html#defaultDirmode)) will be used.
 
-<a id="dirmode"></a>
-
 ## dirmode
 
 This is UNIX permissions (file mode) to assign to directories when installed.
 This value consists of three octal digits representing the access for the
 owner, the group, and the world. Each digit represents the access allowed
 and is the sum of 4 for read, 2 for write, and 1 for execute (in the context of
-directories, 'execute' allows the user to list the contents of the directory).
-A common value to use is "755" which provides the owner read/write access and
+directories, &apos;execute&apos; allows the user to list the contents of the directory).
+A common value to use is &quot;755&quot; which provides the owner read/write access and
 read-only access to everyone else. Everyone is allowed to list the contents
 of the directory. For more information on this subject,
-read [File Security](http://www.tldp.org/LDP/intro-linux/html/sect_03_04.html),
+read [File Security](https://tldp.org/LDP/intro-linux/html/sect_03_04.html),
 section 3.4 of the Introduction to Linux maintained by the
 Linux Documentation Project. If not specified, filemode, will be used instead.
 
@@ -143,8 +135,6 @@ populated, the defaults ([defaultFileMode](./rpm-mojo.html#defaultFilemode),
 [defaultGroupname](./rpm-mojo.html#defaultGroupname), and
 [defaultDirmode](./rpm-mojo.html#defaultDirmode)) will be used.
 
-<a id="directoryIncluded"></a>
-
 ## directoryIncluded
 
 If the value is `true` then the attribute string will be written for
@@ -155,49 +145,43 @@ the `directory` if the `sources` identify all of the files in the
 If the value is `false`, the files in this mapping will be listed
 individually in the spec file.
 
-<a id="recurseDirectories"></a>
-
 ## recurseDirectories
 
 Indicates if sub-directories contained in the `sources` should be explicitly listed in `%files`.
 This includes listing the `destination` if `directoryIncluded` is `true`.
 
-<a id="artifact"></a>
-
 ## artifact
 
-If present, then the project's artifact should be included in this
+If present, then the project&apos;s artifact should be included in this
 mapping. This file will be installed in the directory specified in
 the `directory` parameter. If the project creates more than one
 artifact and you do not want all of the artifacts installed with this
 mapping, you need to specify the classifier(s) which should be included
-with this mapping; this is done by including a "`<classifiers>`"
-tag which holds one or more "`<classifier>`" tags holding a single
-classifier (use "`<classifier></classifier>`" for the primary
+with this mapping; this is done by including a &quot;`<classifiers>`&quot;
+tag which holds one or more &quot;`<classifier>`&quot; tags holding a single
+classifier (use &quot;`<classifier></classifier>`&quot; for the primary
 project artifact).
-
-<a id="dependency"></a>
 
 ## dependency
 
-If present, then some or all of the project's transitive runtime dependencies
+If present, then some or all of the project&apos;s transitive runtime dependencies
 should be included in this mapping. The dependencies to be included are those
 which are specified with `compile` or `runtime` scope, and all of the
 dependencies of those artifacts which are similarly defined. These files will
 be installed in the directory specified in the `directory` parameter.
 
-If the tag is empty ("`<dependency/>`"), then all dependencies will
+If the tag is empty (&quot;`<dependency/>`&quot;), then all dependencies will
 be included in the mapping. To limit the dependencies to include in the
-mapping, you must specify "`<includes>`", "`<excludes>`", or
+mapping, you must specify &quot;`<includes>`&quot;, &quot;`<excludes>`&quot;, or
 both. Each of these elements contains a list of items; for example, the
-"`<includes>`" element will have a list of "`<include>`" items.
+&quot;`<includes>`&quot; element will have a list of &quot;`<include>`&quot; items.
 Each item specifies a single dependency to include or exclude with a string
 in one of the following two formats:
 
-- "*group*`:`*artifact*" which specifies the group ID and artifact ID
+- &quot;*group*`:`*artifact*&quot; which specifies the group ID and artifact ID
   of the dependency; the version and type are taken from the actual dependency
   definition in the project
-- "*group*`:`*artifact*`:`*versionrange*" which extends the above
+- &quot;*group*`:`*artifact*`:`*versionrange*&quot; which extends the above
   to limit the specification to particular versions of the artifact; note that
   this will not cause a different version of the dependency to be packaged
   than what was used to build the project
@@ -205,10 +189,8 @@ in one of the following two formats:
 If no include items are specified, then all dependencies not explicitly
 excluded are included.
 
-- "`<stripVersion>true</stripVersion>`" will strip the version from the
+- &quot;`<stripVersion>true</stripVersion>`&quot; will strip the version from the
   name of the dependencies when installed in the RPM package.
-
-<a id="sources"></a>
 
 ## sources
 

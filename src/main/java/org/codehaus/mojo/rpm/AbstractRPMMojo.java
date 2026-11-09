@@ -197,7 +197,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private File keypath;
 
     /**
-     * The passphrase for the <i>keyname</i> to sign the rpm. This utilizes <a href="http://expect.nist.gov/">expect</a>
+     * The passphrase for the <i>keyname</i> to sign the rpm. This utilizes <a href="https://core.tcl-lang.org/expect/">expect</a>
      * and requires that {@code expect} be on the PATH.
      * <p>
      * Note that the data type used is <b>NOT</b> {@code String}.

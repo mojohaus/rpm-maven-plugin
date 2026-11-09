@@ -10,29 +10,28 @@ RPM on Demand
 =============
 
 In this scenario, an RPM is generated from the project on demand by
-executing the goal "`rpm:rpm`" within a project. The project itself
+executing the goal &quot;`rpm:rpm`&quot; within a project. The project itself
 may be configured to produce any sort of packaging, since the RPM is not
 the primary artifact produced by the project.
 
-If you want the project's artifacts packaged in the RPM, you must generate
+If you want the project&apos;s artifacts packaged in the RPM, you must generate
 the RPM as a side effect of the standard lifecycle.
 
 Things which do not work as I envision the 1.0 release working:
 
 - If this goal is run on a project with modules, it will run the
-  "`rpm:rpm`" goal on each module, rather than packaging the modules into
+  &quot;`rpm:rpm`&quot; goal on each module, rather than packaging the modules into
   a single RPM.
 
-<a id="RPM_as_Side_Effect"></a>
 
 RPM as Side Effect
 ==================
 
 In this scenario, an RPM is generated from the project whenever the project
-is packaged. This must be done whenever the project's primary artifact is
+is packaged. This must be done whenever the project&apos;s primary artifact is
 intended to be part of the RPM package but can be done anytime. To set up
 this configuration, include the following lines in the plugin definition
-in the project's POM file (see the [sample configuration](./example1.html) for
+in the project&apos;s POM file (see the [sample configuration](./example1.html) for
 an example of this):
 
 ```xml
@@ -67,13 +66,13 @@ RPM as Primary Artifact
 =======================
 
 In this scenario, the RPM is the primary artifact of the project and is
-created by executing the phase "`package`" within the project. If
-properly configured, this allows the user to execute "`mvn package`"
+created by executing the phase &quot;`package`&quot; within the project. If
+properly configured, this allows the user to execute &quot;`mvn package`&quot;
 on a top-level project (which has the items to build and the RPM project
 as modules) and have Maven package the items to build into jars, wars, ears,
 etc. and them assemble the RPM of those items for distribution.
 
-The packaging value should be set to "`rpm`".
+The packaging value should be set to &quot;`rpm`&quot;.
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -105,7 +104,7 @@ Configure GPG passphrase under settings.xml
 ===========================================
 
 GPG passphrase can be configured under local settings.xml
-either in clear or [encrypted](http://maven.apache.org/guides/mini/guide-encryption.html) text.
+either in clear or [encrypted](https://maven.apache.org/guides/mini/guide-encryption.html) text.
 
 ```xml
 <settings>
