@@ -14,6 +14,10 @@ assert specFile.text.contains("echo \"Erasing version (escaped) \${project.versi
 assert specFile.text.contains("echo \"Done erasing version 1.0\"")
 assert specFile.text.contains("echo \"Done erasing version (escaped) \${project.version}\"")
 
+// Test if a scriptFile given as an absolute path (${project.basedir}/...) was found and filtered
+assert specFile.text.contains("%pretrans")
+assert specFile.text.count("PROJECT_NAME=rpm-filter-scriptlet") == 2
+
 // Test if the trigger script was filtered
 assert specFile.text.contains("echo \"a filtered install trigger for rpm-filter-scriptlet\"")
 
