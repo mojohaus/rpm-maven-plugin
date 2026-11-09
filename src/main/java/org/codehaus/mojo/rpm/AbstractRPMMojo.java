@@ -201,8 +201,10 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private File keypath;
 
     /**
-     * Set the hash algorithm that will be used to sign the package using GPG.
-     * @since 2.2.1
+     * The digest algorithm GPG uses to sign the rpm, for example {@code SHA512}. It defines the
+     * {@code %_gpg_digest_algo} macro. If not given, the GPG default applies.
+     *
+     * @since 2.5.0
      */
     @Parameter(property = "gpg.signHashAlgorithm")
     private String signHashAlgorithm;
@@ -231,11 +233,13 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private Passphrase keyPassphrase;
 
     /**
-     * Set the expect timeout value, -1 means no timeout
-     * @since 2.2.1
+     * The number of seconds <a href="http://expect.nist.gov/">expect</a> waits for each prompt while signing the rpm
+     * with a <i>keyPassphrase</i>. The default {@code -1} means no timeout.
+     *
+     * @since 2.5.0
      */
     @Parameter(defaultValue = "-1")
-    private String keyExpectTimeout;
+    private int keyExpectTimeout;
 
     /**
      * Server id to lookup the gpg passphrase under Maven settings. The default value intentionally selected to match
@@ -1780,7 +1784,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * @return Returns the {@link #keyExpectTimeout}.
      */
-    final String getKeyExpectTimeout() {
+    final int getKeyExpectTimeout() {
         return this.keyExpectTimeout;
     }
 

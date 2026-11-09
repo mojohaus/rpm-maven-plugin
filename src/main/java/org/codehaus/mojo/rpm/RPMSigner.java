@@ -68,7 +68,7 @@ final class RPMSigner {
     /**
      * Expect timeout, -1 means no timeout
      */
-    private final String expectTimeout;
+    private final int expectTimeout;
 
     /**
      * Constructor takes all necessary attributes to sign an rpm.
@@ -79,7 +79,7 @@ final class RPMSigner {
      * @param log Used for logging information in the signing process.
      */
     public RPMSigner(
-            File gpgPath, String gpgName, char[] passphrase, Log log, String expectTimeout, String hashAlgorithm) {
+            File gpgPath, String gpgName, char[] passphrase, Log log, int expectTimeout, String hashAlgorithm) {
         this.gpgPath = gpgPath;
         this.gpgName = gpgName;
         this.passphrase = passphrase;
@@ -224,7 +224,7 @@ final class RPMSigner {
                 writer.print(" --define \"_gpg_path ");
                 writer.print(gpgPath + "\"");
             }
-            if (hashAlgorithm != null) {
+            if (hashAlgorithm != null && !hashAlgorithm.isEmpty()) {
                 writer.print(" --define \"_gpg_digest_algo ");
                 writer.print(hashAlgorithm + "\"");
             }
