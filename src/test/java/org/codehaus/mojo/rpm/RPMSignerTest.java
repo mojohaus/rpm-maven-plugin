@@ -37,7 +37,7 @@ class RPMSignerTest {
     private final File rpm = new File("target/rpm/RPMS/noarch/demo-1.0-1.noarch.rpm").getAbsoluteFile();
 
     private RPMSigner signer(char[] passphrase) {
-        return new RPMSigner(new File("target/gnupg"), "Demo Key", passphrase, new SystemStreamLog());
+        return new RPMSigner(new File("target/gnupg"), "Demo Key", passphrase, new SystemStreamLog(), "-1", null);
     }
 
     private static Properties environment(Commandline cl) throws Exception {

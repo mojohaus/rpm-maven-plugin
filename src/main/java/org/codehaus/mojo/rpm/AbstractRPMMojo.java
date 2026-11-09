@@ -204,7 +204,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * Set the hash algorithm that will be used to sign the package using GPG.
      * @since 2.2.1
      */
-    @Parameter( property = "gpg.signHashAlgorithm" )
+    @Parameter(property = "gpg.signHashAlgorithm")
     private String signHashAlgorithm;
 
     /**
@@ -229,13 +229,6 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     @Parameter
     private Passphrase keyPassphrase;
-
-    /**
-     * Set the waiting phrase in the expect installation langage (in English "Enter pass phrase")
-     * @since 2.2.1
-     */
-    @Parameter
-    private String keyExpectPhrase;
 
     /**
      * Set the expect timeout value, -1 means no timeout
@@ -1780,24 +1773,14 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * @return Returns the {@link #signHashAlgorithm}.
      */
-    final String getSignHashAlgorithm()
-    {
+    final String getSignHashAlgorithm() {
         return this.signHashAlgorithm;
-    }
-
-    /**
-     * @return Returns the {@link #keyExpectPhrase}.
-     */
-    final String getKeyExpectPhrase()
-    {
-        return this.keyExpectPhrase;
     }
 
     /**
      * @return Returns the {@link #keyExpectTimeout}.
      */
-    final String getKeyExpectTimeout()
-    {
+    final String getKeyExpectTimeout() {
         return this.keyExpectTimeout;
     }
 
