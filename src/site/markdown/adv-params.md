@@ -252,3 +252,17 @@ equivalent to defining the `%_gpg_name` macro and adding the
 This parameter sets the passphrase for the key to sign the rpm. The use of this
 attribute requires [expect](https://core.tcl-lang.org/expect/) to be available on the
 PATH.
+
+### `keyExpectTimeout`
+
+This parameter sets how many seconds [expect](http://expect.nist.gov/) waits
+for each prompt while signing with a `keyPassphrase`. The default is `-1`,
+which means no timeout. It is available since 2.5.0.
+
+### `signHashAlgorithm`
+
+This parameter sets the digest algorithm GPG uses to sign the package, for
+example `SHA512`. It defines the `%_gpg_digest_algo` macro, both when the
+package is signed with a `keyPassphrase` and when it is not. If it is not set,
+the GPG default applies. The user property is `gpg.signHashAlgorithm`. It is
+available since 2.5.0.

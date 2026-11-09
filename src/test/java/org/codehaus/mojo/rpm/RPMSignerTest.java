@@ -22,6 +22,7 @@ package org.codehaus.mojo.rpm;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.plugin.logging.SystemStreamLog;
@@ -37,7 +38,12 @@ class RPMSignerTest {
     private final File rpm = new File("target/rpm/RPMS/noarch/demo-1.0-1.noarch.rpm").getAbsoluteFile();
 
     private RPMSigner signer(char[] passphrase) {
-        return new RPMSigner(new File("target/gnupg"), "Demo Key", passphrase, new SystemStreamLog(), "-1", null);
+        return signer(passphrase, -1, null);
+    }
+
+    private RPMSigner signer(char[] passphrase, int expectTimeout, String hashAlgorithm) {
+        return new RPMSigner(
+                new File("target/gnupg"), "Demo Key", passphrase, new SystemStreamLog(), expectTimeout, hashAlgorithm);
     }
 
     private static Properties environment(Commandline cl) throws Exception {
@@ -79,5 +85,43 @@ class RPMSignerTest {
         assertTrue(script.contains("\nset timeout -1\n"), script);
         assertTrue(script.contains("spawn rpm --define \"_gpg_name Demo Key\""), script);
         assertFalse(script.contains("-c"), script);
+    }
+
+    @Test
+    void hashAlgorithmIsDefinedInTheExpectScript() throws Exception {
+        String script = new String(
+                signer("secret".toCharArray(), -1, "SHA512").writeExpectScriptFile(rpm), StandardCharsets.UTF_8);
+
+        assertTrue(script.contains("--define \"_gpg_digest_algo SHA512\" --addsign "), script);
+    }
+
+    @Test
+    void hashAlgorithmIsDefinedForRpmsign() throws Exception {
+        Commandline cl = signer(null, -1, "SHA512").rpmsignCommandline(rpm);
+
+        List<String> args = Arrays.asList(cl.getArguments());
+        int define = args.indexOf("_gpg_digest_algo SHA512");
+        assertTrue(define > 0, args.toString());
+        assertEquals("--define", args.get(define - 1));
+    }
+
+    @Test
+    void noHashAlgorithmDefinesNothing() throws Exception {
+        for (String unset : new String[] {null, ""}) {
+            RPMSigner signer = signer("secret".toCharArray(), -1, unset);
+            String script = new String(signer.writeExpectScriptFile(rpm), StandardCharsets.UTF_8);
+            assertFalse(script.contains("_gpg_digest_algo"), script);
+            assertFalse(Arrays.asList(signer.rpmsignCommandline(rpm).getArguments())
+                    .toString()
+                    .contains("_gpg_digest_algo"));
+        }
+    }
+
+    @Test
+    void timeoutIsWrittenToTheExpectScript() throws Exception {
+        String script =
+                new String(signer("secret".toCharArray(), 30, null).writeExpectScriptFile(rpm), StandardCharsets.UTF_8);
+
+        assertTrue(script.contains("\nset timeout 30\n"), script);
     }
 }
