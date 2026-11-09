@@ -45,6 +45,10 @@
             <scriptFile>classpath:preremove.sh</scriptFile>
             <filter>true</filter>
           </preremoveScriptlet>
+          <pretransScriptlet>
+            <scriptFile>${project.basedir}/src/main/scripts/postinstall.sh</scriptFile>
+            <filter>true</filter>
+          </pretransScriptlet>
           <postremoveScriptlet>
             <scriptFile>../sample-lib/src/scripts/postremove.sh</scriptFile>
             <filter>true</filter>
@@ -61,7 +65,7 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>test</groupId>
+            <groupId>localhost</groupId>
             <artifactId>sample-lib</artifactId>
             <version>1.0</version>
           </dependency>
