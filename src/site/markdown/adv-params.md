@@ -245,7 +245,7 @@ PATH.
 
 ### `keyExpectTimeout`
 
-This parameter sets how many seconds [expect](http://expect.nist.gov/) waits
+This parameter sets how many seconds [expect](https://core.tcl-lang.org/expect/) waits
 for each prompt while signing with a `keyPassphrase`. The default is `-1`,
 which means no timeout. It is available since 2.5.0.
 
