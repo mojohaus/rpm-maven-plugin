@@ -256,13 +256,14 @@ final class RPMHelper {
     }
 
     /**
-     * Gets the value of the RPM attribute for the given RPM file..
-     * @param rpmFile The full path of the RPM file.
-     * @param attribute The attribute to get the value for.
-     * @return A String containing the value of the requested attribute.
-     * @throws MojoExecutionException if the attribute could not be read.
+     * Creates the command line that queries one attribute of an rpm file. It runs in the C locale, like the signing
+     * commands, so that the output does not depend on the user's language.
+     *
+     * @param rpmFile The rpm file to query.
+     * @param attribute The attribute to query, such as <code>NAME</code>.
+     * @return The command line.
      */
-    public String getRpmAttribute(File rpmFile, String attribute) throws MojoExecutionException {
+    Commandline rpmQueryCommandline(File rpmFile, String attribute) {
         final Commandline cl = new Commandline();
         cl.setExecutable("rpm");
         cl.createArg().setValue("--query");
@@ -270,6 +271,20 @@ final class RPMHelper {
         cl.createArg().setValue(rpmFile.getAbsolutePath());
         cl.createArg().setValue("--queryformat");
         cl.createArg().setValue("%{" + attribute + "}");
+        cl.addEnvironment("LC_ALL", "C");
+        cl.addEnvironment("LANG", "C");
+        return cl;
+    }
+
+    /**
+     * Gets the value of the RPM attribute for the given RPM file..
+     * @param rpmFile The full path of the RPM file.
+     * @param attribute The attribute to get the value for.
+     * @return A String containing the value of the requested attribute.
+     * @throws MojoExecutionException if the attribute could not be read.
+     */
+    public String getRpmAttribute(File rpmFile, String attribute) throws MojoExecutionException {
+        final Commandline cl = rpmQueryCommandline(rpmFile, attribute);
 
         final Log log = mojo.getLog();
 

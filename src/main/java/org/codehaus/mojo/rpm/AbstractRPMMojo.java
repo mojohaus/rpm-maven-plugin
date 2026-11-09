@@ -1144,6 +1144,11 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
         for (Artifact dependencyArtifact : selectRpmDependencies(project.getArtifacts(), project.getDependencies())) {
             getLog().debug("Determining rpm name and version of rpm-dependency " + dependencyArtifact);
             File rpmFile = dependencyArtifact.getFile();
+            if (rpmFile == null) {
+                throw new MojoExecutionException("The rpm dependency " + dependencyArtifact
+                        + " has no file, so its name and version cannot be read; addDependencyBasedRequires needs it"
+                        + " resolved (in a reactor build, run at least the package phase)");
+            }
             String rpmName = helper.getRpmAttribute(rpmFile, "NAME");
             String rpmVersion = helper.getRpmAttribute(rpmFile, "VERSION");
             String rpmRelease = helper.getRpmAttribute(rpmFile, "RELEASE");
