@@ -6,8 +6,8 @@ attach it to an issue in the bugtracker.
 # Using Vagrant
 
 Building and testing the plugin can easily be done with help of
-[Vagrant](http://www.vagrantup.com) and
-[VirtualBox](http://www.virtualbox.org)
+[Vagrant](https://www.vagrantup.com) and
+[VirtualBox](https://www.virtualbox.org)
 
 Install VirtualBox and Vagrant and run `vagrant up --provision`. This
 will start a VirtualBox machine running CentOS and install Maven, JDK, and

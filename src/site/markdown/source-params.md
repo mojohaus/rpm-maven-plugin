@@ -36,25 +36,19 @@ a `sources` tag. A minimal source configuration looks like:
 
 The file or directory to include. If a directory is specified, all files
 and subdirectories are also included. If the path does not start with
-`/`, it is taken to be relative to the project's base directory.
+`/`, it is taken to be relative to the project&apos;s base directory.
 
 Note that the entire source specification is optional, but each source
 specification that is present must have this parameter.
-
-<a id="noDefaultExcludes"></a>
 
 ## noDefaultExcludes
 
 If given the value `true`, the default exclusions are not used.
 
-<a id="includes"></a>
-
 ## includes
 
 Contains one or more `include` elements with a wildcard filename
 expression which identifies the files to be included.
-
-<a id="excludes"></a>
 
 ## excludes
 
@@ -180,7 +174,7 @@ Example: Create a link from `/usr/local/something` to `/usr/local/something-A`
 
 ## targetOSName (**optional**)
 
-A [regular expression](http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html) that, if populated, indicates
+A [regular expression](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html) that, if populated, indicates
 that the files defined are only applicable if the expression matches the [MOJO.targetOS](./ident-params.html#targetOS) value.
 
 ```xml

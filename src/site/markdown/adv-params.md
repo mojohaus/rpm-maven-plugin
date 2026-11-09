@@ -2,7 +2,7 @@
 
 The parameters described in this page are parameters which enable advanced
 RPM features. Before using these parameters, it is **highly** recommended
-that you read [Maximum RPM](http://www.rpm.org/max-rpm/) to gain an
+that you read [Maximum RPM](https://ftp.osuosl.org/pub/rpm/max-rpm/) to gain an
 understanding of what these parameters do.
 
 <a id="Dependency"></a>
@@ -115,17 +115,13 @@ properly specified in the XML file. Here is an example:
 </buildRequires>
 ```
 
-<a id="Relocation"></a>
-
 ## Relocation
 
 If you specify the `prefix/prefixes` parameter to the RPM plugin, you can create
 a package that can be installed in a user-specified location. Before doing
 this, read and understand Maximum RPM
-[Chapter 15](http://www.rpm.org/max-rpm/ch-rpm-reloc.html) since there are
+[Chapter 15](https://ftp.osuosl.org/pub/rpm/max-rpm/ch-rpm-reloc.html) since there are
 a number of kinks and quirks that must be addressed.
-
-<a id="Scripts"></a>
 
 ## Scripts
 
@@ -138,7 +134,7 @@ Each of the scripts can be configured as a
 the content of the script to be provided either as a String or File. If
 both parameters are specified for a script, the external file will be
 ignored. Before writing scripts for RPM packages, understand the
-[script docs](http://www.rpm.org/max-rpm/s1-rpm-inside-scripts.html) in
+[script docs](https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-inside-scripts.html) in
 Maximum RPM since the operation of the scripts must be done correctly or
 major problems can occur while installing or removing the package.
 
@@ -210,17 +206,13 @@ the spec file.
 This script is run at the end of the transaction. It corresponds to the `%posttrans` tag in the spec
 file.
 
-<a id="Triggers"></a>
-
 ## Triggers
 
 Triggers are scripts which can be included in an RPM package to execute based
 on the action of other packages in a system. Before writing triggers for RPM
-packages, understand the [triggers](http://rpm.org/api/4.4.2.2/triggers.html) in
+packages, understand the [triggers](https://rpm-software-management.github.io/rpm/manual/triggers.html) in
 the RPM documentation since the operation of the scripts must be done correctly or
 major problems can occur while installing or removing other packages.
-
-<a id="Signatures"></a>
 
 ## Signatures
 
@@ -237,5 +229,5 @@ equivalent to defining the `%_gpg_name` macro and adding the
 ### `keyPassphrase`
 
 This parameter sets the passphrase for the key to sign the rpm. The use of this
-attribute requires [expect](http://expect.nist.gov/) to be available on the
+attribute requires [expect](https://core.tcl-lang.org/expect/) to be available on the
 PATH.

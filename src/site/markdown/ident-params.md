@@ -2,16 +2,12 @@
 
 The parameters described in this page provide the identification of the
 RPM package. This information will be present in the package file and can be
-viewed with the "`rpm -i`" command.
-
-<a id="name"></a>
+viewed with the &quot;`rpm -i`&quot; command.
 
 ## name
 
 Can be used to set the Name of the RPM package. Defaults to the artifactId of
 the Maven project.
-
-<a id="version"></a>
 
 ## version
 
@@ -19,8 +15,6 @@ The version number to use for the RPM package. By default, this is the
 project version. This value cannot contain a dash (`-`) due to
 contraints in the RPM file naming convention. Any specified value will
 be truncated at the first dash.
-
-<a id="changelogFile"></a>
 
 ## changelogFile
 
@@ -35,8 +29,6 @@ The content will not be validated and must follow the syntax for RPM:
 The list of changes can be as long as is necessary, but this is intended to be
 a list of changes for the RPM itself and not for the package.
 
-<a id="release"></a>
-
 ## release
 
 The release number of the RPM.
@@ -50,8 +42,6 @@ modifier portion of the [project version](#version) using the following rules:
 - If the modifier is numeric and [numericModifierAsRelease](#numericModifierAsRelease) is `true`, it will be used as the release.
 - If a modifier exists, does not end with `SNAPSHOT`, and is not used as the release, `"_1"` will be appended to end.
 
-<a id="numericModifierAsRelease"></a>
-
 ## numericModifierAsRelease
 
 If given the value `true`, an all-numeric modifier of the project version is used
@@ -59,9 +49,10 @@ as the release instead of having `_1` appended to it. With `true`, version
 `1.0.0-1` gives version `1.0.0` and release `1`; the default gives release
 `1_1`. It only applies if [release](#release) is not set. The default is `false`.
 
-<a id="license"></a>
-
 ## license
+
+<a id="project.inceptionYear"></a>
+<a id="project.organization"></a>
 
 A one line license information string for the RPM, like `GPLv3`. Defaults to
 `(c) ${project.inceptionYear} ${project.organization}`.
@@ -72,13 +63,9 @@ A one line license information string for the RPM, like `GPLv3`. Defaults to
 
 Deprecated: use [license](./source-params.html#license) instead.
 
-<a id="distribution"></a>
-
 ## distribution
 
 A one-line string identifying the distribution of which this RPM is a part.
-
-<a id="group"></a>
 
 ## group
 
@@ -91,14 +78,10 @@ The parameter is optional. Since RPM 4.6 the `Group` tag is optional, and some
 distributions, such as Fedora, deprecate it. Without a value the plugin writes
 no `Group` line to the spec file.
 
-<a id="icon"></a>
-
 ## icon
 
 The file (GIF or XPM) with an icon for the package. This can be used by GUI
 tools to display an icon for the package.
-
-<a id="needarch"></a>
 
 ## needarch
 
@@ -115,8 +98,6 @@ consists only of scripts (such as shell, perl, or python) and/or Java code.
 This can be used in conjunction with [Source targetArchitecture](./source-params.html#targetArchitecture)
 to flex the contents of the rpm based on the architecture.
 
-<a id="targetOS"></a>
-
 ## targetOS
 
 The target os for building the RPM. By default, this will be populated to
@@ -125,22 +106,16 @@ the System property `os.name`.
 This can be used in conjunction with [Source targetOSName](./source-params.html#targetOSName)
 to flex the contents of the rpm based on operating system.
 
-<a id="targetVendor"></a>
-
 ## targetVendor
 
 The target vendor for building the RPM. By default, this will be populated to the result
 of `rpm -E %{_host_vendor}`.
 
-<a id="packager"></a>
-
 ## packager
 
 The name of the person or group which is creating the package. By default,
-this will be taken from the name specified in the POM's organization
+this will be taken from the name specified in the POM&apos;s organization
 information.
-
-<a id="repackJars"></a>
 
 ## repackJars
 
@@ -149,8 +124,6 @@ added to the SPEC file to disable repackaging of jar files when creating
 the RPM. This defaults to `false`. This will only have effect with
 version 9.0.0 or later releases of `redhat-rpm-config` (RHEL 6).
 
-<a id="epoch"></a>
-
 ## epoch
 
 Set to an integer value that is greater than 0 (or whatever your current epoch value is)
@@ -158,12 +131,12 @@ to make this version of the package greater than that last one no matter WHAT th
 tag was set to prior.
 
 Setting the Epoch is typically used as a way getting out of a situation where your old
-version is larger than your new version. This is usually because you've decided to go from a
+version is larger than your new version. This is usually because you&apos;ve decided to go from a
 time/date stamp for a version to a version like 6.0. A time/date stamp will always be larger
 than something like 6.0 unless you set the epoch to 1. If epoch is 1 you now have a version
 like 1:6.0 which will be greater than 0:2016.01.28.
 
 `In general you should not need to set this tag!`
 
-See the epoch tag at <http://www.rpm.org/max-rpm-snapshot/s1-rpm-inside-tags.html> for a more
-detailed writeup about when you'd want to set epoch.
+See the epoch tag at <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-inside-tags.html> for a more
+detailed writeup about when you&apos;d want to set epoch.
