@@ -12,7 +12,10 @@ what the code and the POMs do not make obvious.
 - Unit tests in `src/test/java` check the spec file and version output and run without `rpmbuild`.
   `src/test/resources/gnupg` is the GnuPG home that the signing ITs use. The integration tests cover
   the rest.
-- The site is built from `src/site` (`apt` pages and the FAQ in `fml`).
+- The site is built from the Markdown pages in `src/site/markdown`; the `.md.vm` pages are
+  filtered by Velocity first. Keep every anchor the published site has: write `<a id="X"></a>` on
+  its own line, and leave it out where the heading below already generates the id `X`, or
+  `mvn site` warns that the anchor is used more than once.
 
 ## Build gates
 
@@ -25,8 +28,14 @@ what the code and the POMs do not make obvious.
 
 ## Integration tests
 
-- They need `rpmbuild` on the `PATH`, which the Ubuntu runner image provides and macOS and Windows
-  do not; that is why CI runs on `ubuntu-latest` only.
+- They need `rpmbuild` on the `PATH`, and `cpio` for the `verify.groovy` scripts that unpack a
+  package. The Ubuntu runner image provides both and macOS and Windows do not, which is why CI runs
+  on Linux only. Elsewhere, run them in a Linux container:
+
+  ```shell
+  docker run --rm -v "$PWD":/src -v m2-rpm:/root/.m2 -w /src maven:3.9.11-eclipse-temurin-17 \
+    bash -c 'apt-get update -qq && apt-get install -y -qq rpm cpio expect && mvn -B -P run-its verify'
+  ```
 - They live in `src/it`, one directory per test, and run with maven-invoker-plugin in the `run-its`
   profile. The plugin is installed into `target/local-repo` first. The profile also starts
   mrm-maven-plugin, which serves `src/it-repo` as the repository named in
