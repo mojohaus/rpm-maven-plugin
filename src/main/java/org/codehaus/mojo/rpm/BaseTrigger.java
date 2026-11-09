@@ -81,7 +81,7 @@ public abstract class BaseTrigger extends Scriptlet {
     }
 
     /**
-     * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String, List)}.
+     * Writes the complete trigger directive. Use instead of {@link #write(PrintWriter, String, AbstractRPMMojo)}.
      *
      * @param writer {@code PrintWriter} to write the trigger directive to.
      * @param mojo the {@code AbstractRPMMojo} which contains any resources needed when writing the trigger.
