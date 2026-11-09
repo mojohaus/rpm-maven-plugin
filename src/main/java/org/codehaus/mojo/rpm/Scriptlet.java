@@ -20,7 +20,6 @@ package org.codehaus.mojo.rpm;
  */
 
 import java.io.*;
-import java.util.List;
 
 import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.utils.io.FileUtils;
@@ -197,8 +196,7 @@ public class Scriptlet {
      * @param mojo the {@code AbstractRPMMojo} which contains any resources needed when writing the scriptlet.
      * @throws IOException if an I/IO error occurs
      */
-    protected final void write(
-            final PrintWriter writer, final String directive, final AbstractRPMMojo mojo)
+    protected final void write(final PrintWriter writer, final String directive, final AbstractRPMMojo mojo)
             throws IOException {
         if (script != null || scriptFile != null || program != null) {
             writer.println();
@@ -231,23 +229,28 @@ public class Scriptlet {
         return builder.toString();
     }
 
-    private Reader getScriptReader(String path, AbstractRPMMojo mojo) throws FileNotFoundException, UnsupportedEncodingException {
+    private Reader getScriptReader(String path, AbstractRPMMojo mojo)
+            throws FileNotFoundException, UnsupportedEncodingException {
         String classpathPrefix = "classpath:";
         Reader reader;
         if (path.startsWith(classpathPrefix)) {
             String classpathResource = path.substring(classpathPrefix.length());
-            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathResource);
+            InputStream inputStream =
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathResource);
             if (inputStream == null) {
-                throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+                throw new RuntimeException(
+                        "Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
             }
             reader = new InputStreamReader(inputStream);
         } else {
             File file = FileUtils.resolveFile(mojo.getProject().getBasedir(), path);
             if (!file.exists()) {
-                throw new RuntimeException("Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
+                throw new RuntimeException(
+                        "Invalid scriptlet declaration found - defined scriptFile does not exist: " + path);
             }
-            reader = fileEncoding != null ? new InputStreamReader( new FileInputStream( file ), fileEncoding )
-                    : new FileReader( file );
+            reader = fileEncoding != null
+                    ? new InputStreamReader(new FileInputStream(file), fileEncoding)
+                    : new FileReader(file);
         }
         return reader;
     }
