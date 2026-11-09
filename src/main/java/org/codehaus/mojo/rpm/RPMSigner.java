@@ -66,12 +66,6 @@ final class RPMSigner {
     private final Log log;
 
     /**
-     * Expect waiting phrase in installation langage
-     * If null or empty, use English phrase
-     */
-    private final String expectPhrase;
-
-    /**
      * Expect timeout, -1 means no timeout
      */
     private final String expectTimeout;
@@ -84,12 +78,12 @@ final class RPMSigner {
      * @param passphrase The passphrase for the gpg key.
      * @param log Used for logging information in the signing process.
      */
-    public RPMSigner(File gpgPath, String gpgName, char[] passphrase, Log log, String expectPhrase, String expectTimeout, String hashAlgorithm) {
+    public RPMSigner(
+            File gpgPath, String gpgName, char[] passphrase, Log log, String expectTimeout, String hashAlgorithm) {
         this.gpgPath = gpgPath;
         this.gpgName = gpgName;
         this.passphrase = passphrase;
         this.log = log;
-        this.expectPhrase = expectPhrase;
         this.expectTimeout = expectTimeout;
         this.hashAlgorithm = hashAlgorithm;
     }
@@ -237,11 +231,7 @@ final class RPMSigner {
             writer.print(" --addsign ");
             writer.println(rpm.getName());
             writer.println("expect {");
-            if (expectPhrase != null && !expectPhrase.isEmpty()) {
-                writer.println(" \"" + this.expectPhrase + "\" {");
-            } else {
-                writer.println(" \"Enter pass phrase: \" {");
-            }
+            writer.println(" \"Enter pass phrase: \" {");
             writer.println("send -- \"" + new String(this.passphrase) + "\r\"");
             writer.println("expect {");
             writer.println(" \"Pass phrase is good.\" {");
