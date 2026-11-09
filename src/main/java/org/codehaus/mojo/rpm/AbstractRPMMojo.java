@@ -534,7 +534,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      *          &lt;subpackage>optional&lt;/subpackage>
      *          &lt;program>program to execute (if not shell) optional&lt;/program>
      *          &lt;script>actual contents of script - optional&lt;/script>
-     *          &lt;scriptFile>location of file containing script - optional&lt;/script>
+     *          &lt;scriptFile>location of file containing script, or classpath:resource - optional&lt;/script>
      *          &lt;fileEncoding>character encoding for script file - recommended&lt;/fileEncoding>
      *          &lt;triggers>
      *              &lt;trigger>package/version to trigger on (i.e. jre > 1.5)&lt;/trigger>
