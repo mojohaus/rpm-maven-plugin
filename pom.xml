@@ -163,12 +163,12 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>4.15.0</version>
+      <version>4.16.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
