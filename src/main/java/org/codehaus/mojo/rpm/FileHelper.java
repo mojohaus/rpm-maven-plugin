@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.archiver.ArchiveEntry;
+import org.codehaus.plexus.archiver.ResourceIterator;
 import org.codehaus.plexus.archiver.util.DefaultFileSet;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -237,13 +239,19 @@ final class FileHelper {
             copier.setFilter(filter);
             copier.setFilterWrappers(mojo.getFilterWrappers());
 
-            Map<String, ArchiveEntry> copiedFilesMap = copier.getFiles();
+            Set<String> entryNames = new HashSet<>();
+            for (ResourceIterator it = copier.getResources(); it.hasNext(); ) {
+                ArchiveEntry entry = it.next();
+                if (copier.getIncludeEmptyDirs() || entry.getType() == ArchiveEntry.FILE) {
+                    entryNames.add(entry.getName());
+                }
+            }
 
             // Perform the copy
             copier.createArchive();
 
-            List<String> copiedFiles = new ArrayList<String>(copiedFilesMap.size());
-            for (String key : copiedFilesMap.keySet()) {
+            List<String> copiedFiles = new ArrayList<String>(entryNames.size());
+            for (String key : entryNames) {
                 if (key != null && key.length() > 0) {
                     copiedFiles.add(key);
                 }

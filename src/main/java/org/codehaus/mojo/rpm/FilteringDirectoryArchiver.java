@@ -118,7 +118,7 @@ final class FilteringDirectoryArchiver extends DirectoryArchiver {
                 try {
                     mavenFileFilter.copyFile(inFile, outFile, true, filterWrappers, null);
                     if (!isIgnorePermissions()) {
-                        ArchiveEntryUtils.chmod(outFile, entry.getMode(), getLogger(), isUseJvmChmod());
+                        ArchiveEntryUtils.chmod(outFile, entry.getMode());
                     }
                 } catch (MavenFilteringException e) {
                     final IOException ioe = new IOException();
