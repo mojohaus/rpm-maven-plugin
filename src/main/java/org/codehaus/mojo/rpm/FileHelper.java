@@ -570,7 +570,7 @@ final class FileHelper {
     }
 
     public static String toUnixPath(String path) {
-        path = StringUtils.replace(path, "\\", "/");
+        path = path == null || path.isEmpty() ? path : path.replace("\\", "/");
 
         String[] tokens = StringUtils.split(path, ":");
 
