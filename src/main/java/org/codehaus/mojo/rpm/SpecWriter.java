@@ -28,7 +28,6 @@ import java.util.Map;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Utility to write spec file based on {@link AbstractRPMMojo} instance.
@@ -261,8 +260,11 @@ final class SpecWriter {
                         if (dir.length() > 0) {
                             // %dir already included in baseDirString
                             spec.print(baseDirString);
-                            spec.println(
-                                    escapeGlob(StringUtils.replace(dir, "\\", FileHelper.UNIX_FILE_SEPARATOR)) + "\"");
+                            spec.println(escapeGlob(
+                                            dir == null || dir.isEmpty() || FileHelper.UNIX_FILE_SEPARATOR == null
+                                                    ? dir
+                                                    : dir.replace("\\", FileHelper.UNIX_FILE_SEPARATOR))
+                                    + "\"");
                         }
                     }
                 }
@@ -273,8 +275,11 @@ final class SpecWriter {
 
                     for (String file : files) {
                         spec.print(baseFileString);
-                        spec.println(
-                                escapeGlob(StringUtils.replace(file, "\\", FileHelper.UNIX_FILE_SEPARATOR)) + "\"");
+                        spec.println(escapeGlob(
+                                        file == null || file.isEmpty() || FileHelper.UNIX_FILE_SEPARATOR == null
+                                                ? file
+                                                : file.replace("\\", FileHelper.UNIX_FILE_SEPARATOR))
+                                + "\"");
                     }
                 }
 
