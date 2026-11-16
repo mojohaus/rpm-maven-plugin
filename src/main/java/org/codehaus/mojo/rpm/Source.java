@@ -318,16 +318,16 @@ public class Source {
         if (location == null) {
             sb.append("nowhere");
         } else {
-            sb.append("\"" + location + "\"");
+            sb.append("\"").append(location).append("\"");
         }
-        sb.append(" failIfLocationNotExists:" + failIfLocationNotExists);
+        sb.append(" failIfLocationNotExists:").append(failIfLocationNotExists);
 
         if (includes != null) {
-            sb.append(" incl:" + includes);
+            sb.append(" incl:").append(includes);
         }
 
         if (excludes != null) {
-            sb.append(" excl:" + excludes);
+            sb.append(" excl:").append(excludes);
         }
 
         if (destination != null) {
@@ -335,7 +335,7 @@ public class Source {
             sb.append(destination);
         }
 
-        sb.append(" filter: " + Boolean.toString(filter));
+        sb.append(" filter: ").append(Boolean.toString(filter));
 
         if (noDefaultExcludes) {
             sb.append(" [no default excludes]");

@@ -59,7 +59,7 @@ public class ArtifactMap {
         sb.append("[artifacts");
 
         if (classifiers != null) {
-            sb.append(" w/classifiers " + classifiers);
+            sb.append(" w/classifiers ").append(classifiers);
         }
 
         sb.append("]");

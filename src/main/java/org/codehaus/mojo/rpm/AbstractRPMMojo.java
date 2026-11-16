@@ -801,7 +801,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      *
      * @since 2.1-alpha-1
      */
-    private final Map<String, String> macroKeyToValue = new HashMap<String, String>();
+    private final Map<String, String> macroKeyToValue = new HashMap<>();
 
     /**
      * The key of the map is the directory where the files should be linked to. The value is the {@code List} of
@@ -809,8 +809,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      *
      * @since 2.0-beta-3
      */
-    private final Map<String, List<SoftlinkSource>> linkTargetToSources =
-            new LinkedHashMap<String, List<SoftlinkSource>>();
+    private final Map<String, List<SoftlinkSource>> linkTargetToSources = new LinkedHashMap<>();
 
     /** The root of the build area prior to calling rpmbuild. */
     private File buildroot;
@@ -860,7 +859,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
 
         if (this.prefix != null) {
             if (this.prefixes == null) {
-                this.prefixes = new ArrayList<String>();
+                this.prefixes = new ArrayList<>();
             }
             this.prefixes.add(prefix);
         }
@@ -1135,7 +1134,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
 
         if (!repackJars) {
             if (defineStatements == null) {
-                defineStatements = new ArrayList<String>();
+                defineStatements = new ArrayList<>();
             }
 
             defineStatements.add("__jar_repack 0");
@@ -1157,7 +1156,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     private void appendDependencyBasedRequires() throws MojoExecutionException {
         if (this.requires == null) {
-            this.requires = new LinkedHashSet<String>();
+            this.requires = new LinkedHashSet<>();
         }
         for (Artifact dependencyArtifact : selectRpmDependencies(project.getArtifacts(), project.getDependencies())) {
             getLog().debug("Determining rpm name and version of rpm-dependency " + dependencyArtifact);
@@ -1187,13 +1186,13 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * @return The resolved artifacts of the direct rpm dependencies, in the order of <code>resolved</code>.
      */
     static List<Artifact> selectRpmDependencies(Collection<Artifact> resolved, List<Dependency> dependencies) {
-        Set<String> direct = new HashSet<String>();
+        Set<String> direct = new HashSet<>();
         for (Dependency dependency : dependencies) {
             if (RPM_TYPE.equals(dependency.getType())) {
                 direct.add(dependency.getManagementKey());
             }
         }
-        List<Artifact> selected = new ArrayList<Artifact>();
+        List<Artifact> selected = new ArrayList<>();
         for (Artifact artifact : resolved) {
             if (RPM_TYPE.equals(artifact.getType()) && direct.contains(artifact.getDependencyConflictId())) {
                 selected.add(artifact);
@@ -1270,7 +1269,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * @since 2.1-alpha-1
      */
     String evaluateMacro(String macro) throws MojoExecutionException {
-        return evaluateMacro(macro, new ArrayList<String>());
+        return evaluateMacro(macro, new ArrayList<>());
     }
 
     private String evaluateMacro(String macro, List<String> chain) throws MojoExecutionException {
@@ -1397,7 +1396,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     }
 
     public Date getBuildTimestamp() {
-        return (session == null) ? new Date() : session.getStartTime();
+        return session == null ? new Date() : session.getStartTime();
     }
 
     /**

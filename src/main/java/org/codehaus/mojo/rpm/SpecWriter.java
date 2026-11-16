@@ -456,12 +456,12 @@ final class SpecWriter {
         scanner.setBasedir(buildSourceLocation);
         List<String> includes = linkSource.getIncludes();
         scanner.setIncludes(
-                (includes == null || includes.isEmpty())
+                includes == null || includes.isEmpty()
                         ? null
                         : (String[]) includes.toArray(new String[includes.size()]));
         List<String> excludes = linkSource.getExcludes();
         scanner.setExcludes(
-                (excludes == null || excludes.isEmpty())
+                excludes == null || excludes.isEmpty()
                         ? null
                         : (String[]) excludes.toArray(new String[excludes.size()]));
         scanner.scan();
