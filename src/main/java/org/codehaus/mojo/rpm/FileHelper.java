@@ -51,7 +51,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @since 2.0
  */
 final class FileHelper {
-    private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<>();
 
     /**
      * Message for exception indicating that a {@link Source} has a {@link Source#getDestination() destination}, but
@@ -250,7 +250,7 @@ final class FileHelper {
             // Perform the copy
             copier.createArchive();
 
-            List<String> copiedFiles = new ArrayList<String>(entryNames.size());
+            List<String> copiedFiles = new ArrayList<>(entryNames.size());
             for (String key : entryNames) {
                 if (key != null && key.length() > 0) {
                     copiedFiles.add(key);
@@ -267,8 +267,7 @@ final class FileHelper {
     }
 
     public static DefaultFileSet fileSet(File directory) {
-        final DefaultFileSet defaultFileSet = new DefaultFileSet(directory);
-        return defaultFileSet;
+        return new DefaultFileSet(directory);
     }
 
     /**
@@ -318,7 +317,7 @@ final class FileHelper {
      * @return The list of artifacts to package
      */
     private List<Artifact> selectArtifacts(ArtifactMap am) {
-        final List<Artifact> retval = new ArrayList<Artifact>();
+        final List<Artifact> retval = new ArrayList<>();
         final List<String> clist = am.getClassifiers();
 
         final Artifact artifact = mojo.getArtifact();
@@ -353,7 +352,7 @@ final class FileHelper {
      * @return The list of artifacts to package
      */
     private List<Artifact> selectDependencies(Dependency d) {
-        List<Artifact> retval = new ArrayList<Artifact>();
+        List<Artifact> retval = new ArrayList<>();
         List<Artifact> inc = d.getIncludes();
         List<Artifact> exc = d.getExcludes();
 
@@ -435,7 +434,7 @@ final class FileHelper {
                     SoftlinkSource softlinkSource = (SoftlinkSource) src;
                     List<SoftlinkSource> sources = linkTargetToSources.get(relativeDestination);
                     if (sources == null) {
-                        sources = new LinkedList<SoftlinkSource>();
+                        sources = new LinkedList<>();
                         linkTargetToSources.put(relativeDestination, sources);
                     }
 

@@ -248,11 +248,14 @@ final class RPMHelper {
         final StringStreamConsumer stdConsumer = new StringStreamConsumer();
         final StreamConsumer errConsumer = new LogStreamConsumer(LogStreamConsumer.INFO, mojo.getLog());
         try {
-            if (mojo.getLog().isDebugEnabled()) mojo.getLog().debug("About to execute \'" + cl.toString() + "\'");
+            if (mojo.getLog().isDebugEnabled()) {
+                mojo.getLog().debug("About to execute \'" + cl.toString() + "\'");
+            }
             final int result = CommandLineUtils.executeCommandLine(cl, stdConsumer, errConsumer);
-            if (result != 0)
+            if (result != 0) {
                 throw new MojoExecutionException(
                         "rpm -E %{_arch} returned: \'" + result + "\' executing \'" + cl.toString() + "\'");
+            }
         } catch (CommandLineException e) {
             throw new MojoExecutionException("Unable get system architecture", e);
         }

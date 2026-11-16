@@ -124,14 +124,14 @@ public class Dependency {
         sb.append("[dependencies");
 
         if (includedArtifacts != null) {
-            sb.append(" include [" + includedArtifacts + "]");
+            sb.append(" include [").append(includedArtifacts).append("]");
         }
 
         if (excludedArtifacts != null) {
-            sb.append(" exclude [" + excludedArtifacts + "]");
+            sb.append(" exclude [").append(excludedArtifacts).append("]");
         }
 
-        sb.append(" stripVersion (" + stripVersion + ")");
+        sb.append(" stripVersion (").append(stripVersion).append(")");
 
         sb.append("]");
         return sb.toString();
@@ -147,7 +147,7 @@ public class Dependency {
      * @throws MojoExecutionException if the parse fails
      */
     private List<Artifact> parseList(List<String> in) throws MojoExecutionException {
-        List<Artifact> retval = new ArrayList<Artifact>();
+        List<Artifact> retval = new ArrayList<>();
 
         for (String s : in) {
             String[] parts = s.split(":");

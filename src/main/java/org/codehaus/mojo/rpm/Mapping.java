@@ -415,7 +415,7 @@ public class Mapping {
      */
     public String getAttrString(String defaultFileMode, String defaultDirMode, String defaultGrp, String defaultUsr) {
         boolean directory =
-                !ghost && ((sources == null) || (sources.size() == 0)) && (dependency == null) && (artifact == null);
+                !ghost && ((sources == null) || (sources.isEmpty())) && (dependency == null) && (artifact == null);
 
         // For backwards compatibility, use defaultFileMode as a fallback for the directory mode
         String defaultMode = directory ? (defaultDirMode != null ? defaultDirMode : defaultFileMode) : defaultFileMode;
@@ -533,7 +533,7 @@ public class Mapping {
             return false;
         }
 
-        if ((sources == null || sources.isEmpty())) {
+        if (sources == null || sources.isEmpty()) {
             return false;
         }
 
@@ -586,7 +586,7 @@ public class Mapping {
      */
     void addCopiedFileNamesRelativeToDestination(List<String> copiedFileNamesRelativeToDestination) {
         if (this.copiedFileNamesRelativeToDestination == null) {
-            this.copiedFileNamesRelativeToDestination = new ArrayList<String>(copiedFileNamesRelativeToDestination);
+            this.copiedFileNamesRelativeToDestination = new ArrayList<>(copiedFileNamesRelativeToDestination);
         } else {
             this.copiedFileNamesRelativeToDestination.addAll(copiedFileNamesRelativeToDestination);
         }
@@ -600,7 +600,7 @@ public class Mapping {
      */
     void addCopiedFileNameRelativeToDestination(String copiedFileNameRelativeToDestination) {
         if (this.copiedFileNamesRelativeToDestination == null) {
-            this.copiedFileNamesRelativeToDestination = new LinkedList<String>();
+            this.copiedFileNamesRelativeToDestination = new LinkedList<>();
         }
         this.copiedFileNamesRelativeToDestination.add(copiedFileNameRelativeToDestination);
     }
@@ -614,7 +614,7 @@ public class Mapping {
      *         <code>null</code>, but may be immutable.
      * @since 2.0-beta-3
      */
-    private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>();
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<>();
 
     List<String> getLinkedFileNamesRelativeToDestination() {
         return this.linkedFileNamesRelativeToDestination != null
@@ -631,7 +631,7 @@ public class Mapping {
      */
     void addLinkedFileNameRelativeToDestination(String linkedFileNameRelativeToDestination) {
         if (this.linkedFileNamesRelativeToDestination == null) {
-            this.linkedFileNamesRelativeToDestination = new LinkedList<String>();
+            this.linkedFileNamesRelativeToDestination = new LinkedList<>();
         }
 
         linkedFileNamesRelativeToDestination.add(linkedFileNameRelativeToDestination);
@@ -674,8 +674,8 @@ public class Mapping {
         boolean sourceShown = false;
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[\"" + getDestination() + "\" ");
-        sb.append("{" + getAttrString(null, null, null, null) + "}");
+        sb.append("[\"").append(getDestination()).append("\" ");
+        sb.append("{").append(getAttrString(null, null, null, null)).append("}");
 
         if (isDirOnly()) {
             sb.append(" (dir only)]");
