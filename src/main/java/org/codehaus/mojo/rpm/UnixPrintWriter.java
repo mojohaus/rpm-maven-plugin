@@ -47,6 +47,7 @@ public class UnixPrintWriter extends PrintWriter {
         super(outputStream, b);
     }
 
+    @Override
     public void println() {
         print('\n');
     }

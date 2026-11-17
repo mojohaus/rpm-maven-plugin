@@ -119,6 +119,7 @@ public class Dependency {
     // // // Public methods
 
     /** {@inheritDoc} */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[dependencies");

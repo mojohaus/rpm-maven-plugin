@@ -53,6 +53,7 @@ final class VersionHelper {
 
         String release;
 
+        @Override
         public String toString() {
             return version + '-' + release;
         }

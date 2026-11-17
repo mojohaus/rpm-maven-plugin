@@ -49,6 +49,7 @@ public class RPMMojo extends AbstractRPMMojo {
      * If the {@link org.apache.maven.project.MavenProject#getPackaging() packaging} is <i>rpm</i>, sets the rpm as the
      * primary artifact.
      */
+    @Override
     protected void afterExecution() {
         if ("rpm".equals(project.getPackaging())) {
             File primaryArtifact = getRPMFile();

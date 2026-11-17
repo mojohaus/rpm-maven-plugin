@@ -92,6 +92,7 @@ final class FilteringDirectoryArchiver extends DirectoryArchiver {
      *
      * @throws IOException
      */
+    @Override
     public void resetArchiver() throws IOException {
         filterWrappers = null;
         filter = false;

@@ -80,6 +80,7 @@ final class LogStreamConsumer implements StreamConsumer {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void consumeLine(String line) {
         switch (level) {
             case DEBUG:

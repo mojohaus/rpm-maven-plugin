@@ -838,6 +838,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     // // // Mojo methods/////////////////////////////////////////////////////
 
     /** {@inheritDoc} */
+    @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         if (skipPOMs && isPOM()) {
             getLog().info("skipping because artifact is a pom (skipPOMs)");
@@ -1384,6 +1385,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * @return Returns the {@link #release}.
      */
+    @Override
     public final String getRelease() {
         return this.release;
     }
@@ -1391,10 +1393,12 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * @return Returns the configured numericModifierAsRelease attribute.
      */
+    @Override
     public final boolean isNumericModifierAsRelease() {
         return this.numericModifierAsRelease;
     }
 
+    @Override
     public Date getBuildTimestamp() {
         return session == null ? new Date() : session.getStartTime();
     }
@@ -1721,6 +1725,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     /**
      * {@inheritDoc}
      */
+    @Override
     public final String getVersion() {
         return this.projversion;
     }

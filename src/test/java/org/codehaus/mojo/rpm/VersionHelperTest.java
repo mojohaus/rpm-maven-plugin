@@ -45,20 +45,25 @@ class VersionHelperTest {
             this.numericModifierAsRelease = numericModifierAsRelease;
         }
 
+        @Override
         public void execute() {}
 
+        @Override
         public String getVersion() {
             return version;
         }
 
+        @Override
         public String getRelease() {
             return release;
         }
 
+        @Override
         public Date getBuildTimestamp() {
             return BUILD_TIME;
         }
 
+        @Override
         public boolean isNumericModifierAsRelease() {
             return numericModifierAsRelease;
         }
