@@ -30,6 +30,7 @@ public class RemoveTrigger extends BaseTrigger {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getDirective() {
         return "%triggerun";
     }

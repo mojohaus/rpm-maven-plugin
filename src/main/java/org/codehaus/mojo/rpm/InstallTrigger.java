@@ -30,6 +30,7 @@ public class InstallTrigger extends BaseTrigger {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getDirective() {
         return "%triggerin";
     }

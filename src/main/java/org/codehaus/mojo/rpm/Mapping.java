@@ -670,6 +670,7 @@ public class Mapping {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toString() {
         boolean sourceShown = false;
         StringBuilder sb = new StringBuilder();

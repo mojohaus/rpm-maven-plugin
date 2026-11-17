@@ -67,6 +67,7 @@ public class AttachedRPMMojo extends AbstractRPMMojo {
      *
      * @see MavenProjectHelper#attachArtifact(org.apache.maven.project.MavenProject, String, String, java.io.File)
      */
+    @Override
     protected void afterExecution() {
 
         File attachedArtifact = getRPMFile();
@@ -82,6 +83,7 @@ public class AttachedRPMMojo extends AbstractRPMMojo {
      *
      * @return The classifier.
      */
+    @Override
     protected String getClassifier() {
         return classifier;
     }

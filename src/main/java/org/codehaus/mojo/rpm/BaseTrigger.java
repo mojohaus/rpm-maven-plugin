@@ -61,6 +61,7 @@ public abstract class BaseTrigger extends Scriptlet {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String buildScriptletLine(String directive) {
         final StringBuilder builder = new StringBuilder(super.buildScriptletLine(directive));
 
@@ -101,6 +102,7 @@ public abstract class BaseTrigger extends Scriptlet {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder(128);
         buffer.append(getClass().getName().substring(getClass().getName().lastIndexOf('.')));

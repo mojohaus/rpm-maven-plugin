@@ -54,6 +54,7 @@ public class ArtifactMap {
     // // // Public methods
 
     /** {@inheritDoc} */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[artifacts");

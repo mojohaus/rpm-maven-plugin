@@ -103,6 +103,7 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         VersionHelper.Version version = new VersionHelper(this).calculateVersion();
 
@@ -119,6 +120,7 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     /**
      * @return Returns the configured version attribute.
      */
+    @Override
     public final String getVersion() {
         return this.projversion;
     }
@@ -126,6 +128,7 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     /**
      * @return Returns the configured release attribute.
      */
+    @Override
     public final String getRelease() {
         return this.release;
     }
@@ -133,10 +136,12 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     /**
      * @return Returns the configured numericModifierAsRelease attribute.
      */
+    @Override
     public final boolean isNumericModifierAsRelease() {
         return this.numericModifierAsRelease;
     }
 
+    @Override
     public Date getBuildTimestamp() {
         return session.getStartTime();
     }

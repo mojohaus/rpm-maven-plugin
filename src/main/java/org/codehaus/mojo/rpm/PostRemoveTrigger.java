@@ -30,6 +30,7 @@ public class PostRemoveTrigger extends BaseTrigger {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getDirective() {
         return "%triggerpostun";
     }
