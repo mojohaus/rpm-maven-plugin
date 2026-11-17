@@ -523,10 +523,10 @@ final class FileHelper {
         for (Artifact item : list) {
             log.debug("Compare " + dep + " to " + item);
             final String groupId = item.getGroupId();
-            if ((groupId == null || groupId.isEmpty()) || "*".equals(groupId) || groupId.equals(dep.getGroupId())) {
+            if (StringUtils.isEmpty(groupId) || "*".equals(groupId) || groupId.equals(dep.getGroupId())) {
                 log.debug("... Group matches");
                 final String artifactId = item.getArtifactId();
-                if ((artifactId == null || artifactId.isEmpty())
+                if (StringUtils.isEmpty(artifactId)
                         || "*".equals(artifactId)
                         || artifactId.equals(dep.getArtifactId())) {
                     log.debug("... Artifact matches");
