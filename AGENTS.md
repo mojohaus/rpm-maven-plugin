@@ -62,10 +62,11 @@ what the code and the POMs do not make obvious.
 
 ## Continuous integration and pull requests
 
-- `.github/workflows/maven.yml` calls the shared `maven-verify.yml@v5` workflow from
-  `apache/maven-gh-actions-shared`, with `-P run-its verify` as the verify goal. Branches in this
-  repository build under the push event, so look at the push run for a pull request from a
-  same-repository branch.
+- `.github/workflows/maven.yml` calls the MojoHaus `maven-verify.yml` reusable workflow in
+  `mojohaus/.github` at `@master`. It sets `os-matrix` to `ubuntu-latest` only, because the ITs call
+  `rpmbuild`, which only the Linux runner image provides, and sets `ff-goal` to `verify` (the
+  fail-fast build skips ITs; the matrix runs them). Branches in this repository build under the push
+  event, so look at the push run for a pull request from a same-repository branch.
 - Pull requests are squash- or rebase-merged; merge commits are disabled. Release Drafter builds
   the release notes from the titles and labels, so the title should describe the change for a
   user.
