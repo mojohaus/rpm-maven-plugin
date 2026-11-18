@@ -599,7 +599,7 @@ final class SpecWriter {
         if (strings != null) {
             for (String str : strings) {
 
-                if (!str.equals("")) {
+                if (!str.isEmpty()) {
                     spec.print(prefix);
                     spec.println(str);
                 }
