@@ -773,7 +773,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * <br />
      * <b>NOTE:</b> Hard link requires maven repository to be on same partition as project's build dir.
      *
-     * @since TODO
+     * @since 2.2.0
      */
     @Parameter(defaultValue = "false")
     private boolean hardLinkDependencies;
