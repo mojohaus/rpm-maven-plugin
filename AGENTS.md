@@ -11,7 +11,8 @@ what the code and the POMs do not make obvious.
   call `rpmbuild` through `RPMHelper`; `RPMSigner` signs the package.
 - Unit tests in `src/test/java` check the spec file and version output and run without `rpmbuild`.
   `src/test/resources/gnupg` is the GnuPG home that the signing ITs use. The integration tests cover
-  the rest.
+  the rest. A check that only reads the spec file or the installed files belongs in a unit test such as
+  `SpecWriterMappingsTest`, which installs the files of a project and writes its spec file, not in an IT.
 - The site is built from the Markdown pages in `src/site/markdown`. Keep every anchor the published site has: write `<a id="X"></a>` on
   its own line, and leave it out where the heading below already generates the id `X`, or
   `mvn site` warns that the anchor is used more than once.
@@ -42,7 +43,7 @@ what the code and the POMs do not make obvious.
 - Run a subset:
 
   ```shell
-  mvn -B -P run-its verify -Dinvoker.test=rpm-1,rpm-artifact
+  mvn -B -P run-its verify -Dinvoker.test=rpm-1,rpm-source
   ```
 - `rpm-dirmode` is excluded in the `run-its` profile (`pomExcludes`).
 - Write `verify.groovy` so that its last expression is `true`: the existing scripts end with
@@ -52,7 +53,7 @@ what the code and the POMs do not make obvious.
 ## Fixtures and dependencies
 
 - Fixture coordinates that a test only packages and never needs from Central use the `localhost`
-  group ID and resolve from the mock repository (`rpm-artifact`, `rpm-dependency-hardlink`,
+  group ID and resolve from the mock repository (`rpm-dependency-hardlink`,
   `rpm-sign-with-keyname-lookup`).
 - Deliberate pins in `.github/dependabot.yml`: `maven-artifact`, `maven-core`, `maven-model`,
   `maven-plugin-api` and `maven-settings` stay below 3.10.0, because the plugin baseline is the

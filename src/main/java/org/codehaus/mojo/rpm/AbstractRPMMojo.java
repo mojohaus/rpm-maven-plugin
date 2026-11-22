@@ -860,12 +860,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
             return;
         }
 
-        if (this.prefix != null) {
-            if (this.prefixes == null) {
-                this.prefixes = new ArrayList<>();
-            }
-            this.prefixes.add(prefix);
-        }
+        addPrefixToPrefixes();
 
         helper = new RPMHelper(this);
 
@@ -918,6 +913,18 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      */
     private boolean isPOM() {
         return "pom".equalsIgnoreCase(getProject().getArtifact().getType());
+    }
+
+    /**
+     * Adds {@link #prefix} to {@link #prefixes}, so that the spec file has a <code>Prefix</code> line for both.
+     */
+    void addPrefixToPrefixes() {
+        if (this.prefix != null) {
+            if (this.prefixes == null) {
+                this.prefixes = new ArrayList<>();
+            }
+            this.prefixes.add(prefix);
+        }
     }
 
     private void makeSecondCopy() throws MojoFailureException {
