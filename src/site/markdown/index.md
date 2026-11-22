@@ -15,6 +15,15 @@ at the bottom of this page. Reading some of these resources should be
 considered optional but highly recommended for basic use of RPMs and required
 before using advanced features such as scripts and dependencies.
 
+# Goals
+
+- [rpm:rpm](./rpm-mojo.html) builds an RPM from the project, for the `package` phase or on demand.
+- [rpm:attached-rpm](./attached-rpm-mojo.html) builds an RPM and attaches it to the project as a secondary artifact.
+- [rpm:version](./version-mojo.html) calculates the RPM version and release from the project version.
+- [rpm:unpack](./unpack-mojo.html) unpacks an RPM file (experimental).
+
+The plugin requires Maven 3.9.0 or later and Java 8 or later, and `rpmbuild` on the `PATH` of the build host.
+
 # Features
 
 - Files can be collected from anywhere on the system and packaged
@@ -29,7 +38,7 @@ For information on how to get the RPM file generated, please refer to the
 
 # Contributing
 
-Contributions is welcomed. See [contributing](./contributing.html).
+Contributions are welcome. See [contributing](./contributing.html).
 
 # Resources
 

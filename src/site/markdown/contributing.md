@@ -1,7 +1,7 @@
 # Contributing
 
-Create a patch against the subversion trunk and
-attach it to an issue in the bugtracker.
+Fork the [GitHub repository](https://github.com/mojohaus/rpm-maven-plugin) and open a pull request, or
+report a problem in the [issue tracker](https://github.com/mojohaus/rpm-maven-plugin/issues).
 
 # Using Vagrant
 

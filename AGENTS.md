@@ -12,8 +12,7 @@ what the code and the POMs do not make obvious.
 - Unit tests in `src/test/java` check the spec file and version output and run without `rpmbuild`.
   `src/test/resources/gnupg` is the GnuPG home that the signing ITs use. The integration tests cover
   the rest.
-- The site is built from the Markdown pages in `src/site/markdown`; the `.md.vm` pages are
-  filtered by Velocity first. Keep every anchor the published site has: write `<a id="X"></a>` on
+- The site is built from the Markdown pages in `src/site/markdown`. Keep every anchor the published site has: write `<a id="X"></a>` on
   its own line, and leave it out where the heading below already generates the id `X`, or
   `mvn site` warns that the anchor is used more than once.
 
@@ -22,7 +21,7 @@ what the code and the POMs do not make obvious.
 - On a local build Spotless applies the formatting; it also reformats Markdown, so run
   `mvn spotless:apply` after editing the README or this file.
 - The parent, `mojo-parent`, sets `maven.compiler.release` to 8, so main code must use the Java 8 API.
-- The plugin compiles against Maven 3.9.16 (`mavenVersion`) and declares a literal
+- The plugin compiles against the Maven 3.9 line (`mavenVersion`) and declares a literal
   `<prerequisites><maven>3.9.0</maven>`; keep the two apart, so raising `mavenVersion` does not
   raise the prerequisite.
 
@@ -62,7 +61,7 @@ what the code and the POMs do not make obvious.
 
 ## Continuous integration and pull requests
 
-- `.github/workflows/maven.yml` calls the MojoHaus `maven-verify.yml` reusable workflow in
+- `.github/workflows/maven.yml` calls the shared MojoHaus verify workflow in
   `mojohaus/.github` at `@master`. It sets `os-matrix` to `ubuntu-latest` only, because the ITs call
   `rpmbuild`, which only the Linux runner image provides, and sets `ff-goal` to `verify` (the
   fail-fast build skips ITs; the matrix runs them). Branches in this repository build under the push
@@ -71,3 +70,21 @@ what the code and the POMs do not make obvious.
   the release notes from the titles and labels, so the title should describe the change for a
   user.
 
+## Documentation updates
+
+A change that users or contributors can notice ships with the documentation it affects, in the
+same pull request. A refactor with no visible effect needs none.
+
+- A new goal, parameter or default: the mojo Javadoc, which becomes the goal page, with `@since`
+  set to the version in the release-drafter draft, the goal list in `src/site/markdown/index.md`
+  and, for a parameter, the matching parameter page (`ident-params.md`, `op-params.md`,
+  `map-params.md`, `source-params.md` or `adv-params.md`) and its entry in the `site.xml` menu.
+- New or changed usage: a scenario in `src/site/markdown/usage.md`, or the sample in
+  `example1.md`. Only the first plugin snippet in `usage.md` carries a version, written as
+  `<version><!-- latest release --></version>`; the others leave it out, so no example goes stale.
+- A page added, removed or renamed: the menu in `src/site/site.xml`. Never rename a published
+  page or change a heading that the menu links to; its URL and anchor are linked from elsewhere.
+- The Maven or Java requirement, or how to build and release: `README.md`.
+- A new convention, build gate or test fixture: this file.
+
+Check the result with `mvn site` and open `target/site/index.html`.
