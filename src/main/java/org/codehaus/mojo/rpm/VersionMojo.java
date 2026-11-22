@@ -59,7 +59,7 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     private String projversion;
 
     /**
-     * The system property to set the calculated version to.
+     * The project property to set the calculated version to.
      */
     @Parameter(required = true, defaultValue = "rpm.version")
     private String versionProperty;
@@ -95,7 +95,7 @@ public class VersionMojo extends AbstractMojo implements RPMVersionableMojo {
     private boolean numericModifierAsRelease;
 
     /**
-     * The system property to set the calculated release to.
+     * The project property to set the calculated release to.
      */
     @Parameter(required = true, defaultValue = "rpm.release")
     private String releaseProperty;

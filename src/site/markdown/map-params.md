@@ -185,6 +185,8 @@ in one of the following two formats:
   to limit the specification to particular versions of the artifact; note that
   this will not cause a different version of the dependency to be packaged
   than what was used to build the project
+- &quot;*group*`:`*artifact*`:`*versionrange*`:`*type*`:`*classifier*&quot; which also limits the
+  specification to the artifact type and classifier; an empty or omitted type matches any type
 
 If no include items are specified, then all dependencies not explicitly
 excluded are included.

@@ -1,10 +1,12 @@
 # MojoHaus RPM Maven Plugin
 
-[![GitHub CI](https://github.com/mojohaus/rpm-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/mojohaus/rpm-maven-plugin/actions/workflows/maven.yml)
+[![GitHub CI](https://github.com/mojohaus/rpm-maven-plugin/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/mojohaus/rpm-maven-plugin/actions/workflows/maven.yml?query=branch%3Amaster)
 [![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.mojo/rpm-maven-plugin)](https://central.sonatype.com/artifact/org.codehaus.mojo/rpm-maven-plugin)
 
 The RPM Maven Plugin packages a Maven project's artifacts, dependencies and other files as an RPM.
 It writes the spec file from the plugin configuration and calls `rpmbuild` to build the package.
+The goals are `rpm`, `attached-rpm`, `version` and `unpack`; the `rpm` packaging type makes the RPM the primary
+artifact of a project.
 
 Documentation: <https://www.mojohaus.org/rpm-maven-plugin/>, with the
 [usage scenarios](https://www.mojohaus.org/rpm-maven-plugin/usage.html) and the

@@ -225,7 +225,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * </pre>
      *
      * </p>
-     * If not given, look up the value under Maven settings using server id at 'keyPassphraseServerId' configuration.
+     * If not given, look up the value under Maven settings using server id at 'passphraseServerId' configuration.
      *
      * @since 2.0-beta-4
      */
@@ -245,7 +245,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
      * Server id to lookup the gpg passphrase under Maven settings. The default value intentionally selected to match
      * with maven-gpg-plugin.
      *
-     * @Since 2.1.2
+     * @since 2.1.2
      */
     @Parameter(property = "gpg.passphraseServerId", defaultValue = "gpg.passphrase")
     private String passphraseServerId;
@@ -689,7 +689,9 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private String defaultGroupname;
 
     /**
-     * Indicates if the execution should be disabled. If <code>true</code>, nothing will occur during execution.
+     * Indicates if the execution should be disabled. If <code>true</code>, nothing will occur during execution. In a
+     * project with packaging <code>rpm</code>, the project is then handled as a POM project, so that install and
+     * deploy publish only its POM.
      *
      * @since 2.0
      */
@@ -697,7 +699,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private boolean disabled;
 
     /**
-     * The system property to read the calculated version from, normally set by the version mojo.
+     * The project property to read the calculated version from, normally set by the version mojo.
      *
      * @since 2.1-alpha-2
      */
@@ -705,7 +707,7 @@ public abstract class AbstractRPMMojo extends AbstractMojo implements RPMVersion
     private String versionProperty;
 
     /**
-     * The system property to read the calculated release from, normally set by the version mojo.
+     * The project property to read the calculated release from, normally set by the version mojo.
      *
      * @since 2.1-alpha-2
      */

@@ -13,7 +13,7 @@ API jar is **not** packaged in the RPM because it is not a runtime dependency.
   <modelVersion>4.0.0</modelVersion>
   <groupId>collection.trash</groupId>
   <artifactId>landfill</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
 
   <name>Land-Based Trash Repository</name>
@@ -43,7 +43,6 @@ API jar is **not** packaged in the RPM because it is not a runtime dependency.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <executions>
           <execution>
             <id>generate-rpm</id>
@@ -98,7 +97,7 @@ API jar is **not** packaged in the RPM because it is not a runtime dependency.
                   <include>javax.servlet:servlet-api:2.4</include>
                 </includes>
                 <excludes>
-                  <exclude>junit:junit</exclude>
+                  <exclude>org.junit.jupiter:junit-jupiter</exclude>
                 </excludes>
               </dependency>
             </mapping>
@@ -148,7 +147,7 @@ API jar is **not** packaged in the RPM because it is not a runtime dependency.
             </mapping>
           </mappings>
           <preinstallScriptlet>
-            <script>echo "installing #[[${project.name}]]# now"</script>
+            <script>echo "installing ${project.name} now"</script>
           </preinstallScriptlet>
           <postinstallScriptlet>
             <scriptFile>src/main/scripts/postinstall</scriptFile>
@@ -165,3 +164,4 @@ API jar is **not** packaged in the RPM because it is not a runtime dependency.
   </build>
 </project>
 ```
+

@@ -17,12 +17,9 @@ the primary artifact produced by the project.
 If you want the project&apos;s artifacts packaged in the RPM, you must generate
 the RPM as a side effect of the standard lifecycle.
 
-Things which do not work as I envision the 1.0 release working:
-
-- If this goal is run on a project with modules, it will run the
-  &quot;`rpm:rpm`&quot; goal on each module, rather than packaging the modules into
-  a single RPM.
-
+If this goal is run on a project with modules, it runs the
+&quot;`rpm:rpm`&quot; goal on each module, rather than packaging the modules into
+a single RPM.
 
 RPM as Side Effect
 ==================
@@ -87,24 +84,57 @@ The packaging value should be set to &quot;`rpm`&quot;.
 The extensions tag for this plugin should be marked true.
 
 ```xml
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>rpm-maven-plugin</artifactId>
-          <version>${project.version}</version>
-          <extensions>true</extensions>
-           ...
-        </plugin>
-      </plugins>
-    </build>
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>rpm-maven-plugin</artifactId>
+      <version><!-- latest release --></version>
+      <extensions>true</extensions>
+       ...
+    </plugin>
+  </plugins>
+</build>
+```
+
+Calculate the version and release
+=================================
+
+The [rpm:version](./version-mojo.html) goal calculates the RPM version and release from the project version, with the
+rules of the [version and release parameters](./ident-params.html), and stores them in the project properties
+`rpm.version` and `rpm.release` (the `versionProperty` and `releaseProperty` parameters). The `rpm` and
+`attached-rpm` goals of the same build use these properties, so other plugins can read the values before the RPM is
+built. The goal runs in the `initialize` phase.
+
+```xml
+<executions>
+  <execution>
+    <id>rpm-version</id>
+    <goals>
+      <goal>version</goal>
+    </goals>
+  </execution>
+</executions>
+```
+
+Unpack an RPM
+=============
+
+The [rpm:unpack](./unpack-mojo.html) goal unpacks the files of an RPM into a directory, for example to inspect the
+result of a build. It is experimental and its settings may change. It calls `rpm2cpio` and `cpio`, so both must be on
+the `PATH`.
+
+```shell
+mvn rpm:unpack -Drpm.file=target/my.rpm -Drpm.unpackDirectory=target/unpacked
 ```
 
 Configure GPG passphrase under settings.xml
 ===========================================
 
 GPG passphrase can be configured under local settings.xml
-either in clear or [encrypted](https://maven.apache.org/guides/mini/guide-encryption.html) text.
+either in clear or [encrypted](https://maven.apache.org/guides/mini/guide-encryption.html) text. The server id is
+`gpg.passphrase`, or the value of the `passphraseServerId` parameter, and the plugin reads it when no
+`keyPassphrase` is configured.
 
 ```xml
 <settings>
@@ -118,3 +148,4 @@ either in clear or [encrypted](https://maven.apache.org/guides/mini/guide-encryp
   </servers>
 </settings>
 ```
+
