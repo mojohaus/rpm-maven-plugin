@@ -4,12 +4,16 @@ if (!rpm.exists())
 
 def proc = ["rpm", "-qlp", rpm.getAbsolutePath()].execute()
 proc.waitFor()
-def expected = ["/usr/local/lib", "/usr/local/lib/signpost-commonshttp4-1.2.1.2-javadoc.jar", "/usr/local/lib/signpost-commonshttp4-1.2.1.2.jar"]
-def i = 0;
+def expected = [
+    "/usr/local/lib",
+    "/usr/local/lib/signpost-commonshttp4-1.2.1.2-javadoc.jar",
+    "/usr/local/lib/signpost-commonshttp4-1.2.1.2.jar"
+]
+def i = 0
 proc.in.text.eachLine {
     if(!it.equals(expected[i]))
-        throw new AssertionError(expected[i] + " not found!");
-    i++;
+        throw new AssertionError(expected[i] + " not found!")
+    i++
 }
 
 return true
