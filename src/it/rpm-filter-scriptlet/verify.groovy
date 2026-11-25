@@ -1,4 +1,4 @@
-File specFile = new File( basedir, "target/rpm/rpm-filter-scriptlet/SPECS/rpm-filter-scriptlet.spec" )
+File specFile = new File(basedir, "target/rpm/rpm-filter-scriptlet/SPECS/rpm-filter-scriptlet.spec")
 
 // Test if the pre install inline <script> was filtered
 assert specFile.text.contains("echo \"installing rpm-filter-scriptlet\"")

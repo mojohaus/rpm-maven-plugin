@@ -15,25 +15,20 @@ if (cpioVersion ==~ /2.1\d/ || cpioVersion ==~ /2.\d\d/) {
     content = proc.in.text
 
     if (!"org.codehaus.mojo.rpm.its".equals(content))
-        throw new java.lang.AssertionError("contents of filter.txt expected[org.codehaus.mojo.rpm.its] actual[${content}]");
+        throw new java.lang.AssertionError("contents of filter.txt expected[org.codehaus.mojo.rpm.its] actual[${content}]")
 
     proc = ["sh", "-c", "rpm2cpio ${rpm.getAbsolutePath()} | cpio -iv --to-stdout '.*filter-version.txt'"].execute()
     proc.waitFor()
     content = proc.in.text
 
     if (!"1.0-1".equals(content))
-        throw new java.lang.AssertionError("contents of filter-version.txt expected[1.0-1] actual[${content}]");
+        throw new java.lang.AssertionError("contents of filter-version.txt expected[1.0-1] actual[${content}]")
 } else
     println "WARNING: cpio version < 2.10, skipping filter test. (Mac OS X?)"
 
 
 lines = new File(basedir, "target/rpm/rpm-1/SPECS/rpm-1.spec").readLines()
-[
-    "Name: rpm-1",
-    "Version: 1.0",
-    "Release: 1",
-    "License: (c) My self - 2013"
-].each {
+["Name: rpm-1", "Version: 1.0", "Release: 1", "License: (c) My self - 2013"].each {
     if (!lines.contains(it))
         throw new AssertionError("Spec file missing \"${it}\"")
 }
